@@ -6,4 +6,4 @@ We declare that the work we have submitted for Stage B of this assignment and al
 
 *  ....
 
-Signed: Mary Jones (u2345678), Kalaiarasan Somasundaram (u6555407), and LingYu Xia (u6483756)
+Signed: Yuqing Zhang (u6767747), Kalaiarasan Somasundaram (u6555407), and LingYu Xia (u6483756)
