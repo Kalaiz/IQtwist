@@ -4,4 +4,4 @@ We declare that the work toward our submission of Stage B was distributed among 
 * u3456789 40
 * u0234567 30
 
-Signed: Mary Jones (u2345678), Bob Smith (u3456789), and Sue Black (u0234567)
+Signed: Mary Jones (u2345678), Kalaiarasan Somasundaram (u6555407), and Sue Black (u0234567)
