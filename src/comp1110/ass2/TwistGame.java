@@ -29,7 +29,7 @@ public class TwistGame {
     char[]data ={'a','l','1','8','A','D','0','8'};
     for(int i=0;i<3;i++){
       if(i==2&&piecePlacement.charAt(i)>=data[i]&& piecePlacement.charAt(i)<data[i+1]){//for the fourth character case where the peg might be 0
-        continue;
+        return true;//no need of continue here as it is going to be the last iteration
       }
       else if( i!=2 && piecePlacement.charAt(i)>data[i]&& piecePlacement.charAt(i)<data[i+1]){
        continue;
