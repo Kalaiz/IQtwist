@@ -39,7 +39,72 @@ public class TwistGame {
    */
   public static boolean isPlacementStringWellFormed(String placement) {
     // FIXME Task 3: determine whether a placement is well-formed
-    return false;
+
+    if(placement.length()%4!=0){                                            //Check if the length of the placement String is valid
+
+      return false;
+
+    }else {
+
+
+      String[] items = new String[placement.length()/4];                   //Using a loop to store all four-character placements into a String[]
+
+      loop: for(int i = 0; i < placement.length()/4 ; i++){
+
+        items[i] = placement.substring(4*i,4*i+3);
+
+
+
+        if(isPlacementStringWellFormed(items[i])==true)                    //First judge if each placement is well-formed
+
+          continue loop;
+
+        else
+
+          return false;
+
+      }
+
+
+
+      for(int j = 1; j < 8; j++){                                          //Second judge if the 8 pieces occur in the correct alphabetical order or have duplicated
+
+        if( items[j-1].charAt(0) >= items[j].charAt(0) )
+
+          return false;
+
+      }
+
+
+
+      for(int x = 0; x < placement.length(); x++){                         //Last judge if pegs are outnumbered
+
+        int countRed = 0;
+        int countGre = 0;
+        int countBlu = 0;
+        int countYel = 0;
+
+        if (placement.charAt(x)=='i')
+          countRed++;
+        else if (placement.charAt(x)=='j')
+          countBlu++;
+        else if (placement.charAt(x)=='k')
+          countGre++;
+        else if (placement.charAt(x)=='l'){
+          countYel++;
+
+        if(countRed > 1 || countBlu > 2 || countGre > 2 || countYel > 2)
+
+          return false;
+
+        }
+
+      }
+
+    }
+
+    return true;
+
   }
 
   /**
