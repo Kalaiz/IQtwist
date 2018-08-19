@@ -10,6 +10,8 @@ import java.util.Set;
  */
 public class TwistGame {
 
+
+
   /**
    * Determine whether a piece or peg placement is well-formed according to the following:
    * - it consists of exactly four characters
@@ -21,10 +23,34 @@ public class TwistGame {
    * @param piecePlacement A string describing a single piece or peg placement
    * @return True if the placement is well-formed
    */
-  public static boolean isPlacementWellFormed(String piecePlacement) {
-    // FIXME Task 2: determine whether a piece or peg placement is well-formed
-    return false;
+
+
+  public static boolean isPlacementWellFormed(String piecePlacement){//chars are compared in accordance to ascii encoding values
+    char[]data ={'a','l','1','8','A','D','0','8'};
+    for(int i=0;i<3;i++){
+      if(i==2&&piecePlacement.charAt(i)>=data[i]&& piecePlacement.charAt(i)<data[i+1]){//for the fourth character case where the peg might be 0
+        return true;//no need of continue here as it is going to be the last iteration
+      }
+      else if( i!=2 && piecePlacement.charAt(i)>data[i]&& piecePlacement.charAt(i)<data[i+1]){
+       continue;
+     }
+     else{return false;}//no need break cause of return statement
+    }
+    return true;
   }
+  // FIXME Task 2: determine whether a piece or peg placement is well-formed
+
+
+  public static boolean isPlacementWellFormed2(String piecePlacement) {//initial  code
+    boolean  contain=(piecePlacement.charAt(0)>'a'&& piecePlacement.charAt(0)<'l');//when char is compared it is converted to ascii encoding numbers
+    boolean contain2=(piecePlacement.charAt(1)<'1'&& piecePlacement.charAt(1)<'8');
+    boolean contain3=(piecePlacement.charAt(2)<'A'&& piecePlacement.charAt(2)>'D');
+    boolean contain4= (piecePlacement.charAt(3)<='0'&& piecePlacement.charAt(3)>'8');// could be a peg
+    contain=contain && contain2&&contain3&& contain4;
+    return contain;
+  }
+
+
 
   /**
    * Determine whether a placement string is well-formed:
