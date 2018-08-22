@@ -49,9 +49,6 @@ public class TwistGame {
     contain=contain && contain2&&contain3&& contain4;
     return contain;
   }
-
-
-
   /**
    * Determine whether a placement string is well-formed:
    * - it consists of exactly N four-character piece placements (where N = 1 .. 15);
@@ -132,7 +129,6 @@ public class TwistGame {
     return true;
 
   }
-
   /**
    * Determine whether a placement string is valid.  To be valid, the placement
    * string must be well-formed and each piece placement must be a valid placement
