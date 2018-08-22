@@ -182,7 +182,7 @@ public class TwistGame {
    * @return An array of strings, each 32-characters long, describing a unique
    * unordered solution to the game given the starting point provided by placement.
    */
-  public static String[] getSolutions(String placement) {
+  public static String[] getSolutions(String placement) {//Use task 6 code here
     // FIXME Task 9: determine all solutions to the game, given a particular starting placement
     return null;
   }
