@@ -40,15 +40,6 @@ public class TwistGame {
   }
   // FIXME Task 2: determine whether a piece or peg placement is well-formed
 
-
-  public static boolean isPlacementWellFormed2(String piecePlacement) {//initial  code
-    boolean  contain=(piecePlacement.charAt(0)>'a'&& piecePlacement.charAt(0)<'l');//when char is compared it is converted to ascii encoding numbers
-    boolean contain2=(piecePlacement.charAt(1)<'1'&& piecePlacement.charAt(1)<'8');
-    boolean contain3=(piecePlacement.charAt(2)<'A'&& piecePlacement.charAt(2)>'D');
-    boolean contain4= (piecePlacement.charAt(3)<='0'&& piecePlacement.charAt(3)>'8');// could be a peg
-    contain=contain && contain2&&contain3&& contain4;
-    return contain;
-  }
   /**
    * Determine whether a placement string is well-formed:
    * - it consists of exactly N four-character piece placements (where N = 1 .. 15);
@@ -187,3 +178,15 @@ public class TwistGame {
     return null;
   }
 }
+
+
+/*DRAFT CODES
+  TASK2
+  public static boolean isPlacementWellFormed2(String piecePlacement) {//initial  code
+    boolean  contain=(piecePlacement.charAt(0)>'a'&& piecePlacement.charAt(0)<'l');//when char is compared it is converted to ascii encoding numbers
+    boolean contain2=(piecePlacement.charAt(1)<'1'&& piecePlacement.charAt(1)<'8');
+    boolean contain3=(piecePlacement.charAt(2)<'A'&& piecePlacement.charAt(2)>'D');
+    boolean contain4= (piecePlacement.charAt(3)<='0'&& piecePlacement.charAt(3)>'8');// could be a peg
+    contain=contain && contain2&&contain3&& contain4;
+    return contain;
+  }*/
