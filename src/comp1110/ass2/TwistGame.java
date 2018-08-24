@@ -25,19 +25,21 @@ public class TwistGame {
    */
 
 
-  public static boolean isPlacementWellFormed(String piecePlacement){//chars are compared in accordance to ascii encoding values
-    char[]data ={'a','l','1','8','A','D','0','8'};
-    for(int i=0;i<3;i++){
-      if(i==2&&piecePlacement.charAt(i)>=data[i]&& piecePlacement.charAt(i)<data[i+1]){//for the fourth character case where the peg might be 0
-        return true;//no need of continue here as it is going to be the last iteration
-      }
-      else if( i!=2 && piecePlacement.charAt(i)>data[i]&& piecePlacement.charAt(i)<data[i+1]){
-       continue;
+
+  public static boolean isPlacementWellFormed(String piecePlacement){
+    char[]data ={'a','l','1','8','A','D','0','7'};
+    /*For the fourth character;In situation where given input represents a peg,
+    then the 4th character must be 0. It also ensures the input has a length of 4.*/
+    if((piecePlacement.charAt(0)>='i'&& piecePlacement.charAt(3)!='0')|| piecePlacement.length()!=4){
+      return false;}
+    for(int i=0,z=0;i<8;i+=2,z++){
+      //Characters compared in accordance to ascii encoding values
+       if( piecePlacement.charAt(z)>=data[i]&& piecePlacement.charAt(z)<=data[i+1]){
      }
-     else{return false;}//no need break cause of return statement
+       else{return false;}
     }
-    return true;
-  }
+    return true; }
+
   // FIXME Task 2: determine whether a piece or peg placement is well-formed
 
   /**
