@@ -55,50 +55,57 @@ public class TwistGame {
    */
   public static boolean isPlacementStringWellFormed(String placement) {
     // FIXME Task 3: determine whether a placement is well-formed
+    String[] items = new String[placement.length()/4];                      //Using a loop to store all four-character placements into a String[]
+    int countRed = 0;
+    int countGre = 0;
+    int countBlu = 0;
+    int countYel = 0;
 
-    if(placement.length()%4!=0){                                            //Check if the length of the placement String is valid
+    //System.out.println(placement.length());
+
+    if(placement.length()%4!=0 || placement==null || placement==""){                                            //Check if the length of the placement String is valid
 
       return false;
 
     }else {
 
+      for(int i = 0; i < placement.length()/4 ; i++){
 
-      String[] items = new String[placement.length()/4];                   //Using a loop to store all four-character placements into a String[]
+        items[i] = placement.substring(4*i,4*i+4);
 
-      loop: for(int i = 0; i < placement.length()/4 ; i++){
-
-        items[i] = placement.substring(4*i,4*i+3);
-
-
-
-        if(isPlacementStringWellFormed(items[i])==true)                    //First judge if each placement is well-formed
-
-          continue loop;
-
-        else
+        if(isPlacementWellFormed(items[i])!=true)
 
           return false;
 
       }
 
+      if(placement.length()<=32 && placement.length()>4){
 
+        for(int j=0;j<placement.length()/4-1;j++){
 
-      for(int j = 1; j < 8; j++){                                          //Second judge if the 8 pieces occur in the correct alphabetical order or have duplicated
+          if(items[j].charAt(0) >= items[j+1].charAt(0)){
 
-        if( items[j-1].charAt(0) >= items[j].charAt(0) )
+            return false;
 
-          return false;
+          }
 
+        }
+
+      }else if(placement.length()>=32) {
+        for (int j = 1; j < 8; j++) {                                          //Second judge if the pieces occur in the correct alphabetical order or have duplicated
+
+          if (items[j - 1].charAt(0) >= items[j].charAt(0)) {
+            //System.out.println(items[j-1].charAt(0));
+            //System.out.println(items[j].charAt(0));
+
+            return false;
+          }
+
+        }
       }
-
 
 
       for(int x = 0; x < placement.length(); x++){                         //Last judge if pegs are outnumbered
-
-        int countRed = 0;
-        int countGre = 0;
-        int countBlu = 0;
-        int countYel = 0;
 
         if (placement.charAt(x)=='i')
           countRed++;
@@ -106,14 +113,14 @@ public class TwistGame {
           countBlu++;
         else if (placement.charAt(x)=='k')
           countGre++;
-        else if (placement.charAt(x)=='l'){
+        else if (placement.charAt(x)=='l')
           countYel++;
 
-        if(countRed > 1 || countBlu > 2 || countGre > 2 || countYel > 2)
+      }
 
-          return false;
+      if(countRed > 1 || countBlu > 2 || countGre > 2 || countYel > 2) {
 
-        }
+        return false;
 
       }
 

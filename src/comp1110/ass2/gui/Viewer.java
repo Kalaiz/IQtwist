@@ -10,7 +10,10 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.ColumnConstraints;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.RowConstraints;
 import javafx.stage.Stage;
 
 /**
@@ -42,17 +45,38 @@ public class Viewer extends Application {
     void makePlacement(String placement) {
 
         // FIXME Task 4: implement the simple placement viewer
+
+        GridPane grid = new GridPane();
+        for(int i=0;i<8;i++){
+            ColumnConstraints col = new ColumnConstraints(VIEWER_WIDTH/8);
+            grid.getColumnConstraints().add(col);
+        }
+
+        for(int i=0;i<4;i++){
+            RowConstraints row = new RowConstraints((VIEWER_HEIGHT-50)/4);
+            grid.getRowConstraints().add(row);
+        }
+
+
         ImageView imageView = new ImageView();
-        imageView.setImage(new Image(Viewer.class.getResource(URI_BASE+"a.png").toString()));
-        imageView.setFitWidth(100);
-        imageView.setFitHeight(200);
+        Image image = new Image(Viewer.class.getResource(URI_BASE+"a.png").toString());
+        imageView.setImage(image);
 
-        HBox hb = new HBox();
-        hb.getChildren().add(imageView);
-        //hb.setLayoutX(150);
-        //hb.setLayoutY(VIEWER_HEIGHT - 250);
-        controls.getChildren().add(hb);
+        ImageView imageView1 = new ImageView();
+        Image image1 = new Image(Viewer.class.getResource(URI_BASE+"c.png").toString());
+        imageView1.setImage(image1);
 
+        ImageView imageView2 = new ImageView();
+        Image image2 = new Image(Viewer.class.getResource(URI_BASE+"f.png").toString());
+        imageView2.setImage(image2);
+        imageView2.setRotate(270);
+        //imageView.setRotate(90);
+        grid.setGridLinesVisible(true);
+
+        grid.add(imageView,1,2,2,3);
+        grid.add(imageView1,2,0,4,1);
+        grid.add(imageView2,0,0,2,3);
+        controls.getChildren().addAll(grid);
     }
 
 
