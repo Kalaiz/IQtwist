@@ -61,9 +61,7 @@ public class TwistGame {
     int countBlu = 0;
     int countYel = 0;
 
-    //System.out.println(placement.length());
-
-    if(placement.length()%4!=0 || placement==null || placement==""){                                            //Check if the length of the placement String is valid
+    if(placement.length()%4!=0 || placement==null || placement==""){        //Check if the length of the placement String is valid and the content of the string
 
       return false;
 
@@ -95,9 +93,6 @@ public class TwistGame {
         for (int j = 1; j < 8; j++) {                                          //Second judge if the pieces occur in the correct alphabetical order or have duplicated
 
           if (items[j - 1].charAt(0) >= items[j].charAt(0)) {
-            //System.out.println(items[j-1].charAt(0));
-            //System.out.println(items[j].charAt(0));
-
             return false;
           }
 
