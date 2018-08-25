@@ -60,16 +60,23 @@ public class Viewer extends Application {
 
         ImageView imageView = new ImageView();
         Image image = new Image(Viewer.class.getResource(URI_BASE+"a.png").toString());
+        imageView.setFitWidth(279);
+        imageView.setFitHeight(200);
         imageView.setImage(image);
 
         ImageView imageView1 = new ImageView();
         Image image1 = new Image(Viewer.class.getResource(URI_BASE+"c.png").toString());
+        imageView1.setFitWidth(372);
+        imageView1.setFitHeight(100);
         imageView1.setImage(image1);
 
         ImageView imageView2 = new ImageView();
         Image image2 = new Image(Viewer.class.getResource(URI_BASE+"f.png").toString());
-        imageView2.setImage(image2);
+        imageView2.setFitWidth(279);
+        imageView2.setFitHeight(200);
         imageView2.setRotate(270);
+        imageView2.setImage(image2);
+
         //imageView.setRotate(90);
         grid.setGridLinesVisible(true);
 
