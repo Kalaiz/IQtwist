@@ -37,8 +37,9 @@ public class Viewer extends Application {
     private final Group controls = new Group();
     TextField textField;
 
-
-    public String returner(String input,int n ){//n =0 for .png alphabet ;n=1 for rotation
+    /*Returns a String of  .png alphabets or rotation value
+    for .png alphabet input should be  n =0 ; for rotation n=1*/
+    public String returner(String input,int n ){
         String s="";
         for(int i=0;i<input.length();i++){
             if((i-n)%4==0){
@@ -47,34 +48,37 @@ public class Viewer extends Application {
         return s;
 
     }
-    public int[] rotator_translate(String input3,int e){//return respective rotation ,translation value and  flipping approval.
+
+    /*return respective rotation ,translation value and
+     flipping approval for the respective eth image_objs */
+    public int[] rotator_translate(String input3,int e){
         int[] v1v2=new int[3];
         int rotation=0;
         int translation=0;
         if(Character.getNumericValue(input3.charAt(e))<4){
                 rotation=90*Character.getNumericValue(input3.charAt(e));
                 translation=0;//TODO : Get translation value
-
-
         }
         else {
             v1v2[2]=-1;//For Flip Horizontal set the scaleX variable of the ImageView to -1.
         }return  v1v2;
     }
 
-    public int[] position(String input2){//positioning method (in accordance to grid add)
+    /* returns an array of int values for
+     grid.add (for only one image_objs) */
+    public int[] position(String input2){
         return null;//TODO : Get grid values
     }
+
+
     /**
      * Draw a placement in the window, removing any previously drawn one
      *
      * @param placement  A valid placement string
      */
-    void makePlacement(String placement) {
+    void makePlacement(String placement) { // FIXME Task 4: implement the simple placement viewer
 
-        // FIXME Task 4: implement the simple placement viewer
-
-        GridPane grid = new GridPane();
+        GridPane grid = new GridPane();//TODO :make this grid displayed without clicking on refresh
         for(int i=0;i<8;i++){
             ColumnConstraints col = new ColumnConstraints(VIEWER_WIDTH/8);
             grid.getColumnConstraints().add(col);
@@ -85,24 +89,24 @@ public class Viewer extends Application {
             grid.getRowConstraints().add(row);
         }
 
+        grid.setGridLinesVisible(true);
 
         String rotations=returner(placement,1);
         String images=returner(placement,0); //for making multiple imageview objects
-        List <ImageView> imageviews=new ArrayList();
+        List <ImageView> image_objs=new ArrayList();
        for(int i=0;i<images.length();i++){
-           imageviews.add(new ImageView());
-           (imageviews.get(i)).setImage(new Image(Viewer.class.getResource(URI_BASE+ images.charAt(i)+".png").toString()));
+           image_objs.add(new ImageView());
+           (image_objs.get(i)).setImage(new Image(Viewer.class.getResource(URI_BASE+ images.charAt(i)+".png").toString()));
        }
 
 
 
-
-       for(int i=0;i<imageviews.size();i++){
+       for(int i=0;i<image_objs.size();i++){
           int[] t= rotator_translate(rotations,i);
-           imageviews.get(i).setRotate(t[0]);
-           imageviews.get(i).setTranslateX(t[1]);//to adjust the offset
+           image_objs.get(i).setRotate(t[0]);
+           image_objs.get(i).setTranslateX(t[1]);//to adjust the offset
            if(t[2]==-1){
-               imageviews.get(i).setScaleX(-1);//For Flip Horizontal set the scaleX variable of the ImageView to -1.
+               image_objs.get(i).setScaleX(-1);//For Flip Horizontal set the scaleX variable of the ImageView to -1.
            }
 
 
@@ -111,14 +115,14 @@ public class Viewer extends Application {
 
 
 
-
- /*
+/*
+      //TESTING
         ImageView imageView = new ImageView();
         Image image = new Image(Viewer.class.getResource(URI_BASE+"a.png").toString());
         imageView.setFitWidth(279);
         imageView.setFitHeight(190);
         imageView.setImage(image);
-        imageView.setRotate(90);
+
 
         ImageView imageView1 = new ImageView();
         Image image1 = new Image(Viewer.class.getResource(URI_BASE+"c.png").toString());
@@ -138,8 +142,8 @@ public class Viewer extends Application {
         grid.add(imageView,1,2,2,3);
         grid.add(imageView1,2,0,4,1);
         grid.add(imageView2,5,1,2,3);
-        grid.setGridLinesVisible(true);
-        */
+
+*/
         controls.getChildren().addAll(grid);
     }
 
