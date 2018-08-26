@@ -16,6 +16,9 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.RowConstraints;
 import javafx.stage.Stage;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * A very simple viewer for piece placements in the twist game.
  *
@@ -29,24 +32,38 @@ public class Viewer extends Application {
     private static final int SQUARE_SIZE = 60;
     private static final int VIEWER_WIDTH = 750;
     private static final int VIEWER_HEIGHT = 500;
-
     private static final String URI_BASE = "assets/";
-
     private final Group root = new Group();
     private final Group controls = new Group();
     TextField textField;
 
 
-    public String image_returner(String input){//Gets a string of just  .png names
+    public String returner(String input,int n ){//n =0 for .png alphabet ;n=1 for rotation
         String s="";
         for(int i=0;i<input.length();i++){
-            if(i%4==0){
+            if((i-n)%4==0){
                 s+=input.charAt(i);
             }}
         return s;
+
     }
-    public String position(String input2){//positioning method (in accordance to grid add)
-        return null;
+    public int[] rotator_translate(String input3,int e){//return respective rotation ,translation value and  flipping approval.
+        int[] v1v2=new int[3];
+        int rotation=0;
+        int translation=0;
+        if(Character.getNumericValue(input3.charAt(e))<4){
+                rotation=90*Character.getNumericValue(input3.charAt(e));
+                translation=0;//TODO : Get translation value
+
+
+        }
+        else {
+            v1v2[2]=-1;//For Flip Horizontal set the scaleX variable of the ImageView to -1.
+        }return  v1v2;
+    }
+
+    public int[] position(String input2){//positioning method (in accordance to grid add)
+        return null;//TODO : Get grid values
     }
     /**
      * Draw a placement in the window, removing any previously drawn one
@@ -68,20 +85,40 @@ public class Viewer extends Application {
             grid.getRowConstraints().add(row);
         }
 
-        /*String images=image_returner(placement); //for making multiple imageview objects
-        List imageviews=new ArrayList();
+
+        String rotations=returner(placement,1);
+        String images=returner(placement,0); //for making multiple imageview objects
+        List <ImageView> imageviews=new ArrayList();
        for(int i=0;i<images.length();i++){
            imageviews.add(new ImageView());
            (imageviews.get(i)).setImage(new Image(Viewer.class.getResource(URI_BASE+ images.charAt(i)+".png").toString()));
        }
-       */
 
 
+
+
+       for(int i=0;i<imageviews.size();i++){
+          int[] t= rotator_translate(rotations,i);
+           imageviews.get(i).setRotate(t[0]);
+           imageviews.get(i).setTranslateX(t[1]);//to adjust the offset
+           if(t[2]==-1){
+               imageviews.get(i).setScaleX(-1);//For Flip Horizontal set the scaleX variable of the ImageView to -1.
+           }
+
+
+
+       }
+
+
+
+
+ /*
         ImageView imageView = new ImageView();
         Image image = new Image(Viewer.class.getResource(URI_BASE+"a.png").toString());
         imageView.setFitWidth(279);
         imageView.setFitHeight(190);
         imageView.setImage(image);
+        imageView.setRotate(90);
 
         ImageView imageView1 = new ImageView();
         Image image1 = new Image(Viewer.class.getResource(URI_BASE+"c.png").toString());
@@ -98,11 +135,11 @@ public class Viewer extends Application {
         imageView2.setTranslateX(-45);//to adjust the offset
 
 
-        //imageView.setRotate(90);
-        grid.setGridLinesVisible(true);
         grid.add(imageView,1,2,2,3);
         grid.add(imageView1,2,0,4,1);
         grid.add(imageView2,5,1,2,3);
+        grid.setGridLinesVisible(true);
+        */
         controls.getChildren().addAll(grid);
     }
 
