@@ -80,28 +80,29 @@ public class Viewer extends Application {
         ImageView imageView = new ImageView();
         Image image = new Image(Viewer.class.getResource(URI_BASE+"a.png").toString());
         imageView.setFitWidth(279);
-        imageView.setFitHeight(200);
+        imageView.setFitHeight(190);
         imageView.setImage(image);
 
         ImageView imageView1 = new ImageView();
         Image image1 = new Image(Viewer.class.getResource(URI_BASE+"c.png").toString());
         imageView1.setFitWidth(372);
-        imageView1.setFitHeight(100);
+        imageView1.setFitHeight(80);
         imageView1.setImage(image1);
 
         ImageView imageView2 = new ImageView();//whenever setRotate is being used,it causes some misalignment.
         Image image2 = new Image(Viewer.class.getResource(URI_BASE+"f.png").toString());
         imageView2.setFitWidth(279);
-        imageView2.setFitHeight(200);
+        imageView2.setFitHeight(190);
         imageView2.setImage(image2);
+        imageView2.setRotate(270);
+        imageView2.setTranslateX(-45);//to adjust the offset
 
 
         //imageView.setRotate(90);
         grid.setGridLinesVisible(true);
-
         grid.add(imageView,1,2,2,3);
         grid.add(imageView1,2,0,4,1);
-        grid.add(imageView2,5,2,3,2);
+        grid.add(imageView2,5,1,2,3);
         controls.getChildren().addAll(grid);
     }
 
