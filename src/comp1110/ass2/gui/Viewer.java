@@ -15,7 +15,6 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.RowConstraints;
 import javafx.stage.Stage;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,7 +26,6 @@ import java.util.List;
  * placements.
  */
 public class Viewer extends Application {
-
     /* board layout */
     private static final int SQUARE_SIZE = 60;
     private static final int VIEWER_WIDTH = 750;
@@ -49,6 +47,8 @@ public class Viewer extends Application {
 
     }
 
+
+
     /*return respective rotation ,translation value and
      flipping approval for the respective eth image_objs */
     public int[] rotator_translate(String input3,int e){
@@ -64,11 +64,14 @@ public class Viewer extends Application {
         }return  v1v2;
     }
 
+
+
     /* returns an array of int values for
      grid.add (for only one image_objs) */
-    public int[] position(String input2){
+    public int[] orientation_shw(String input2){//TODO - set height width for each image_objs;using image_objs.getwidth
         return null;//TODO : Get grid values
     }
+
 
 
     /**
@@ -114,13 +117,13 @@ public class Viewer extends Application {
        }
 
 
-
 /*
+
       //TESTING
         ImageView imageView = new ImageView();
         Image image = new Image(Viewer.class.getResource(URI_BASE+"a.png").toString());
-        imageView.setFitWidth(279);
-        imageView.setFitHeight(190);
+        imageView.setFitWidth(image.getWidth()*0.9);
+        imageView.setFitHeight(image.getHeight()*0.9);
         imageView.setImage(image);
 
 
@@ -132,8 +135,8 @@ public class Viewer extends Application {
 
         ImageView imageView2 = new ImageView();//whenever setRotate is being used,it causes some misalignment.
         Image image2 = new Image(Viewer.class.getResource(URI_BASE+"f.png").toString());
-        imageView2.setFitWidth(279);
-        imageView2.setFitHeight(190);
+        imageView2.setFitWidth(image.getWidth()*0.9);
+        imageView2.setFitHeight(image.getHeight()*0.9);
         imageView2.setImage(image2);
         imageView2.setRotate(270);
         imageView2.setTranslateX(-45);//to adjust the offset
@@ -142,7 +145,6 @@ public class Viewer extends Application {
         grid.add(imageView,1,2,2,3);
         grid.add(imageView1,2,0,4,1);
         grid.add(imageView2,5,1,2,3);
-
 */
         controls.getChildren().addAll(grid);
     }
@@ -151,7 +153,7 @@ public class Viewer extends Application {
     /**
      * Create a basic text field for input and a refresh button.
      */
-    private void makeControls() {
+    private void makeControls(){
         Label label1 = new Label("Placement:");
         textField = new TextField ();
         textField.setPrefWidth(300);
