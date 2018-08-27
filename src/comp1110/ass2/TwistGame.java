@@ -1,5 +1,6 @@
 package comp1110.ass2;
 
+import java.util.Arrays;
 import java.util.Set;
 
 /**
@@ -137,6 +138,24 @@ public class TwistGame {
    * @return True if the placement sequence is valid
    */
   public static boolean isPlacementStringValid(String placement) {
+    /*piece : a-h, 1-8, A-D, 0-3, 4-7;
+    peg: i, j, k, l; 0
+    divide the placement string into pieces and pegs
+    store the information into a 2d matrix ch*/
+    char [][] ch = new char [12][4];//12 objects
+    char[] placechar = placement.toCharArray();
+    int rows = 12, columns = 4;
+    int s = 0;
+    int i = 0, j = 0;
+    while (i < 12){
+      ch [i][0] = placechar[s];
+      ch [i][1] = placechar[s+1];
+      ch [i][2] = placechar[s+2];
+      ch [i][3] = placechar[s+3];
+      s += 4;
+      i += 1;
+    }
+
     // FIXME Task 5: determine whether a placement string is valid
     return false;
   }

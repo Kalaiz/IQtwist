@@ -69,8 +69,10 @@ public class Viewer extends Application {
     /* returns an array of int values for
      grid.add (for only one image_objs) */
     public int[] orientation_shw(char row,char col){//TODO - set height width for each image_objs;using image_objs.getwidth
-
-        return null;//TODO : Get grid values
+            int[] iric=new int[2];
+            iric[0]=Character.getNumericValue(col);
+            iric[1]=(int) row -65;//using ascii encoding
+            return iric;//TODO : Get grid values
     }
 
 
@@ -80,6 +82,7 @@ public class Viewer extends Application {
      *
      * @param placement  A valid placement string
      */
+
     void makePlacement(String placement) { // FIXME Task 4: implement the simple placement viewer
 
         GridPane grid = new GridPane();//TODO :make this grid displayed without clicking on refresh
