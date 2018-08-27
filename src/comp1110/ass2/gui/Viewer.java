@@ -1,6 +1,4 @@
 package comp1110.ass2.gui;
-
-
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -46,10 +44,7 @@ public class Viewer extends Application {
                 s+=input.charAt(i);
             }}
         return s;
-
-
     }
-
 
     /*return respective rotation ,translation value and
      flipping approval for the respective eth image_objs */
@@ -66,22 +61,14 @@ public class Viewer extends Application {
         }return  v1v2;
     }
 
-
-
-
-    /* returns an array of int values for
-     grid.add (for only one image_objs) */
-    public int[] orientation_shw(char row,char col){//TODO - set height width for each image_objs;using image_objs.getwidth
+    /* returns an array of int values(irow and icol only )
+    for grid.add (for only one image_objs)*/
+    public int[] orientation_shw(char row,char col){
         int[] iric=new int[2];
         iric[0]=Character.getNumericValue(col);
         iric[1]=(int) row-65;//using ascii encoding
         return iric;//TODO : Get grid values
-
-
     }
-
-
-
 
     /**
      * Draw a placement in the window, removing any previously drawn one
@@ -89,20 +76,16 @@ public class Viewer extends Application {
      * @param placement  A valid placement string
      */
     void makePlacement(String placement) { // FIXME Task 4: implement the simple placement viewer
-
-
         GridPane grid = new GridPane();//TODO :make this grid displayed without clicking on refresh
         for(int i=0;i<8;i++){
             ColumnConstraints col = new ColumnConstraints(VIEWER_WIDTH/8);
             grid.getColumnConstraints().add(col);
         }
 
-
         for(int i=0;i<4;i++){
             RowConstraints row = new RowConstraints((VIEWER_HEIGHT-50)/4);
             grid.getRowConstraints().add(row);
         }
-
 
         grid.setGridLinesVisible(true);
         String row_val=returner(placement,2);
@@ -114,8 +97,6 @@ public class Viewer extends Application {
             image_objs.add(new ImageView());
             (image_objs.get(i)).setImage(new Image(Viewer.class.getResource(URI_BASE+ images.charAt(i)+".png").toString()));
         }
-
-
 
         for(int i=0;i<image_objs.size();i++){//Configuring all image_obj
             int[] t= rotator_translate(rotations,i);
@@ -132,24 +113,17 @@ public class Viewer extends Application {
             int colspan=(int)((image_objs.get(i).getImage()).getWidth())/100;
             int[] gridvalues=orientation_shw(row_val.charAt(i),col_value.charAt(i));
             //System.out.println(gridvalues[0]+""+gridvalues[1]+""+colspan+""+rowspan);
-            grid.add(image_objs.get(i),gridvalues[0],gridvalues[1],colspan,rowspan);
-
-
+            if(Character.getNumericValue(rotations.charAt(i))%2==0)//Since rotations changes the row span and colspan
+            { grid.add(image_objs.get(i),gridvalues[0],gridvalues[1],colspan,rowspan);}
+            else{grid.add(image_objs.get(i),gridvalues[0],gridvalues[1],rowspan,colspan);}
         }
 
-
-/*
-
-
-     //TESTING
+/*     //TESTING
        ImageView imageView = new ImageView();
        Image image = new Image(Viewer.class.getResource(URI_BASE+"a.png").toString());
        imageView.setFitWidth(image.getWidth()*0.9);
        imageView.setFitHeight(image.getHeight()*0.9);
        imageView.setImage(image);
-
-
-
 
        ImageView imageView1 = new ImageView();
        Image image1 = new Image(Viewer.class.getResource(URI_BASE+"c.png").toString());
@@ -157,29 +131,25 @@ public class Viewer extends Application {
        imageView1.setFitHeight(80);
        imageView1.setImage(image1);
 
-
        ImageView imageView2 = new ImageView();//whenever setRotate is being used,it causes some misalignment.
-       Image image2 = new Image(Viewer.class.getResource(URI_BASE+"f.png").toString());
-       imageView2.setFitWidth(image.getWidth()*0.9);
-       imageView2.setFitHeight(image.getHeight()*0.9);
+       Image image2 = new Image(Viewer.class.getResource(URI_BASE+"e.png").toString());
        imageView2.setImage(image2);
-       imageView2.setRotate(270);
-       imageView2.setTranslateX(-45);//to adjust the offset
+       imageView2.setScaleX(-1);
+       imageView2.setRotate(90);
+      //imageView2.setTranslateX(-45);//to adjust the offset
 
+      TRANSLATION DATA
+      when rotate is 90 or 270 -Translation is needed ;does not matter whether flipped or not.
+      360 and 180 does not require translation.
+      e piece does not need any changes.rotation 180 ,
 
        grid.add(imageView,1,2,2,3);
        grid.add(imageView1,2,0,4,1);
-       grid.add(imageView2,5,1,2,3);
-
-
-*/
+       grid.add(imageView2,5,1,2,2);*/
 
 
         controls.getChildren().addAll(grid);
     }
-
-
-
 
     /**
      * Create a basic text field for input and a refresh button.
@@ -204,7 +174,6 @@ public class Viewer extends Application {
         controls.getChildren().add(hb);
     }
 
-
     @Override
     public void start(Stage primaryStage) throws Exception {
         primaryStage.setTitle("TwistGame Viewer");
@@ -214,8 +183,4 @@ public class Viewer extends Application {
         primaryStage.setScene(scene);
         primaryStage.show();
     }
-
-
-
-
 }
