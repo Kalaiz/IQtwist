@@ -69,7 +69,8 @@ public class Viewer extends Application {
     /* returns an array of int values for
      grid.add (for only one image_objs) */
     public int[] orientation_shw(char row,char col){//TODO - set height width for each image_objs;using image_objs.getwidth
-return null;
+
+        return null;//TODO : Get grid values
     }
 
 
