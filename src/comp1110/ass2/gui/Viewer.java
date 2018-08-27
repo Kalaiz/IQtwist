@@ -51,12 +51,12 @@ public class Viewer extends Application {
 
     /*return respective rotation ,translation value and
      flipping approval for the respective eth image_objs */
-    public int[] rotator_translate(String input3,int e){
+    public int[] rotator_translate(String rotations2,int e){
         int[] v1v2=new int[3];
         int rotation=0;
         int translation=0;
-        if(Character.getNumericValue(input3.charAt(e))<4){
-                rotation=90*Character.getNumericValue(input3.charAt(e));
+        if(Character.getNumericValue(rotations2.charAt(e))<4){
+                rotation=90*Character.getNumericValue(rotations2.charAt(e));
                 translation=0;//TODO : Get translation value
         }
         else {
@@ -68,8 +68,8 @@ public class Viewer extends Application {
 
     /* returns an array of int values for
      grid.add (for only one image_objs) */
-    public int[] orientation_shw(String input2){//TODO - set height width for each image_objs;using image_objs.getwidth
-        return null;//TODO : Get grid values
+    public int[] orientation_shw(char row,char col){//TODO - set height width for each image_objs;using image_objs.getwidth
+return null;
     }
 
 
@@ -93,7 +93,8 @@ public class Viewer extends Application {
         }
 
         grid.setGridLinesVisible(true);
-
+        String row_val=returner(placement,2);
+        String col_value=returner(placement,3);
         String rotations=returner(placement,1);
         String images=returner(placement,0); //for making multiple imageview objects
         List <ImageView> image_objs=new ArrayList();
@@ -104,7 +105,7 @@ public class Viewer extends Application {
 
 
 
-       for(int i=0;i<image_objs.size();i++){
+       for(int i=0;i<image_objs.size();i++){//Configuring all image_obj
           int[] t= rotator_translate(rotations,i);
            image_objs.get(i).setRotate(t[0]);
            image_objs.get(i).setTranslateX(t[1]);//to adjust the offset
@@ -115,6 +116,13 @@ public class Viewer extends Application {
 
 
        }
+        for(int i=0;i<image_objs.size();i++){
+            int rowspan=(int)image_objs.get(i).getFitWidth()/100;
+            int colspan=(int)image_objs.get(i).getFitHeight()/100;
+            int[] gridvalues=orientation_shw(row_val.charAt(i),col_value.charAt(i));
+            grid.add(image_objs.get(i),gridvalues[0],gridvalues[1],colspan,rowspan);
+
+        }
 
 
 /*
@@ -141,11 +149,11 @@ public class Viewer extends Application {
         imageView2.setRotate(270);
         imageView2.setTranslateX(-45);//to adjust the offset
 
-
         grid.add(imageView,1,2,2,3);
         grid.add(imageView1,2,0,4,1);
         grid.add(imageView2,5,1,2,3);
 */
+
         controls.getChildren().addAll(grid);
     }
 
