@@ -2,6 +2,7 @@ package comp1110.ass2.gui;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -9,13 +10,11 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.ColumnConstraints;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.RowConstraints;
+import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import java.util.ArrayList;
 import java.util.List;
+import javafx.geometry.Pos;
 
 
 /**
@@ -37,8 +36,9 @@ public class Viewer extends Application {
     TextField textField;
 
 
-    /*Returns a String of  .png alphabets or rotation value
-    for .png alphabet input should be  n =0 ; for rotation n=1*/
+    /*Returns a String of  .png alphabets or rotation value or
+    column value or row valuefor .png alphabet input should be
+      n =0 ; for rotation n=1*/
     public String returner(String input,int n ){
         String s="";
         for(int i=0;i<input.length();i++){
@@ -93,7 +93,8 @@ public class Viewer extends Application {
      * @param placement  A valid placement string
      */
     void makePlacement(String placement) { // FIXME Task 4: implement the simple placement viewer
-        GridPane grid = new GridPane();//TODO :make this grid displayed without clicking on refresh
+        StackPane stack = new StackPane();
+        GridPane grid = new GridPane();
         for(int i=0;i<8;i++){
             ColumnConstraints col = new ColumnConstraints(92);
             grid.getColumnConstraints().add(col);
@@ -103,7 +104,6 @@ public class Viewer extends Application {
             RowConstraints row = new RowConstraints(92);
             grid.getRowConstraints().add(row);
         }
-
         grid.setGridLinesVisible(true);
         String row_val=returner(placement,2);
         String col_value=returner(placement,1);
@@ -129,7 +129,6 @@ public class Viewer extends Application {
 
         }
 
-
         for(int i=0;i<image_objs.size();i++){
             int rowspan=(int)((image_objs.get(i).getImage())).getHeight()/100;
             int colspan=(int)((image_objs.get(i).getImage()).getWidth())/100;
@@ -138,6 +137,7 @@ public class Viewer extends Application {
             { grid.add(image_objs.get(i),gridvalues[0],gridvalues[1],colspan,rowspan);}
             else{
                 grid.add(image_objs.get(i),gridvalues[0],gridvalues[1],rowspan,colspan);}
+
         }
 
   /*//TESTING
@@ -178,8 +178,10 @@ public class Viewer extends Application {
        grid.add(imageView,0,0,1,4);
        grid.add(imageView1,2,0,4,1);
        grid.add(imageView2,5,1,2,2);*/
-
-
+/*
+        stack.getChildren().addAll(grid);
+        stack.setAlignment(Pos.TOP_RIGHT);
+        controls.getChildren().addAll(stack);*/
         controls.getChildren().addAll(grid);
     }
 
