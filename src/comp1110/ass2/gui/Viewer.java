@@ -118,7 +118,7 @@ public class Viewer extends Application {
             else{grid.add(image_objs.get(i),gridvalues[0],gridvalues[1],rowspan,colspan);}
         }
 
-/*     //TESTING
+   /*  //TESTING
        ImageView imageView = new ImageView();
        Image image = new Image(Viewer.class.getResource(URI_BASE+"a.png").toString());
        imageView.setFitWidth(image.getWidth()*0.9);
@@ -137,16 +137,29 @@ public class Viewer extends Application {
        imageView2.setScaleX(-1);
        imageView2.setRotate(90);
       //imageView2.setTranslateX(-45);//to adjust the offset
-
+*//*
       TRANSLATION DATA
+        R90    R180    R270
+      a -45             -45
+      b
+      c
+      d
+      e
+      f
+      g
+      h
+      i
+      j
+      k
+      l
       when rotate is 90 or 270 -Translation is needed ;does not matter whether flipped or not.
-      360 and 180 does not require translation.
-      e piece does not need any changes.rotation 180 ,
+      180 does not require translation.
+      e piece does not need any changes.rotation 180 ,*//*
 
        grid.add(imageView,1,2,2,3);
        grid.add(imageView1,2,0,4,1);
-       grid.add(imageView2,5,1,2,2);*/
-
+       grid.add(imageView2,5,1,2,2);
+*/
 
         controls.getChildren().addAll(grid);
     }
