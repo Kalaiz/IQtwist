@@ -47,7 +47,11 @@ public class Viewer extends Application {
     }
 
     /*return respective rotation ,translation value and
-     flipping approval for the respective eth image_objs */
+     flipping approval for the respective eth image_objs
+
+     while rotating, if the second number is greater than 3, for example a4. We flip the a0, if
+     it is a7, we still flip the a0 and totate for 7%4 times.
+     */
     public int[] rotator_translate(String rotations2,int e){
         int[] v1v2=new int[3];
         int rotation=0;
