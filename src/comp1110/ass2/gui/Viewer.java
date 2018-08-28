@@ -16,6 +16,9 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.RowConstraints;
 import javafx.stage.Stage;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * A very simple viewer for piece placements in the twist game.
  *
@@ -37,6 +40,14 @@ public class Viewer extends Application {
     TextField textField;
 
 
+    public String image_returner(String input){
+        String s="";
+        for(int i=0;i<input.length();i++){
+            if(i%4==0){
+                s+=input.charAt(i);
+            }}
+        return s;
+    }
     /**
      * Draw a placement in the window, removing any previously drawn one
      *
@@ -46,7 +57,28 @@ public class Viewer extends Application {
 
         // FIXME Task 4: implement the simple placement viewer
 
-        GridPane grid = new GridPane();
+        String images=image_returner(placement);
+        List<ImageView> imageviews=new ArrayList();
+        //ImageView iv = new ImageView();
+       for(int i=0;i<images.length();i++){
+           imageviews.add(new ImageView());
+           (imageviews.get(i)).setImage(new Image(Viewer.class.getResource(URI_BASE+ images.charAt(i)+".png").toString()));
+       }
+
+        // FIXME Task 4: implement the simple placement viewer
+        ImageView imageView = new ImageView();
+        imageView.setImage(new Image(Viewer.class.getResource(URI_BASE+"a.png").toString()));
+        imageView.setFitWidth(279);
+        imageView.setFitHeight(200);
+        HBox hb = new HBox();
+        hb.getChildren().add(imageView);
+        //hb.setLayoutX(150);
+        //hb.setLayoutY(VIEWER_HEIGHT - 250);
+        controls.getChildren().add(hb);
+
+
+
+        /*GridPane grid = new GridPane();
         for(int i=0;i<8;i++){
             ColumnConstraints col = new ColumnConstraints(VIEWER_WIDTH/8);
             grid.getColumnConstraints().add(col);
@@ -76,7 +108,7 @@ public class Viewer extends Application {
         grid.add(imageView,1,2,2,3);
         grid.add(imageView1,2,0,4,1);
         grid.add(imageView2,0,0,2,3);
-        controls.getChildren().addAll(grid);
+        controls.getChildren().addAll(grid);*/
     }
 
 
