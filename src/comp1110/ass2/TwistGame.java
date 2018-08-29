@@ -139,15 +139,18 @@ public class TwistGame {
    */
   public static boolean isPlacementStringValid(String placement) {
     /*piece : a-h, 1-8, A-D, 0-3, 4-7;
-    peg: i, j, k, l; 0
-    divide the placement string into pieces and pegs
-    store the information into a 2d matrix ch*/
-    char [][] ch = new char [12][4];//12 objects
+    *peg: i, j, k, l; 0
+    *divide the placement string into pieces and pegs
+    *store the information into a 2d matrix ch
+    */
+    boolean bh = false;
+    int rnumber = placement.length()/4;
+    int cnumber = 4;
+    char [][] ch = new char [rnumber][cnumber];//12 objects
     char[] placechar = placement.toCharArray();
-    int rows = 12, columns = 4;
     int s = 0;
     int i = 0, j = 0;
-    while (i < 12){
+    while (i < rnumber){
       ch [i][0] = placechar[s];
       ch [i][1] = placechar[s+1];
       ch [i][2] = placechar[s+2];
@@ -156,8 +159,71 @@ public class TwistGame {
       i += 1;
     }
 
+    /** pieces must be entirely on the board
+     * left and top, for pegs
+     * 1 < ch[i][1] < 8, A < ch[i][2] < D
+     */
+    for (i = 0; i < rnumber; i++){
+      if ((ch[i][1]<'1')||(ch[i][1]>'8')){
+        bh = false;
+      } else if ((ch[i][2]<'A')||(ch[i][2]>'D')){
+        bh = false;
+      }
+    }
+
+    /**right and bottom:
+     * just 8 pieces
+     */
+    for (i = 0; i < rnumber; i++){
+      //piece a, b, d, f are 2*3 grids
+      if ((ch[i][0]=='a')||(ch[i][0]=='b')||(ch[i][0]=='d')||(ch[i][0]=='f')){
+        //right and bottom of the pieces
+        if (ch[i][3]%2==0){
+          if (((ch[i][1]) <= '6')&&((ch[i][2]) <= 'C')){
+            bh = true;
+          }
+        } else {
+          if (((ch[i][1]) <= '7')&&((ch[i][2]) <= 'B')){
+            bh = true;
+          }
+        }
+      } else if(ch[i][0]=='c'){
+        //piece c
+        if (ch[i][3]%2==0){
+          if ((ch[i][1]) <= '5'){
+            bh = true;
+          }
+        } else {
+          if ((ch[i][2]) <= 'A'){
+            bh = true;
+          }
+        }
+      } else if (ch[i][0]=='e'){
+        //piece e
+        if (((ch[i][1]) <= '7')&&(ch[i][2] <= 'C')){
+          bh = true;
+        }
+      } else if (ch[i][0]=='g'){
+        //piece g
+        if (((ch[i][1]) <= '6')&&((ch[i][2]) <= 'B')){
+          bh = true;
+        }
+      } else if (ch[i][0]=='h'){
+        //piece h
+        if ((ch[i][3]%2)==0){
+          if ((ch[i][1]) <= '6'){
+            bh = true;
+          }
+        } else {
+          if (ch[i][2] <= 'B'){
+            bh = true;
+          }
+        }
+      }
+    }
+
     // FIXME Task 5: determine whether a placement string is valid
-    return false;
+    return bh;
   }
 
   /**
