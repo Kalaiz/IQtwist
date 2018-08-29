@@ -3,11 +3,8 @@ package comp1110.ass2;
 import comp1110.ass2.gui.Viewer;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 /**
  * This class provides the text interface for the Twist Game
@@ -273,6 +270,8 @@ public class TwistGame {
      *store the information into a 2d matrix ch
      */
     boolean bh4=is_onboard(placement);
+    if(!bh4)
+    {return false;}
     boolean bh1 = true, bh2 = true, bh3 = true,  bh;
     int rnumber = placement.length()/4;
     int cnumber = 4;
@@ -866,7 +865,7 @@ public class TwistGame {
       }
     }
 
-    bh = bh1 && bh2 && bh3 && bh4;
+    bh = bh1 && bh2 && bh3;
     // FIXME Task 5: determine whether a placement string is valid
     return bh;
   }
