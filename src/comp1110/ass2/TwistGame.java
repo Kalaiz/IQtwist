@@ -135,8 +135,21 @@ public class TwistGame {
     return trial;
   }
 
-  public static int[][] rotator(){//rotates the array
+  public static int[][] rotator(int[][] actualpiece){//rotates the array
     int [][] trial= {{1,1,1}};
+
+    for(int i = 0; i < actualpiece.length ; i++){
+
+        for (int j = actualpiece[i].length ; j > 0 ; j--){
+
+          trial[i][j] = actualpiece[j-1][i];
+
+        }
+      //trial[i][actualpiece.length] = actualpiece[0][i];
+      //trial[i][0] = actualpiece[1][i];
+
+    }
+
     return trial;
   }
 
@@ -150,7 +163,7 @@ public class TwistGame {
   }
 
   public static boolean is_onboard(String placement){
- Viewer obj = new Viewer();
+    Viewer obj = new Viewer();
     int[][] board = new int[10][14];// going to change it to  a bigger one
     for(int row = 0; row < 10; row++){
       for(int col = 0; col < 14; col++){
