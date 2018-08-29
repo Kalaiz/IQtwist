@@ -140,6 +140,15 @@ public class TwistGame {
     return trial;
   }
 
+  public static int[][] placer(int[][] pieceplacement,int row2,int col2){//places the array into the board array
+    int [][] trial= {{1,1,1}};
+    return trial;
+  }
+
+  public static boolean checkboard(int [][] board2){//check if all pieces are in the inner board inner board pieces
+    return true;
+  }
+
   public static boolean is_onboard(String placement){
  Viewer obj = new Viewer();
     int[][] board = new int[4][8];// going to change it to  a bigger one
@@ -148,17 +157,29 @@ public class TwistGame {
         board[row][col] = 0;
       }
     }
+    String col=obj.returner(placement,1);
+    String row=obj.returner(placement,2);
     String reqd_pieces=obj.returner(placement,0);
     String orientation =obj.returner(placement,3);
     List <Pieces>objects = new ArrayList();
     for(int i =0;i<reqd_pieces.length();i++){
       objects.add(new Pieces(reqd_pieces.charAt(i)));
       if(Character.getNumericValue(orientation.charAt(i))>3){
-        flipper(objects.get(i).getactual_piece());
+        objects.get(i).changeactualplace(flipper(objects.get(i).getactual_piece()));//flipping
+        if(Character.getNumericValue(orientation.charAt(i))!=4){
+          // rotate x times
+        }
       }
       if(orientation.charAt(i)!='0'){
-
+                                           // rotate x times
       }
+      board=placer(objects.get(i).getactual_piece(),row.charAt(i),col.charAt(i));
+      if(!checkboard(board)){
+        return false;
+      }
+
+
+
     }
 
 

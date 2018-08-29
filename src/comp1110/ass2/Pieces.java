@@ -25,6 +25,11 @@ public class Pieces {
         return actual_piece;
     }
 
+    void changeactualplace(int[][] changingplace){
+        this.actual_piece=changingplace;
+
+    }
+
 
    /* Pieces(char piece_name,int row,int col,int[][] actualpieces){
         this.piece_name=piece_name;
