@@ -1,6 +1,10 @@
 package comp1110.ass2;
 
+import comp1110.ass2.gui.Viewer;
+
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -10,7 +14,6 @@ import java.util.Set;
  * (http://www.smartgames.eu/en/smartgames/iq-twist)
  */
 public class TwistGame {
-
 
 
   /**
@@ -125,6 +128,60 @@ public class TwistGame {
     return true;
 
   }
+
+
+  public static int[][] flipper(int[][] actualpiece){//flip the array stuffs
+    int [][] trial= {{1,1,1}};
+    return trial;
+  }
+
+  public static int[][] rotator(){//rotates the array
+    int [][] trial= {{1,1,1}};
+    return trial;
+  }
+
+  public static int[][] placer(int[][] pieceplacement,int row2,int col2){//places the array into the board array
+    int [][] trial= {{1,1,1}};
+    return trial;
+  }
+
+  public static boolean checkboard(int [][] board2){//check if all pieces are in the inner board inner board pieces
+    return true;
+  }
+
+  public static boolean is_onboard(String placement){
+ Viewer obj = new Viewer();
+    int[][] board = new int[10][14];// going to change it to  a bigger one
+    for(int row = 0; row < 10; row++){
+      for(int col = 0; col < 14; col++){
+        board[row][col] = 0;
+      }
+    }
+    String col=obj.returner(placement,1);
+    String row=obj.returner(placement,2);
+    String reqd_pieces=obj.returner(placement,0);
+    String orientation =obj.returner(placement,3);
+    List <Pieces>objects = new ArrayList();
+    for(int i =0;i<reqd_pieces.length();i++){
+      objects.add(new Pieces(reqd_pieces.charAt(i)));
+      if(Character.getNumericValue(orientation.charAt(i))>3){
+        objects.get(i).changeactualplace(flipper(objects.get(i).getactual_piece()));//flipping
+        if(Character.getNumericValue(orientation.charAt(i))!=4){
+          // rotate x times
+        }
+      }
+      if(orientation.charAt(i)!='0'){
+                                           // rotate x times
+      }
+      board=placer(objects.get(i).getactual_piece(),row.charAt(i),col.charAt(i));
+      if(!checkboard(board)){
+        return false;
+      }
+
+    }
+
+    return true;
+  }
   /**
    * Determine whether a placement string is valid.  To be valid, the placement
    * string must be well-formed and each piece placement must be a valid placement
@@ -150,6 +207,7 @@ public class TwistGame {
     char[] placechar = placement.toCharArray();
     int s = 0;
     int i = 0, j = 0;
+
     while (i < rnumber){
       ch [i][0] = placechar[s];
       ch [i][1] = placechar[s+1];
@@ -163,6 +221,7 @@ public class TwistGame {
      * left and top, for pegs
      * 1 < ch[i][1] < 8, A < ch[i][2] < D
      */
+
     for (i = 0; i < rnumber; i++){
       if ((ch[i][1]<'1')||(ch[i][1]>'8')){
         bh = false;
@@ -221,6 +280,315 @@ public class TwistGame {
         }
       }
     }
+
+    /**
+     * build a 4*8 matrix
+     * initialized as board[4][8] = {0}
+     * at the end
+     * if board[i][j] > 1
+     * bh is false
+     */
+    int[][] board = new int[4][8];
+    for(i = 0; i < 4; i++){
+      for(j = 0; j < 8; j++){
+        board[i][j] = 0;
+      }
+    }
+
+    /**
+     * left of the piece
+     * board[row][(int) ch[i][1]]
+     * top of the piece
+     * board[ch[i][2]-'A'][column]
+     */
+    int rch;//top row of the piece
+    int cch;//left column of the piece
+    for(i = 0; i < rnumber; i++){
+      rch = ch[i][2] - 'A';
+      cch = ch[i][1] - '1';
+      if (ch[i][0] == 'a'){
+        if (ch[i][3] == '0'){
+          board[rch][cch] += 1;
+          board[rch][cch+1] += 1;
+          board[rch][cch+2] += 1;
+          board[rch+1][cch+2] += 1;
+        }
+        if (ch[i][3] == '1'){
+          board[rch][cch+1] += 1;
+          board[rch+1][cch+1] += 1;
+          board[rch+2][cch+1] += 1;
+          board[rch+2][cch] += 1;
+        }
+        if (ch[i][3] == '2'){
+          board[rch][cch] += 1;
+          board[rch+1][cch] += 1;
+          board[rch+1][cch+1] += 1;
+          board[rch+1][cch+2] += 1;
+        }
+        if (ch[i][3] == '3'){
+          board[rch][cch] += 1;
+          board[rch+1][cch] += 1;
+          board[rch+2][cch] += 1;
+          board[rch][cch+1] += 1;
+        }
+        if (ch[i][3] == '4'){
+          board[rch+1][cch] += 1;
+          board[rch+1][cch+1] += 1;
+          board[rch+1][cch+2] += 1;
+          board[rch][cch+2] += 1;
+        }
+        if (ch[i][3] == '5'){
+          board[rch][cch] += 1;
+          board[rch+1][cch] += 1;
+          board[rch+2][cch] += 1;
+          board[rch+2][cch+1] += 1;
+        }
+        if (ch[i][3] == '6'){
+          board[rch][cch] += 1;
+          board[rch][cch+1] += 1;
+          board[rch][cch+2] += 1;
+          board[rch+1][cch] += 1;
+        }
+        if (ch[i][3] == '7'){
+          board[rch][cch] += 1;
+          board[rch][cch+1] += 1;
+          board[rch+1][cch+1] += 1;
+          board[rch+2][cch+1] += 1;
+        }
+      }
+
+      if (ch[i][0] == 'b'){
+        if ((ch[i][3] == '0') || (ch[i][3] == '2')){
+          board[rch][cch] += 1;
+          board[rch][cch+1] += 1;
+          board[rch+1][cch+1] += 1;
+          board[rch+1][cch+2] += 1;
+        }
+        if ((ch[i][3] == '1') ||(ch[i][3] == '3')){
+          board[rch][cch+1] += 1;
+          board[rch+1][cch+1] += 1;
+          board[rch+1][cch] += 1;
+          board[rch+2][cch] += 1;
+        }
+        if ((ch[i][3] == '4') || (ch[i][3] == '6')){
+          board[rch+1][cch] += 1;
+          board[rch+1][cch+1] += 1;
+          board[rch][cch+1] += 1;
+          board[rch][cch+2] += 1;
+        }
+        if ((ch[i][3] == '5') || (ch[i][3] == '7')){
+          board[rch][cch] += 1;
+          board[rch+1][cch] += 1;
+          board[rch+1][cch+1] += 1;
+          board[rch+2][cch+1] += 1;
+        }
+      }
+
+      if (ch[i][0] == 'c'){
+        if ((ch[i][3] == '0') || (ch[i][3] == '2') ||(ch[i][3] == '4') ||(ch[i][3] == '6')){
+          board[rch][cch] += 1;
+          board[rch][cch+1] += 1;
+          board[rch][cch+2] += 1;
+          board[rch][cch+3] += 1;
+        }
+        if ((ch[i][3] == '1') || (ch[i][3] == '3') || (ch[i][3] == '5') || (ch[i][3] == '7')){
+          board[rch][cch] += 1;
+          board[rch+1][cch] += 1;
+          board[rch+2][cch] += 1;
+          board[rch+3][cch] += 1;
+        }
+      }
+
+      if (ch[i][0] == 'd'){
+        if (ch[i][3] == '0'){
+          board[rch][cch] += 1;
+          board[rch][cch+1] += 1;
+          board[rch][cch+2] += 1;
+          board[rch+1][cch+1] += 1;
+          board[rch+1][cch+2] += 1;
+        }
+        if (ch[i][3] == '1'){
+          board[rch][cch+1] += 1;
+          board[rch+1][cch+1] += 1;
+          board[rch+2][cch+1] += 1;
+          board[rch+2][cch] += 1;
+          board[rch+1][cch] += 1;
+        }
+        if (ch[i][3] == '2'){
+          board[rch][cch] += 1;
+          board[rch][cch+1] += 1;
+          board[rch+1][cch] += 1;
+          board[rch+1][cch+1] += 1;
+          board[rch+1][cch+2] += 1;
+        }
+        if (ch[i][3] == '3'){
+          board[rch][cch] += 1;
+          board[rch+1][cch] += 1;
+          board[rch+2][cch] += 1;
+          board[rch][cch+1] += 1;
+          board[rch+1][cch+1] += 1;
+        }
+        if (ch[i][3] == '4'){
+          board[rch+1][cch] += 1;
+          board[rch+1][cch+1] += 1;
+          board[rch+1][cch+2] += 1;
+          board[rch][cch+2] += 1;
+          board[rch][cch+1] += 1;
+        }
+        if (ch[i][3] == '5'){
+          board[rch][cch] += 1;
+          board[rch+1][cch] += 1;
+          board[rch+2][cch] += 1;
+          board[rch+2][cch+1] += 1;
+          board[rch+1][cch+1] += 1;
+        }
+        if (ch[i][3] == '6'){
+          board[rch][cch] += 1;
+          board[rch][cch+1] += 1;
+          board[rch][cch+2] += 1;
+          board[rch+1][cch] += 1;
+          board[rch+1][cch+1] += 1;
+        }
+        if (ch[i][3] == '7'){
+          board[rch][cch] += 1;
+          board[rch][cch+1] += 1;
+          board[rch+1][cch+1] += 1;
+          board[rch+2][cch+1] += 1;
+          board[rch+1][cch] += 1;
+        }
+      }
+
+      if (ch[i][0] == 'e'){
+        if ((ch[i][3] == '0') || (ch[i][3] == '7')){
+          board[rch][cch] += 1;
+          board[rch][cch+1] += 1;
+          board[rch+1][cch+1] += 1;
+        }
+        if ((ch[i][3] == '1') || (ch[i][3] == '4')){
+          board[rch][cch+1] += 1;
+          board[rch+1][cch+1] += 1;
+          board[rch+1][cch] += 1;
+        }
+        if ((ch[i][3] == '2') || (ch[i][3] == '5')){
+          board[rch][cch] += 1;
+          board[rch+1][cch] += 1;
+          board[rch+1][cch+1] += 1;
+        }
+        if ((ch[i][3] == '3') || (ch[i][3] == '6')){
+          board[rch][cch] += 1;
+          board[rch+1][cch] += 1;
+          board[rch][cch+1] += 1;
+        }
+      }
+
+      if (ch[i][0] == 'f'){
+        if ((ch[i][3] == '0') || (ch[i][3] == '6')){
+          board[rch][cch] += 1;
+          board[rch][cch+1] += 1;
+          board[rch][cch+2] += 1;
+          board[rch+1][cch+1] += 1;
+        }
+        if ((ch[i][3] == '1') || (ch[i][3] == '7')){
+          board[rch][cch+1] += 1;
+          board[rch+1][cch+1] += 1;
+          board[rch+2][cch+1] += 1;
+          board[rch+1][cch] += 1;
+        }
+        if ((ch[i][3] == '2') || (ch[i][3] == '4')){
+          board[rch][cch+1] += 1;
+          board[rch+1][cch] += 1;
+          board[rch+1][cch+1] += 1;
+          board[rch+1][cch+2] += 1;
+        }
+        if ((ch[i][3] == '3') || (ch[i][3] == '5')){
+          board[rch][cch] += 1;
+          board[rch+1][cch] += 1;
+          board[rch+2][cch] += 1;
+          board[rch+1][cch+1] += 1;
+        }
+      }
+
+      if (ch[i][0] == 'g'){
+        if (ch[i][3] == '0'){
+          board[rch][cch] += 1;
+          board[rch+1][cch] += 1;
+          board[rch+1][cch+1] += 1;
+          board[rch+1][cch+2] += 1;
+          board[rch+2][cch+1] += 1;
+        }
+        if (ch[i][3] == '1'){
+          board[rch][cch+1] += 1;
+          board[rch][cch+2] += 1;
+          board[rch+1][cch] += 1;
+          board[rch+1][cch+1] += 1;
+          board[rch+2][cch+1] += 1;
+        }
+        if (ch[i][3] == '2'){
+          board[rch][cch+1] += 1;
+          board[rch+1][cch] += 1;
+          board[rch+1][cch+1] += 1;
+          board[rch+1][cch+2] += 1;
+          board[rch+2][cch+2] += 1;
+        }
+        if (ch[i][3] == '3'){
+          board[rch+2][cch] += 1;
+          board[rch][cch+1] += 1;
+          board[rch+1][cch+1] += 1;
+          board[rch+2][cch+1] += 1;
+          board[rch+1][cch+2] += 1;
+        }
+        if (ch[i][3] == '4'){
+          board[rch][cch+1] += 1;
+          board[rch+1][cch] += 1;
+          board[rch+1][cch+1] += 1;
+          board[rch+1][cch+2] += 1;
+          board[rch+2][cch] += 1;
+        }
+        if (ch[i][3] == '5'){
+          board[rch][cch] += 1;
+          board[rch][cch+1] += 1;
+          board[rch+1][cch+1] += 1;
+          board[rch+1][cch+2] += 1;
+          board[rch+2][cch+1] += 1;
+        }
+        if (ch[i][3] == '6'){
+          board[rch][cch+2] += 1;
+          board[rch+1][cch] += 1;
+          board[rch+1][cch+1] += 1;
+          board[rch+1][cch+2] += 1;
+          board[rch+2][cch+1] += 1;
+        }
+        if (ch[i][3] == '7'){
+          board[rch][cch+1] += 1;
+          board[rch+1][cch] += 1;
+          board[rch+1][cch+1] += 1;
+          board[rch+2][cch+1] += 1;
+          board[rch+2][cch+2] += 1;
+        }
+      }
+
+      if (ch[i][0] == 'h'){
+        if ((ch[i][3] == '0') || (ch[i][3] == '2') ||(ch[i][3] == '4') ||(ch[i][3] == '6')){
+          board[rch][cch] += 1;
+          board[rch][cch+1] += 1;
+          board[rch][cch+2] += 1;
+        }
+        if ((ch[i][3] == '1') || (ch[i][3] == '3') || (ch[i][3] == '5') || (ch[i][3] == '7')){
+          board[rch][cch] += 1;
+          board[rch+1][cch] += 1;
+          board[rch+2][cch] += 1;
+        }
+      }
+    }
+
+    for(i = 0; i < 4; i++){
+      for(j = 0; j < 8; j++){
+        if(board[i][j] > 1){
+          bh = false;
+        }
+      }
+    }
+
 
     // FIXME Task 5: determine whether a placement string is valid
     return bh;
