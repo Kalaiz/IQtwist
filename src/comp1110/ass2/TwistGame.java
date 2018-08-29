@@ -200,7 +200,7 @@ public class TwistGame {
     *divide the placement string into pieces and pegs
     *store the information into a 2d matrix ch
     */
-    boolean bh1 = false, bh2 = true, bh3 = true,  bh;
+    boolean bh1 = true, bh2 = true, bh3 = true,  bh;
     int rnumber = placement.length()/4;
     int cnumber = 4;
     char [][] ch = new char [rnumber][cnumber];//12 objects
@@ -230,45 +230,45 @@ public class TwistGame {
       //piece a, b, d, f are 2*3 grids
       if ((ch[i][0]=='a')||(ch[i][0]=='b')||(ch[i][0]=='d')||(ch[i][0]=='f')){
         //right and bottom of the pieces
-        if (ch[i][3]%2==0){
-          if (((ch[i][1]) <= '6')&&((ch[i][2]) <= 'C')){
-            bh1 = true;
+        if ((ch[i][3] == '0') || (ch[i][3] == '2') || (ch[i][3] == '4') || (ch[i][3] == '6')){
+          if (((ch[i][1]) > '6')||((ch[i][2]) > 'C')){
+            bh1 = false;
           }
         } else {
-          if (((ch[i][1]) <= '7')&&((ch[i][2]) <= 'B')){
-            bh1 = true;
+          if (((ch[i][1]) > '7')||((ch[i][2]) > 'B')){
+            bh1 = false;
           }
         }
       } else if(ch[i][0]=='c'){
         //piece c
-        if (ch[i][3]%2==0){
-          if ((ch[i][1]) <= '5'){
-            bh1 = true;
+        if ((ch[i][3] == '0') || (ch[i][3] == '2') || (ch[i][3] == '4') || (ch[i][3] == '6')){
+          if ((ch[i][1]) > '5'){
+            bh1 = false;
           }
         } else {
-          if ((ch[i][2]) <= 'A'){
-            bh1 = true;
-          }
+            if((ch[i][2]) > 'A'){
+                bh1 = false;
+            }
         }
-      } else if (ch[i][0]=='e'){
+        } else if (ch[i][0]=='e'){
         //piece e
-        if (((ch[i][1]) <= '7')&&(ch[i][2] <= 'C')){
-          bh1 = true;
+        if (((ch[i][1]) > '7')||(ch[i][2] > 'C')){
+          bh1 = false;
         }
       } else if (ch[i][0]=='g'){
         //piece g
-        if (((ch[i][1]) <= '6')&&((ch[i][2]) <= 'B')){
-          bh1 = true;
+        if (((ch[i][1]) > '6')||((ch[i][2]) > 'B')){
+          bh1 = false;
         }
       } else if (ch[i][0]=='h'){
         //piece h
-        if ((ch[i][3]%2)==0){
-          if ((ch[i][1]) <= '6'){
-            bh1 = true;
+        if ((ch[i][3]== '0') || (ch[i][3] == '2') || (ch[i][3] == '4') || (ch[i][3] == '6')){
+          if ((ch[i][1]) > '6'){
+            bh1 = false;
           }
         } else {
-          if (ch[i][2] <= 'B'){
-            bh1 = true;
+          if (ch[i][2] > 'B'){
+            bh1 = false;
           }
         }
       }
@@ -835,7 +835,8 @@ public class TwistGame {
    * unordered solution to the game given the starting point provided by placement.
    */
   public static String[] getSolutions(String placement) {//Use task 6 code here
-    // FIXME Task 9: determine all solutions to the game, given a particular starting placement
+
+      // FIXME Task 9: determine all solutions to the game, given a particular starting placement
     return null;
   }
 }
