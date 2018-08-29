@@ -129,11 +129,11 @@ public class TwistGame {
 
   }
 
+
   public static int[][] flipper(int[][] actualpiece){//flip the array stuffs
     int [][] trial= {{1,1,1}};
     return trial;
   }
-
 
   public static int[][] rotator(){//rotates the array
     int [][] trial= {{1,1,1}};
@@ -151,9 +151,9 @@ public class TwistGame {
 
   public static boolean is_onboard(String placement){
  Viewer obj = new Viewer();
-    int[][] board = new int[4][8];// going to change it to  a bigger one
-    for(int row = 0; row < 4; row++){
-      for(int col = 0; col < 8; col++){
+    int[][] board = new int[10][14];// going to change it to  a bigger one
+    for(int row = 0; row < 10; row++){
+      for(int col = 0; col < 14; col++){
         board[row][col] = 0;
       }
     }
@@ -178,15 +178,7 @@ public class TwistGame {
         return false;
       }
 
-
-
     }
-
-
-
-
-
-
 
     return true;
   }
