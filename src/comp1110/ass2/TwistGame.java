@@ -269,8 +269,8 @@ public class TwistGame {
      *divide the placement string into pieces and pegs
      *store the information into a 2d matrix ch
      */
-    boolean bh4=is_onboard(placement);
-    if(!bh4)
+
+    if(!is_onboard(placement))
     {return false;}
     boolean bh1 = true, bh2 = true, bh3 = true,  bh;
     int rnumber = placement.length()/4;
