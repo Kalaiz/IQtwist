@@ -14,9 +14,6 @@ import java.util.Set;
  * (http://www.smartgames.eu/en/smartgames/iq-twist)
  */
 public class TwistGame {
-  Pieces pieces;
-
-
 
 
   /**
