@@ -1,6 +1,10 @@
 package comp1110.ass2;
 
+import comp1110.ass2.gui.Viewer;
+
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -10,6 +14,8 @@ import java.util.Set;
  * (http://www.smartgames.eu/en/smartgames/iq-twist)
  */
 public class TwistGame {
+  Pieces pieces;
+
 
 
 
@@ -125,6 +131,47 @@ public class TwistGame {
     return true;
 
   }
+
+  public static int[][] flipper(int[][] actualpiece){//flip the array stuffs
+    int [][] trial= {{1,1,1}};
+    return trial;
+  }
+
+
+  public static int[][] rotator(){//rotates the array
+    int [][] trial= {{1,1,1}};
+    return trial;
+  }
+
+  public static boolean is_onboard(String placement){
+ Viewer obj = new Viewer();
+    int[][] board = new int[4][8];// going to change it to  a bigger one
+    for(int row = 0; row < 4; row++){
+      for(int col = 0; col < 8; col++){
+        board[row][col] = 0;
+      }
+    }
+    String reqd_pieces=obj.returner(placement,0);
+    String orientation =obj.returner(placement,3);
+    List <Pieces>objects = new ArrayList();
+    for(int i =0;i<reqd_pieces.length();i++){
+      objects.add(new Pieces(reqd_pieces.charAt(i)));
+      if(Character.getNumericValue(orientation.charAt(i))>3){
+        flipper(objects.get(i).getactual_piece());
+      }
+      if(orientation.charAt(i)!='0'){
+
+      }
+    }
+
+
+
+
+
+
+
+    return true;
+  }
   /**
    * Determine whether a placement string is valid.  To be valid, the placement
    * string must be well-formed and each piece placement must be a valid placement
@@ -150,6 +197,7 @@ public class TwistGame {
     char[] placechar = placement.toCharArray();
     int s = 0;
     int i = 0, j = 0;
+
     while (i < rnumber){
       ch [i][0] = placechar[s];
       ch [i][1] = placechar[s+1];
