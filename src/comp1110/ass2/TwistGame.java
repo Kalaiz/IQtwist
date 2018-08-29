@@ -163,6 +163,7 @@ public class TwistGame {
      * left and top, for pegs
      * 1 < ch[i][1] < 8, A < ch[i][2] < D
      */
+
     for (i = 0; i < rnumber; i++){
       if ((ch[i][1]<'1')||(ch[i][1]>'8')){
         bh = false;
@@ -221,6 +222,390 @@ public class TwistGame {
         }
       }
     }
+
+    /**
+     * build a 4*8 matrix
+     * initialized as board[4][8] = {0}
+     * at the end
+     * if board[i][j] > 1
+     * bh is false
+     */
+    int[][] board = new int[4][8];
+    for(i = 0; i < 4; i++){
+      for(j = 0; j < 8; j++){
+        board[i][j] = 0;
+      }
+    }
+
+    /**
+     * left of the piece
+     * board[row][(int) ch[i][1]]
+     * top of the piece
+     * board[ch[i][2]-'A'][column]
+     */
+    int rch;//top row of the piece
+    int cch;//left column of the piece
+    for(i = 0; i < rnumber; i++){
+      rch = ch[i][2] - 'A';
+      cch = ch[i][1] - '1';
+      if (ch[i][0] == 'a'){
+        if (ch[i][3] == '0'){
+          board[rch][cch] += 1;
+          board[rch][cch+1] += 1;
+          board[rch][cch+2] += 1;
+          board[rch+1][cch+2] += 1;
+        }
+        if (ch[i][3] == '1'){
+          board[rch][cch+1] += 1;
+          board[rch+1][cch+1] += 1;
+          board[rch+2][cch+1] += 1;
+          board[rch+2][cch] += 1;
+        }
+        if (ch[i][3] == '2'){
+          board[rch][cch] += 1;
+          board[rch+1][cch] += 1;
+          board[rch+1][cch+1] += 1;
+          board[rch+1][cch+2] += 1;
+        }
+        if (ch[i][3] == '3'){
+          board[rch][cch] += 1;
+          board[rch+1][cch] += 1;
+          board[rch+2][cch] += 1;
+          board[rch][cch+1] += 1;
+        }
+        if (ch[i][3] == '4'){
+          board[rch+1][cch] += 1;
+          board[rch+1][cch+1] += 1;
+          board[rch+1][cch+2] += 1;
+          board[rch][cch+2] += 1;
+        }
+        if (ch[i][3] == '5'){
+          board[rch][cch] += 1;
+          board[rch+1][cch] += 1;
+          board[rch+2][cch] += 1;
+          board[rch+2][cch+1] += 1;
+        }
+        if (ch[i][3] == '6'){
+          board[rch][cch] += 1;
+          board[rch][cch+1] += 1;
+          board[rch][cch+2] += 1;
+          board[rch+1][cch] += 1;
+        }
+        if (ch[i][3] == '7'){
+          board[rch][cch] += 1;
+          board[rch][cch+1] += 1;
+          board[rch+1][cch+1] += 1;
+          board[rch+2][cch+1] += 1;
+        }
+      }
+
+      if (ch[i][0] == 'b'){
+        if (ch[i][3] == '0'){
+          board[rch][cch] += 1;
+          board[rch][cch+1] += 1;
+          board[rch][cch+2] += 1;
+          board[rch+1][cch+2] += 1;
+        }
+        if (ch[i][3] == '1'){
+          board[rch][cch+1] += 1;
+          board[rch+1][cch+1] += 1;
+          board[rch+2][cch+1] += 1;
+          board[rch+2][cch] += 1;
+        }
+        if (ch[i][3] == '2'){
+          board[rch][cch] += 1;
+          board[rch+1][cch] += 1;
+          board[rch+1][cch+1] += 1;
+          board[rch+1][cch+2] += 1;
+        }
+        if (ch[i][3] == '3'){
+          board[rch][cch] += 1;
+          board[rch+1][cch] += 1;
+          board[rch+2][cch] += 1;
+          board[rch][cch+1] += 1;
+        }
+        if (ch[i][3] == '4'){
+          board[rch+1][cch] += 1;
+          board[rch+1][cch+1] += 1;
+          board[rch+1][cch+2] += 1;
+          board[rch][cch+2] += 1;
+        }
+        if (ch[i][3] == '5'){
+          board[rch][cch] += 1;
+          board[rch+1][cch] += 1;
+          board[rch+2][cch] += 1;
+          board[rch+2][cch+1] += 1;
+        }
+        if (ch[i][3] == '6'){
+          board[rch][cch] += 1;
+          board[rch][cch+1] += 1;
+          board[rch][cch+2] += 1;
+          board[rch+1][cch] += 1;
+        }
+        if (ch[i][3] == '7'){
+          board[rch][cch] += 1;
+          board[rch][cch+1] += 1;
+          board[rch+1][cch+1] += 1;
+          board[rch+2][cch+1] += 1;
+        }
+      }
+
+      if (ch[i][0] == 'c'){
+        if (ch[i][3] == '0'){
+          board[rch][cch] += 1;
+          board[rch][cch+1] += 1;
+          board[rch][cch+2] += 1;
+          board[rch+1][cch+2] += 1;
+        }
+        if (ch[i][3] == '1'){
+          board[rch][cch+1] += 1;
+          board[rch+1][cch+1] += 1;
+          board[rch+2][cch+1] += 1;
+          board[rch+2][cch] += 1;
+        }
+        if (ch[i][3] == '2'){
+          board[rch][cch] += 1;
+          board[rch+1][cch] += 1;
+          board[rch+1][cch+1] += 1;
+          board[rch+1][cch+2] += 1;
+        }
+        if (ch[i][3] == '3'){
+          board[rch][cch] += 1;
+          board[rch+1][cch] += 1;
+          board[rch+2][cch] += 1;
+          board[rch][cch+1] += 1;
+        }
+        if (ch[i][3] == '4'){
+          board[rch+1][cch] += 1;
+          board[rch+1][cch+1] += 1;
+          board[rch+1][cch+2] += 1;
+          board[rch][cch+2] += 1;
+        }
+        if (ch[i][3] == '5'){
+          board[rch][cch] += 1;
+          board[rch+1][cch] += 1;
+          board[rch+2][cch] += 1;
+          board[rch+2][cch+1] += 1;
+        }
+        if (ch[i][3] == '6'){
+          board[rch][cch] += 1;
+          board[rch][cch+1] += 1;
+          board[rch][cch+2] += 1;
+          board[rch+1][cch] += 1;
+        }
+        if (ch[i][3] == '7'){
+          board[rch][cch] += 1;
+          board[rch][cch+1] += 1;
+          board[rch+1][cch+1] += 1;
+          board[rch+2][cch+1] += 1;
+        }
+      }
+
+      if (ch[i][0] == 'd'){
+        if (ch[i][3] == '0'){
+          board[rch][cch] += 1;
+          board[rch][cch+1] += 1;
+          board[rch][cch+2] += 1;
+          board[rch+1][cch+2] += 1;
+        }
+        if (ch[i][3] == '1'){
+          board[rch][cch+1] += 1;
+          board[rch+1][cch+1] += 1;
+          board[rch+2][cch+1] += 1;
+          board[rch+2][cch] += 1;
+        }
+        if (ch[i][3] == '2'){
+          board[rch][cch] += 1;
+          board[rch+1][cch] += 1;
+          board[rch+1][cch+1] += 1;
+          board[rch+1][cch+2] += 1;
+        }
+        if (ch[i][3] == '3'){
+          board[rch][cch] += 1;
+          board[rch+1][cch] += 1;
+          board[rch+2][cch] += 1;
+          board[rch][cch+1] += 1;
+        }
+        if (ch[i][3] == '4'){
+          board[rch+1][cch] += 1;
+          board[rch+1][cch+1] += 1;
+          board[rch+1][cch+2] += 1;
+          board[rch][cch+2] += 1;
+        }
+        if (ch[i][3] == '5'){
+          board[rch][cch] += 1;
+          board[rch+1][cch] += 1;
+          board[rch+2][cch] += 1;
+          board[rch+2][cch+1] += 1;
+        }
+        if (ch[i][3] == '6'){
+          board[rch][cch] += 1;
+          board[rch][cch+1] += 1;
+          board[rch][cch+2] += 1;
+          board[rch+1][cch] += 1;
+        }
+        if (ch[i][3] == '7'){
+          board[rch][cch] += 1;
+          board[rch][cch+1] += 1;
+          board[rch+1][cch+1] += 1;
+          board[rch+2][cch+1] += 1;
+        }
+      }
+
+      if (ch[i][0] == 'e'){
+        if (ch[i][3] == '0'){
+          board[rch][cch] += 1;
+          board[rch][cch+1] += 1;
+          board[rch][cch+2] += 1;
+          board[rch+1][cch+2] += 1;
+        }
+        if (ch[i][3] == '1'){
+          board[rch][cch+1] += 1;
+          board[rch+1][cch+1] += 1;
+          board[rch+2][cch+1] += 1;
+          board[rch+2][cch] += 1;
+        }
+        if (ch[i][3] == '2'){
+          board[rch][cch] += 1;
+          board[rch+1][cch] += 1;
+          board[rch+1][cch+1] += 1;
+          board[rch+1][cch+2] += 1;
+        }
+        if (ch[i][3] == '3'){
+          board[rch][cch] += 1;
+          board[rch+1][cch] += 1;
+          board[rch+2][cch] += 1;
+          board[rch][cch+1] += 1;
+        }
+        if (ch[i][3] == '4'){
+          board[rch+1][cch] += 1;
+          board[rch+1][cch+1] += 1;
+          board[rch+1][cch+2] += 1;
+          board[rch][cch+2] += 1;
+        }
+        if (ch[i][3] == '5'){
+          board[rch][cch] += 1;
+          board[rch+1][cch] += 1;
+          board[rch+2][cch] += 1;
+          board[rch+2][cch+1] += 1;
+        }
+        if (ch[i][3] == '6'){
+          board[rch][cch] += 1;
+          board[rch][cch+1] += 1;
+          board[rch][cch+2] += 1;
+          board[rch+1][cch] += 1;
+        }
+        if (ch[i][3] == '7'){
+          board[rch][cch] += 1;
+          board[rch][cch+1] += 1;
+          board[rch+1][cch+1] += 1;
+          board[rch+2][cch+1] += 1;
+        }
+      }
+
+      if (ch[i][0] == 'f'){
+        if (ch[i][3] == '0'){
+          board[rch][cch] += 1;
+          board[rch][cch+1] += 1;
+          board[rch][cch+2] += 1;
+          board[rch+1][cch+2] += 1;
+        }
+        if (ch[i][3] == '1'){
+          board[rch][cch+1] += 1;
+          board[rch+1][cch+1] += 1;
+          board[rch+2][cch+1] += 1;
+          board[rch+2][cch] += 1;
+        }
+        if (ch[i][3] == '2'){
+          board[rch][cch] += 1;
+          board[rch+1][cch] += 1;
+          board[rch+1][cch+1] += 1;
+          board[rch+1][cch+2] += 1;
+        }
+        if (ch[i][3] == '3'){
+          board[rch][cch] += 1;
+          board[rch+1][cch] += 1;
+          board[rch+2][cch] += 1;
+          board[rch][cch+1] += 1;
+        }
+        if (ch[i][3] == '4'){
+          board[rch+1][cch] += 1;
+          board[rch+1][cch+1] += 1;
+          board[rch+1][cch+2] += 1;
+          board[rch][cch+2] += 1;
+        }
+        if (ch[i][3] == '5'){
+          board[rch][cch] += 1;
+          board[rch+1][cch] += 1;
+          board[rch+2][cch] += 1;
+          board[rch+2][cch+1] += 1;
+        }
+        if (ch[i][3] == '6'){
+          board[rch][cch] += 1;
+          board[rch][cch+1] += 1;
+          board[rch][cch+2] += 1;
+          board[rch+1][cch] += 1;
+        }
+        if (ch[i][3] == '7'){
+          board[rch][cch] += 1;
+          board[rch][cch+1] += 1;
+          board[rch+1][cch+1] += 1;
+          board[rch+2][cch+1] += 1;
+        }
+      }
+
+      if (ch[i][0] == 'g'){
+        if (ch[i][3] == '0'){
+          board[rch][cch] += 1;
+          board[rch][cch+1] += 1;
+          board[rch][cch+2] += 1;
+          board[rch+1][cch+2] += 1;
+        }
+        if (ch[i][3] == '1'){
+          board[rch][cch+1] += 1;
+          board[rch+1][cch+1] += 1;
+          board[rch+2][cch+1] += 1;
+          board[rch+2][cch] += 1;
+        }
+        if (ch[i][3] == '2'){
+          board[rch][cch] += 1;
+          board[rch+1][cch] += 1;
+          board[rch+1][cch+1] += 1;
+          board[rch+1][cch+2] += 1;
+        }
+        if (ch[i][3] == '3'){
+          board[rch][cch] += 1;
+          board[rch+1][cch] += 1;
+          board[rch+2][cch] += 1;
+          board[rch][cch+1] += 1;
+        }
+        if (ch[i][3] == '4'){
+          board[rch+1][cch] += 1;
+          board[rch+1][cch+1] += 1;
+          board[rch+1][cch+2] += 1;
+          board[rch][cch+2] += 1;
+        }
+        if (ch[i][3] == '5'){
+          board[rch][cch] += 1;
+          board[rch+1][cch] += 1;
+          board[rch+2][cch] += 1;
+          board[rch+2][cch+1] += 1;
+        }
+        if (ch[i][3] == '6'){
+          board[rch][cch] += 1;
+          board[rch][cch+1] += 1;
+          board[rch][cch+2] += 1;
+          board[rch+1][cch] += 1;
+        }
+        if (ch[i][3] == '7'){
+          board[rch][cch] += 1;
+          board[rch][cch+1] += 1;
+          board[rch+1][cch+1] += 1;
+          board[rch+2][cch+1] += 1;
+        }
+      }
+    }
+
 
     // FIXME Task 5: determine whether a placement string is valid
     return bh;
