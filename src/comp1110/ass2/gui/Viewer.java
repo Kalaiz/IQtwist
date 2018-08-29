@@ -31,13 +31,21 @@ public class Viewer extends Application {
     private static final String URI_BASE = "assets/";
     private final Group root = new Group();
     private final Group controls = new Group();
-    public static String iimages="";
+    public static String iimages=""; //String of pieces in accordance to the input placement String .
     TextField textField;
 
 
-    /*Returns a String of  .png alphabets or rotation value or
-    column value or row valuefor .png alphabet input should be
-      n =0 ; for column n=1; for row n=2;for orientation n=3*/
+    /**
+     * Returns a String of  .png alphabets or rotation value or
+     * column value or row value input should be
+     * n =0 ; for column n=1; for row n=2;for orientation n=3
+     * @param input is the piece encoding string
+     * @param n; 0 - for .png alphabet
+     *           1 - for column
+     *           2 - for row
+     *           3 - for orientation
+     * @return Respective "n" string
+      */
     public String returner(String input,int n ){
         String s="";
         for(int i=0;i<input.length();i++){
@@ -47,18 +55,24 @@ public class Viewer extends Application {
         return s;
     }
 
-    /*return respective rotation ,translation value and
-     flipping approval for the respective eth image_objs
-     while rotating, if the second number is greater than 3,
-     for example a4. We flip the a0, if it is a7, we still
-     flip the a0 and rotate it.
+
+    /**
+     * Gets the  respective rotation ,translation  and
+     * flipping value for the respective 'e'th image_objs.
+     * Only rotates  if the rotation value  is lesser than 4,If it
+     * is greater than 3 it will flip (in accordance to line y) and
+     * then rotates for example in a0A4. We flip the a piece , if
+     * it is a7, we still flip the a0 and rotate it.
+     * @param rotations2 is the String which consist of the entire rotation values of the input placement
+     * @param e - index
+     * @return Respective Rotation ,Transalation & flipping  value .
      */
     public int[] rotator_translate(String rotations2,int e){
         int[] rts=new int[3];
         int r=Character.getNumericValue(rotations2.charAt(e));
         if(r>=4){
             r-=4;
-            rts[2]=-1;//For Flip Horizontal set the scaleX variable of the ImageView to -1.
+            rts[2]=-1;//For Flip Horizontal set the scaleY variable of the ImageView to -1.
         }
             rts[0]=90*r;
             if(rts[0]==90||rts[0]==270){
@@ -72,13 +86,16 @@ public class Viewer extends Application {
                         break;
                     default:
                         rts[1]=0;
-                        break;}
+                       }
             }
         return  rts;
     }
 
-    /* returns an array of int values(irow and icol only )
-    for grid.add (for only one image_objs)*/
+
+    /**
+     * Returns an array of int values(irow and icol only )
+     * for grid.add (for only one image_objs)
+     */
     public int[] orientation_shw(char col,char row){
         int[] iric=new int[2];
         iric[0]=Character.getNumericValue(col)-1;
@@ -91,9 +108,10 @@ public class Viewer extends Application {
      *
      * @param placement  A valid placement string
      */
-    void makePlacement(String placement) { // FIXME Task 4: implement the simple placement viewer
+    //  Task 4: implement the simple placement viewer
+    void makePlacement(String placement) {
         StackPane stack = new StackPane();
-        GridPane grid = new GridPane();
+        GridPane grid = new GridPane(); //Creating Grid
         for(int i=0;i<8;i++){
             ColumnConstraints col = new ColumnConstraints(92);
             grid.getColumnConstraints().add(col);
@@ -121,10 +139,10 @@ public class Viewer extends Application {
         for(int i=0;i<image_objs.size();i++){//Configuring all image_obj
             int[] t= rotator_translate(rotations,i);
             if(t[2]==-1){
-                image_objs.get(i).setScaleY(-1);//For Flip Horizontal set the scaleX variable of the ImageView to -1.
+                image_objs.get(i).setScaleY(-1);//For Flip Horizontal set the scaleY variable of the ImageView to -1.
             }
             image_objs.get(i).setRotate(t[0]);
-            image_objs.get(i).setTranslateX(t[1]);//to adjust the offset
+            image_objs.get(i).setTranslateX(t[1]);//to adjust the offset caused by rotation
 
         }
 
@@ -139,29 +157,7 @@ public class Viewer extends Application {
 
         }
 
-  /*//TESTING
-       ImageView imageView = new ImageView();
-       Image image = new Image(Viewer.class.getResource(URI_BASE+"c.png").toString());
-       imageView.setFitWidth(image.getWidth()*92/100);
-       imageView.setFitHeight(image.getHeight()*92/100);
-       imageView.setImage(image);
-       imageView.setRotate(270);
-      imageView.setTranslateX(-140);//to adjust the offset
-
-       ImageView imageView1 = new ImageView();
-       Image image1 = new Image(Viewer.class.getResource(URI_BASE+"c.png").toString());
-       imageView1.setFitWidth(372);
-       imageView1.setFitHeight(80);
-       imageView1.setImage(image1);
-
-       ImageView imageView2 = new ImageView();//whenever setRotate is being used,it causes some misalignment.
-       Image image2 = new Image(Viewer.class.getResource(URI_BASE+"e.png").toString());
-       imageView2.setImage(image2);
-       imageView2.setScaleX(-1);
-       imageView2.setRotate(90);
-      //imageView2.setTranslateX(-45);//to adjust the offset
-
-     TRANSLATION DATA
+     /*TRANSLATION DATA
         R90    R180    R270  RS
       a -45     0      -45   N
       b -45     0      -45   N
@@ -171,16 +167,10 @@ public class Viewer extends Application {
       f -45     0      -45   N
       g 0       0        0   N
       h 0       0        0   N
-
-
-
-       grid.add(imageView,0,0,1,4);
-       grid.add(imageView1,2,0,4,1);
-       grid.add(imageView2,5,1,2,2);*/
-/*
-        stack.getChildren().addAll(grid);
+        stack.getChildren().addAll(grid);//Trying to use StackPane to center the Grid
         stack.setAlignment(Pos.TOP_RIGHT);
         controls.getChildren().addAll(stack);*/
+
         controls.getChildren().addAll(grid);
     }
 

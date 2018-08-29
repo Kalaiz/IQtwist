@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * This class provides the text interface for the Twist Game
@@ -29,7 +31,7 @@ public class TwistGame {
    */
 
 
-
+  //  Task 2: determine whether a piece or peg placement is well-formed
   public static boolean isPlacementWellFormed(String piecePlacement){
     char[]data ={'a','l','1','8','A','D','0','7'};
     /*For the fourth character;In situation where given input represents a peg,
@@ -44,7 +46,7 @@ public class TwistGame {
     }
     return true; }
 
-  // FIXME Task 2: determine whether a piece or peg placement is well-formed
+
 
   /**
    * Determine whether a placement string is well-formed:
@@ -128,60 +130,129 @@ public class TwistGame {
     return true;
 
   }
-
-
-  public static int[][] flipper(int[][] actualpiece){//flip the array stuffs
-    int [][] trial= {{1,1,1}};
-    return trial;
-  }
-
-  public static int[][] rotator(){//rotates the array
-    int [][] trial= {{1,1,1}};
-    return trial;
-  }
-
-  public static int[][] placer(int[][] pieceplacement,int row2,int col2){//places the array into the board array
-    int [][] trial= {{1,1,1}};
-    return trial;
-  }
-
-  public static boolean checkboard(int [][] board2){//check if all pieces are in the inner board inner board pieces
-    return true;
-  }
-
-  public static boolean is_onboard(String placement){
- Viewer obj = new Viewer();
-    int[][] board = new int[10][14];// going to change it to  a bigger one
-    for(int row = 0; row < 10; row++){
-      for(int col = 0; col < 14; col++){
-        board[row][col] = 0;
-      }
-    }
-    String col=obj.returner(placement,1);
-    String row=obj.returner(placement,2);
-    String reqd_pieces=obj.returner(placement,0);
-    String orientation =obj.returner(placement,3);
-    List <Pieces>objects = new ArrayList();
-    for(int i =0;i<reqd_pieces.length();i++){
-      objects.add(new Pieces(reqd_pieces.charAt(i)));
-      if(Character.getNumericValue(orientation.charAt(i))>3){
-        objects.get(i).changeactualplace(flipper(objects.get(i).getactual_piece()));//flipping
-        if(Character.getNumericValue(orientation.charAt(i))!=4){
-          // rotate x times
+  /**
+  *flip the array stuffs (not considering the holes in
+  * pieces for now) and hence cannot take in c or h pieces.
+  *@param actualpiece multidimensional array (Respective piece)
+  *@return  a Flipped array(in respective to line-X)
+  */
+  public static int[][] flipper(int[][] actualpiece){
+    int row=actualpiece.length;
+    int col=actualpiece[0].length;
+    int result[][]=new int[row][col];
+    for(int i =0; i<= row/2; i++){
+      for(int j=0; j < col; j++){
+          result[i][j]=actualpiece[row-(i+1)][j];
+          result[row-(i+1)][j]=actualpiece[i][j];
         }
       }
-      if(orientation.charAt(i)!='0'){
-                                           // rotate x times
-      }
-      board=placer(objects.get(i).getactual_piece(),row.charAt(i),col.charAt(i));
-      if(!checkboard(board)){
-        return false;
-      }
-
+    return result;
     }
 
-    return true;
+  /**
+   *rotates the array clockwise(90 degree)
+   *
+   *@param actualpiece2 multidimensional array (Respective piece)
+   *@return  a Rotated array
+   */
+  public static int[][] rotator(int[][] actualpiece2) {
+    int[][] rotated = new int[actualpiece2[0].length][actualpiece2.length];
+    for (int i = 0; i < actualpiece2[0].length; ++i) {
+      for (int j = 0; j < actualpiece2.length; ++j) {
+        rotated[i][j] = actualpiece2[actualpiece2.length - j - 1][i];
+      }
+    }
+    return rotated;
   }
+
+  /**
+   *Places the piece on the board multidimensional array
+   *
+   *@param board3  Non-modified board
+   *@param piecearr Multidimensional array of the piece
+   *@param row2 the row on which the top-most piece resides
+   *@param col2 the column in which the left-most piece resides
+   *@return  Updated board
+   */
+  public static int[][] placer(int[][] board3,int[][] piecearr,int row2,int col2){//places the array into the board array
+    int row=piecearr.length;
+    int col=piecearr[0].length;
+    int endr=row+row2;
+    int endc=col+col2;
+    for(int cr=0;row2<endr;row2++,cr++) {
+      int col2_temp=col2;
+      for (int cc=0; col2_temp<endc;col2_temp++,cc++) {
+          board3[row2+3][col2_temp+3]=piecearr[cr][cc];
+      }
+    }
+    return board3;
+  }
+
+  /**
+   *Checks if any pieces is outerboard(the main board)
+   *
+   *@param board2  Modified board
+   *@return  True if there is on the outerboard
+   */
+  public static boolean checkboard(int [][] board2){//check if all pieces are in the inner board inner board pieces
+    int row=board2.length;
+    int col=board2[0].length;
+    for(int cr=0;cr<row;cr++){
+      for(int cc=0;cc<col;cc++){
+        if((cr<3||cr>6)&&board2[cr][cc]==1){
+          return true;
+        }
+        else if((cc<3||cc>10)&& board2[cr][cc]==1){
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  /**
+   *Checks if any pieces is on the main board
+   *
+   *@param placement A well formed piece placement String
+   *@return  True if all pieces are on the main board
+   */
+
+  public static boolean is_onboard(String placement) {
+    Viewer obj = new Viewer();
+     int[][] board2 = new int[10][14];// Inclusive of the main board(4x8)
+    for (int row = 0; row < 10; row++) {
+      for (int col = 0; col < 14; col++) {
+        board2[row][col] = 0;
+      }
+    }
+    String col = obj.returner(placement, 1); //From Viewer class
+    String row = obj.returner(placement, 2);
+    String reqd_pieces = obj.returner(placement, 0);
+    String orientation = obj.returner(placement, 3);
+    List<Pieces> objects = new ArrayList();
+    for (int i = 0; i < reqd_pieces.length(); i++) {
+      char pname = reqd_pieces.charAt(i);
+      int orientation_no = Character.getNumericValue(orientation.charAt(i));
+      objects.add(new Pieces(pname));
+      if (orientation_no > 3) {
+        orientation_no -= 4;
+        if (pname == 'c' || pname == 'h') {//flipping these pieces will not cause any problem for on_board function
+        } else {
+          objects.get(i).changeactualplace(flipper(objects.get(i).getactual_piece()));//flipping
+        }
+      }
+      while (orientation_no != 0) {
+        objects.get(i).changeactualplace(rotator(objects.get(i).getactual_piece()));;
+        orientation_no--;
+      }
+
+      board2 = placer(board2, objects.get(i).getactual_piece(), row.charAt(i) - 65, Character.getNumericValue(col.charAt(i))-1 );
+
+      if (checkboard(board2)) {
+        return false;
+      }
+    }
+    return true;}
   /**
    * Determine whether a placement string is valid.  To be valid, the placement
    * string must be well-formed and each piece placement must be a valid placement
@@ -196,11 +267,12 @@ public class TwistGame {
    */
   public static boolean isPlacementStringValid(String placement) {
     /*piece : a-h, 1-8, A-D, 0-3, 4-7;
-    *peg: i, j, k, l; 0
-    *divide the placement string into pieces and pegs
-    *store the information into a 2d matrix ch
-    */
-    boolean bh = false;
+     *peg: i, j, k, l; 0
+     *divide the placement string into pieces and pegs
+     *store the information into a 2d matrix ch
+     */
+    boolean bh4=is_onboard(placement);
+    boolean bh1 = true, bh2 = true, bh3 = true,  bh;
     int rnumber = placement.length()/4;
     int cnumber = 4;
     char [][] ch = new char [rnumber][cnumber];//12 objects
@@ -222,13 +294,6 @@ public class TwistGame {
      * 1 < ch[i][1] < 8, A < ch[i][2] < D
      */
 
-    for (i = 0; i < rnumber; i++){
-      if ((ch[i][1]<'1')||(ch[i][1]>'8')){
-        bh = false;
-      } else if ((ch[i][2]<'A')||(ch[i][2]>'D')){
-        bh = false;
-      }
-    }
 
     /**right and bottom:
      * just 8 pieces
@@ -237,45 +302,45 @@ public class TwistGame {
       //piece a, b, d, f are 2*3 grids
       if ((ch[i][0]=='a')||(ch[i][0]=='b')||(ch[i][0]=='d')||(ch[i][0]=='f')){
         //right and bottom of the pieces
-        if (ch[i][3]%2==0){
-          if (((ch[i][1]) <= '6')&&((ch[i][2]) <= 'C')){
-            bh = true;
+        if ((ch[i][3] == '0') || (ch[i][3] == '2') || (ch[i][3] == '4') || (ch[i][3] == '6')){
+          if (((ch[i][1]) > '6')||((ch[i][2]) > 'C')){
+            bh1 = false;
           }
         } else {
-          if (((ch[i][1]) <= '7')&&((ch[i][2]) <= 'B')){
-            bh = true;
+          if (((ch[i][1]) > '7')||((ch[i][2]) > 'B')){
+            bh1 = false;
           }
         }
       } else if(ch[i][0]=='c'){
         //piece c
-        if (ch[i][3]%2==0){
-          if ((ch[i][1]) <= '5'){
-            bh = true;
+        if ((ch[i][3] == '0') || (ch[i][3] == '2') || (ch[i][3] == '4') || (ch[i][3] == '6')){
+          if ((ch[i][1]) > '5'){
+            bh1 = false;
           }
         } else {
-          if ((ch[i][2]) <= 'A'){
-            bh = true;
+          if((ch[i][2]) > 'A'){
+            bh1 = false;
           }
         }
       } else if (ch[i][0]=='e'){
         //piece e
-        if (((ch[i][1]) <= '7')&&(ch[i][2] <= 'C')){
-          bh = true;
+        if (((ch[i][1]) > '7')||(ch[i][2] > 'C')){
+          bh1 = false;
         }
       } else if (ch[i][0]=='g'){
         //piece g
-        if (((ch[i][1]) <= '6')&&((ch[i][2]) <= 'B')){
-          bh = true;
+        if (((ch[i][1]) > '6')||((ch[i][2]) > 'B')){
+          bh1 = false;
         }
       } else if (ch[i][0]=='h'){
         //piece h
-        if ((ch[i][3]%2)==0){
-          if ((ch[i][1]) <= '6'){
-            bh = true;
+        if ((ch[i][3]== '0') || (ch[i][3] == '2') || (ch[i][3] == '4') || (ch[i][3] == '6')){
+          if ((ch[i][1]) > '6'){
+            bh1 = false;
           }
         } else {
-          if (ch[i][2] <= 'B'){
-            bh = true;
+          if (ch[i][2] > 'B'){
+            bh1 = false;
           }
         }
       }
@@ -289,9 +354,15 @@ public class TwistGame {
      * bh is false
      */
     int[][] board = new int[4][8];
+    char[][] pegboard = new char[4][8];
+    int red = 'i';
+    int blue = 'j';
+    int green = 'k';
+    int yellow = 'l';
     for(i = 0; i < 4; i++){
       for(j = 0; j < 8; j++){
         board[i][j] = 0;
+        pegboard[i][j] = ' ';
       }
     }
 
@@ -355,6 +426,24 @@ public class TwistGame {
           board[rch+1][cch+1] += 1;
           board[rch+2][cch+1] += 1;
         }
+
+        //badpegs
+        if ((ch[i][3] == '0') || (ch[i][3] == '6')) {
+          pegboard[rch][cch] = 'i';
+          pegboard[rch][cch + 2] = 'i';
+        }
+        if ((ch[i][3] == '1') || (ch[i][3] == '7')) {
+          pegboard[rch][cch+1] = 'i';
+          pegboard[rch+2][cch + 1] = 'i';
+        }
+        if ((ch[i][3] == '2') || (ch[i][3] == '4')) {
+          pegboard[rch+1][cch] = 'i';
+          pegboard[rch+1][cch + 2] = 'i';
+        }
+        if ((ch[i][3] == '3') || (ch[i][3] == '5')) {
+          pegboard[rch][cch] = 'i';
+          pegboard[rch+2][cch] = 'i';
+        }
       }
 
       if (ch[i][0] == 'b'){
@@ -382,6 +471,17 @@ public class TwistGame {
           board[rch+1][cch+1] += 1;
           board[rch+2][cch+1] += 1;
         }
+
+        //badpegs
+        if ((ch[i][3] == '0') || (ch[i][3] == '3') || (ch[i][3] == '5') || (ch[i][3] == '6')) {
+          pegboard[rch+1][cch+1] = 'i';
+        }
+        if ((ch[i][3] == '1') || (ch[i][3] == '7')) {
+          pegboard[rch+1][cch] = 'i';
+        }
+        if ((ch[i][3] == '2') || (ch[i][3] == '4')) {
+          pegboard[rch][cch+1] = 'i';
+        }
       }
 
       if (ch[i][0] == 'c'){
@@ -396,6 +496,20 @@ public class TwistGame {
           board[rch+1][cch] += 1;
           board[rch+2][cch] += 1;
           board[rch+3][cch] += 1;
+        }
+
+        //badpegs
+        if ((ch[i][3] == '0') || (ch[i][3] == '4')) {
+          pegboard[rch][cch+1] = 'j';
+        }
+        if ((ch[i][3] == '1') || (ch[i][3] == '5')) {
+          pegboard[rch+1][cch] = 'j';
+        }
+        if ((ch[i][3] == '2') || (ch[i][3] == '6')) {
+          pegboard[rch][cch+2] = 'j';
+        }
+        if ((ch[i][3] == '3') || (ch[i][3] == '7')) {
+          pegboard[rch+2][cch] = 'j';
         }
       }
 
@@ -456,6 +570,40 @@ public class TwistGame {
           board[rch+2][cch+1] += 1;
           board[rch+1][cch] += 1;
         }
+
+        //badpegs
+        if (ch[i][3] == '0') {
+          pegboard[rch+1][cch+1] = 'j';
+          pegboard[rch+1][cch+2] = 'j';
+        }
+        if (ch[i][3] == '1') {
+          pegboard[rch+1][cch] = 'j';
+          pegboard[rch+2][cch] = 'j';
+        }
+        if (ch[i][3] == '2') {
+          pegboard[rch][cch] = 'j';
+          pegboard[rch][cch+1] = 'j';
+        }
+        if (ch[i][3] == '3') {
+          pegboard[rch][cch+1] = 'j';
+          pegboard[rch+1][cch+1] = 'j';
+        }
+        if (ch[i][3] == '4') {
+          pegboard[rch][cch+1] = 'j';
+          pegboard[rch][cch+2] = 'j';
+        }
+        if (ch[i][3] == '5') {
+          pegboard[rch+1][cch+1] = 'j';
+          pegboard[rch+2][cch+1] = 'j';
+        }
+        if (ch[i][3] == '6') {
+          pegboard[rch+1][cch] = 'j';
+          pegboard[rch+1][cch+1] = 'j';
+        }
+        if (ch[i][3] == '7') {
+          pegboard[rch][cch] = 'j';
+          pegboard[rch+1][cch] = 'j';
+        }
       }
 
       if (ch[i][0] == 'e'){
@@ -478,6 +626,24 @@ public class TwistGame {
           board[rch][cch] += 1;
           board[rch+1][cch] += 1;
           board[rch][cch+1] += 1;
+        }
+
+        //badpegs
+        if ((ch[i][3] == '0') || (ch[i][3] == '4')) {
+          pegboard[rch][cch+1] = 'k';
+          pegboard[rch+1][cch+1] = 'k';
+        }
+        if ((ch[i][3] == '1') || (ch[i][3] == '5')) {
+          pegboard[rch+1][cch] = 'k';
+          pegboard[rch+1][cch+1] = 'k';
+        }
+        if ((ch[i][3] == '2') || (ch[i][3] == '6')) {
+          pegboard[rch][cch] = 'k';
+          pegboard[rch+1][cch] = 'k';
+        }
+        if ((ch[i][3] == '3') || (ch[i][3] == '7')) {
+          pegboard[rch][cch] = 'k';
+          pegboard[rch][cch+1] = 'k';
         }
       }
 
@@ -505,6 +671,40 @@ public class TwistGame {
           board[rch+1][cch] += 1;
           board[rch+2][cch] += 1;
           board[rch+1][cch+1] += 1;
+        }
+
+        //badpegs
+        if (ch[i][3] == '0') {
+          pegboard[rch][cch+2] = 'k';
+          pegboard[rch+1][cch+1] = 'k';
+        }
+        if (ch[i][3] == '1') {
+          pegboard[rch+1][cch] = 'k';
+          pegboard[rch+2][cch+1] = 'k';
+        }
+        if (ch[i][3] == '2') {
+          pegboard[rch][cch+1] = 'k';
+          pegboard[rch+1][cch] = 'k';
+        }
+        if (ch[i][3] == '3') {
+          pegboard[rch][cch] = 'k';
+          pegboard[rch+1][cch+1] = 'k';
+        }
+        if (ch[i][3] == '4') {
+          pegboard[rch][cch+1] = 'k';
+          pegboard[rch+1][cch+2] = 'k';
+        }
+        if (ch[i][3] == '5') {
+          pegboard[rch+1][cch+1] = 'k';
+          pegboard[rch+2][cch] = 'k';
+        }
+        if (ch[i][3] == '6') {
+          pegboard[rch][cch] = 'k';
+          pegboard[rch+1][cch+1] = 'k';
+        }
+        if (ch[i][3] == '7') {
+          pegboard[rch][cch+1] = 'k';
+          pegboard[rch+1][cch] = 'k';
         }
       }
 
@@ -565,6 +765,48 @@ public class TwistGame {
           board[rch+2][cch+1] += 1;
           board[rch+2][cch+2] += 1;
         }
+
+        //badpegs
+        if (ch[i][3] == '0') {
+          pegboard[rch][cch] = 'l';
+          pegboard[rch+1][cch] = 'l';
+          pegboard[rch+2][cch+1] = 'l';
+        }
+        if (ch[i][3] == '1') {
+          pegboard[rch][cch+1] = 'l';
+          pegboard[rch][cch+2] = 'l';
+          pegboard[rch+1][cch] = 'l';
+        }
+        if (ch[i][3] == '2') {
+          pegboard[rch][cch+1] = 'l';
+          pegboard[rch+1][cch+2] = 'l';
+          pegboard[rch+2][cch+2] = 'l';
+        }
+        if (ch[i][3] == '3') {
+          pegboard[rch+1][cch+2] = 'l';
+          pegboard[rch+2][cch] = 'l';
+          pegboard[rch+2][cch+1] = 'l';
+        }
+        if (ch[i][3] == '4') {
+          pegboard[rch][cch+1] = 'l';
+          pegboard[rch+1][cch] = 'l';
+          pegboard[rch+2][cch] = 'l';
+        }
+        if (ch[i][3] == '5') {
+          pegboard[rch][cch] = 'l';
+          pegboard[rch][cch+1] = 'l';
+          pegboard[rch+1][cch+2] = 'l';
+        }
+        if (ch[i][3] == '6') {
+          pegboard[rch][cch+2] = 'l';
+          pegboard[rch+1][cch+2] = 'l';
+          pegboard[rch+2][cch+1] = 'l';
+        }
+        if (ch[i][3] == '7') {
+          pegboard[rch+1][cch] = 'l';
+          pegboard[rch+2][cch+1] = 'l';
+          pegboard[rch+2][cch+2] = 'l';
+        }
       }
 
       if (ch[i][0] == 'h'){
@@ -578,21 +820,56 @@ public class TwistGame {
           board[rch+1][cch] += 1;
           board[rch+2][cch] += 1;
         }
+
+        //badpegs
+        if ((ch[i][3] == '0') || (ch[i][3] == '1') || (ch[i][3] == '4') || (ch[i][3] == '5')) {
+          pegboard[rch][cch] = 'l';
+        }
+        if ((ch[i][3] == '2') || (ch[i][3] == '6')) {
+          pegboard[rch][cch+2] = 'l';
+        }
+        if ((ch[i][3] == '3') || (ch[i][3] == '7')) {
+          pegboard[rch+2][cch] = 'l';
+        }
       }
     }
 
     for(i = 0; i < 4; i++){
       for(j = 0; j < 8; j++){
         if(board[i][j] > 1){
-          bh = false;
+          bh2 = false;
         }
       }
     }
 
+    for (i = 0; i < rnumber; i++){
+      if(ch[i][0]=='i'){
+        if(pegboard[ch[i][2]-'A'][ch[i][1]-'1'] != 'i'){
+          bh3 = false;
+        }
+      }
+      if(ch[i][0]=='j'){
+        if(pegboard[ch[i][2]-'A'][ch[i][1]-'1'] != 'j'){
+          bh3 = false;
+        }
+      }
+      if(ch[i][0]=='k'){
+        if(pegboard[ch[i][2]-'A'][ch[i][1]-'1'] != 'k'){
+          bh3 = false;
+        }
+      }
+      if(ch[i][0]=='l'){
+        if(pegboard[ch[i][2]-'A'][ch[i][1]-'1'] != 'l'){
+          bh3 = false;
+        }
+      }
+    }
 
+    bh = bh1 && bh2 && bh3 && bh4;
     // FIXME Task 5: determine whether a placement string is valid
     return bh;
   }
+
 
   /**
    * Given a string describing a placement of pieces and pegs, return a set
@@ -636,14 +913,3 @@ public class TwistGame {
   }
 }
 
-
-/*DRAFT CODES
-  TASK2
-  public static boolean isPlacementWellFormed2(String piecePlacement) {//initial  code
-    boolean  contain=(piecePlacement.charAt(0)>'a'&& piecePlacement.charAt(0)<'l');//when char is compared it is converted to ascii encoding numbers
-    boolean contain2=(piecePlacement.charAt(1)<'1'&& piecePlacement.charAt(1)<'8');
-    boolean contain3=(piecePlacement.charAt(2)<'A'&& piecePlacement.charAt(2)>'D');
-    boolean contain4= (piecePlacement.charAt(3)<='0'&& piecePlacement.charAt(3)>'8');// could be a peg
-    contain=contain && contain2&&contain3&& contain4;
-    return contain;
-  }*/
