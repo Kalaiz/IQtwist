@@ -82,12 +82,12 @@ public class Viewer extends Application {
     void makePlacement(String placement) { // FIXME Task 4: implement the simple placement viewer
         GridPane grid = new GridPane();//TODO :make this grid displayed without clicking on refresh
         for(int i=0;i<8;i++){
-            ColumnConstraints col = new ColumnConstraints(VIEWER_WIDTH/8);
+            ColumnConstraints col = new ColumnConstraints(92);
             grid.getColumnConstraints().add(col);
         }
 
         for(int i=0;i<4;i++){
-            RowConstraints row = new RowConstraints((VIEWER_HEIGHT-50)/4);
+            RowConstraints row = new RowConstraints(92);
             grid.getRowConstraints().add(row);
         }
 
@@ -122,6 +122,31 @@ public class Viewer extends Application {
             else{grid.add(image_objs.get(i),gridvalues[0],gridvalues[1],rowspan,colspan);}
         }
 
+        ImageView imageView1 = new ImageView();
+        Image image1 = new Image(Viewer.class.getResource(URI_BASE+"c.png").toString());
+        imageView1.setFitWidth(image1.getWidth()*92/100);
+        imageView1.setFitHeight(image1.getHeight()*92/100);
+        imageView1.setRotate(90);
+        imageView1.setImage(image1);
+        imageView1.setTranslateX(-130);
+
+        ImageView imageView2 = new ImageView();//whenever setRotate is being used,it causes some misalignment.
+        Image image2 = new Image(Viewer.class.getResource(URI_BASE+"e.png").toString());
+        imageView2.setFitWidth(image2.getWidth()*0.9);
+        imageView2.setFitHeight(image2.getHeight()*0.9);
+        imageView2.setImage(image2);
+        imageView2.setRotate(90);
+
+        ImageView imageView3 = new ImageView();//whenever setRotate is being used,it causes some misalignment.
+        Image image3 = new Image(Viewer.class.getResource(URI_BASE+"g.png").toString());
+        imageView3.setFitWidth(image3.getWidth()*0.9);
+        imageView3.setFitHeight(image3.getHeight()*0.9);
+        imageView3.setImage(image3);
+        imageView3.setRotate(90);
+
+        grid.add(imageView1,3,0,1,4);
+        grid.add(imageView2,5,1,2,2);
+        grid.add(imageView3,0,1,3,3);
 /*     //TESTING
        ImageView imageView = new ImageView();
        Image image = new Image(Viewer.class.getResource(URI_BASE+"a.png").toString());
