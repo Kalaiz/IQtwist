@@ -213,7 +213,7 @@ public class TwistGame {
     *divide the placement string into pieces and pegs
     *store the information into a 2d matrix ch
     */
-    boolean bh = false;
+    boolean bh1 = false, bh2 = true, bh3 = true,  bh;
     int rnumber = placement.length()/4;
     int cnumber = 4;
     char [][] ch = new char [rnumber][cnumber];//12 objects
@@ -235,13 +235,6 @@ public class TwistGame {
      * 1 < ch[i][1] < 8, A < ch[i][2] < D
      */
 
-    for (i = 0; i < rnumber; i++){
-      if ((ch[i][1]<'1')||(ch[i][1]>'8')){
-        bh = false;
-      } else if ((ch[i][2]<'A')||(ch[i][2]>'D')){
-        bh = false;
-      }
-    }
 
     /**right and bottom:
      * just 8 pieces
@@ -252,43 +245,43 @@ public class TwistGame {
         //right and bottom of the pieces
         if (ch[i][3]%2==0){
           if (((ch[i][1]) <= '6')&&((ch[i][2]) <= 'C')){
-            bh = true;
+            bh1 = true;
           }
         } else {
           if (((ch[i][1]) <= '7')&&((ch[i][2]) <= 'B')){
-            bh = true;
+            bh1 = true;
           }
         }
       } else if(ch[i][0]=='c'){
         //piece c
         if (ch[i][3]%2==0){
           if ((ch[i][1]) <= '5'){
-            bh = true;
+            bh1 = true;
           }
         } else {
           if ((ch[i][2]) <= 'A'){
-            bh = true;
+            bh1 = true;
           }
         }
       } else if (ch[i][0]=='e'){
         //piece e
         if (((ch[i][1]) <= '7')&&(ch[i][2] <= 'C')){
-          bh = true;
+          bh1 = true;
         }
       } else if (ch[i][0]=='g'){
         //piece g
         if (((ch[i][1]) <= '6')&&((ch[i][2]) <= 'B')){
-          bh = true;
+          bh1 = true;
         }
       } else if (ch[i][0]=='h'){
         //piece h
         if ((ch[i][3]%2)==0){
           if ((ch[i][1]) <= '6'){
-            bh = true;
+            bh1 = true;
           }
         } else {
           if (ch[i][2] <= 'B'){
-            bh = true;
+            bh1 = true;
           }
         }
       }
@@ -302,9 +295,15 @@ public class TwistGame {
      * bh is false
      */
     int[][] board = new int[4][8];
+    char[][] pegboard = new char[4][8];
+    int red = 'i';
+    int blue = 'j';
+    int green = 'k';
+    int yellow = 'l';
     for(i = 0; i < 4; i++){
       for(j = 0; j < 8; j++){
         board[i][j] = 0;
+        pegboard[i][j] = ' ';
       }
     }
 
@@ -368,6 +367,24 @@ public class TwistGame {
           board[rch+1][cch+1] += 1;
           board[rch+2][cch+1] += 1;
         }
+
+        //badpegs
+        if ((ch[i][3] == '0') || (ch[i][3] == '6')) {
+          pegboard[rch][cch] = 'i';
+          pegboard[rch][cch + 2] = 'i';
+        }
+        if ((ch[i][3] == '1') || (ch[i][3] == '7')) {
+          pegboard[rch][cch+1] = 'i';
+          pegboard[rch+2][cch + 1] = 'i';
+        }
+        if ((ch[i][3] == '2') || (ch[i][3] == '4')) {
+          pegboard[rch+1][cch] = 'i';
+          pegboard[rch+1][cch + 2] = 'i';
+        }
+        if ((ch[i][3] == '3') || (ch[i][3] == '5')) {
+          pegboard[rch][cch] = 'i';
+          pegboard[rch+2][cch] = 'i';
+        }
       }
 
       if (ch[i][0] == 'b'){
@@ -395,6 +412,17 @@ public class TwistGame {
           board[rch+1][cch+1] += 1;
           board[rch+2][cch+1] += 1;
         }
+
+        //badpegs
+        if ((ch[i][3] == '0') || (ch[i][3] == '3') || (ch[i][3] == '5') || (ch[i][3] == '6')) {
+          pegboard[rch+1][cch+1] = 'i';
+        }
+        if ((ch[i][3] == '1') || (ch[i][3] == '7')) {
+          pegboard[rch+1][cch] = 'i';
+        }
+        if ((ch[i][3] == '2') || (ch[i][3] == '4')) {
+          pegboard[rch][cch+1] = 'i';
+        }
       }
 
       if (ch[i][0] == 'c'){
@@ -410,6 +438,20 @@ public class TwistGame {
           board[rch+2][cch] += 1;
           board[rch+3][cch] += 1;
         }
+
+        //badpegs
+          if ((ch[i][3] == '0') || (ch[i][3] == '4')) {
+            pegboard[rch][cch+1] = 'j';
+          }
+          if ((ch[i][3] == '1') || (ch[i][3] == '5')) {
+            pegboard[rch+1][cch] = 'j';
+          }
+          if ((ch[i][3] == '2') || (ch[i][3] == '6')) {
+            pegboard[rch][cch+2] = 'j';
+          }
+          if ((ch[i][3] == '3') || (ch[i][3] == '7')) {
+            pegboard[rch+2][cch] = 'j';
+          }
       }
 
       if (ch[i][0] == 'd'){
@@ -469,6 +511,40 @@ public class TwistGame {
           board[rch+2][cch+1] += 1;
           board[rch+1][cch] += 1;
         }
+
+        //badpegs
+        if (ch[i][3] == '0') {
+          pegboard[rch+1][cch+1] = 'j';
+          pegboard[rch+1][cch+2] = 'j';
+        }
+        if (ch[i][3] == '1') {
+          pegboard[rch+1][cch] = 'j';
+          pegboard[rch+2][cch] = 'j';
+        }
+        if (ch[i][3] == '2') {
+          pegboard[rch][cch] = 'j';
+          pegboard[rch][cch+1] = 'j';
+        }
+        if (ch[i][3] == '3') {
+          pegboard[rch][cch+1] = 'j';
+          pegboard[rch+1][cch+1] = 'j';
+        }
+        if (ch[i][3] == '4') {
+          pegboard[rch][cch+1] = 'j';
+          pegboard[rch][cch+2] = 'j';
+        }
+        if (ch[i][3] == '5') {
+          pegboard[rch+1][cch+1] = 'j';
+          pegboard[rch+2][cch+1] = 'j';
+        }
+        if (ch[i][3] == '6') {
+          pegboard[rch+1][cch] = 'j';
+          pegboard[rch+1][cch+1] = 'j';
+        }
+        if (ch[i][3] == '7') {
+          pegboard[rch][cch] = 'j';
+          pegboard[rch+1][cch] = 'j';
+        }
       }
 
       if (ch[i][0] == 'e'){
@@ -491,6 +567,24 @@ public class TwistGame {
           board[rch][cch] += 1;
           board[rch+1][cch] += 1;
           board[rch][cch+1] += 1;
+        }
+
+        //badpegs
+        if ((ch[i][3] == '0') || (ch[i][3] == '4')) {
+          pegboard[rch][cch+1] = 'k';
+          pegboard[rch+1][cch+1] = 'k';
+        }
+        if ((ch[i][3] == '1') || (ch[i][3] == '5')) {
+          pegboard[rch+1][cch] = 'k';
+          pegboard[rch+1][cch+1] = 'k';
+        }
+        if ((ch[i][3] == '2') || (ch[i][3] == '6')) {
+          pegboard[rch][cch] = 'k';
+          pegboard[rch+1][cch] = 'k';
+        }
+        if ((ch[i][3] == '3') || (ch[i][3] == '7')) {
+          pegboard[rch][cch] = 'k';
+          pegboard[rch][cch+1] = 'k';
         }
       }
 
@@ -518,6 +612,40 @@ public class TwistGame {
           board[rch+1][cch] += 1;
           board[rch+2][cch] += 1;
           board[rch+1][cch+1] += 1;
+        }
+
+        //badpegs
+        if (ch[i][3] == '0') {
+          pegboard[rch][cch+2] = 'k';
+          pegboard[rch+1][cch+1] = 'k';
+        }
+        if (ch[i][3] == '1') {
+          pegboard[rch+1][cch] = 'k';
+          pegboard[rch+2][cch+1] = 'k';
+        }
+        if (ch[i][3] == '2') {
+          pegboard[rch][cch+1] = 'k';
+          pegboard[rch+1][cch] = 'k';
+        }
+        if (ch[i][3] == '3') {
+          pegboard[rch][cch] = 'k';
+          pegboard[rch+1][cch+1] = 'k';
+        }
+        if (ch[i][3] == '4') {
+          pegboard[rch][cch+1] = 'k';
+          pegboard[rch+1][cch+2] = 'k';
+        }
+        if (ch[i][3] == '5') {
+          pegboard[rch+1][cch+1] = 'k';
+          pegboard[rch+2][cch] = 'k';
+        }
+        if (ch[i][3] == '6') {
+          pegboard[rch][cch] = 'k';
+          pegboard[rch+1][cch+1] = 'k';
+        }
+        if (ch[i][3] == '7') {
+          pegboard[rch][cch+1] = 'k';
+          pegboard[rch+1][cch] = 'k';
         }
       }
 
@@ -578,6 +706,48 @@ public class TwistGame {
           board[rch+2][cch+1] += 1;
           board[rch+2][cch+2] += 1;
         }
+
+        //badpegs
+        if (ch[i][3] == '0') {
+          pegboard[rch][cch] = 'l';
+          pegboard[rch+1][cch] = 'l';
+          pegboard[rch+2][cch+1] = 'l';
+        }
+        if (ch[i][3] == '1') {
+          pegboard[rch][cch+1] = 'l';
+          pegboard[rch][cch+2] = 'l';
+          pegboard[rch+1][cch] = 'l';
+        }
+        if (ch[i][3] == '2') {
+          pegboard[rch][cch+1] = 'l';
+          pegboard[rch+1][cch+2] = 'l';
+          pegboard[rch+2][cch+2] = 'l';
+        }
+        if (ch[i][3] == '3') {
+          pegboard[rch+1][cch+2] = 'l';
+          pegboard[rch+2][cch] = 'l';
+          pegboard[rch+2][cch+1] = 'l';
+        }
+        if (ch[i][3] == '4') {
+          pegboard[rch][cch+1] = 'l';
+          pegboard[rch+1][cch] = 'l';
+          pegboard[rch+2][cch] = 'l';
+        }
+        if (ch[i][3] == '5') {
+          pegboard[rch][cch] = 'l';
+          pegboard[rch][cch+1] = 'l';
+          pegboard[rch+1][cch+2] = 'l';
+        }
+        if (ch[i][3] == '6') {
+          pegboard[rch][cch+2] = 'l';
+          pegboard[rch+1][cch+2] = 'l';
+          pegboard[rch+2][cch+1] = 'l';
+        }
+        if (ch[i][3] == '7') {
+          pegboard[rch+1][cch] = 'l';
+          pegboard[rch+2][cch+1] = 'l';
+          pegboard[rch+2][cch+2] = 'l';
+        }
       }
 
       if (ch[i][0] == 'h'){
@@ -591,18 +761,52 @@ public class TwistGame {
           board[rch+1][cch] += 1;
           board[rch+2][cch] += 1;
         }
+
+        //badpegs
+        if ((ch[i][3] == '0') || (ch[i][3] == '1') || (ch[i][3] == '4') || (ch[i][3] == '5')) {
+          pegboard[rch][cch] = 'l';
+        }
+        if ((ch[i][3] == '2') || (ch[i][3] == '6')) {
+          pegboard[rch][cch+2] = 'l';
+        }
+        if ((ch[i][3] == '3') || (ch[i][3] == '7')) {
+          pegboard[rch+2][cch] = 'l';
+        }
       }
     }
 
     for(i = 0; i < 4; i++){
       for(j = 0; j < 8; j++){
         if(board[i][j] > 1){
-          bh = false;
+          bh2 = false;
         }
       }
     }
 
+    for (i = 0; i < rnumber; i++){
+      if(ch[i][0]=='i'){
+        if(pegboard[ch[i][2]-'A'][ch[i][1]-'1'] != 'i'){
+          bh3 = false;
+        }
+      }
+      if(ch[i][0]=='j'){
+        if(pegboard[ch[i][2]-'A'][ch[i][1]-'1'] != 'j'){
+          bh3 = false;
+        }
+      }
+      if(ch[i][0]=='k'){
+        if(pegboard[ch[i][2]-'A'][ch[i][1]-'1'] != 'k'){
+          bh3 = false;
+        }
+      }
+      if(ch[i][0]=='l'){
+        if(pegboard[ch[i][2]-'A'][ch[i][1]-'1'] != 'l'){
+          bh3 = false;
+        }
+      }
+    }
 
+    bh = bh1 && bh2 && bh3;
     // FIXME Task 5: determine whether a placement string is valid
     return bh;
   }
