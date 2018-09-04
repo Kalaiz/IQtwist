@@ -136,13 +136,18 @@ public class TwistGame {
   }
 
   public static int[][] rotator(int[][] actualpiece){//rotates the array
-    int [][] trial= {{1,1,1}};
+    int row=actualpiece.length;
+    System.out.println(row);
+    int col=actualpiece[0].length;
+    System.out.println(col);
+    int[][] trial=new int[col][row];
+
 
     for(int i = 0; i < actualpiece.length ; i++){
 
-        for (int j = actualpiece[i].length ; j > 0 ; j--){
+        for (int j = 0; j < actualpiece[i].length ; j++){
 
-          trial[i][j] = actualpiece[j-1][i];
+          trial[i][j] = actualpiece[actualpiece.length-j-1][i];
 
         }
       //trial[i][actualpiece.length] = actualpiece[0][i];
@@ -827,6 +832,16 @@ public class TwistGame {
    */
   public static Set<String> getViablePiecePlacements(String placement) {
     // FIXME Task 6: determine the set of valid next piece placements
+    Viewer v = new Viewer();
+    String placed_pieces = v.returner(placement,0);
+    String unplaced_pieces = "";
+    for (int i = 'a' ; i <= 'l' ; i++){
+      if(placed_pieces.indexOf(String.valueOf((char)i))==-1)
+        unplaced_pieces = unplaced_pieces + String.valueOf((char)i);
+    }
+    //System.out.println(unplaced_pieces);
+
+
     return null;
   }
 
@@ -850,6 +865,21 @@ public class TwistGame {
   public static String[] getSolutions(String placement) {//Use task 6 code here
     // FIXME Task 9: determine all solutions to the game, given a particular starting placement
     return null;
+  }
+
+
+  public static void main(String[] args) {
+    int[][] actual_piece2=new int[2][2];
+    actual_piece2[0][0]=1;
+    actual_piece2[0][1]=2;
+    actual_piece2[1][0]=3;
+    actual_piece2[1][1]=4;
+    actual_piece2=rotator(actual_piece2);
+    for(int i=0;i<actual_piece2.length;i++){
+      System.out.println();
+      for(int j=0;j<actual_piece2[i].length;j++)
+        System.out.print(actual_piece2[i][j]);
+    }
   }
 }
 
