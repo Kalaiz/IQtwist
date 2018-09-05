@@ -8,7 +8,7 @@ public class Board extends Application {
     private static final int BOARD_HEIGHT = 700;
 
     // FIXME Task 7: Implement a basic playable Twist Game in JavaFX that only allows pieces to be placed in valid places
-    //uses task 8(creates the base for the game) and 5 (check pieces can be used or not).
+    //uses task 8(creates the base for the game) and 5 (check pieces can be used or not).6 should be used here
     private void start_play(){}
 
     private void rotate(){}//rotate pieces

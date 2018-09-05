@@ -14,7 +14,6 @@ import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import java.util.ArrayList;
 import java.util.List;
-import javafx.geometry.Pos;
 
 
 /**
@@ -38,7 +37,7 @@ public class Viewer extends Application {
 
     /*Returns a String of  .png alphabets or rotation value or
     column value or row valuefor .png alphabet input should be
-      n =0 ; for rotation n=1*/
+      n =0 ; for column n=1; for row n=2;for orientation n=3*/
     public String returner(String input,int n ){
         String s="";
         for(int i=0;i<input.length();i++){
@@ -108,7 +107,7 @@ public class Viewer extends Application {
         String row_val=returner(placement,2);
         String col_value=returner(placement,1);
         String rotations=returner(placement,3);
-        Viewer.iimages=returner(placement,0); //for making multiple imageview objects
+        Viewer.iimages=returner(placement,0);
 
         List <ImageView> image_objs=new ArrayList();
         for(int i=0;i<Viewer.iimages.length();i++){
