@@ -241,6 +241,10 @@ int ctr =1;
 
 }
 
+  public static void main(String[] args) {
+    displayBoard(boardcreator("a1A0",0));
+  }
+
   /**
    *Modifies respective board based on the placement string
    *
