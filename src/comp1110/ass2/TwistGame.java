@@ -893,8 +893,68 @@ public class TwistGame {
       if(placed_pieces.indexOf(String.valueOf((char)i))==-1)
         unplaced_pieces = unplaced_pieces + String.valueOf((char)i);
     }
-    
+
+    List<int[]> emptyGrid = getEmptyGrid(placement);
+    System.out.println(emptyGrid);
+
     return null;
+  }
+
+  /**
+   * Return a multidimensional array of int[]
+   * Showing all the index number of grid which has a value of 0
+   * */
+  public static List<int[]> getEmptyGrid(String placement) {
+
+    List<int[]> emptyGrid = new ArrayList<>();
+
+    int[][] board = new int[4][8];
+    for (int i = 0; i < 4; i++) {
+      for (int j = 0; j < 8; j++) {
+        board[i][j] = 0;
+      }
+    }
+
+    Viewer obj = new Viewer();
+
+    String col = obj.returner(placement, 1); //From Viewer class
+    String row = obj.returner(placement, 2);
+    String reqd_pieces = obj.returner(placement, 0);
+    String orientation = obj.returner(placement, 3);
+    List<Pieces> objects = new ArrayList();
+    for (int i = 0; i < reqd_pieces.length(); i++) {
+      char pname = reqd_pieces.charAt(i);
+      int orientation_no = Character.getNumericValue(orientation.charAt(i));
+      objects.add(new Pieces(pname));
+      if (orientation_no > 3) {
+        orientation_no -= 4;
+        if (pname == 'c' || pname == 'h') {//flipping these pieces will not cause any problem for on_board function
+        } else {
+          objects.get(i).changeactualplace(flipper(objects.get(i).getactual_piece()));//flipping
+        }
+      }
+      while (orientation_no != 0) {
+        objects.get(i).changeactualplace(rotator(objects.get(i).getactual_piece()));
+        ;
+        orientation_no--;
+      }
+
+      board = placer(board, objects.get(i).getactual_piece(), row.charAt(i) - 65, Character.getNumericValue(col.charAt(i)) - 1);
+
+    }
+
+    for (int x = 0; x < 4; x++){
+      for(int y = 0; y < 8; y++){
+        if (board[x][y]==0){
+          int[] gridIndex = new int[2];
+          gridIndex[0] = x;
+          gridIndex[1] = y;
+          emptyGrid.add(gridIndex);
+        }
+      }
+    }
+
+    return emptyGrid;
   }
 
   /**
