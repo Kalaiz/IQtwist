@@ -13,6 +13,8 @@ import java.util.Set;
  * (http://www.smartgames.eu/en/smartgames/iq-twist)
  */
 public class TwistGame {
+  public static int[][] checkingBoard = new int[10][14];// Inclusive of the main board(4x8)
+  public static int[][] actualBoard =new int[4][8]; //The actual board
 
 
   /**
@@ -147,6 +149,7 @@ public class TwistGame {
     return result;
   }
 
+
   /**
    *rotates the array clockwise(90 degree)
    *
@@ -163,6 +166,8 @@ public class TwistGame {
     return rotated;
   }
 
+
+
   /**
    *Places the piece on the board multidimensional array
    *
@@ -170,9 +175,10 @@ public class TwistGame {
    *@param piecearr Multidimensional array of the piece
    *@param row2 the row on which the top-most piece resides
    *@param col2 the column in which the left-most piece resides
+   *@param modifier value added for the sake of is_onboard (Default should be 0)
    *@return  Updated board
    */
-  public static int[][] placer(int[][] board3,int[][] piecearr,int row2,int col2){//places the array into the board array
+  public static int[][] placer(int[][] board3,int[][] piecearr,int row2,int col2,int modifier){//places the array into the board array
     int row=piecearr.length;
     int col=piecearr[0].length;
     int endr=row+row2;
@@ -180,7 +186,7 @@ public class TwistGame {
     for(int cr=0;row2<endr;row2++,cr++) {
       int col2_temp=col2;
       for (int cc=0; col2_temp<endc;col2_temp++,cc++) {
-        board3[row2+3][col2_temp+3]=piecearr[cr][cc];
+        board3[row2+modifier][col2_temp+modifier]=piecearr[cr][cc];//adding 3 so to add the first segment of the piece to the inner board(mandatory)
       }
     }
     return board3;
@@ -190,9 +196,9 @@ public class TwistGame {
    *Checks if any pieces is outerboard(the main board)
    *
    *@param board2  Modified board
-   *@return  True if there is on the outerboard
+   *@return  True if there is a piece  on the outerboard
    */
-  public static boolean checkboard(int [][] board2){//check if all pieces are in the inner board inner board pieces
+  public static boolean checkboard(int [][] board2){//check if  pieces are in the outer board
     int row=board2.length;
     int col=board2[0].length;
     for(int cr=0;cr<row;cr++){
@@ -208,19 +214,51 @@ public class TwistGame {
     return false;
   }
 
-  /**
-   *Checks if any pieces is on the main board
-   *
-   *@param placement A well formed piece placement String
-   *@return  True if all pieces are on the main board
-   */
 
-  public static boolean is_onboard(String placement) {
+  //TESTING PROGRAM: Diplays the entire board (must be 4x8)
+public static void displayBoard(int[][] displayerboard){
+int ctr =1;
+  System.out.print("  ");
+  while(ctr!=9){
+    if(ctr==8){
+      System.out.println(ctr);
+    }
+    else {
+      System.out.print(ctr);
+    }
+    ctr++;
+  }
+  for (int row = 0; row < 4; row++) {// initialize the board
+    if(row>0){
+      System.out.printf("%n"+Character.toString((char) (65 + row))+" ");
+    }
+    else {
+      System.out.print(Character.toString((char) (65 + row))+" ");
+    }
+    for (int col = 0; col < 8; col++) {
+        System.out.print(actualBoard[row][col]);
+      } }
+
+}
+
+  /**
+   *Modifies respective board based on the placement string
+   *
+   *@param placement details of the pieces
+   *@param modifier value added for the sake of is_onboard (Default should be 0)
+   *@return Updated board or a fake board for is_onboard
+   */
+  public static int[][] boardcreator(String placement,int modifier ){
     Viewer obj = new Viewer();
-    int[][] board2 = new int[10][14];// Inclusive of the main board(4x8)
-    for (int row = 0; row < 10; row++) {
+    int[][] fake={{9}};//For on_board
+    for (int row = 0; row < 10; row++) { // need to refresh upon usage of isvalidplacement
       for (int col = 0; col < 14; col++) {
-        board2[row][col] = 0;
+        checkingBoard[row][col] = 0;
+      }
+    }
+    for (int row = 0; row < 4; row++) { // initialize the board
+      for (int col = 0; col < 8; col++) {
+        actualBoard[row][col] = 0;
       }
     }
     String col = obj.returner(placement, 1); //From Viewer class
@@ -236,21 +274,39 @@ public class TwistGame {
         orientation_no -= 4;
         if (pname == 'c' || pname == 'h') {//flipping these pieces will not cause any problem for on_board function
         } else {
-          objects.get(i).changeactualplace(flipper(objects.get(i).getactual_piece()));//flipping
+          objects.get(i).changeactualplace(flipper(objects.get(i).getactual_piece()));//flipping the actual piece obj
         }
       }
       while (orientation_no != 0) {
         objects.get(i).changeactualplace(rotator(objects.get(i).getactual_piece()));;
         orientation_no--;
       }
-
-      board2 = placer(board2, objects.get(i).getactual_piece(), row.charAt(i) - 65, Character.getNumericValue(col.charAt(i))-1 );
-
-      if (checkboard(board2)) {
-        return false;
+      if(modifier==0) {//Default
+        actualBoard = placer(actualBoard, objects.get(i).getactual_piece(), row.charAt(i) - 65, Character.getNumericValue(col.charAt(i)) - 1, 0);
+      }
+      else{
+        checkingBoard = placer(checkingBoard, objects.get(i).getactual_piece(), row.charAt(i) - 65, Character.getNumericValue(col.charAt(i)) - 1, 3);
+        if (checkboard(checkingBoard)) {//check if pieces are in the outer board
+          return fake;
+        }
       }
     }
-    return true;}
+  return actualBoard;}
+
+
+  /**
+   *Checks if any pieces is on the main board
+   *
+   *@param placement A well formed piece placement String
+   *@return  True if all pieces are on the main board
+   */
+
+  public static boolean is_onboard(String placement) {
+    if (boardcreator(placement, 3)[0][0] == 9) {
+      return false;
+    }
+    return true;
+  }
   /**
    * Determine whether a placement string is valid.  To be valid, the placement
    * string must be well-formed and each piece placement must be a valid placement
@@ -939,7 +995,7 @@ public class TwistGame {
         orientation_no--;
       }
 
-      board = placer(board, objects.get(i).getactual_piece(), row.charAt(i) - 65, Character.getNumericValue(col.charAt(i)) - 1);
+      board = placer(checkingBoard, objects.get(i).getactual_piece(), row.charAt(i) - 65, Character.getNumericValue(col.charAt(i)) - 1,0);
 
     }
 
