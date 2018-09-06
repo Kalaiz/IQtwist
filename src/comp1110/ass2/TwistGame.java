@@ -129,7 +129,22 @@ public class TwistGame {
 
 
   /**
-   *Checks if any pieces is outerboard(the main board)
+   *Checks if any pieces is in the outerboard
+   *
+   *          o o o o o o o o o o o o o o
+   *          o o o o o o o o o o o o o o
+   *          o o o o o o o o o o o o o o
+   *          o o o I I I I I I I I o o o
+   *          o o o I I I I I I I I o o o
+   *          o o o I I I I I I I I o o o
+   *          o o o I I I I I I I I o o o
+   *          o o o o o o o o o o o o o o
+   *          o o o o o o o o o o o o o o
+   *          o o o o o o o o o o o o o o
+   *
+   *     'o' fields represent the outer board
+   *     meanwhile 'i' fields represent the inner board
+   *
    *
    *@param board2  Modified board
    *@return  True if there is a piece  on the outerboard
@@ -173,7 +188,7 @@ public class TwistGame {
 
 
   public static void main(String[] args) {
-    displayBoard(boardcreator("a1A0",0));
+    displayBoard(boardcreator("a1A0",'a'));
   }
 
 
@@ -182,24 +197,27 @@ public class TwistGame {
    *Modifies respective board based on the placement string
    *
    *@param placement details of the pieces
-   *@param modifier value added for the sake of is_onboard (Default should be 0)
-   *@return Updated board or a fake board for is_onboard
+   *@param bt describes the board type
+   *                actualboard (4x8 board)
+   *                checkingboard (10x12 board specifically for is_onboard and isvalidPlacement )
+   *@local temp used as the initial value for is_onboard or else will get updated as per requirement and return itself
+   *@return Updated board
    */
-  public static int[][] boardcreator(String placement,int modifier ) {
-    int[][] fake = {{9}};//For on_board
-    gobj.refreshBoardvalues("ac");//refreshes both the Boards
+  public static int[][] boardcreator(String placement,char bt ) {
+    int[][] temp = {{9}};//For on_board
+    gobj.resetBoardvalues("ac");//resets both the Boards
     for (int i = 0; i < placement.length() / 4; i++) {
       String ch=placement.substring(4*i,4*i+4);
-      if(modifier==0){
+      if(bt=='a'){
          gobj.pieceTobeAdded(ch,"a"); }
       else{
       gobj.pieceTobeAdded(ch,"c");
       if(checkboard(gobj.getcboard())){
-        return fake;
+        return temp;
       }}
     }
-    fake = (modifier != 0) ? gobj.getcboard() : gobj.getaboard();
-    return fake;}
+    temp = (bt =='a') ? gobj.getaboard() : gobj.getcboard();
+    return temp;}
 
 
 
@@ -212,7 +230,7 @@ public class TwistGame {
    */
 
   public static boolean is_onboard(String placement) {
-    if (boardcreator(placement, 3)[0][0] == 9) {
+    if (boardcreator(placement, 'a')[0][0] == 9) {
       return false;
     }
     return true;
@@ -855,6 +873,7 @@ public class TwistGame {
     Viewer v = new Viewer();
     String placed_pieces = v.returner(placement,0);
     String unplaced_pieces = "";
+    boardcreator(placement,'a');//Creates* an  actualboard
     for (int i = 'a' ; i <= 'l' ; i++){
       if(placed_pieces.indexOf(String.valueOf((char)i))==-1)
         unplaced_pieces = unplaced_pieces + String.valueOf((char)i);
@@ -874,7 +893,6 @@ public class TwistGame {
    * */
   public static List<int[]> getEmptyGrid(String placement) {
     List<int[]> emptyGrid = new ArrayList<>();
-   boardcreator(placement,0);
     for (int x = 0; x < 4; x++){
       for(int y = 0; y < 8; y++){
         if (gobj.getaboard()[x][y]==0){
