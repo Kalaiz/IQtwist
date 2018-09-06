@@ -13,9 +13,8 @@ import java.util.Set;
  * (http://www.smartgames.eu/en/smartgames/iq-twist)
  */
 public class TwistGame {
-  public static int[][] checkingBoard = new int[10][14];// Inclusive of the main board(4x8)
-  public static int[][] actualBoard =new int[4][8]; //The actual board
-
+  public static int[][] test =new int[4][8];
+  static GameBoard gobj=new GameBoard();
 
   /**
    * Determine whether a piece or peg placement is well-formed according to the following:
@@ -129,69 +128,6 @@ public class TwistGame {
   }
 
 
-
-  /**
-   *flip the array stuffs (not considering the holes in
-   * pieces for now) and hence cannot take in c or h pieces.
-   *@param actualpiece multidimensional array (Respective piece)
-   *@return  a Flipped array(in respective to line-X)
-   */
-  public static int[][] flipper(int[][] actualpiece){
-    int row=actualpiece.length;
-    int col=actualpiece[0].length;
-    int result[][]=new int[row][col];
-    for(int i =0; i<= row/2; i++){
-      for(int j=0; j < col; j++){
-        result[i][j]=actualpiece[row-(i+1)][j];
-        result[row-(i+1)][j]=actualpiece[i][j];
-      }
-    }
-    return result;
-  }
-
-
-  /**
-   *rotates the array clockwise(90 degree)
-   *
-   *@param actualpiece2 multidimensional array (Respective piece)
-   *@return  a Rotated array
-   */
-  public static int[][] rotator(int[][] actualpiece2) {
-    int[][] rotated = new int[actualpiece2[0].length][actualpiece2.length];
-    for (int i = 0; i < actualpiece2[0].length; ++i) {
-      for (int j = 0; j < actualpiece2.length; ++j) {
-        rotated[i][j] = actualpiece2[actualpiece2.length - j - 1][i];
-      }
-    }
-    return rotated;
-  }
-
-
-
-  /**
-   *Places the piece on the board multidimensional array
-   *
-   *@param board3  Non-modified board
-   *@param piecearr Multidimensional array of the piece
-   *@param row2 the row on which the top-most piece resides
-   *@param col2 the column in which the left-most piece resides
-   *@param modifier value added for the sake of is_onboard (Default should be 0)
-   *@return  Updated board
-   */
-  public static int[][] placer(int[][] board3,int[][] piecearr,int row2,int col2,int modifier){//places the array into the board array
-    int row=piecearr.length;
-    int col=piecearr[0].length;
-    int endr=row+row2;
-    int endc=col+col2;
-    for(int cr=0;row2<endr;row2++,cr++) {
-      int col2_temp=col2;
-      for (int cc=0; col2_temp<endc;col2_temp++,cc++) {
-        board3[row2+modifier][col2_temp+modifier]=piecearr[cr][cc];//adding 3 so to add the first segment of the piece to the inner board(mandatory)
-      }
-    }
-    return board3;
-  }
-
   /**
    *Checks if any pieces is outerboard(the main board)
    *
@@ -216,34 +152,31 @@ public class TwistGame {
 
 
   //TESTING PROGRAM: Displays the entire board (must be 4x8)
-public static void displayBoard(int[][] displayerboard){
-int ctr =1;
+  public static void displayBoard(int[][] displayerboard){
+   int ctr =1;
   System.out.print("  ");
   while(ctr!=9){
     if(ctr==8){
-      System.out.println(ctr);
-    }
+      System.out.println(ctr); }
     else {
-      System.out.print(ctr);
-    }
-    ctr++;
-  }
+      System.out.print(ctr); }
+    ctr++; }
   for (int row = 0; row < 4; row++) {// initialize the board
     if(row>0){
-      System.out.printf("%n"+Character.toString((char) (65 + row))+" ");
-    }
+      System.out.printf("%n"+Character.toString((char) (65 + row))+" "); }
     else {
-      System.out.print(Character.toString((char) (65 + row))+" ");
-    }
+      System.out.print(Character.toString((char) (65 + row))+" "); }
     for (int col = 0; col < 8; col++) {
-        System.out.print(actualBoard[row][col]);
-      } }
+        System.out.print(gobj.getaboard()[row][col]);
+      } } }
 
-}
+
 
   public static void main(String[] args) {
     displayBoard(boardcreator("a1A0",0));
   }
+
+
 
   /**
    *Modifies respective board based on the placement string
@@ -252,50 +185,23 @@ int ctr =1;
    *@param modifier value added for the sake of is_onboard (Default should be 0)
    *@return Updated board or a fake board for is_onboard
    */
-  public static int[][] boardcreator(String placement,int modifier ){
-    Viewer obj = new Viewer();
-    int[][] fake={{9}};//For on_board
-    for (int row = 0; row < 10; row++) { // need to refresh upon usage of isvalidplacement
-      for (int col = 0; col < 14; col++) {
-        checkingBoard[row][col] = 0;
-      }
-    }
-    for (int row = 0; row < 4; row++) { // initialize the board
-      for (int col = 0; col < 8; col++) {
-        actualBoard[row][col] = 0;
-      }
-    }
-    String col = obj.returner(placement, 1); //From Viewer class
-    String row = obj.returner(placement, 2);
-    String reqd_pieces = obj.returner(placement, 0);
-    String orientation = obj.returner(placement, 3);
-    List<Pieces> objects = new ArrayList();
-    for (int i = 0; i < reqd_pieces.length(); i++) {
-      char pname = reqd_pieces.charAt(i);
-      int orientation_no = Character.getNumericValue(orientation.charAt(i));
-      objects.add(new Pieces(pname));
-      if (orientation_no > 3) {
-        orientation_no -= 4;
-        if (pname == 'c' || pname == 'h') {//flipping these pieces will not cause any problem for on_board function
-        } else {
-          objects.get(i).changeactualplace(flipper(objects.get(i).getactual_piece()));//flipping the actual piece obj
-        }
-      }
-      while (orientation_no != 0) {
-        objects.get(i).changeactualplace(rotator(objects.get(i).getactual_piece()));;
-        orientation_no--;
-      }
-      if(modifier==0) {//Default
-        actualBoard = placer(actualBoard, objects.get(i).getactual_piece(), row.charAt(i) - 65, Character.getNumericValue(col.charAt(i)) - 1, 0);
-      }
+  public static int[][] boardcreator(String placement,int modifier ) {
+    int[][] fake = {{9}};//For on_board
+    gobj.refreshBoardvalues("ac");//refreshes both the Boards
+    for (int i = 0; i < placement.length() / 4; i++) {
+      String ch=placement.substring(4*i,4*i+4);
+      if(modifier==0){
+         gobj.pieceTobeAdded(ch,"a"); }
       else{
-        checkingBoard = placer(checkingBoard, objects.get(i).getactual_piece(), row.charAt(i) - 65, Character.getNumericValue(col.charAt(i)) - 1, 3);
-        if (checkboard(checkingBoard)) {//check if pieces are in the outer board
-          return fake;
-        }
-      }
+      gobj.pieceTobeAdded(ch,"c");
+      if(checkboard(gobj.getcboard())){
+        return fake;
+      }}
     }
-  return actualBoard;}
+    fake = (modifier != 0) ? gobj.getcboard() : gobj.getaboard();
+    return fake;}
+
+
 
 
   /**
@@ -971,7 +877,7 @@ int ctr =1;
    boardcreator(placement,0);
     for (int x = 0; x < 4; x++){
       for(int y = 0; y < 8; y++){
-        if (actualBoard[x][y]==0){
+        if (gobj.getaboard()[x][y]==0){
           int[] gridIndex = new int[2];
           gridIndex[0] = x;
           gridIndex[1] = y;
