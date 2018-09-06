@@ -115,7 +115,7 @@ public class GameBoard {
      * pieces for now) and hence cannot take in c or h pieces.
      *
      * @param actualpiece multidimensional array (Respective piece)
-     * @return a Flipped array(in respective to line-X)
+     * @return a Flipped array(in respective to X-axis)
      */
     public static int[][] flipper(int[][] actualpiece) {
         int row = actualpiece.length;

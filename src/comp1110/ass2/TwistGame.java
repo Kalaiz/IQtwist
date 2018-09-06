@@ -230,7 +230,7 @@ public class TwistGame {
    */
 
   public static boolean is_onboard(String placement) {
-    if (boardcreator(placement, 'a')[0][0] == 9) {
+    if (boardcreator(placement, 'c')[0][0] == 9) {
       return false;
     }
     return true;
