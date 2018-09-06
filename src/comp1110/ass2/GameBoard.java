@@ -104,7 +104,7 @@ public class GameBoard {
         for (int cr = 0; row2 < endr; row2++, cr++) {
             int col2_temp = col2;
             for (int cc = 0; col2_temp < endc; col2_temp++, cc++) {
-                board3[row2 + modifier][col2_temp + modifier] = piecearr[cr][cc];//adding 3 so to add the first segment of the piece to the inner board(mandatory)
+                board3[row2 + modifier][col2_temp + modifier] += piecearr[cr][cc];//adding 3 so to add the first segment of the piece to the inner board(mandatory)
             }
         }
         return board3;
