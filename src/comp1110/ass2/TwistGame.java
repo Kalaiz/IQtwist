@@ -188,7 +188,7 @@ public class TwistGame {
 
 
   public static void main(String[] args) {
-    displayBoard(boardcreator("a1A0",'a'));
+    displayBoard(boardcreator("i6A3b3F3",'c'));
   }
 
 
