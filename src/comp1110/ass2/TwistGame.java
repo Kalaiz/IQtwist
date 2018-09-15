@@ -883,23 +883,24 @@ public class TwistGame {
         unplaced_pieces = unplaced_pieces + String.valueOf((char)i);
     }
 
- /*   List<int[]> emptyGrid = getEmptyGrid(placement);
-    System.out.println(emptyGrid);*/
+    List<int[]> emptyGrid = getEmptyGrid(placement);
+    System.out.println(emptyGrid);
 
     return null;
   }
 
- /* *//**
+  /*
    * Gives the indices of the empty grids
    *
    * @param placement details of the piece location
    * @return list of required indices
-   * *//*
+   *
+   */
   public static List<int[]> getEmptyGrid(String placement) {
     List<int[]> emptyGrid = new ArrayList<>();
     for (int x = 0; x < 4; x++){
       for(int y = 0; y < 8; y++){
-        if (gobj.getaboard()[x][y]==0){
+        if (gobj.getaboard()[x][y]=="x"){
           int[] gridIndex = new int[2];
           gridIndex[0] = x;
           gridIndex[1] = y;
@@ -910,7 +911,6 @@ public class TwistGame {
 
     return emptyGrid;
   }
-*/
   /**
    * Return an array of all unique solutions for a given starting placement.
    *
