@@ -1,8 +1,8 @@
 package comp1110.ass2;
 
 public class GameBoard {
-    public int[][] checkingBoard = new int[10][14];// Inclusive of the main board(4x8)
-    public int[][] actualBoard = new int[4][8]; //The actual board
+    public String[][] checkingBoard = new String[10][14];// Inclusive of the main board(4x8)
+    public String[][] actualBoard = new String[4][8]; //The actual board
 
     /**
      * Adds a piece to the respective board and updates it.
@@ -42,7 +42,7 @@ public class GameBoard {
      *
      * @return Multidimensional array representing the actualBoard
      */
-    int[][] getaboard() {
+    String[][] getaboard() {
         return actualBoard;
     }
 
@@ -51,7 +51,7 @@ public class GameBoard {
      *
      * @return Multidimensional array representing the checkingBoard
      */
-    int[][] getcboard() {
+    String[][] getcboard() {
         return checkingBoard;
     }
 
@@ -76,9 +76,9 @@ public class GameBoard {
         for (int trow = 0; trow < row; trow++) {
             for (int tcol = 0; tcol < col; tcol++) {
                 if (!s.equals("a")) {
-                    this.checkingBoard[trow][tcol] = 0;
+                    this.checkingBoard[trow][tcol] = "x";
                 } else {
-                    this.actualBoard[trow][tcol] = 0;
+                    this.actualBoard[trow][tcol] = "x";
                 }
             }
         }
@@ -96,7 +96,7 @@ public class GameBoard {
      * @param modifier value added for the sake of is_onboard (Default should be 0)
      * @return Updated board
      */
-    public static int[][] placer(int[][] board3, int[][] piecearr, int row2, int col2, int modifier) {//places the array into the board array
+    public static String[][] placer(String[][] board3, String[][] piecearr, int row2, int col2, int modifier) {//places the array into the board array
         int row = piecearr.length;
         int col = piecearr[0].length;
         int endr = row + row2;
@@ -104,8 +104,12 @@ public class GameBoard {
         for (int cr = 0; row2 < endr; row2++, cr++) {
             int col2_temp = col2;
             for (int cc = 0; col2_temp < endc; col2_temp++, cc++) {
-                board3[row2 + modifier][col2_temp + modifier] += piecearr[cr][cc];//adding 3 so to add the first segment of the piece to the inner board(mandatory)
-            }
+                if (board3[row2 + modifier][col2_temp + modifier] == "x"){
+                    board3[row2 + modifier][col2_temp + modifier] =piecearr[cr][cc];
+                }
+                else {
+                    board3[row2 + modifier][col2_temp + modifier] = board3[row2 + modifier][col2_temp + modifier] + piecearr[cr][cc];//adding 3 so to add the first segment of the piece to the inner board(mandatory)
+                }}
         }
         return board3;
     }
@@ -117,10 +121,10 @@ public class GameBoard {
      * @param actualpiece multidimensional array (Respective piece)
      * @return a Flipped array(in respective to X-axis)
      */
-    public static int[][] flipper(int[][] actualpiece) {
+    public static String[][] flipper(String[][] actualpiece) {
         int row = actualpiece.length;
         int col = actualpiece[0].length;
-        int result[][] = new int[row][col];
+        String result[][] = new String[row][col];
         for (int i = 0; i <= row / 2; i++) {
             for (int j = 0; j < col; j++) {
                 result[i][j] = actualpiece[row - (i + 1)][j];
@@ -137,8 +141,8 @@ public class GameBoard {
      * @param actualpiece2 multidimensional array (Respective piece)
      * @return a Rotated array
      */
-    public static int[][] rotator(int[][] actualpiece2) {
-        int[][] rotated = new int[actualpiece2[0].length][actualpiece2.length];
+    public static String[][] rotator(String[][] actualpiece2) {
+        String[][] rotated = new String[actualpiece2[0].length][actualpiece2.length];
         for (int i = 0; i < actualpiece2[0].length; ++i) {
             for (int j = 0; j < actualpiece2.length; ++j) {
                 rotated[i][j] = actualpiece2[actualpiece2.length - j - 1][i];

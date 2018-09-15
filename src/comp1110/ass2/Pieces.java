@@ -7,17 +7,20 @@ public class Pieces {
 
 
     public final char piece_name;
-    public int[][] actual_piece;
+    public String[][] actual_piece;
     PieceColours color;
-    int[][] aactual_piece={{1,1,1},{0,0,1}};
-    int[][] bactual_piece={{1,1,0},{0,1,1}};
-    int[][] cactual_piece={{1,1,1,1}};
-    int[][] dactual_piece={{1,1,1},{0,1,1}};
-    int[][] eactual_piece={{1,1},{0,1}};
-    int[][] factual_piece={{1,1,1},{0,1,0}};
-    int[][] gactual_piece={{1,0,0},{1,1,1},{0,1,0}};
-    int[][] hactual_piece={{1,1,1}};
-    int[][] ijklactual_piece={{1}};
+    String[][] aactual_piece={{"or","r","or"},{"x","x","r"}};
+    String[][] bactual_piece={{"r","r","x"},{"x","or","r"}};
+    String[][] cactual_piece={{"b","ob","b","b"}};
+    String[][] dactual_piece={{"b","b","b"},{"x","ob","ob"}};
+    String[][] eactual_piece={{"g","og"},{"x","og"}};
+    String[][] factual_piece={{"g","g","og"},{"x","og","x"}};
+    String[][] gactual_piece={{"oy","x","x"},{"oy","y","y"},{"x","oy","y"}};
+    String[][] hactual_piece={{"oy","y","y"}};
+    String[][] iactual_piece={{"r"}};
+    String[][] jactual_piece={{"b"}};
+    String[][] kactual_piece={{"g"}};
+    String[][] lactual_piece={{"y"}};
 
 
     Pieces(char piece_name){
@@ -31,7 +34,11 @@ public class Pieces {
         else if(piece_name=='f'){this.actual_piece=factual_piece; }
         else if(piece_name=='g'){this.actual_piece=gactual_piece; }
         else if(piece_name=='h'){this.actual_piece=hactual_piece; }
-        else if(piece_name=='i'||piece_name=='j'||piece_name=='k'||piece_name=='l'){this.actual_piece=ijklactual_piece;}
+        else if(piece_name=='i'){this.actual_piece=iactual_piece;}
+        else if(piece_name=='j'){this.actual_piece=jactual_piece;}
+        else if(piece_name=='k'){this.actual_piece=kactual_piece;}
+        else if(piece_name=='l'){this.actual_piece=lactual_piece;}
+
         }
 
 
@@ -61,7 +68,7 @@ public class Pieces {
     /**
      * @return  A multidimensional array of the respective piece.
      */
-    int[][] getactual_piece() {
+    String[][] getactual_piece() {
         return actual_piece;
     }
 
@@ -72,7 +79,7 @@ public class Pieces {
      *@param  changingplace
      *@return  A multidimensional array of the respective piece.
      */
-    void changeactualplace(int[][] changingplace){
+    void changeactualplace(String[][] changingplace){
         this.actual_piece=changingplace;
 
     }
