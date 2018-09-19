@@ -25,7 +25,6 @@ public class GameBoard {
         }
         while (orientation_no != 0) {
             p.changeactualplace(rotator(p.getactual_piece()));
-            ;
             orientation_no--;
         }
         if (bt == "a") {
