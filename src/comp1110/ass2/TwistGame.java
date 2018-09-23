@@ -36,9 +36,9 @@ public class TwistGame {
     then the 4th character must be 0. It also ensures the input has a length of 4.*/
     if((piecePlacement.charAt(0)>='i'&& piecePlacement.charAt(3)!='0')|| piecePlacement.length()!=4){
       return false;}
-    for(int i=0,z=0;i<8;i+=2,z++){
+    for(int i=0;i<4;i++){
       //Characters compared in accordance to ascii encoding values
-      if( piecePlacement.charAt(z)>=data[i]&& piecePlacement.charAt(z)<=data[i+1]){
+      if( piecePlacement.charAt(i)>=data[i*2]&& piecePlacement.charAt(i)<=data[i*2+1]){
       }
       else{return false;}
     }

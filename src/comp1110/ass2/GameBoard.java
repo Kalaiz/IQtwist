@@ -107,7 +107,8 @@ public class GameBoard {
                     board3[row2 + modifier][col2_temp + modifier] =piecearr[cr][cc];
                 }
                 else {
-                    board3[row2 + modifier][col2_temp + modifier] = piecearr[cr][cc] + board3[row2 + modifier][col2_temp + modifier]  ;//adding 3 so to add the first segment of the piece to the inner board(mandatory)
+                    //adding 3 so to add the first segment of the piece to the inner board(mandatory)
+                    board3[row2 + modifier][col2_temp + modifier] = piecearr[cr][cc] + board3[row2 + modifier][col2_temp + modifier];
                 }}
         }
         return board3;
