@@ -166,69 +166,26 @@ public class TwistGame {
   }
 
 
-  //TESTING PROGRAM: Displays the entire board (must be 4x8)
-  public static void displayBoard(String[][] displayerboard){
-   int ctr =1;
-  System.out.print("  ");
-  while(ctr!=9){
-    if(ctr==8){
-      System.out.println(ctr); }
-    else {
-      System.out.print(ctr); }
-    ctr++; }
-  for (int row = 0; row < 4; row++) {// initialize the board
-    if(row>0){
-      System.out.printf("%n"+Character.toString((char) (65 + row))+" "); }
-    else {
-      System.out.print(Character.toString((char) (65 + row))+" "); }
-    for (int col = 0; col < 8; col++) {
-      if(gobj.getaboard()[row][col].length()>=2){//gobj.getaboard()[row][col].length()>=2
-        System.out.print("#");
-      }
-      else {
-        System.out.print(gobj.getaboard()[row][col]);
-      }} } }
-
-
-  public static void displayCheckingBoard(String[][] board){
-    for (int row = 0; row < 10; row++) {// initialize the board
-      for (int col = 0; col < 14; col++) {
-        if(board[row][col].length()>=2&& col==13){//gobj.getaboard()[row][col].length()>=2
-          System.out.println("#");
-        }
-        else if(board[row][col].length()>=2) {
-          System.out.print(board[row][col]);
-        }
-        else if(col==13){
-          System.out.println(board[row][col]);
-        }
-        else{
-          System.out.print(board[row][col]);
-        }
-      }
-    }
-
-  }
-
   public static boolean checkBoard2(){
-    for (int row = 3; row < 7; row++) {// initialize the board
+    for (int row = 3; row < 7; row++) {
       for (int col = 3; col < 11; col++) {
-        if(gobj.getcboard()[row][col].length() == 4 ){
-          if (gobj.getcboard()[row][col].charAt(1) != gobj.getcboard()[row][col].charAt(3)){//pror (or)  orpr
+        String ccs=gobj.getcboard()[row][col];//ccs-Current checking piece string
+        if(ccs.length() == 4 ){
+          if (ccs.charAt(1) != ccs.charAt(3)){//pror (or)  orpr
             return false;
-          } else if(gobj.getcboard()[row][col].charAt(0) == gobj.getcboard()[row][col].charAt(2)){// ogog case
+          } else if(ccs.charAt(0) == ccs.charAt(2)){// ogog case
             return false;
           }
-        }else if(gobj.getcboard()[row][col].length() == 3){
+        }else if(ccs.length() == 3){
           return false;
         }
-        else if((gobj.getcboard()[row][col].length() == 2) ){
+        else if((ccs.length() == 2) ){
           //shouldnt start with any character other than o or p
-          if(!((gobj.getcboard()[row][col].charAt(0) == 'p') || (gobj.getcboard()[row][col].charAt(0) == 'o'))){
+          if(!((ccs.charAt(0) == 'p') || (ccs.charAt(0) == 'o'))){
             return false;
           }
 
-        } else if(gobj.getcboard()[row][col].length() > 4){
+        } else if(ccs.length() > 4){
           return false;
         }
       }
@@ -236,24 +193,6 @@ public class TwistGame {
     return true;
   }
 
-  public static void displayOverlapBoard1(String[][] actualboard) {
-    for (int row = 0; row < 4; row++) {// initialize the board
-      for (int col = 0; col < 8; col++) {
-        System.out.print(actualboard[row][col]);
-      }
-      System.out.print("\n");
-    }
-  }
-
-
-  public static boolean check2(String placement){
-    if(!is_onboard(placement))
-      {return false;}
-      else if(!checkBoard2()){
-        return false;
-      }
-      return true;
-    }
 
   public static void main(String[] args) {
     GameBoard g =new GameBoard();
@@ -263,17 +202,11 @@ public class TwistGame {
     System.out.println(checkboard(g.getcboard()));
     displayCheckingBoard(g.getcboard());
 
-    boolean check = is_onboard("a7A7");
-
-    System.out.println(check);
-
-    //displayBoard(boardcreator("a7A7c1A3d2A6e2C3f3C4g4A7h6D0i6A0j2B0j1C0k3C0l4B0l5C0",'a'));
   }
-
-
 
   /**
    *Modifies respective board based on the placement string
+   *and checks whether place is valid or not concurrently
    *
    *@param placement details of the pieces
    *@param bt describes the board type
@@ -291,7 +224,7 @@ public class TwistGame {
          gobj.pieceTobeAdded(ch,"a"); }
       else{
       gobj.pieceTobeAdded(ch,"c");
-      if(checkboard(gobj.getcboard())){
+      if(checkboard(gobj.getcboard())|| !checkBoard2()){
         return temp;
       }}
     }
@@ -299,21 +232,6 @@ public class TwistGame {
     return temp;}
 
 
-
-
-  /**
-   *Checks if any pieces is on the main board
-   *
-   *@param placement A well formed piece placement String
-   *@return  True if all pieces are on the main board
-   */
-
-  public static boolean is_onboard(String placement) {
-    if (boardcreator(placement, 'c')[0][0] == "z") {
-      return false;
-    }
-    return true;
-  }
   /**
    * Determine whether a placement string is valid.  To be valid, the placement
    * string must be well-formed and each piece placement must be a valid placement
@@ -327,23 +245,9 @@ public class TwistGame {
    * @return True if the placement sequence is valid
    */
   public static boolean isPlacementStringValid(String placement) {
-    /*piece : a-h, 1-8, A-D, 0-3, 4-7;
-     *peg: i, j, k, l; 0
-     *divide the placement string into pieces and pegs
-     *store the information into a 2d matrix ch
-     */
-
-
-    if(!is_onboard(placement))
-    {return false;}
-else if(!checkBoard2()){
+    if (boardcreator(placement, 'c')[0][0] == "z") {
       return false;
     }
-
-    //boolean bh2 = true, bh3 = true,  bh;
-
-    //bh = bh2 && bh3;
-    // FIXME Task 5: determine whether a placement string is valid
     return true;
   }
 
@@ -421,6 +325,52 @@ else if(!checkBoard2()){
 
     // FIXME Task 9: determine all solutions to the game, given a particular starting placement
     return null;
+  }
+
+
+
+  //TESTING PROGRAM: Displays the entire board (must be 4x8)
+  public static void displayBoard(String[][] displayerboard){
+    int ctr =1;
+    System.out.print("  ");
+    while(ctr!=9){
+      if(ctr==8){
+        System.out.println(ctr); }
+      else {
+        System.out.print(ctr); }
+      ctr++; }
+    for (int row = 0; row < 4; row++) {// initialize the board
+      if(row>0){
+        System.out.printf("%n"+Character.toString((char) (65 + row))+" "); }
+      else {
+        System.out.print(Character.toString((char) (65 + row))+" "); }
+      for (int col = 0; col < 8; col++) {
+        if(gobj.getaboard()[row][col].length()>=2){//gobj.getaboard()[row][col].length()>=2
+          System.out.print("#");
+        }
+        else {
+          System.out.print(gobj.getaboard()[row][col]);
+        }} } }
+
+  //TESTING PROGRAM: Displays the checkingboard (must be 10x14)
+  public static void displayCheckingBoard(String[][] board){
+    for (int row = 0; row < 10; row++) {// initialize the board
+      for (int col = 0; col < 14; col++) {
+        if(board[row][col].length()>=2&& col==13){//gobj.getaboard()[row][col].length()>=2
+          System.out.println("#");
+        }
+        else if(board[row][col].length()>=2) {
+          System.out.print(board[row][col]);
+        }
+        else if(col==13){
+          System.out.println(board[row][col]);
+        }
+        else{
+          System.out.print(board[row][col]);
+        }
+      }
+    }
+
   }
 }
 
