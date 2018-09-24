@@ -13,8 +13,8 @@ import java.util.Set;
  * (http://www.smartgames.eu/en/smartgames/iq-twist)
  */
 public class TwistGame {
-  public static int[][] test =new int[4][8];
-  static GameBoard gobj=new GameBoard();
+  public static int[][] test = new int[4][8];
+  static GameBoard gobj = new GameBoard();
 
   /**
    * Determine whether a piece or peg placement is well-formed according to the following:
@@ -166,39 +166,47 @@ public class TwistGame {
   }
 
 
-  //TESTING PROGRAM: Displays the entire board (must be 4x8)
-  public static void displayBoard(String[][] displayerboard){
-   int ctr =1;
-  System.out.print("  ");
-  while(ctr!=9){
-    if(ctr==8){
-      System.out.println(ctr); }
-    else {
-      System.out.print(ctr); }
-    ctr++; }
-  for (int row = 0; row < 4; row++) {// initialize the board
-    if(row>0){
-      System.out.printf("%n"+Character.toString((char) (65 + row))+" "); }
-    else {
-      System.out.print(Character.toString((char) (65 + row))+" "); }
-    for (int col = 0; col < 8; col++) {
-      if(gobj.getaboard()[row][col].length()>=2){//gobj.getaboard()[row][col].length()>=2
-        System.out.print("#");
+  public static boolean checkBoard2(){
+    for (int row = 3; row < 7; row++) {
+      for (int col = 3; col < 11; col++) {
+        String ccs=gobj.getcboard()[row][col];//ccs-Current checking piece string
+        if(ccs.length() == 4 ){
+          if (ccs.charAt(1) != ccs.charAt(3)){//pror (or)  orpr
+            return false;
+          } else if(ccs.charAt(0) == ccs.charAt(2)){// ogog case
+            return false;
+          }
+        }else if(ccs.length() == 3){
+          return false;
+        }
+        else if((ccs.length() == 2) ){
+          //shouldnt start with any character other than o or p
+          if(!((ccs.charAt(0) == 'p') || (ccs.charAt(0) == 'o'))){
+            return false;
+          }
+
+        } else if(ccs.length() > 4){
+          return false;
+        }
       }
-      else {
-        System.out.print(gobj.getaboard()[row][col]);
-      }} } }
-
-
-
-  public static void main(String[] args) {
-    displayBoard(boardcreator("f3C4i6B0j2B0j1C0k3C0l4B0l5C0",'a'));
+    }
+    return true;
   }
 
 
+  public static void main(String[] args) {
+    GameBoard g =new GameBoard();
+    g.resetBoardvalues("c");
+    g.pieceTobeAdded("f1A6","c");
+    g.pieceTobeAdded("g3A7","c");
+    System.out.println(checkboard(g.getcboard()));
+    displayCheckingBoard(g.getcboard());
+
+  }
 
   /**
    *Modifies respective board based on the placement string
+   *and checks whether place is valid or not concurrently
    *
    *@param placement details of the pieces
    *@param bt describes the board type
@@ -216,7 +224,7 @@ public class TwistGame {
          gobj.pieceTobeAdded(ch,"a"); }
       else{
       gobj.pieceTobeAdded(ch,"c");
-      if(checkboard(gobj.getcboard())){
+      if(checkboard(gobj.getcboard())|| !checkBoard2()){
         return temp;
       }}
     }
@@ -224,21 +232,6 @@ public class TwistGame {
     return temp;}
 
 
-
-
-  /**
-   *Checks if any pieces is on the main board
-   *
-   *@param placement A well formed piece placement String
-   *@return  True if all pieces are on the main board
-   */
-
-  public static boolean is_onboard(String placement) {
-    if (boardcreator(placement, 'c')[0][0] == "x") {
-      return false;
-    }
-    return true;
-  }
   /**
    * Determine whether a placement string is valid.  To be valid, the placement
    * string must be well-formed and each piece placement must be a valid placement
@@ -252,610 +245,10 @@ public class TwistGame {
    * @return True if the placement sequence is valid
    */
   public static boolean isPlacementStringValid(String placement) {
-    /*piece : a-h, 1-8, A-D, 0-3, 4-7;
-     *peg: i, j, k, l; 0
-     *divide the placement string into pieces and pegs
-     *store the information into a 2d matrix ch
-     */
-
-    if(!is_onboard(placement))
-    {return false;}
-    boolean bh1 = true, bh2 = true, bh3 = true,  bh;
-    int rnumber = placement.length()/4;
-    int cnumber = 4;
-    char [][] ch = new char [rnumber][cnumber];//12 objects
-    char[] placechar = placement.toCharArray();
-    int s = 0;
-    int i = 0, j = 0;
-
-    while (i < rnumber){
-      ch [i][0] = placechar[s];
-      ch [i][1] = placechar[s+1];
-      ch [i][2] = placechar[s+2];
-      ch [i][3] = placechar[s+3];
-      s += 4;
-      i += 1;
+    if (boardcreator(placement, 'c')[0][0] == "z") {
+      return false;
     }
-
-    /** pieces must be entirely on the board
-     * left and top, for pegs
-     * 1 < ch[i][1] < 8, A < ch[i][2] < D
-     */
-
-
-    /**right and bottom:
-     * just 8 pieces
-     */
-    for (i = 0; i < rnumber; i++){
-      //piece a, b, d, f are 2*3 grids
-      if ((ch[i][0]=='a')||(ch[i][0]=='b')||(ch[i][0]=='d')||(ch[i][0]=='f')){
-        //right and bottom of the pieces
-        if ((ch[i][3] == '0') || (ch[i][3] == '2') || (ch[i][3] == '4') || (ch[i][3] == '6')){
-          if (((ch[i][1]) > '6')||((ch[i][2]) > 'C')){
-            bh1 = false;
-          }
-        } else {
-          if (((ch[i][1]) > '7')||((ch[i][2]) > 'B')){
-            bh1 = false;
-          }
-        }
-      } else if(ch[i][0]=='c'){
-        //piece c
-        if ((ch[i][3] == '0') || (ch[i][3] == '2') || (ch[i][3] == '4') || (ch[i][3] == '6')){
-          if ((ch[i][1]) > '5'){
-            bh1 = false;
-          }
-        } else {
-          if((ch[i][2]) > 'A'){
-            bh1 = false;
-          }
-        }
-      } else if (ch[i][0]=='e'){
-        //piece e
-        if (((ch[i][1]) > '7')||(ch[i][2] > 'C')){
-          bh1 = false;
-        }
-      } else if (ch[i][0]=='g'){
-        //piece g
-        if (((ch[i][1]) > '6')||((ch[i][2]) > 'B')){
-          bh1 = false;
-        }
-      } else if (ch[i][0]=='h'){
-        //piece h
-        if ((ch[i][3]== '0') || (ch[i][3] == '2') || (ch[i][3] == '4') || (ch[i][3] == '6')){
-          if ((ch[i][1]) > '6'){
-            bh1 = false;
-          }
-        } else {
-          if (ch[i][2] > 'B'){
-            bh1 = false;
-          }
-        }
-      }
-    }
-
-    /**
-     * build a 4*8 matrix
-     * initialized as board[4][8] = {0}
-     * at the end
-     * if board[i][j] > 1
-     * bh is false
-     */
-    int[][] board = new int[4][8];
-    char[][] pegboard = new char[4][8];
-    int red = 'i';
-    int blue = 'j';
-    int green = 'k';
-    int yellow = 'l';
-    for(i = 0; i < 4; i++){
-      for(j = 0; j < 8; j++){
-        board[i][j] = 0;
-        pegboard[i][j] = ' ';
-      }
-    }
-
-    /**
-     * left of the piece
-     * board[row][(int) ch[i][1]]
-     * top of the piece
-     * board[ch[i][2]-'A'][column]
-     */
-    int rch;//top row of the piece
-    int cch;//left column of the piece
-    for(i = 0; i < rnumber; i++){
-      rch = ch[i][2] - 'A';
-      cch = ch[i][1] - '1';
-      if (ch[i][0] == 'a'){
-        if (ch[i][3] == '0'){
-          board[rch][cch] += 1;
-          board[rch][cch+1] += 1;
-          board[rch][cch+2] += 1;
-          board[rch+1][cch+2] += 1;
-        }
-        if (ch[i][3] == '1'){
-          board[rch][cch+1] += 1;
-          board[rch+1][cch+1] += 1;
-          board[rch+2][cch+1] += 1;
-          board[rch+2][cch] += 1;
-        }
-        if (ch[i][3] == '2'){
-          board[rch][cch] += 1;
-          board[rch+1][cch] += 1;
-          board[rch+1][cch+1] += 1;
-          board[rch+1][cch+2] += 1;
-        }
-        if (ch[i][3] == '3'){
-          board[rch][cch] += 1;
-          board[rch+1][cch] += 1;
-          board[rch+2][cch] += 1;
-          board[rch][cch+1] += 1;
-        }
-        if (ch[i][3] == '4'){
-          board[rch+1][cch] += 1;
-          board[rch+1][cch+1] += 1;
-          board[rch+1][cch+2] += 1;
-          board[rch][cch+2] += 1;
-        }
-        if (ch[i][3] == '5'){
-          board[rch][cch] += 1;
-          board[rch+1][cch] += 1;
-          board[rch+2][cch] += 1;
-          board[rch+2][cch+1] += 1;
-        }
-        if (ch[i][3] == '6'){
-          board[rch][cch] += 1;
-          board[rch][cch+1] += 1;
-          board[rch][cch+2] += 1;
-          board[rch+1][cch] += 1;
-        }
-        if (ch[i][3] == '7'){
-          board[rch][cch] += 1;
-          board[rch][cch+1] += 1;
-          board[rch+1][cch+1] += 1;
-          board[rch+2][cch+1] += 1;
-        }
-
-        //badpegs
-        if ((ch[i][3] == '0') || (ch[i][3] == '6')) {
-          pegboard[rch][cch] = 'i';
-          pegboard[rch][cch + 2] = 'i';
-        }
-        if ((ch[i][3] == '1') || (ch[i][3] == '7')) {
-          pegboard[rch][cch+1] = 'i';
-          pegboard[rch+2][cch + 1] = 'i';
-        }
-        if ((ch[i][3] == '2') || (ch[i][3] == '4')) {
-          pegboard[rch+1][cch] = 'i';
-          pegboard[rch+1][cch + 2] = 'i';
-        }
-        if ((ch[i][3] == '3') || (ch[i][3] == '5')) {
-          pegboard[rch][cch] = 'i';
-          pegboard[rch+2][cch] = 'i';
-        }
-      }
-
-      if (ch[i][0] == 'b'){
-        if ((ch[i][3] == '0') || (ch[i][3] == '2')){
-          board[rch][cch] += 1;
-          board[rch][cch+1] += 1;
-          board[rch+1][cch+1] += 1;
-          board[rch+1][cch+2] += 1;
-        }
-        if ((ch[i][3] == '1') ||(ch[i][3] == '3')){
-          board[rch][cch+1] += 1;
-          board[rch+1][cch+1] += 1;
-          board[rch+1][cch] += 1;
-          board[rch+2][cch] += 1;
-        }
-        if ((ch[i][3] == '4') || (ch[i][3] == '6')){
-          board[rch+1][cch] += 1;
-          board[rch+1][cch+1] += 1;
-          board[rch][cch+1] += 1;
-          board[rch][cch+2] += 1;
-        }
-        if ((ch[i][3] == '5') || (ch[i][3] == '7')){
-          board[rch][cch] += 1;
-          board[rch+1][cch] += 1;
-          board[rch+1][cch+1] += 1;
-          board[rch+2][cch+1] += 1;
-        }
-
-        //badpegs
-        if ((ch[i][3] == '0') || (ch[i][3] == '3') || (ch[i][3] == '5') || (ch[i][3] == '6')) {
-          pegboard[rch+1][cch+1] = 'i';
-        }
-        if ((ch[i][3] == '1') || (ch[i][3] == '7')) {
-          pegboard[rch+1][cch] = 'i';
-        }
-        if ((ch[i][3] == '2') || (ch[i][3] == '4')) {
-          pegboard[rch][cch+1] = 'i';
-        }
-      }
-
-      if (ch[i][0] == 'c'){
-        if ((ch[i][3] == '0') || (ch[i][3] == '2') ||(ch[i][3] == '4') ||(ch[i][3] == '6')){
-          board[rch][cch] += 1;
-          board[rch][cch+1] += 1;
-          board[rch][cch+2] += 1;
-          board[rch][cch+3] += 1;
-        }
-        if ((ch[i][3] == '1') || (ch[i][3] == '3') || (ch[i][3] == '5') || (ch[i][3] == '7')){
-          board[rch][cch] += 1;
-          board[rch+1][cch] += 1;
-          board[rch+2][cch] += 1;
-          board[rch+3][cch] += 1;
-        }
-
-        //badpegs
-        if ((ch[i][3] == '0') || (ch[i][3] == '4')) {
-          pegboard[rch][cch+1] = 'j';
-        }
-        if ((ch[i][3] == '1') || (ch[i][3] == '5')) {
-          pegboard[rch+1][cch] = 'j';
-        }
-        if ((ch[i][3] == '2') || (ch[i][3] == '6')) {
-          pegboard[rch][cch+2] = 'j';
-        }
-        if ((ch[i][3] == '3') || (ch[i][3] == '7')) {
-          pegboard[rch+2][cch] = 'j';
-        }
-      }
-
-      if (ch[i][0] == 'd'){
-        if (ch[i][3] == '0'){
-          board[rch][cch] += 1;
-          board[rch][cch+1] += 1;
-          board[rch][cch+2] += 1;
-          board[rch+1][cch+1] += 1;
-          board[rch+1][cch+2] += 1;
-        }
-        if (ch[i][3] == '1'){
-          board[rch][cch+1] += 1;
-          board[rch+1][cch+1] += 1;
-          board[rch+2][cch+1] += 1;
-          board[rch+2][cch] += 1;
-          board[rch+1][cch] += 1;
-        }
-        if (ch[i][3] == '2'){
-          board[rch][cch] += 1;
-          board[rch][cch+1] += 1;
-          board[rch+1][cch] += 1;
-          board[rch+1][cch+1] += 1;
-          board[rch+1][cch+2] += 1;
-        }
-        if (ch[i][3] == '3'){
-          board[rch][cch] += 1;
-          board[rch+1][cch] += 1;
-          board[rch+2][cch] += 1;
-          board[rch][cch+1] += 1;
-          board[rch+1][cch+1] += 1;
-        }
-        if (ch[i][3] == '4'){
-          board[rch+1][cch] += 1;
-          board[rch+1][cch+1] += 1;
-          board[rch+1][cch+2] += 1;
-          board[rch][cch+2] += 1;
-          board[rch][cch+1] += 1;
-        }
-        if (ch[i][3] == '5'){
-          board[rch][cch] += 1;
-          board[rch+1][cch] += 1;
-          board[rch+2][cch] += 1;
-          board[rch+2][cch+1] += 1;
-          board[rch+1][cch+1] += 1;
-        }
-        if (ch[i][3] == '6'){
-          board[rch][cch] += 1;
-          board[rch][cch+1] += 1;
-          board[rch][cch+2] += 1;
-          board[rch+1][cch] += 1;
-          board[rch+1][cch+1] += 1;
-        }
-        if (ch[i][3] == '7'){
-          board[rch][cch] += 1;
-          board[rch][cch+1] += 1;
-          board[rch+1][cch+1] += 1;
-          board[rch+2][cch+1] += 1;
-          board[rch+1][cch] += 1;
-        }
-
-        //badpegs
-        if (ch[i][3] == '0') {
-          pegboard[rch+1][cch+1] = 'j';
-          pegboard[rch+1][cch+2] = 'j';
-        }
-        if (ch[i][3] == '1') {
-          pegboard[rch+1][cch] = 'j';
-          pegboard[rch+2][cch] = 'j';
-        }
-        if (ch[i][3] == '2') {
-          pegboard[rch][cch] = 'j';
-          pegboard[rch][cch+1] = 'j';
-        }
-        if (ch[i][3] == '3') {
-          pegboard[rch][cch+1] = 'j';
-          pegboard[rch+1][cch+1] = 'j';
-        }
-        if (ch[i][3] == '4') {
-          pegboard[rch][cch+1] = 'j';
-          pegboard[rch][cch+2] = 'j';
-        }
-        if (ch[i][3] == '5') {
-          pegboard[rch+1][cch+1] = 'j';
-          pegboard[rch+2][cch+1] = 'j';
-        }
-        if (ch[i][3] == '6') {
-          pegboard[rch+1][cch] = 'j';
-          pegboard[rch+1][cch+1] = 'j';
-        }
-        if (ch[i][3] == '7') {
-          pegboard[rch][cch] = 'j';
-          pegboard[rch+1][cch] = 'j';
-        }
-      }
-
-      if (ch[i][0] == 'e'){
-        if ((ch[i][3] == '0') || (ch[i][3] == '7')){
-          board[rch][cch] += 1;
-          board[rch][cch+1] += 1;
-          board[rch+1][cch+1] += 1;
-        }
-        if ((ch[i][3] == '1') || (ch[i][3] == '4')){
-          board[rch][cch+1] += 1;
-          board[rch+1][cch+1] += 1;
-          board[rch+1][cch] += 1;
-        }
-        if ((ch[i][3] == '2') || (ch[i][3] == '5')){
-          board[rch][cch] += 1;
-          board[rch+1][cch] += 1;
-          board[rch+1][cch+1] += 1;
-        }
-        if ((ch[i][3] == '3') || (ch[i][3] == '6')){
-          board[rch][cch] += 1;
-          board[rch+1][cch] += 1;
-          board[rch][cch+1] += 1;
-        }
-
-        //badpegs
-        if ((ch[i][3] == '0') || (ch[i][3] == '4')) {
-          pegboard[rch][cch+1] = 'k';
-          pegboard[rch+1][cch+1] = 'k';
-        }
-        if ((ch[i][3] == '1') || (ch[i][3] == '5')) {
-          pegboard[rch+1][cch] = 'k';
-          pegboard[rch+1][cch+1] = 'k';
-        }
-        if ((ch[i][3] == '2') || (ch[i][3] == '6')) {
-          pegboard[rch][cch] = 'k';
-          pegboard[rch+1][cch] = 'k';
-        }
-        if ((ch[i][3] == '3') || (ch[i][3] == '7')) {
-          pegboard[rch][cch] = 'k';
-          pegboard[rch][cch+1] = 'k';
-        }
-      }
-
-      if (ch[i][0] == 'f'){
-        if ((ch[i][3] == '0') || (ch[i][3] == '6')){
-          board[rch][cch] += 1;
-          board[rch][cch+1] += 1;
-          board[rch][cch+2] += 1;
-          board[rch+1][cch+1] += 1;
-        }
-        if ((ch[i][3] == '1') || (ch[i][3] == '7')){
-          board[rch][cch+1] += 1;
-          board[rch+1][cch+1] += 1;
-          board[rch+2][cch+1] += 1;
-          board[rch+1][cch] += 1;
-        }
-        if ((ch[i][3] == '2') || (ch[i][3] == '4')){
-          board[rch][cch+1] += 1;
-          board[rch+1][cch] += 1;
-          board[rch+1][cch+1] += 1;
-          board[rch+1][cch+2] += 1;
-        }
-        if ((ch[i][3] == '3') || (ch[i][3] == '5')){
-          board[rch][cch] += 1;
-          board[rch+1][cch] += 1;
-          board[rch+2][cch] += 1;
-          board[rch+1][cch+1] += 1;
-        }
-
-        //badpegs
-        if (ch[i][3] == '0') {
-          pegboard[rch][cch+2] = 'k';
-          pegboard[rch+1][cch+1] = 'k';
-        }
-        if (ch[i][3] == '1') {
-          pegboard[rch+1][cch] = 'k';
-          pegboard[rch+2][cch+1] = 'k';
-        }
-        if (ch[i][3] == '2') {
-          pegboard[rch][cch+1] = 'k';
-          pegboard[rch+1][cch] = 'k';
-        }
-        if (ch[i][3] == '3') {
-          pegboard[rch][cch] = 'k';
-          pegboard[rch+1][cch+1] = 'k';
-        }
-        if (ch[i][3] == '4') {
-          pegboard[rch][cch+1] = 'k';
-          pegboard[rch+1][cch+2] = 'k';
-        }
-        if (ch[i][3] == '5') {
-          pegboard[rch+1][cch+1] = 'k';
-          pegboard[rch+2][cch] = 'k';
-        }
-        if (ch[i][3] == '6') {
-          pegboard[rch][cch] = 'k';
-          pegboard[rch+1][cch+1] = 'k';
-        }
-        if (ch[i][3] == '7') {
-          pegboard[rch][cch+1] = 'k';
-          pegboard[rch+1][cch] = 'k';
-        }
-      }
-
-      if (ch[i][0] == 'g'){
-        if (ch[i][3] == '0'){
-          board[rch][cch] += 1;
-          board[rch+1][cch] += 1;
-          board[rch+1][cch+1] += 1;
-          board[rch+1][cch+2] += 1;
-          board[rch+2][cch+1] += 1;
-        }
-        if (ch[i][3] == '1'){
-          board[rch][cch+1] += 1;
-          board[rch][cch+2] += 1;
-          board[rch+1][cch] += 1;
-          board[rch+1][cch+1] += 1;
-          board[rch+2][cch+1] += 1;
-        }
-        if (ch[i][3] == '2'){
-          board[rch][cch+1] += 1;
-          board[rch+1][cch] += 1;
-          board[rch+1][cch+1] += 1;
-          board[rch+1][cch+2] += 1;
-          board[rch+2][cch+2] += 1;
-        }
-        if (ch[i][3] == '3'){
-          board[rch+2][cch] += 1;
-          board[rch][cch+1] += 1;
-          board[rch+1][cch+1] += 1;
-          board[rch+2][cch+1] += 1;
-          board[rch+1][cch+2] += 1;
-        }
-        if (ch[i][3] == '4'){
-          board[rch][cch+1] += 1;
-          board[rch+1][cch] += 1;
-          board[rch+1][cch+1] += 1;
-          board[rch+1][cch+2] += 1;
-          board[rch+2][cch] += 1;
-        }
-        if (ch[i][3] == '5'){
-          board[rch][cch] += 1;
-          board[rch][cch+1] += 1;
-          board[rch+1][cch+1] += 1;
-          board[rch+1][cch+2] += 1;
-          board[rch+2][cch+1] += 1;
-        }
-        if (ch[i][3] == '6'){
-          board[rch][cch+2] += 1;
-          board[rch+1][cch] += 1;
-          board[rch+1][cch+1] += 1;
-          board[rch+1][cch+2] += 1;
-          board[rch+2][cch+1] += 1;
-        }
-        if (ch[i][3] == '7'){
-          board[rch][cch+1] += 1;
-          board[rch+1][cch] += 1;
-          board[rch+1][cch+1] += 1;
-          board[rch+2][cch+1] += 1;
-          board[rch+2][cch+2] += 1;
-        }
-
-        //badpegs
-        if (ch[i][3] == '0') {
-          pegboard[rch][cch] = 'l';
-          pegboard[rch+1][cch] = 'l';
-          pegboard[rch+2][cch+1] = 'l';
-        }
-        if (ch[i][3] == '1') {
-          pegboard[rch][cch+1] = 'l';
-          pegboard[rch][cch+2] = 'l';
-          pegboard[rch+1][cch] = 'l';
-        }
-        if (ch[i][3] == '2') {
-          pegboard[rch][cch+1] = 'l';
-          pegboard[rch+1][cch+2] = 'l';
-          pegboard[rch+2][cch+2] = 'l';
-        }
-        if (ch[i][3] == '3') {
-          pegboard[rch+1][cch+2] = 'l';
-          pegboard[rch+2][cch] = 'l';
-          pegboard[rch+2][cch+1] = 'l';
-        }
-        if (ch[i][3] == '4') {
-          pegboard[rch][cch+1] = 'l';
-          pegboard[rch+1][cch] = 'l';
-          pegboard[rch+2][cch] = 'l';
-        }
-        if (ch[i][3] == '5') {
-          pegboard[rch][cch] = 'l';
-          pegboard[rch][cch+1] = 'l';
-          pegboard[rch+1][cch+2] = 'l';
-        }
-        if (ch[i][3] == '6') {
-          pegboard[rch][cch+2] = 'l';
-          pegboard[rch+1][cch+2] = 'l';
-          pegboard[rch+2][cch+1] = 'l';
-        }
-        if (ch[i][3] == '7') {
-          pegboard[rch+1][cch] = 'l';
-          pegboard[rch+2][cch+1] = 'l';
-          pegboard[rch+2][cch+2] = 'l';
-        }
-      }
-
-      if (ch[i][0] == 'h'){
-        if ((ch[i][3] == '0') || (ch[i][3] == '2') ||(ch[i][3] == '4') ||(ch[i][3] == '6')){
-          board[rch][cch] += 1;
-          board[rch][cch+1] += 1;
-          board[rch][cch+2] += 1;
-        }
-        if ((ch[i][3] == '1') || (ch[i][3] == '3') || (ch[i][3] == '5') || (ch[i][3] == '7')){
-          board[rch][cch] += 1;
-          board[rch+1][cch] += 1;
-          board[rch+2][cch] += 1;
-        }
-
-        //badpegs
-        if ((ch[i][3] == '0') || (ch[i][3] == '1') || (ch[i][3] == '4') || (ch[i][3] == '5')) {
-          pegboard[rch][cch] = 'l';
-        }
-        if ((ch[i][3] == '2') || (ch[i][3] == '6')) {
-          pegboard[rch][cch+2] = 'l';
-        }
-        if ((ch[i][3] == '3') || (ch[i][3] == '7')) {
-          pegboard[rch+2][cch] = 'l';
-        }
-      }
-    }
-
-    for(i = 0; i < 4; i++){
-      for(j = 0; j < 8; j++){
-        if(board[i][j] > 1){
-          bh2 = false;
-        }
-      }
-    }
-
-    for (i = 0; i < rnumber; i++){
-      if(ch[i][0]=='i'){
-        if(pegboard[ch[i][2]-'A'][ch[i][1]-'1'] != 'i'){
-          bh3 = false;
-        }
-      }
-      if(ch[i][0]=='j'){
-        if(pegboard[ch[i][2]-'A'][ch[i][1]-'1'] != 'j'){
-          bh3 = false;
-        }
-      }
-      if(ch[i][0]=='k'){
-        if(pegboard[ch[i][2]-'A'][ch[i][1]-'1'] != 'k'){
-          bh3 = false;
-        }
-      }
-      if(ch[i][0]=='l'){
-        if(pegboard[ch[i][2]-'A'][ch[i][1]-'1'] != 'l'){
-          bh3 = false;
-        }
-      }
-    }
-
-    bh = bh1 && bh2 && bh3;
-    // FIXME Task 5: determine whether a placement string is valid
-    return bh;
+    return true;
   }
 
   /**
@@ -936,6 +329,52 @@ public class TwistGame {
 
     // FIXME Task 9: determine all solutions to the game, given a particular starting placement
     return null;
+  }
+
+
+
+  //TESTING PROGRAM: Displays the entire board (must be 4x8)
+  public static void displayBoard(String[][] displayerboard){
+    int ctr =1;
+    System.out.print("  ");
+    while(ctr!=9){
+      if(ctr==8){
+        System.out.println(ctr); }
+      else {
+        System.out.print(ctr); }
+      ctr++; }
+    for (int row = 0; row < 4; row++) {// initialize the board
+      if(row>0){
+        System.out.printf("%n"+Character.toString((char) (65 + row))+" "); }
+      else {
+        System.out.print(Character.toString((char) (65 + row))+" "); }
+      for (int col = 0; col < 8; col++) {
+        if(gobj.getaboard()[row][col].length()>=2){//gobj.getaboard()[row][col].length()>=2
+          System.out.print("#");
+        }
+        else {
+          System.out.print(gobj.getaboard()[row][col]);
+        }} } }
+
+  //TESTING PROGRAM: Displays the checkingboard (must be 10x14)
+  public static void displayCheckingBoard(String[][] board){
+    for (int row = 0; row < 10; row++) {// initialize the board
+      for (int col = 0; col < 14; col++) {
+        if(board[row][col].length()>=2&& col==13){//gobj.getaboard()[row][col].length()>=2
+          System.out.println("#");
+        }
+        else if(board[row][col].length()>=2) {
+          System.out.print(board[row][col]);
+        }
+        else if(col==13){
+          System.out.println(board[row][col]);
+        }
+        else{
+          System.out.print(board[row][col]);
+        }
+      }
+    }
+
   }
 }
 

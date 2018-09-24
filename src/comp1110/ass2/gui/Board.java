@@ -24,7 +24,7 @@ public class Board extends Application {
 
     // FIXME Task 8: Implement starting placements
 
-    private void makeBoard(){//Draft copy
+    private void makeBoard(){
         Random rn =new Random();
         /*
         *1)create an (linked)hashset of string ,such that each string is a piece placement data.

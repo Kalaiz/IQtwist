@@ -15,12 +15,12 @@ public class Pieces {
     String[][] dactual_piece={{"b","b","b"},{"x","ob","ob"}};
     String[][] eactual_piece={{"g","og"},{"x","og"}};
     String[][] factual_piece={{"g","g","og"},{"x","og","x"}};
-    String[][] gactual_piece={{"oy","x","x"},{"oy","y","y"},{"x","oy","y"}};
+    String[][] gactual_piece={{"oy","x","x"},{"oy","y","y"},{"x","oy","x"}};
     String[][] hactual_piece={{"oy","y","y"}};
-    String[][] iactual_piece={{"r"}};
-    String[][] jactual_piece={{"b"}};
-    String[][] kactual_piece={{"g"}};
-    String[][] lactual_piece={{"y"}};
+    String[][] iactual_piece={{"pr"}};
+    String[][] jactual_piece={{"pb"}};
+    String[][] kactual_piece={{"pg"}};
+    String[][] lactual_piece={{"py"}};
 
 
     Pieces(char piece_name){
