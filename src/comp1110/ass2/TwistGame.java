@@ -224,12 +224,10 @@ public class TwistGame {
         }
         else if((gobj.getcboard()[row][col].length() == 2) ){
           //shouldnt start with any character other than o or p
-          if((gobj.getcboard()[row][col].charAt(0) == 'p') || (gobj.getcboard()[row][col].charAt(0) == 'o')){
-
-          }
-          else{
+          if(!((gobj.getcboard()[row][col].charAt(0) == 'p') || (gobj.getcboard()[row][col].charAt(0) == 'o'))){
             return false;
           }
+
         } else if(gobj.getcboard()[row][col].length() > 4){
           return false;
         }
