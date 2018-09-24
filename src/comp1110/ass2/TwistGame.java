@@ -189,35 +189,45 @@ public class TwistGame {
         System.out.print(gobj.getaboard()[row][col]);
       }} } }
 
-  public static String[][] displayOverlapBoard(String[][] displayerboard){
-    String[][] actualboard = new String[4][8];
-    for (int row = 0; row < 4; row++) {// initialize the board
-      for (int col = 0; col < 8; col++) {
-        if(gobj.getaboard()[row][col].length()>=2){//gobj.getaboard()[row][col].length()>=2
-          actualboard[row][col] = "#";
+
+  public static void displayCheckingBoard(String[][] board){
+    for (int row = 0; row < 10; row++) {// initialize the board
+      for (int col = 0; col < 14; col++) {
+        if(board[row][col].length()>=2&& col==13){//gobj.getaboard()[row][col].length()>=2
+          System.out.println("#");
         }
-        else {
-         actualboard[row][col] = gobj.getaboard()[row][col];
+        else if(board[row][col].length()>=2) {
+          System.out.print(board[row][col]);
+        }
+        else if(col==13){
+          System.out.println(board[row][col]);
+        }
+        else{
+          System.out.print(board[row][col]);
         }
       }
     }
-        return actualboard;
+
   }
 
   public static boolean checkBoard2(){
     for (int row = 3; row < 7; row++) {// initialize the board
-      for (int col = 3; col < 12; col++) {
+      for (int col = 3; col < 11; col++) {
         if(gobj.getcboard()[row][col].length() == 4 ){
-          if (gobj.getcboard()[row][col].charAt(1) != gobj.getcboard()[row][col].charAt(3)){
+          if (gobj.getcboard()[row][col].charAt(1) != gobj.getcboard()[row][col].charAt(3)){//pror (or)  orpr
             return false;
-          } else if(gobj.getcboard()[row][col].charAt(0) == gobj.getcboard()[row][col].charAt(2)){
+          } else if(gobj.getcboard()[row][col].charAt(0) == gobj.getcboard()[row][col].charAt(2)){// ogog case
             return false;
           }
         }else if(gobj.getcboard()[row][col].length() == 3){
           return false;
         }
         else if((gobj.getcboard()[row][col].length() == 2) ){
-          if((gobj.getcboard()[row][col].charAt(0) != 'p') && (gobj.getcboard()[row][col].charAt(0) != 'o')){
+          //shouldnt start with any character other than o or p
+          if((gobj.getcboard()[row][col].charAt(0) == 'p') || (gobj.getcboard()[row][col].charAt(0) == 'o')){
+
+          }
+          else{
             return false;
           }
         } else if(gobj.getcboard()[row][col].length() > 4){
@@ -248,8 +258,14 @@ public class TwistGame {
     }
 
   public static void main(String[] args) {
+    GameBoard g =new GameBoard();
+    g.resetBoardvalues("c");
+    g.pieceTobeAdded("f1A6","c");
+    g.pieceTobeAdded("g3A7","c");
+    System.out.println(checkboard(g.getcboard()));
+    displayCheckingBoard(g.getcboard());
 
-    boolean check = check2("a7A7j8A0");
+    boolean check = is_onboard("a7A7");
 
     System.out.println(check);
 
@@ -295,7 +311,7 @@ public class TwistGame {
    */
 
   public static boolean is_onboard(String placement) {
-    if (boardcreator(placement, 'c')[0][0] == "x") {
+    if (boardcreator(placement, 'c')[0][0] == "z") {
       return false;
     }
     return true;
@@ -322,7 +338,7 @@ public class TwistGame {
 
     if(!is_onboard(placement))
     {return false;}
-    else if(!checkBoard2()){
+else if(!checkBoard2()){
       return false;
     }
 

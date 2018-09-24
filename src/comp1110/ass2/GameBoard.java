@@ -64,7 +64,7 @@ public class GameBoard {
      *          "ac"-both the boards
      */
     void resetBoardvalues(String s) { //TODO-Try to implement Map function using streams
-        int row = 10, col = 12;
+        int row = 10, col = 14;
         if (s == "ac") {
             resetBoardvalues("a");
             resetBoardvalues("c");
@@ -106,6 +106,10 @@ public class GameBoard {
                 if (board3[row2 + modifier][col2_temp + modifier] == "x"){
                     board3[row2 + modifier][col2_temp + modifier] =piecearr[cr][cc];
                 }
+                else if( piecearr[cr][cc]=="x"){// if the piece part is empty dont update the output board
+
+                }
+
                 else {
                     //adding 3 so to add the first segment of the piece to the inner board(mandatory)
                     board3[row2 + modifier][col2_temp + modifier] = piecearr[cr][cc] + board3[row2 + modifier][col2_temp + modifier];
