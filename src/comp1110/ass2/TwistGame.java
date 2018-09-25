@@ -277,7 +277,9 @@ public class TwistGame {
     }
 
     List<int[]> emptyGrid = getEmptyGrid(placement);
-    System.out.println(emptyGrid);
+    /*for (int i = 0; i < emptyGrid.size(); i++) {
+      System.out.println(emptyGrid.get(i));
+    }*/
 
     return null;
   }
@@ -298,6 +300,8 @@ public class TwistGame {
           gridIndex[0] = x;
           gridIndex[1] = y;
           emptyGrid.add(gridIndex);
+          System.out.print(x);
+          System.out.println(y);
         }
       }
     }
