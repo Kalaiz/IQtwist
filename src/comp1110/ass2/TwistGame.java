@@ -1,7 +1,6 @@
 package comp1110.ass2;
 
 import comp1110.ass2.gui.Viewer;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
