@@ -216,7 +216,7 @@ public class TwistGame {
    *@return Updated board
    */
   public static String[][] boardcreator(String placement,char bt ) {
-    String[][] temp = {{"z"}};//For on_board
+    String[][] temp = {{"z"}};//For task5
     gobj.resetBoardvalues(Character.toString(bt));//resets the respective board
     for (int i = 0; i < placement.length() / 4; i++) {
       String ch=placement.substring(4*i,4*i+4);
