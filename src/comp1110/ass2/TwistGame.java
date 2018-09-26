@@ -193,7 +193,7 @@ public class TwistGame {
 
 
   public static void main(String[] args) {
-
+    System.out.println((char)97);
     /*GameBoard g =new GameBoard();
     g.resetBoardvalues("c");
     g.pieceTobeAdded("f1A6","c");

@@ -101,6 +101,9 @@ public class GameBoard {
      * @return (Updated) board
      */
     public static String[][] placer(String[][] board, String[][] piecearr, int row2, int col2, int modifier) {
+        if(row2<0 || col2<0){
+            return board;
+        }
         int prow = piecearr.length;
         int pcol = piecearr[0].length;
         int endr = prow + row2;
@@ -117,8 +120,8 @@ public class GameBoard {
                         oboard[row2 + modifier][col2_temp + modifier] = piecearr[cr][cc] + oboard[row2 + modifier][col2_temp + modifier];
                     }
                 } } }
-           //If piecearr size is more than than board or the board has null value(i.e Values of the board not declared)
-                catch(ArrayIndexOutOfBoundsException|NullPointerException|NegativeArraySizeException e){
+           //if piecearr size is more than than board or the board has null value(i.e Values of the board not declared)
+                catch(ArrayIndexOutOfBoundsException|NullPointerException e){
                   return board;
                }
             return oboard;

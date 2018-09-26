@@ -11,19 +11,14 @@ public class PlacerTest  {
     GameBoard tb = new GameBoard();
     String[][]testpiece=(new Pieces('a')).getactual_piece();
 
-
-
     private void test(boolean cond,String expected,String input){
         tb.resetBoardvalues("ac");//initialises both the  boards
         assertTrue("Expected : "+expected+" for inputs : "+ input, cond); }
 
-
-
    private String[][] filler(String[][] input){
         for(int i=0;i<input.length;i++){
             for(int m=0;m<input[0].length;m++){
-                input[i][m]="x"; } }return input;
- }
+                input[i][m]="x"; } }return input; }
 
    private boolean iptb(char type){
      String[][] board=(type=='a')?tb.getaboard():tb.getcboard();
@@ -43,6 +38,33 @@ public class PlacerTest  {
         //cond2 is for out of board
         return cond1 && Arrays.deepEquals(GameBoard.placer(board,testpiece,prow,pcol,modifer),board);
     }
+
+    private boolean placesitsum(char type){
+        int modifer=(type=='a')?0:3;
+        for(int i=0;i<9;i++){
+            Pieces p= (new Pieces((char) (i+97)));
+            String[][]testboard= GameBoard.placer(tb.getaboard(),(new Pieces((char) (i+97))).getactual_piece(),modifer,modifer,modifer);
+            //Arrays.stream(testboard).filter(ch->ch=="x")
+            int eoccupancy=sumnotx(testboard);
+            int aoccupancy=sumnotx(p.getactual_piece());
+            if((eoccupancy!=aoccupancy)){return false;}
+        }
+        return true;
+
+    }
+
+    public int sumnotx(String[][] input){
+        int acc=0;
+        for(int i=0;i<input.length;i++){
+            for(int m=0;m<input[0].length;m++){
+                if(input[i][m]!="x"){
+                    acc+=1;
+                }
+            }
+        }
+    return acc;}
+
+
 
     //if inputpiecearray  is too big ,then return the non-modified board.
   @Test
@@ -70,10 +92,13 @@ public class PlacerTest  {
          test(cond1 && !Arrays.deepEquals(GameBoard.placer(tb.getcboard(),testpiece,3,3,3),DeliverableTestUtility.expectedacboards),"exp","inp");
     }
     @Test
-    public void placesIt(){}//calculate the number of characters other than "x" if placed ;ensure whether it is correct
+    public void basicPlacesIt(){
+        tb.resetBoardvalues("ac");
+test(!(placesitsum('a')&&placesitsum('c')),"The Input pieces to be placed within the board","which are valid ");
+    }//calculate the number of characters other than "x" if placed ;ensure whether it is correct
 
     @Test
-    public void doesntOverlapOtherPieces(){
+    public void EmptyPiecedataDoesntOverlap(){
 
     }
 
