@@ -2,26 +2,24 @@ package comp1110.ass2;
 
 import org.junit.Rule;
 import org.junit.Test;
-
 import java.util.Arrays;
 import java.util.Random;
 import org.junit.rules.Timeout;
-import static org.junit.Assert.assertFalse;
+import static junit.framework.TestCase.assertTrue;
+
 
 
 public class PlacerTest  {
     @Rule
     public Timeout globalTimeout = Timeout.millis(20000);
     GameBoard tb = new GameBoard();
-    static Random rn  = new Random();
     static String[][]testpiece=(new Pieces('a')).getactual_piece();
-    String[][] output = {{"x","x","x","x",}};
-    String[][] output2 = {{}};
+     TwistGame t =new TwistGame();
 
 
     private void test(boolean cond,String expected,String input){
         tb.resetBoardvalues("ac");//initialises both the  boards
-        assertFalse("Expected : "+expected+" for inputs : "+ input, cond); }
+        assertTrue("Expected : "+expected+" for inputs : "+ input, cond); }
 
 
 
@@ -52,7 +50,7 @@ public class PlacerTest  {
     //If inputpiecearray  is too big ,then return the non-modified board.
   @Test
     public void  inputPieceTooBig(){
-      test(!(iptb('a')&&iptb('c')),"The default board","valid board,row,col and invalid inputpiecearr");
+      test((iptb('a')&&iptb('c')),"The default board","valid board,row,col and invalid inputpiecearr");
     }
 
 
@@ -65,25 +63,17 @@ public class PlacerTest  {
     @Test
     public void  wrongPositionValues(){
         tb.resetBoardvalues("ac");
-      test(!(wpv('a')&&wpv('c')),"The default board","valid board,inputpiecearr and an invalid positional row and col");
+      test((wpv('a')&&wpv('c')),"The default board","valid board,inputpiecearr and an invalid positional row and col");
         }
+
 
      @Test
     public void correctlyplaces(){
-         //String[][] otpt=(type=='a')?output:output2;
+        boolean cond1=!Arrays.deepEquals(GameBoard.placer(tb.getaboard(),testpiece,3,3,3),DeliverableTestUtility.expectedaaboards);
+         test(cond1 && !Arrays.deepEquals(GameBoard.placer(tb.getcboard(),testpiece,3,3,3),DeliverableTestUtility.expectedacboards),"exp","inp");
+    }
 
-     }
 
-
-/*
-   private boolean checkarray(String[][] array1, String[][] array2){
-       if(array1.length==array2.length && array1[0].length==array2[0].length){return false;}//if the sizes of the array are same
-           else{for(int row =0;row<array1.length;row++){
-               for(int col=0;col<array1[0].length;col++){
-                   if(array1[row][col]!=array2[row][col]){
-                      return false;
-                   } } } }
-   return true;}*/
 
 
 }

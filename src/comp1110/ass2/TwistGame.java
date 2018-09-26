@@ -348,11 +348,11 @@ public class TwistGame {
       else {
         System.out.print(Character.toString((char) (65 + row))+" "); }
       for (int col = 0; col < 8; col++) {
-        if(gobj.getaboard()[row][col].length()>=2){//gobj.getaboard()[row][col].length()>=2
+        if(displayerboard[row][col].length()>=2){//gobj.getaboard()[row][col].length()>=2
           System.out.print("#");
         }
         else {
-          System.out.print(gobj.getaboard()[row][col]);
+          System.out.print(displayerboard[row][col]);
         }} } }
 
   //TESTING PROGRAM: Displays the checkingboard (must be 10x14)
