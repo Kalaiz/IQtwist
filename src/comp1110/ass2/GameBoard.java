@@ -1,5 +1,7 @@
 package comp1110.ass2;
 
+import java.util.Arrays;
+
 public class GameBoard {
     private String[][] checkingBoard = new String[10][14];// Inclusive of the main board(4x8)
     private String[][] actualBoard = new String[4][8]; //The actual board
@@ -103,22 +105,23 @@ public class GameBoard {
         int pcol = piecearr[0].length;
         int endr = prow + row2;
         int endc = pcol + col2;
+        String[][] oboard= board;
            try { for (int cr = 0; row2 < endr; row2++, cr++) {
                 int col2_temp = col2;
                 for (int cc = 0; col2_temp < endc; col2_temp++, cc++) {
-                    if (board[row2 + modifier][col2_temp + modifier] == "x") {
-                        board[row2 + modifier][col2_temp + modifier] = piecearr[cr][cc];
+                    if (oboard[row2 + modifier][col2_temp + modifier] == "x") {
+                        oboard[row2 + modifier][col2_temp + modifier] = piecearr[cr][cc];
                     } else if (piecearr[cr][cc] == "x") {// if the piece part is empty dont update the output board
                     } else {
                         //adding 3 so to add the first segment of the piece to the inner board(mandatory)
-                        board[row2 + modifier][col2_temp + modifier] = piecearr[cr][cc] + board[row2 + modifier][col2_temp + modifier];
+                        oboard[row2 + modifier][col2_temp + modifier] = piecearr[cr][cc] + oboard[row2 + modifier][col2_temp + modifier];
                     }
                 } } }
            //If piecearr size is more than than board or the board has null value(i.e Values of the board not declared)
                 catch(ArrayIndexOutOfBoundsException|NullPointerException|NegativeArraySizeException e){
                   return board;
                }
-            return board;
+            return oboard;
     }
 
     /**

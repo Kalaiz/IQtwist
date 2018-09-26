@@ -2,12 +2,12 @@ package comp1110.ass2;
 
 import org.junit.Rule;
 import org.junit.Test;
+
+import java.util.Arrays;
 import java.util.Random;
 import org.junit.rules.Timeout;
-
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+
 
 public class PlacerTest  {
     @Rule
@@ -19,19 +19,11 @@ public class PlacerTest  {
     String[][] output2 = {{}};
 
 
-    private void test(boolean cond){
+    private void test(boolean cond,String expected,String input){
         tb.resetBoardvalues("ac");//initialises both the  boards
-        assertFalse("", cond); }
+        assertFalse("Expected : "+expected+" for inputs : "+ input, cond); }
 
 
-   private boolean checkarray(String[][] array1, String[][] array2){
-       if(array1.length==array2.length && array1[0].length==array2[0].length){return false;}//if the sizes of the array are same
-           else{for(int row =0;row<array1.length;row++){
-               for(int col=0;col<array1[0].length;col++){
-                   if(array1[row][col]!=array2[row][col]){
-                      return false;
-                   } } } }
-   return true;}
 
    private String[][] filler(String[][] input){
         for(int i=0;i<input.length;i++){
@@ -42,25 +34,25 @@ public class PlacerTest  {
    private boolean iptb(char type){
      String[][] board=(type=='a')?tb.getaboard():tb.getcboard();
      int modifer=(type=='a')?0:3;
-     int row= board.length+rn.nextInt(20);
-     int col=board[0].length + rn.nextInt(20);
+     int row= board.length;
+     int col=board[0].length;
      String[][] bigPiece= filler(new String[row][col]);//to avoid nullpointerexception
-     return checkarray(GameBoard.placer(board,bigPiece,modifer,modifer,modifer),board);
+     return Arrays.deepEquals(GameBoard.placer(board,bigPiece,modifer,modifer,modifer),board);
  }
     private boolean wpv(char type){
         String[][] board=(type=='a')?tb.getaboard():tb.getcboard();
         int modifer=(type=='a')?0:3;
-        int parow = board.length+rn.nextInt(20);
-        int pacol = board[0].length + rn.nextInt(20);
+        int prow = board.length;
+        int pcol = board[0].length;
         //for negative positioning input
-        boolean cond1 = checkarray(GameBoard.placer(board,testpiece,-parow,-pacol,modifer),board);
+        boolean cond1 = Arrays.deepEquals(GameBoard.placer(board,testpiece,-prow,-pcol,modifer),board);
         //cond2 is for out of board
-        return cond1&&checkarray(GameBoard.placer(board,testpiece,parow,pacol,modifer),board);
+        return cond1 && Arrays.deepEquals(GameBoard.placer(board,testpiece,prow,pcol,modifer),board);
     }
     //If inputpiecearray  is too big ,then return the non-modified board.
   @Test
     public void  inputPieceTooBig(){
-      test(iptb('a')&&iptb('c'));
+      test(!(iptb('a')&&iptb('c')),"The default board","valid board,row,col and invalid inputpiecearr");
     }
 
 
@@ -73,7 +65,7 @@ public class PlacerTest  {
     @Test
     public void  wrongPositionValues(){
         tb.resetBoardvalues("ac");
-      test(wpv('a')&&wpv('c'));
+      test(!(wpv('a')&&wpv('c')),"The default board","valid board,inputpiecearr and an invalid positional row and col");
         }
 
      @Test
@@ -83,7 +75,15 @@ public class PlacerTest  {
      }
 
 
-
+/*
+   private boolean checkarray(String[][] array1, String[][] array2){
+       if(array1.length==array2.length && array1[0].length==array2[0].length){return false;}//if the sizes of the array are same
+           else{for(int row =0;row<array1.length;row++){
+               for(int col=0;col<array1[0].length;col++){
+                   if(array1[row][col]!=array2[row][col]){
+                      return false;
+                   } } } }
+   return true;}*/
 
 
 }
