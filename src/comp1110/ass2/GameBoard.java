@@ -1,8 +1,10 @@
 package comp1110.ass2;
 
+import java.util.Arrays;
+
 public class GameBoard {
-    public String[][] checkingBoard = new String[10][14];// Inclusive of the main board(4x8)
-    public String[][] actualBoard = new String[4][8]; //The actual board
+    private String[][] checkingBoard = new String[10][14];// Inclusive of the main board(4x8)
+    private String[][] actualBoard = new String[4][8]; //The actual board
 
     /**
      * Adds a piece to the respective board and updates it.
@@ -65,7 +67,7 @@ public class GameBoard {
      */
     void resetBoardvalues(String s) { //TODO-Try to implement Map function using streams
         int row = 10, col = 14;
-        if (s == "ac") {
+        if (s .equals("ac") ) {
             resetBoardvalues("a");
             resetBoardvalues("c");
         } else if (s.equals("a")) {
@@ -87,35 +89,42 @@ public class GameBoard {
 
     /**
      * Places the piece on the board multidimensional array
+     * It will return the non modified board if the (placing array)
+     * piecearr is larger than the board or if the input values
+     * aren't valid.
      *
-     * @param board3   Non-modified board
+     * @param board   Non-modified board
      * @param piecearr Multidimensional array of the piece
      * @param row2     the row on which the top-most piece resides
      * @param col2     the column in which the left-most piece resides
-     * @param modifier value added for the sake of is_onboard (Default should be 0)
-     * @return Updated board
+     * @param modifier value added for the sake of differentiating actual and checking board  (Default should be 0)
+     * @return (Updated) board
      */
-    public static String[][] placer(String[][] board3, String[][] piecearr, int row2, int col2, int modifier) {//places the array into the board array
-        int row = piecearr.length;
-        int col = piecearr[0].length;
-        int endr = row + row2;
-        int endc = col + col2;
-        for (int cr = 0; row2 < endr; row2++, cr++) {
-            int col2_temp = col2;
-            for (int cc = 0; col2_temp < endc; col2_temp++, cc++) {
-                if (board3[row2 + modifier][col2_temp + modifier] == "x"){
-                    board3[row2 + modifier][col2_temp + modifier] =piecearr[cr][cc];
-                }
-                else if( piecearr[cr][cc]=="x"){// if the piece part is empty dont update the output board
-
-                }
-
-                else {
-                    //adding 3 so to add the first segment of the piece to the inner board(mandatory)
-                    board3[row2 + modifier][col2_temp + modifier] = piecearr[cr][cc] + board3[row2 + modifier][col2_temp + modifier];
-                }}
+    public static String[][] placer(String[][] board, String[][] piecearr, int row2, int col2, int modifier) {
+        if(row2<0 || col2<0){
+            return board;
         }
-        return board3;
+        int prow = piecearr.length;
+        int pcol = piecearr[0].length;
+        int endr = prow + row2;
+        int endc = pcol + col2;
+        String[][] oboard= board;
+           try { for (int cr = 0; row2 < endr; row2++, cr++) {
+                int col2_temp = col2;
+                for (int cc = 0; col2_temp < endc; col2_temp++, cc++) {
+                    if (oboard[row2 + modifier][col2_temp + modifier] == "x") {
+                        oboard[row2 + modifier][col2_temp + modifier] = piecearr[cr][cc];
+                    } else if (piecearr[cr][cc] == "x") {// if the piece part is empty dont update the output board
+                    } else {
+                        //adding 3 so to add the first segment of the piece to the inner board(mandatory)
+                        oboard[row2 + modifier][col2_temp + modifier] = piecearr[cr][cc] + oboard[row2 + modifier][col2_temp + modifier];
+                    }
+                } } }
+                 //if piecearr size is more than than board or the board has null value(i.e Values of the board not declared)
+                catch(ArrayIndexOutOfBoundsException|NullPointerException e){
+                  return board;
+               }
+            return oboard;
     }
 
     /**

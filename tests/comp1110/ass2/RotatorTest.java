@@ -34,7 +34,7 @@ public class RotatorTest {
 
     @Test
     public void testg(){
-        String[][] expected = {{"x","oy","oy"},{"oy","y","x"},{"y","y","x"}};
+        String[][] expected = {{"x","oy","oy"},{"oy","y","x"},{"x","y","x"}};
         test(new Pieces('g'),expected);
     }
 

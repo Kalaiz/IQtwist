@@ -1,7 +1,6 @@
 package comp1110.ass2;
 
 import comp1110.ass2.gui.Viewer;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -166,7 +165,7 @@ public class TwistGame {
   }
 
 
-  public static boolean checkBoard2(){
+  public static boolean checkBoard2(){//checks for colourpeg and overlap
     for (int row = 3; row < 7; row++) {
       for (int col = 3; col < 11; col++) {
         String ccs=gobj.getcboard()[row][col];//ccs-Current checking piece string
@@ -184,7 +183,6 @@ public class TwistGame {
           if(!((ccs.charAt(0) == 'p') || (ccs.charAt(0) == 'o'))){
             return false;
           }
-
         } else if(ccs.length() > 4){
           return false;
         }
@@ -195,12 +193,13 @@ public class TwistGame {
 
 
   public static void main(String[] args) {
-    GameBoard g =new GameBoard();
+    System.out.println((char)97);
+    /*GameBoard g =new GameBoard();
     g.resetBoardvalues("c");
     g.pieceTobeAdded("f1A6","c");
     g.pieceTobeAdded("g3A7","c");
     System.out.println(checkboard(g.getcboard()));
-    displayCheckingBoard(g.getcboard());
+    displayCheckingBoard(g.getcboard());*/
 
   }
 
@@ -216,7 +215,7 @@ public class TwistGame {
    *@return Updated board
    */
   public static String[][] boardcreator(String placement,char bt ) {
-    String[][] temp = {{"z"}};//For on_board
+    String[][] temp = {{"z"}};//For task5
     gobj.resetBoardvalues(Character.toString(bt));//resets the respective board
     for (int i = 0; i < placement.length() / 4; i++) {
       String ch=placement.substring(4*i,4*i+4);
@@ -349,11 +348,11 @@ public class TwistGame {
       else {
         System.out.print(Character.toString((char) (65 + row))+" "); }
       for (int col = 0; col < 8; col++) {
-        if(gobj.getaboard()[row][col].length()>=2){//gobj.getaboard()[row][col].length()>=2
+        if(displayerboard[row][col].length()>=2){//gobj.getaboard()[row][col].length()>=2
           System.out.print("#");
         }
         else {
-          System.out.print(gobj.getaboard()[row][col]);
+          System.out.print(displayerboard[row][col]);
         }} } }
 
   //TESTING PROGRAM: Displays the checkingboard (must be 10x14)
@@ -379,13 +378,4 @@ public class TwistGame {
 }
 
 
-/*DRAFT CODES
-  TASK2
-  public static boolean isPlacementWellFormed2(String piecePlacement) {//initial  code
-    boolean  contain=(piecePlacement.charAt(0)>'a'&& piecePlacement.charAt(0)<'l');//when char is compared it is converted to ascii encoding numbers
-    boolean contain2=(piecePlacement.charAt(1)<'1'&& piecePlacement.charAt(1)<'8');
-    boolean contain3=(piecePlacement.charAt(2)<'A'&& piecePlacement.charAt(2)>'D');
-    boolean contain4= (piecePlacement.charAt(3)<='0'&& piecePlacement.charAt(3)>'8');// could be a peg
-    contain=contain && contain2&&contain3&& contain4;
-    return contain;
-  }*/
+
