@@ -120,7 +120,7 @@ public class GameBoard {
                         oboard[row2 + modifier][col2_temp + modifier] = piecearr[cr][cc] + oboard[row2 + modifier][col2_temp + modifier];
                     }
                 } } }
-           //if piecearr size is more than than board or the board has null value(i.e Values of the board not declared)
+                 //if piecearr size is more than than board or the board has null value(i.e Values of the board not declared)
                 catch(ArrayIndexOutOfBoundsException|NullPointerException e){
                   return board;
                }
