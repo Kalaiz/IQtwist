@@ -15,18 +15,16 @@ public class PlacerTest  {
     GameBoard tb = new GameBoard();
     static Random rn  = new Random();
     static String[][]testpiece=(new Pieces('a')).getactual_piece();
-
+    String[][] output = {{"x","x","x","x",}};
+    String[][] output2 = {{}};
 
 
     private void test(boolean cond){
         tb.resetBoardvalues("ac");//initialises both the  boards
-        assertFalse("", cond);
+        assertFalse("", cond); }
 
 
-   }
-
-
-   public boolean checkarray(String[][] array1, String[][] array2){
+   private boolean checkarray(String[][] array1, String[][] array2){
        if(array1.length==array2.length && array1[0].length==array2[0].length){return false;}//if the sizes of the array are same
            else{for(int row =0;row<array1.length;row++){
                for(int col=0;col<array1[0].length;col++){
@@ -35,87 +33,58 @@ public class PlacerTest  {
                    } } } }
    return true;}
 
+   private String[][] filler(String[][] input){
+        for(int i=0;i<input.length;i++){
+            for(int m=0;m<input[0].length;m++){
+                input[i][m]="x"; } }return input;
+ }
 
-/*    @Test
-    public void outOfBoundforCB() {
-       int irow = tb.getcboard().length+rn.nextInt(20);
-       int icol = tb.getcboard()[0].length + rn.nextInt(20);
-       String[][] inputpa = new String[irow][icol];
-       test(checkarray(GameBoard.placer(tb.getcboard(),inputpa,irow,icol,3),tb.getcboard()));
-   }
-
-   @Test
-    public void outOfBoundforAB(){
-       int irow = tb.getaboard().length+rn.nextInt(20);
-       int icol = tb.getaboard()[0].length + rn.nextInt(20);
-       String[][] inputpa = new String[irow][icol];
-       test(checkarray(GameBoard.placer(tb.getaboard(),inputpa,irow,icol,0),tb.getaboard()));
-   }*/
+   private boolean iptb(char type){
+     String[][] board=(type=='a')?tb.getaboard():tb.getcboard();
+     int modifer=(type=='a')?0:3;
+     int row= board.length+rn.nextInt(20);
+     int col=board[0].length + rn.nextInt(20);
+     String[][] bigPiece= filler(new String[row][col]);//to avoid nullpointerexception
+     return checkarray(GameBoard.placer(board,bigPiece,modifer,modifer,modifer),board);
+ }
+    private boolean wpv(char type){
+        String[][] board=(type=='a')?tb.getaboard():tb.getcboard();
+        int modifer=(type=='a')?0:3;
+        int parow = board.length+rn.nextInt(20);
+        int pacol = board[0].length + rn.nextInt(20);
+        //for negative positioning input
+        boolean cond1 = checkarray(GameBoard.placer(board,testpiece,-parow,-pacol,modifer),board);
+        //cond2 is for out of board
+        return cond1&&checkarray(GameBoard.placer(board,testpiece,parow,pacol,modifer),board);
+    }
+    //If inputpiecearray  is too big ,then return the non-modified board.
   @Test
-    public void  inputPieceTooBigAB(){
-      int irow=5;
-      int icol=5;
-      test(checkarray(GameBoard.placer(tb.getaboard(),testpiece,irow,icol,0),tb.getaboard()));
-
-
-
-    }
-    @Test
-    public void  inputPieceTooBigCB(){
-        int irow=5;
-        int icol=5;
-        test(checkarray(GameBoard.placer(tb.getaboard(),testpiece,irow,icol,0),tb.getaboard()));
+    public void  inputPieceTooBig(){
+      test(iptb('a')&&iptb('c'));
     }
 
 
+    /*includes wrong value for positioning row and col
+    1)row &col must be positive
+    2)row & col must a valid indices on the board
+    3)once placed piece must not go out of board
+    if any ot those conditions are not met , the non-modified board is returned.
+    */
     @Test
-    public void  WrongPositionValuesAB(){
+    public void  wrongPositionValues(){
         tb.resetBoardvalues("ac");
-        int icrow = tb.getcboard().length+rn.nextInt(20);
-        int iccol = tb.getcboard()[0].length + rn.nextInt(20);
-        int iarow= tb.getaboard().length +rn.nextInt(20);
-        int iacol= tb.getaboard()[0].length+rn.nextInt(20);
-
-
-            //boolean[i]=GameBoard.placer(tb.getcboard(),testpiece,irow,icol,0));
-
-
-
+      test(wpv('a')&&wpv('c'));
         }
 
+     @Test
+    public void correctlyplaces(){
+         //String[][] otpt=(type=='a')?output:output2;
 
-
-    @Test
-    public void  WrongPositionValuesCB(){
-        tb.resetBoardvalues("ac");
-        int icrow = tb.getcboard().length+rn.nextInt(20);
-        int iccol = tb.getcboard()[0].length + rn.nextInt(20);
-        int iarow= tb.getaboard().length +rn.nextInt(20);
-        int iacol= tb.getaboard()[0].length+rn.nextInt(20);
-
-
-        //boolean[i]=GameBoard.placer(tb.getcboard(),testpiece,irow,icol,0));
-
-
-
-    }
+     }
 
 
 
 
-
-    @Test
-    public void OffBoardAB(){
-        tb.resetBoardvalues("ac");
-
-
-    }
-    @Test
-    public void OffBoardCB(){
-        tb.resetBoardvalues("ac");
-
-
-    }
 
 }
 

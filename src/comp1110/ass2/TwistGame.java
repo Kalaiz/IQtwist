@@ -165,7 +165,7 @@ public class TwistGame {
   }
 
 
-  public static boolean checkBoard2(){
+  public static boolean checkBoard2(){//checks for colourpeg and overlap
     for (int row = 3; row < 7; row++) {
       for (int col = 3; col < 11; col++) {
         String ccs=gobj.getcboard()[row][col];//ccs-Current checking piece string
@@ -183,7 +183,6 @@ public class TwistGame {
           if(!((ccs.charAt(0) == 'p') || (ccs.charAt(0) == 'o'))){
             return false;
           }
-
         } else if(ccs.length() > 4){
           return false;
         }

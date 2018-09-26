@@ -115,7 +115,7 @@ public class GameBoard {
                     }
                 } } }
            //If piecearr size is more than than board or the board has null value(i.e Values of the board not declared)
-                catch(IndexOutOfBoundsException |NullPointerException|NegativeArraySizeException e){
+                catch(ArrayIndexOutOfBoundsException|NullPointerException|NegativeArraySizeException e){
                   return board;
                }
             return board;
