@@ -276,7 +276,7 @@ public class TwistGame {
         unplaced_pieces = unplaced_pieces + String.valueOf((char)i);
     }
 
-    List<int[]> emptyGrid = getEmptyGrid(placement);
+    List<int[]> emptyGrid = getEmptyGrid();
     /*for (int i = 0; i < emptyGrid.size(); i++) {
       System.out.println(emptyGrid.get(i));
     }*/
@@ -291,7 +291,7 @@ public class TwistGame {
    * @return list of required indices
    *
    */
-  public static List<int[]> getEmptyGrid(String placement) {
+  public static List<int[]> getEmptyGrid() {
     List<int[]> emptyGrid = new ArrayList<>();
     for (int x = 0; x < 4; x++){
       for(int y = 0; y < 8; y++){
