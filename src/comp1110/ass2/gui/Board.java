@@ -5,22 +5,150 @@ import comp1110.ass2.TwistGame;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 
 public class Board extends Application {
     private static final int BOARD_WIDTH = 933;
     private static final int BOARD_HEIGHT = 700;
     static GameBoard g = new GameBoard();
-    static TwistGame t=new TwistGame();
+    static TwistGame t = new TwistGame();
 
     // FIXME Task 7: Implement a basic playable Twist Game in JavaFX that only allows pieces to be placed in valid places
     //uses task 8(creates the base for the game) and 5 (check pieces can be used or not).6 should be used here
-    private void start_play(){}
+    //private void start_play(){ }
 
-    private void rotate(){}//rotate pieces
+    public static String start_Placements(){
+        Random rand = new Random(1);
+        int numofpiece = rand.nextInt(2); //number of the pieces
+        int numofr = rand.nextInt(2);
+        int numofb = rand.nextInt(3);
+        int numofg = rand.nextInt(3);
+        int numofy = rand.nextInt(3); //random number of different pegs
+
+        int startlength = 4 * (numofpiece + numofr + numofb + numofg + numofy);
+
+        //the piece of the output String
+        char[] piece = new char[4];
+        piece[0] = (char) (rand.nextInt(8) + 97);
+        piece[1] = (char) (rand.nextInt(8) + 49);
+        piece[2] = (char) (rand.nextInt(4) + 65);
+        piece[3] = (char) (rand.nextInt(8) + 48);
+        String strp = new String(piece);
+
+        //the pegs of the output String
+        char[] rpeg = new char[4];
+        rpeg[0] = 'i';
+        rpeg[1] = (char) (rand.nextInt(8) + 49);
+        rpeg[2] = (char) (rand.nextInt(4) + 65);
+        rpeg[3] = '0';
+        String strr = new String(rpeg);
+
+        char[] bpeg1 = new char[4];
+        bpeg1[0] = 'j';
+        bpeg1[1] = (char) (rand.nextInt(8) + 49);
+        bpeg1[2] = (char) (rand.nextInt(4) + 65);
+        bpeg1[3] = '0';
+        char[] bpeg2 = new char[4];
+        bpeg2[0] = 'j';
+        bpeg2[1] = (char) (rand.nextInt(8) + 49);
+        bpeg2[2] = (char) (rand.nextInt(4) + 65);
+        bpeg2[3] = '0';
+        String strb1 = new String(bpeg1);
+        String strb2 = new String(bpeg2);
+
+        char[] gpeg1 = new char[4];
+        gpeg1[0] = 'k';
+        gpeg1[1] = (char) (rand.nextInt(8) + 49);
+        gpeg1[2] = (char) (rand.nextInt(4) + 65);
+        gpeg1[3] = '0';
+        char[] gpeg2 = new char[4];
+        gpeg2[0] = 'k';
+        gpeg2[1] = (char) (rand.nextInt(8) + 49);
+        gpeg2[2] = (char) (rand.nextInt(4) + 65);
+        gpeg2[3] = '0';
+        String strg1 = new String(gpeg1);
+        String strg2 = new String(gpeg2);
+
+        char[] ypeg1 = new char[4];
+        ypeg1[0] = 'l';
+        ypeg1[1] = (char) (rand.nextInt(8) + 49);
+        ypeg1[2] = (char) (rand.nextInt(4) + 65);
+        ypeg1[3] = '0';
+        char[] ypeg2 = new char[4];
+        ypeg2[0] = 'l';
+        ypeg2[1] = (char) (rand.nextInt(8) + 49);
+        ypeg2[2] = (char) (rand.nextInt(4) + 65);
+        ypeg2[3] = '0';
+        String stry1 = new String(ypeg1);
+        String stry2 = new String(ypeg2);
+
+        String str = "                                            ";
+        StringBuilder str1 = new StringBuilder(str);
+
+        if(numofpiece == 1){
+            str1.insert(0, strp);
+        }
+
+        if(numofr == 1){
+            str1.insert(4, strr);
+        }
+
+        if(numofb == 1){
+            str1.insert(8, strb1);
+        } else if(numofb == 2){
+            str1.insert(8, strb1);
+            str1.insert(12,strb2);
+        }
+
+        if(numofg == 1){
+            str1.insert(8, strg1);
+        } else if(numofg == 2){
+            str1.insert(8, strg1);
+            str1.insert(12,strg2);
+        }
+
+        if(numofy == 1){
+            str1.insert(8, stry1);
+        } else if(numofy == 2){
+            str1.insert(8, stry1);
+            str1.insert(12,stry2);
+        }
+
+        str = new String(str1);
+
+        char[] charpla = str.toCharArray();
+        char[] charnew = new char[startlength];
+
+        int j = 0;
+        for(int i = 0; i < charpla.length; i++){
+            if(charpla[i] != ' '){
+                charnew[j] = charpla[i];
+                j ++;
+            }
+        }
+
+        str = new String(charnew);
+
+        return str;
+    }
+
+    public static String validStartPlacement(){
+        String str = start_Placements();
+        if(!t.isPlacementStringValid(str)){
+            str = start_Placements();
+        }
+
+        return str;
+    }
+
+
+    //private void rotate(){}//rotate pieces
 
     //Snap the pieces to nearest position (if it is over the respective position.)
-    private void snap_to_nearest_grid(){}
+    //private void snap_to_nearest_grid(){}
 
     // FIXME Task 8: Implement starting placements
 
@@ -57,11 +185,15 @@ public class Board extends Application {
     public static void main(String[] args) {
        /* Board b = new Board();
         b.makeBoard();*/
-    }
+        String str = validStartPlacement();
+        System.out.println(str);
+
+        }
     /*set opacity of selected pieces to a certain percentage  or
     use Blur effect for that certain piece (using setEffect) Use task 9 code for the solutions.*/
     // FIXME Task 10: Implement hints
-    public static void hint(){}
+    public static void hint(){
+    }
 
     // FIXME Task 11: Generate interesting starting placements
 /*In reference to Difficulty level choose a certain state from Difficulty_level */
@@ -69,7 +201,7 @@ public class Board extends Application {
     public void start(Stage primaryStage) throws Exception {
 
     }
- /*  Task 8 Draft codes
+ /* Task 8 Draft codes
     Random rn =new Random();
     String rngame="";
     int[] arr ={12,8,4,7};
