@@ -67,7 +67,7 @@ public class GameBoard {
      */
     void resetBoardvalues(String s) { //TODO-Try to implement Map function using streams
         int row = 10, col = 14;
-        if (s == "ac") {
+        if (s .equals("ac") ) {
             resetBoardvalues("a");
             resetBoardvalues("c");
         } else if (s.equals("a")) {
@@ -90,15 +90,15 @@ public class GameBoard {
     /**
      * Places the piece on the board multidimensional array
      * It will return the non modified board if the (placing array)
-     * piecearr is larger than the board or if the values of the board
-     * aren't declared.
+     * piecearr is larger than the board or if the input values
+     * aren't valid.
      *
      * @param board   Non-modified board
      * @param piecearr Multidimensional array of the piece
      * @param row2     the row on which the top-most piece resides
      * @param col2     the column in which the left-most piece resides
      * @param modifier value added for the sake of differentiating actual and checking board  (Default should be 0)
-     * @return Updated board
+     * @return (Updated) board
      */
     public static String[][] placer(String[][] board, String[][] piecearr, int row2, int col2, int modifier) {
         int prow = piecearr.length;

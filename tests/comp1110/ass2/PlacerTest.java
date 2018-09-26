@@ -1,20 +1,16 @@
 package comp1110.ass2;
 
-import org.junit.Rule;
 import org.junit.Test;
 import java.util.Arrays;
-import java.util.Random;
-import org.junit.rules.Timeout;
 import static junit.framework.TestCase.assertTrue;
 
 
 
 public class PlacerTest  {
-    @Rule
-    public Timeout globalTimeout = Timeout.millis(20000);
+
     GameBoard tb = new GameBoard();
-    static String[][]testpiece=(new Pieces('a')).getactual_piece();
-     TwistGame t =new TwistGame();
+    String[][]testpiece=(new Pieces('a')).getactual_piece();
+
 
 
     private void test(boolean cond,String expected,String input){
@@ -47,7 +43,8 @@ public class PlacerTest  {
         //cond2 is for out of board
         return cond1 && Arrays.deepEquals(GameBoard.placer(board,testpiece,prow,pcol,modifer),board);
     }
-    //If inputpiecearray  is too big ,then return the non-modified board.
+
+    //if inputpiecearray  is too big ,then return the non-modified board.
   @Test
     public void  inputPieceTooBig(){
       test((iptb('a')&&iptb('c')),"The default board","valid board,row,col and invalid inputpiecearr");
@@ -68,11 +65,17 @@ public class PlacerTest  {
 
 
      @Test
-    public void correctlyplaces(){
+    public void correctlyPlaces(){
         boolean cond1=!Arrays.deepEquals(GameBoard.placer(tb.getaboard(),testpiece,3,3,3),DeliverableTestUtility.expectedaaboards);
          test(cond1 && !Arrays.deepEquals(GameBoard.placer(tb.getcboard(),testpiece,3,3,3),DeliverableTestUtility.expectedacboards),"exp","inp");
     }
+    @Test
+    public void placesIt(){}//calculate the number of characters other than "x" if placed ;ensure whether it is correct
 
+    @Test
+    public void doesntOverlapOtherPieces(){
+
+    }
 
 
 
