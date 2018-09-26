@@ -165,7 +165,7 @@ public class TwistGame {
   }
 
 
-  public static boolean checkBoard2(){
+  public static boolean checkBoard2(){//checks for colourpeg and overlap
     for (int row = 3; row < 7; row++) {
       for (int col = 3; col < 11; col++) {
         String ccs=gobj.getcboard()[row][col];//ccs-Current checking piece string
@@ -183,7 +183,6 @@ public class TwistGame {
           if(!((ccs.charAt(0) == 'p') || (ccs.charAt(0) == 'o'))){
             return false;
           }
-
         } else if(ccs.length() > 4){
           return false;
         }
@@ -194,12 +193,13 @@ public class TwistGame {
 
 
   public static void main(String[] args) {
-    GameBoard g =new GameBoard();
+
+    /*GameBoard g =new GameBoard();
     g.resetBoardvalues("c");
     g.pieceTobeAdded("f1A6","c");
     g.pieceTobeAdded("g3A7","c");
     System.out.println(checkboard(g.getcboard()));
-    displayCheckingBoard(g.getcboard());
+    displayCheckingBoard(g.getcboard());*/
 
   }
 
@@ -348,11 +348,11 @@ public class TwistGame {
       else {
         System.out.print(Character.toString((char) (65 + row))+" "); }
       for (int col = 0; col < 8; col++) {
-        if(gobj.getaboard()[row][col].length()>=2){//gobj.getaboard()[row][col].length()>=2
+        if(displayerboard[row][col].length()>=2){//gobj.getaboard()[row][col].length()>=2
           System.out.print("#");
         }
         else {
-          System.out.print(gobj.getaboard()[row][col]);
+          System.out.print(displayerboard[row][col]);
         }} } }
 
   //TESTING PROGRAM: Displays the checkingboard (must be 10x14)
