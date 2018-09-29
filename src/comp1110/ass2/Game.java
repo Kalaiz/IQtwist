@@ -27,5 +27,16 @@ public class Game extends Application{
         root.getChildren().add(controls);
         primaryStage.setScene(scene);
         primaryStage.show();
+
+
+    }
+    public class InGameBoard extends ImageView{//creates an board
+
+    }
+
+    public class PieceBoard extends ImageView{//creates a box with all pieces
+    ImageView img = new ImageView();
+    //img.setImage()
+
     }
 }

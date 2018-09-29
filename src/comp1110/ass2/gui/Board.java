@@ -190,7 +190,7 @@ public class Board extends Application {
        /* Board b = new Board();
         b.makeBoard();*/
         String str = validStartPlacement();
-        System.out.println(t.isPlacementStringValid(str));
+        System.out.println(str+t.isPlacementStringValid(str));
 
     }
     /*set opacity of selected pieces to a certain percentage  or

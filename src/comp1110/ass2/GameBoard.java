@@ -117,7 +117,7 @@ public class GameBoard {
                     } else if (piecearr[cr][cc] == "x") {// if the piece part is empty dont update the output board
                     } else {
                         //adding 3 so to add the first segment of the piece to the inner board(mandatory)
-                        oboard[row2 + modifier][col2_temp + modifier] = piecearr[cr][cc] + oboard[row2 + modifier][col2_temp + modifier];
+                    oboard[row2 + modifier][col2_temp + modifier] = piecearr[cr][cc] + oboard[row2 + modifier][col2_temp + modifier];
                     }
                 } } }
                  //if piecearr size is more than than board or the board has null value(i.e Values of the board not declared)

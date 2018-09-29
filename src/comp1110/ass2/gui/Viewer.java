@@ -113,7 +113,7 @@ public class Viewer extends Application {
      */
     //  Task 4: implement the simple placement viewer
     void makePlacement(String placement) {
-        StackPane stack = new StackPane();
+        //StackPane stack = new StackPane();
         GridPane grid = new GridPane(); //Creating Grid
         for(int i=0;i<8;i++){
             ColumnConstraints col = new ColumnConstraints(92);
