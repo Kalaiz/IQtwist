@@ -20,16 +20,27 @@ public class Board extends Application {
     //uses task 8(creates the base for the game) and 5 (check pieces can be used or not).6 should be used here
     //private void start_play(){ }
 
-    public static String start_Placements(int seed){
-        Random rand1 = new Random(1);
-        Random rand = new Random(rand1.nextInt());
-        int numofpiece = rand.nextInt(2); //number of the pieces
-        int numofr = rand.nextInt(2);
-        int numofb = rand.nextInt(3);
-        int numofg = rand.nextInt(3);
-        int numofy = rand.nextInt(3); //random number of different pegs
+    public static String start_Placements(){
+          int numofpiece ; //number of the pieces
+          int numofr;
+          int numofb;
+          int numofg;
+          int numofy ; //random number of different pegs
+//
+// int startlength = 4 * (numofpiece + numofr + numofb + numofg + numofy);
+
+        do {
+            Random rand1 = new Random();
+            numofpiece = rand1.nextInt(2); //number of the pieces
+            numofr = rand1.nextInt(2);
+            numofb = rand1.nextInt(3);
+            numofg = rand1.nextInt(3);
+            numofy = rand1.nextInt(3); //random number of different pegs
+        }while((numofr + numofb + numofg + numofy) < 1);
 
         int startlength = 4 * (numofpiece + numofr + numofb + numofg + numofy);
+
+        Random rand = new Random();
 
         //the piece of the output String
         char[] piece = new char[4];
@@ -137,12 +148,9 @@ public class Board extends Application {
     }
 
     public static String validStartPlacement(){
-        Random rand = new Random(1);
-        int seed = rand.nextInt();
-        String str = start_Placements(seed);
-        while(!t.isPlacementStringValid(str)) {
-            str = new String(start_Placements(seed));
-            seed++;
+        String str = start_Placements();
+        if (!t.isPlacementStringValid(str)) {
+            str = start_Placements();
         }
 
             return str;
@@ -191,7 +199,7 @@ public class Board extends Application {
         b.makeBoard();*/
        String str = validStartPlacement();
         System.out.println(t.isPlacementStringValid(str));
-
+        System.out.println(str);
         }
     /*set opacity of selected pieces to a certain percentage  or
     use Blur effect for that certain piece (using setEffect) Use task 9 code for the solutions.*/
