@@ -20,15 +20,9 @@ public class Board extends Application {
     //uses task 8(creates the base for the game) and 5 (check pieces can be used or not).6 should be used here
     //private void start_play(){ }
 
-<<<<<<< HEAD
-
-    public static String start_Placements(){
-        Random rand = new Random(1);
-=======
     public static String start_Placements(int seed){
         Random rand1 = new Random(1);
         Random rand = new Random(rand1.nextInt());
->>>>>>> 0d6982bb07da8be364199da779051b9616085d6f
         int numofpiece = rand.nextInt(2); //number of the pieces
         int numofr = rand.nextInt(2);
         int numofb = rand.nextInt(3);
@@ -143,21 +137,15 @@ public class Board extends Application {
     }
 
     public static String validStartPlacement(){
-<<<<<<< HEAD
-        String str = start_Placements();
-       if (!t.isPlacementStringValid(str)){
-            str = start_Placements();
-=======
         Random rand = new Random(1);
         int seed = rand.nextInt();
         String str = start_Placements(seed);
         while(!t.isPlacementStringValid(str)) {
             str = new String(start_Placements(seed));
             seed++;
->>>>>>> 0d6982bb07da8be364199da779051b9616085d6f
         }
 
-            return str;
+        return str;
     }
 
 
@@ -171,47 +159,40 @@ public class Board extends Application {
     private void makeBoard(){
         Random rn =new Random();
         /*
-        *1)create an (linked)hashset of string ,such that each string is a piece placement data.
-        *  use hashsets to prevent duplicates
-        *  This hashset contains the data about those value which needs pieces to be created.
-        *  if insertion order is crucial use linked type hashset
-        *2)create a list of piece inclusive of pegs - alphas
-        *  represent pegs as with literal and 0 added behind
-        *  example: a0
-        *  Create a rng value specifically for the no of pieces to be placed
-        *  Create a string for the output
-        *3)run for loop (cond index should be greater than 1 and must us rng with a bound of x - 4 )
-        *   every iteration should check if such string exist
-        *   in the list and whether it is valid or not.
-        *  (if it exist then remove or else repeat for loop - counters updated)
-        *  then remove it from the list .After that  add it to the output string
-        *
-        *4)create a case such that Starting must at least contain a single peg
-        *  alter 4th rng to 0 just fr this case
-        *
-        *5) use rng to generate a random value
-        *      for 1st char- use list.size as reference to get the bound value
-        *                    then apply it to the list of char
-        *               2nd-  standard bound value of 8
-        *               3rd-  standard bound value of 3
-        *               4th-  standard bound value of 7
-        */
+         *1)create an (linked)hashset of string ,such that each string is a piece placement data.
+         *  use hashsets to prevent duplicates
+         *  This hashset contains the data about those value which needs pieces to be created.
+         *  if insertion order is crucial use linked type hashset
+         *2)create a list of piece inclusive of pegs - alphas
+         *  represent pegs as with literal and 0 added behind
+         *  example: a0
+         *  Create a rng value specifically for the no of pieces to be placed
+         *  Create a string for the output
+         *3)run for loop (cond index should be greater than 1 and must us rng with a bound of x - 4 )
+         *   every iteration should check if such string exist
+         *   in the list and whether it is valid or not.
+         *  (if it exist then remove or else repeat for loop - counters updated)
+         *  then remove it from the list .After that  add it to the output string
+         *
+         *4)create a case such that Starting must at least contain a single peg
+         *  alter 4th rng to 0 just fr this case
+         *
+         *5) use rng to generate a random value
+         *      for 1st char- use list.size as reference to get the bound value
+         *                    then apply it to the list of char
+         *               2nd-  standard bound value of 8
+         *               3rd-  standard bound value of 3
+         *               4th-  standard bound value of 7
+         */
     }
 
     public static void main(String[] args) {
        /* Board b = new Board();
         b.makeBoard();*/
-<<<<<<< HEAD
         String str = validStartPlacement();
-
-        System.out.println(TwistGame.isPlacementStringValid(str)+str);
-
-=======
-       String str = validStartPlacement();
         System.out.println(t.isPlacementStringValid(str));
->>>>>>> 0d6982bb07da8be364199da779051b9616085d6f
 
-        }
+    }
     /*set opacity of selected pieces to a certain percentage  or
     use Blur effect for that certain piece (using setEffect) Use task 9 code for the solutions.*/
     // FIXME Task 10: Implement hints
@@ -219,7 +200,7 @@ public class Board extends Application {
     }
 
     // FIXME Task 11: Generate interesting starting placements
-/*In reference to Difficulty level choose a certain state from Difficulty_level */
+    /*In reference to Difficulty level choose a certain state from Difficulty_level */
     @Override
     public void start(Stage primaryStage) throws Exception {
 
