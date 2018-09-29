@@ -20,6 +20,7 @@ public class Board extends Application {
     //uses task 8(creates the base for the game) and 5 (check pieces can be used or not).6 should be used here
     //private void start_play(){ }
 
+
     public static String start_Placements(){
         Random rand = new Random(1);
         int numofpiece = rand.nextInt(2); //number of the pieces
@@ -137,7 +138,7 @@ public class Board extends Application {
 
     public static String validStartPlacement(){
         String str = start_Placements();
-        if(!t.isPlacementStringValid(str)){
+       if (!t.isPlacementStringValid(str)){
             str = start_Placements();
         }
 
@@ -186,7 +187,9 @@ public class Board extends Application {
        /* Board b = new Board();
         b.makeBoard();*/
         String str = validStartPlacement();
-        System.out.println(str);
+
+        System.out.println(TwistGame.isPlacementStringValid(str)+str);
+
 
         }
     /*set opacity of selected pieces to a certain percentage  or
