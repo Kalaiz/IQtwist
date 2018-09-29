@@ -20,9 +20,15 @@ public class Board extends Application {
     //uses task 8(creates the base for the game) and 5 (check pieces can be used or not).6 should be used here
     //private void start_play(){ }
 
+<<<<<<< HEAD
 
     public static String start_Placements(){
         Random rand = new Random(1);
+=======
+    public static String start_Placements(int seed){
+        Random rand1 = new Random(1);
+        Random rand = new Random(rand1.nextInt());
+>>>>>>> 0d6982bb07da8be364199da779051b9616085d6f
         int numofpiece = rand.nextInt(2); //number of the pieces
         int numofr = rand.nextInt(2);
         int numofb = rand.nextInt(3);
@@ -137,12 +143,21 @@ public class Board extends Application {
     }
 
     public static String validStartPlacement(){
+<<<<<<< HEAD
         String str = start_Placements();
        if (!t.isPlacementStringValid(str)){
             str = start_Placements();
+=======
+        Random rand = new Random(1);
+        int seed = rand.nextInt();
+        String str = start_Placements(seed);
+        while(!t.isPlacementStringValid(str)) {
+            str = new String(start_Placements(seed));
+            seed++;
+>>>>>>> 0d6982bb07da8be364199da779051b9616085d6f
         }
 
-        return str;
+            return str;
     }
 
 
@@ -186,10 +201,15 @@ public class Board extends Application {
     public static void main(String[] args) {
        /* Board b = new Board();
         b.makeBoard();*/
+<<<<<<< HEAD
         String str = validStartPlacement();
 
         System.out.println(TwistGame.isPlacementStringValid(str)+str);
 
+=======
+       String str = validStartPlacement();
+        System.out.println(t.isPlacementStringValid(str));
+>>>>>>> 0d6982bb07da8be364199da779051b9616085d6f
 
         }
     /*set opacity of selected pieces to a certain percentage  or
