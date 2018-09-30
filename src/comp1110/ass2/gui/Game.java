@@ -34,14 +34,13 @@ public class Game extends Application{
         //For loop to iterate through everypiece
         for(int i=0;i<12;i++){//12 pieces
             imgObjs.add(new ImageView());
-            imgObjs.get(i).setImage((new Image(Viewer.class.getResource(URI_BASE+ ((char) (i +97)) +".png").toString())));
-           double width = imgObjs.get(i).getImage().getWidth()/2;//scaling reduces size
-           double height= imgObjs.get(i).getImage().getHeight()/2;//scaling reduces size
-          double m = new boxcreator(((char)(i+97)),height,width).measurement;
+            ImageView ivo=imgObjs.get(i);
+            ivo.setImage((new Image(Viewer.class.getResource(URI_BASE+ ((char) (i +97)) +".png").toString())));
+           double width = ivo.getImage().getWidth()/2;//scaling reduces size
+           double height= ivo.getImage().getHeight()/2;//scaling reduces size
           boxcreator b = new boxcreator(((char)(i+97)),height,width);
-          int rotateval=b.rotate;
-            imgObjs.get(i).setScaleY(0.5);
-            imgObjs.get(i).setScaleX(0.5);
+            ivo.setScaleY(0.5);
+            ivo.setScaleX(0.5);
             if(i==4){
                 tempx=340;
                 tempy=0; }
@@ -53,22 +52,21 @@ public class Game extends Application{
                 tempy=230;
                 tempx+=50;
             }
-           tempy+=m;
-            imgObjs.get(i).setX(tempx);
-            imgObjs.get(i).setY(tempy);
+           tempy+=b.measurement;;
+            ivo.setX(tempx);
+            ivo.setY(tempy);
             Glow g = new Glow();
             g.setLevel(0.9);
             Glow g2 = new Glow();
             g.setLevel(0);
-            ImageView ivo=imgObjs.get(i);
             ivo.setOnMouseEntered(e-> {
          ivo.setEffect(g2);});
-            imgObjs.get(i).setOnMouseExited(e-> {ivo.setEffect(g);});
-            imgObjs.get(i).setOnScroll(e-> {
+            ivo.setOnMouseExited(e-> {ivo.setEffect(g);});
+            ivo.setOnScroll(e-> {
                 b.rotate();
-                ivo.setRotate(b.getrotate());});
+                ivo.setRotate(b.rotate);});
 
-        root.getChildren().add(imgObjs.get(i));
+        root.getChildren().add(ivo);
 
         }
 
@@ -103,7 +101,6 @@ public class Game extends Application{
         void rotate(){
             if(rotate>360){
                 rotate=90;
-
             }
             else{
                 rotate+=90;
