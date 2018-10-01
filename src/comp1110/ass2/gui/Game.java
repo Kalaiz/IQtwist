@@ -1,6 +1,7 @@
 package comp1110.ass2.gui;
 import com.sun.prism.paint.Color;
 import javafx.application.Application;
+import javafx.geometry.Point3D;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Node;
@@ -16,7 +17,7 @@ import javafx.stage.Stage;
 
 import java.util.ArrayList;
 import java.util.List;
-
+//USE BUFFERED IMAGES
 public class Game extends Application{
     private static final int VIEWER_WIDTH = 1280;
     private static final int VIEWER_HEIGHT = 640;
@@ -43,12 +44,15 @@ public class Game extends Application{
         grid.setLayoutX(700);
         grid.setLayoutY(10);
         ImageView iv=new ImageView();
-        iv.setImage((new Image(Viewer.class.getResource(URI_BASE+ "f" +".png").toString())));
+        iv.setImage((new Image(Viewer.class.getResource(URI_BASE+ "h" +".png").toString())));
         iv.setFitWidth(iv.getImage().getWidth()*0.5);
         iv.setFitHeight(iv.getImage().getHeight()*0.5);
         /*iv.setScaleY(0.5);//causing problems
         iv.setScaleX(0.5);*/
-        grid.add(iv,4,0,3,2);
+        /*iv.setTranslateX(-50);
+        iv.setTranslateY(-25);*/
+
+        grid.add(iv,7,2,1,3);
 tempy=50;
 tempx=200;
         List<ImageView> imgObjs=new ArrayList();// list of images
@@ -69,7 +73,7 @@ tempx=200;
            boxcreator b = boxes.get(i);
 
            //ivo.setTranslateX(b.getTranslation());
-            System.out.println(ivo.getImage().getWidth());
+           // System.out.println(ivo.getImage().getWidth());
             /*ivo.setScaleX(0.5);
             ivo.setScaleY(0.5);*///CAUSING PROBLEMS DO NOT USE !!!!!
             //ivo.resize(iv.getImage().getWidth()*0.25,iv.getImage().getHeight()*0.25);
@@ -110,9 +114,19 @@ tempx=200;
           ivo.setOnMouseReleased(t->{
               if(m.getSceneX()>700&&m.getSceneY()<1100&&m.getSceneY()<230&&m.getSceneY()>10){//if it is within the board
                   System.out.println((m.getSceneX()-width) +" "+(m.getSceneY()-height));
-              int[] xyval=getrowcol(m.getSceneX()-width,m.getSceneY()-height);
+                  //Add condition here stating that if rotation has occured you shd change th g
+                  double y=m.getSceneY()-height;
+                  double x= m.getSceneX()-width;
+    /*if(b.rotate==90){
+        x+=25;
+        //if(getrowcol(x,y)[])
+        ivo.setTranslateY(-49);
+        ivo.setTranslateX(-24);
+    }*/
+              int[] xyval=getrowcol(x,y);
               //b.updateGridVal(xyval[1],xyval[0],);
                   System.out.println("width is "+width);
+                  System.out.println("height is "+height);
                   int[] csrs={(int)height/25,(int)width/25};
                   if((b.rotate/90)%2!=0){
 
@@ -144,8 +158,11 @@ tempx=200;
 
     public int[] getrowcol(double x,double y){//returns respective grid row values
           int[] xyvals= new int[2];
+
+          x=(x-675<10)?x+10:Math.ceil(x);
+          y=Math.ceil(y);
           xyvals[0]=(int) Math.round((x-700)/50);
-          xyvals[1]=(int)Math.round((y-10)/50);
+          xyvals[1]=(int)Math.round(((y-10))/50);
 
     return xyvals;}
 
