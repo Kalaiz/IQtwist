@@ -3,6 +3,7 @@ import com.sun.prism.paint.Color;
 import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.effect.Glow;
 import javafx.scene.image.Image;
@@ -43,6 +44,7 @@ public class Game extends Application{
         grid.setLayoutY(10);
 
         List<ImageView> imgObjs=new ArrayList();// list of images
+        List<boxcreator> boxes = new ArrayList();
         //For loop to iterate through everypiece
         for(int i=0;i<12;i++){//12 pieces
             imgObjs.add(new ImageView());
@@ -50,7 +52,8 @@ public class Game extends Application{
             ivo.setImage((new Image(Viewer.class.getResource(URI_BASE+ ((char) (i +97)) +".png").toString())));
            double width = ivo.getImage().getWidth()/2;//scaling reduces size
            double height= ivo.getImage().getHeight()/2;//scaling reduces size
-          boxcreator b = new boxcreator(((char)(i+97)),height,width);
+          boxes.add(new boxcreator(((char)(i+97)),height,width));
+           boxcreator b = boxes.get(i);
             ivo.setScaleY(0.5);
             ivo.setScaleX(0.5);
             if(i==4){
@@ -80,17 +83,28 @@ public class Game extends Application{
                 ivo.setRotate(b.rotate);});
             ivo.setOnMouseDragged(m->{ivo.setY(m.getSceneY()-height);//for centering piece upon drag
                ivo.setEffect(g2);
-               /* System.out.println("Screen x"+m.getScreenX());
+           /*    System.out.println("Screen x"+m.getScreenX());
                 System.out.println(m.getScreenY());
                 System.out.println(m.getSceneX());*/
             ivo.setX(m.getSceneX()-width);
 
 
+          ivo.setOnMouseReleased(t->{
+              if(m.getSceneX()>700&&m.getSceneY()<1100&&m.getSceneY()<230&&m.getSceneY()>10){//if it is within the board
+              int[] xyval=getrowcol(m.getSceneX()-width,m.getSceneY()-height);
+              //b.updateGridVal(xyval[1],xyval[0],);
+                  int[] csrs={(int)height/50,(int)width/50};
+                  if((b.rotate/90)%2!=0){
+                      csrs[0]=(int)width/50;
+                      csrs[1]=(int)height/50;
+                  }
 
+                  System.out.println(xyval[1]+  " " +xyval[0]+" "+ csrs[1]+" " + csrs[0]);
+                grid.add(ivo,xyval[1],xyval[0],csrs[1],csrs[0]);
+                //column index, rowindex, colspan, rowspan
+              }});
 
             });
-
-
 
         root.getChildren().add(ivo);
 
@@ -104,15 +118,28 @@ public class Game extends Application{
         primaryStage.show();
 
 
+
     }
+
+    public int[] getrowcol(double x,double y){//returns respective grid row values
+          int[] xyvals= new int[2];
+          xyvals[0]=(int) (x-700)/50;
+          xyvals[1]=(int)(y-10)/50;
+
+    return xyvals;}
     class boxcreator{//containers which will hold the pieces
         // each piece will have it's container
         double measurement;//the offset calculated for the piece placesment (default)
         int rotate;
         double x ,y;// default x position and y position
+        double height,width;
+        int gridVal[];
 
         boxcreator(char ptype,double height,double width){
+            this.width=width;
+            this.height=height;
                 measurement=(ptype=='a'||ptype=='e'||(int)ptype>104)? 0 :(height > width) ? height : width; }
+
         void rotate() {
             if (rotate > 360) {
                 rotate = 90;
@@ -135,6 +162,21 @@ public class Game extends Application{
             this.x=x;
             this.y=y;
         }
+
+    /*    int[]csrs(){
+            int[] csrs={(int)height/100,(int)width/100};
+            if((rotate/90)%2!=0){
+                csrs[0]=(int)width/100;
+                csrs[1]=(int)height/100;
+            }
+           return csrs;
+        }*/
+        void updateGridVal(int[]vals){
+
+
+        }
+
+
     }
     class DragPieces  {
         int pX, pY;
@@ -145,37 +187,4 @@ public class Game extends Application{
 
 
     }
-        //DRAFT CODES
-     /*ImageView img = new ImageView();
-        img.setImage((new Image(Game.class.getResource(URI_BASE+ "a.png").toString())));
-        img.setScaleX(0.5);
-        img.setScaleY(0.5);
-        ImageView img2 = new ImageView();
-        img2.setImage((new Image(Game.class.getResource(URI_BASE+ "g.png").toString())));
-        img2.setScaleX(0.5);
-        img2.setScaleY(0.5);
-        img2.setX(0);
-        img2.setY(90);
-        Glow g = new Glow();
-        g.setLevel(0.9);
-        Glow g2 =new Glow();
-        g2.setLevel(0);
-        int t=0;
-
-     img.setOnMouseEntered(e-> {
-     img.setEffect(g);});
-     img.setOnMouseExited(e-> {img.setEffect(g2);});
-        img.setOnMouseClicked(e -> {
-            img.setRotate(90);
-        });*/
-/*
-    public class InGameBoard extends ImageView{//creates an board
-
-    }
-
-    public class PieceBoard extends ImageView{//creates a box with all pieces
-
-
-
-    }*/
 }
