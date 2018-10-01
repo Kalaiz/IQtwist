@@ -28,7 +28,19 @@ public class Game extends Application{
     @Override
     public void start(Stage primaryStage) throws Exception {
         primaryStage.setTitle("Game");
+        GridPane grid = new GridPane(); //Creating Grid
+        for(int i=0;i<8;i++){
+            ColumnConstraints col = new ColumnConstraints(50);
+            grid.getColumnConstraints().add(col);
 
+        }
+        for(int i=0;i<4;i++){
+            RowConstraints row = new RowConstraints(50);
+            grid.getRowConstraints().add(row);
+        }
+        grid.setGridLinesVisible(true);
+        grid.setLayoutX(700);
+        grid.setLayoutY(10);
 
         List<ImageView> imgObjs=new ArrayList();// list of images
         //For loop to iterate through everypiece
@@ -52,9 +64,10 @@ public class Game extends Application{
                 tempy=230;
                 tempx+=50;
             }
-           tempy+=b.measurement;;
+           tempy+=b.measurement;
             ivo.setX(tempx);
             ivo.setY(tempy);
+            b.defaultxy(tempx,tempy);
             Glow g = new Glow();
             g.setLevel(0.9);
             Glow g2 = new Glow();
@@ -65,23 +78,25 @@ public class Game extends Application{
             ivo.setOnScroll(e-> {
                 b.rotate();
                 ivo.setRotate(b.rotate);});
+            ivo.setOnMouseDragged(m->{ivo.setY(m.getSceneY()-height);//for centering piece upon drag
+               ivo.setEffect(g2);
+               /* System.out.println("Screen x"+m.getScreenX());
+                System.out.println(m.getScreenY());
+                System.out.println(m.getSceneX());*/
+            ivo.setX(m.getSceneX()-width);
+
+
+
+
+            });
+
+
 
         root.getChildren().add(ivo);
 
         }
 
-        GridPane grid = new GridPane(); //Creating Grid
-        for(int i=0;i<8;i++){
-            ColumnConstraints col = new ColumnConstraints(48);
-            grid.getColumnConstraints().add(col);
-        }
-        for(int i=0;i<4;i++){
-            RowConstraints row = new RowConstraints(48);
-            grid.getRowConstraints().add(row);
-        }
-        grid.setGridLinesVisible(true);
-        grid.setLayoutX(700);
-        grid.setLayoutY(10);
+
 
         Scene scene = new Scene(root, VIEWER_WIDTH, VIEWER_HEIGHT);
         root.getChildren().add(grid);
@@ -92,25 +107,45 @@ public class Game extends Application{
     }
     class boxcreator{//containers which will hold the pieces
         // each piece will have it's container
-        double measurement;
+        double measurement;//the offset calculated for the piece placesment (default)
         int rotate;
+        double x ,y;// default x position and y position
 
         boxcreator(char ptype,double height,double width){
                 measurement=(ptype=='a'||ptype=='e'||(int)ptype>104)? 0 :(height > width) ? height : width; }
+        void rotate() {
+            if (rotate > 360) {
+                rotate = 90;
+            } else {
+                rotate += 90;
+            }
+        }
 
-        void rotate(){
-            if(rotate>360){
-                rotate=90;
-            }
-            else{
-                rotate+=90;
-            }
+        double getx(){
+            return x;
+        }
+        double gety(){
+            return y;
         }
         int getrotate(){
      return rotate;
         }
+
+        void defaultxy(double x,double y){
+            this.x=x;
+            this.y=y;
+        }
     }
-    //DRAFT CODES
+    class DragPieces  {
+        int pX, pY;
+        double x, y; // the position in the window where the mask should be when not on the board
+        public void attachtoGrid(){
+
+        }
+
+
+    }
+        //DRAFT CODES
      /*ImageView img = new ImageView();
         img.setImage((new Image(Game.class.getResource(URI_BASE+ "a.png").toString())));
         img.setScaleX(0.5);
