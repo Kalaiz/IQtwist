@@ -43,18 +43,18 @@ public class Game extends Application{
         grid.setGridLinesVisible(true);
         grid.setLayoutX(700);
         grid.setLayoutY(10);
-        ImageView iv=new ImageView();
+  /*      ImageView iv=new ImageView();
         iv.setImage((new Image(Viewer.class.getResource(URI_BASE+ "h" +".png").toString())));
         iv.setFitWidth(iv.getImage().getWidth()*0.5);
-        iv.setFitHeight(iv.getImage().getHeight()*0.5);
+        iv.setFitHeight(iv.getImage().getHeight()*0.5);*/
         /*iv.setScaleY(0.5);//causing problems
         iv.setScaleX(0.5);*/
         /*iv.setTranslateX(-50);
         iv.setTranslateY(-25);*/
 
-        grid.add(iv,7,2,1,3);
+        //grid.add(iv,7,2,1,3);
 tempy=50;
-tempx=200;
+tempx=100;
         List<ImageView> imgObjs=new ArrayList();// list of images
         List<boxcreator> boxes = new ArrayList();
         //For loop to iterate through everypiece
@@ -67,9 +67,7 @@ tempx=200;
             ivo.setImage((new Image(Viewer.class.getResource(URI_BASE+ ((char) (i +97)) +".png").toString(),imageWidth*0.5,imageHeight*0.5,false,false)));
             double width = ivo.getImage().getWidth()/2; // divide by 2 so to have cursor in middle of it when dragging
             double height= ivo.getImage().getHeight()/2;
-
-
-          boxes.add(new boxcreator(((char)(i+97)),height,width));
+           boxes.add(new boxcreator(((char)(i+97)),height*2,width*2));
            boxcreator b = boxes.get(i);
 
            //ivo.setTranslateX(b.getTranslation());
@@ -89,6 +87,7 @@ tempx=200;
                 tempy=230;
                 tempx+=50;
             }
+            System.out.println(b.measurement);
            tempy+=b.measurement;
             ivo.setX(tempx);
             ivo.setY(tempy);
