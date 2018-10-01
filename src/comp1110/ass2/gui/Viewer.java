@@ -65,7 +65,7 @@ public class Viewer extends Application {
      * it is a7, we still flip the a0 and rotate it.
      * @param rotations2 is the String which consist of the entire rotation values of the input placement
      * @param e - index
-     * @return Respective Rotation ,Transalation & flipping  value .
+     * @return Respective Rotation ,Translation & flipping  value .
      */
     public int[] rotator_translate(String rotations2,int e){
         int[] rts=new int[3];
@@ -124,6 +124,8 @@ public class Viewer extends Application {
             RowConstraints row = new RowConstraints(92);
             grid.getRowConstraints().add(row);
         }
+        grid.setLayoutX(8);
+
         grid.setGridLinesVisible(true);
         String row_val=returner(placement,2);
         String col_value=returner(placement,1);

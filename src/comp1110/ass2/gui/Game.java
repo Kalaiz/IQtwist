@@ -42,23 +42,41 @@ public class Game extends Application{
         grid.setGridLinesVisible(true);
         grid.setLayoutX(700);
         grid.setLayoutY(10);
-
+        ImageView iv=new ImageView();
+        iv.setImage((new Image(Viewer.class.getResource(URI_BASE+ "f" +".png").toString())));
+        iv.setFitWidth(iv.getImage().getWidth()*0.5);
+        iv.setFitHeight(iv.getImage().getHeight()*0.5);
+        /*iv.setScaleY(0.5);//causing problems
+        iv.setScaleX(0.5);*/
+        grid.add(iv,4,0,3,2);
+tempy=50;
+tempx=200;
         List<ImageView> imgObjs=new ArrayList();// list of images
         List<boxcreator> boxes = new ArrayList();
         //For loop to iterate through everypiece
         for(int i=0;i<12;i++){//12 pieces
             imgObjs.add(new ImageView());
             ImageView ivo=imgObjs.get(i);
-            ivo.setImage((new Image(Viewer.class.getResource(URI_BASE+ ((char) (i +97)) +".png").toString())));
-           double width = ivo.getImage().getWidth()/2;//scaling reduces size
-           double height= ivo.getImage().getHeight()/2;//scaling reduces size
+            //need to make it syntatically sugar
+            double imageWidth = (new Image(Viewer.class.getResource(URI_BASE+ ((char) (i +97)) +".png").toString())).getWidth();
+            double imageHeight=(new Image(Viewer.class.getResource(URI_BASE+ ((char) (i +97)) +".png").toString()).getHeight());
+            ivo.setImage((new Image(Viewer.class.getResource(URI_BASE+ ((char) (i +97)) +".png").toString(),imageWidth*0.5,imageHeight*0.5,false,false)));
+            double width = ivo.getImage().getWidth()/2; // divide by 2 so to have cursor in middle of it when dragging
+            double height= ivo.getImage().getHeight()/2;
+
+
           boxes.add(new boxcreator(((char)(i+97)),height,width));
            boxcreator b = boxes.get(i);
-            ivo.setScaleY(0.5);
-            ivo.setScaleX(0.5);
+
+           //ivo.setTranslateX(b.getTranslation());
+            System.out.println(ivo.getImage().getWidth());
+            /*ivo.setScaleX(0.5);
+            ivo.setScaleY(0.5);*///CAUSING PROBLEMS DO NOT USE !!!!!
+            //ivo.resize(iv.getImage().getWidth()*0.25,iv.getImage().getHeight()*0.25);
+            //ivo.setFitHeight(iv.getImage().getHeight()*50/100);
             if(i==4){
                 tempx=340;
-                tempy=0; }
+                tempy=50; }
             else if(i==7){
                 tempx+=300;
                 tempy=230;
@@ -91,16 +109,19 @@ public class Game extends Application{
 
           ivo.setOnMouseReleased(t->{
               if(m.getSceneX()>700&&m.getSceneY()<1100&&m.getSceneY()<230&&m.getSceneY()>10){//if it is within the board
+                  System.out.println((m.getSceneX()-width) +" "+(m.getSceneY()-height));
               int[] xyval=getrowcol(m.getSceneX()-width,m.getSceneY()-height);
               //b.updateGridVal(xyval[1],xyval[0],);
-                  int[] csrs={(int)height/50,(int)width/50};
+                  System.out.println("width is "+width);
+                  int[] csrs={(int)height/25,(int)width/25};
                   if((b.rotate/90)%2!=0){
-                      csrs[0]=(int)width/50;
-                      csrs[1]=(int)height/50;
+
+                      csrs[0]=(int)width/25;
+                      csrs[1]=(int)height/25;
                   }
 
-                  System.out.println(xyval[1]+  " " +xyval[0]+" "+ csrs[1]+" " + csrs[0]);
-                grid.add(ivo,xyval[1],xyval[0],csrs[1],csrs[0]);
+                  System.out.println(xyval[0]+  " " +xyval[1]+" "+ csrs[1]+" " + csrs[0]);
+                grid.add(ivo,xyval[0],xyval[1],csrs[1],csrs[0]);//use an outer function ,for loop might be causing troubles
                 //column index, rowindex, colspan, rowspan
               }});
 
@@ -123,19 +144,24 @@ public class Game extends Application{
 
     public int[] getrowcol(double x,double y){//returns respective grid row values
           int[] xyvals= new int[2];
-          xyvals[0]=(int) (x-700)/50;
-          xyvals[1]=(int)(y-10)/50;
+          xyvals[0]=(int) Math.round((x-700)/50);
+          xyvals[1]=(int)Math.round((y-10)/50);
 
     return xyvals;}
+
+
     class boxcreator{//containers which will hold the pieces
         // each piece will have it's container
+        char ptype;
         double measurement;//the offset calculated for the piece placesment (default)
         int rotate;
         double x ,y;// default x position and y position
         double height,width;
         int gridVal[];
+        int translation;
 
         boxcreator(char ptype,double height,double width){
+            this.ptype=ptype;
             this.width=width;
             this.height=height;
                 measurement=(ptype=='a'||ptype=='e'||(int)ptype>104)? 0 :(height > width) ? height : width; }
@@ -174,6 +200,21 @@ public class Game extends Application{
         void updateGridVal(int[]vals){
 
 
+        }
+        int getTranslation() {
+            if (rotate / 90 % 2 == 0) {
+                return translation = 0;
+            } else {
+                switch (ptype) {
+                    case 'a': case 'b':
+                     case 'd': case 'f':
+                        return translation = -45;
+                    case 'c':
+                       return  translation = -140;
+                    default:
+                         return  translation = 0;
+                }
+            }
         }
 
 
