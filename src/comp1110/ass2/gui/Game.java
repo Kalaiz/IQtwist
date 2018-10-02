@@ -1,8 +1,6 @@
 package comp1110.ass2.gui;
 import javafx.application.Application;
-
 import javafx.scene.Group;
-
 import javafx.scene.Scene;
 import javafx.scene.effect.Glow;
 import javafx.scene.image.Image;
@@ -22,6 +20,8 @@ public class Game extends Application{
     private final Group controls = new Group();
     static double tempx;//for positioning
     static double tempy;//for positioning
+    Glow g2 = new Glow();
+    Glow g = new Glow();
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -29,106 +29,68 @@ public class Game extends Application{
         GridPane grid = new GridPane(); //Creating Grid
         for(int i=0;i<8;i++){
             ColumnConstraints col = new ColumnConstraints(50);
-            grid.getColumnConstraints().add(col);
-
-        }
+            grid.getColumnConstraints().add(col); }
         for(int i=0;i<4;i++){
             RowConstraints row = new RowConstraints(50);
-            grid.getRowConstraints().add(row);
-        }
+            grid.getRowConstraints().add(row); }
         grid.setGridLinesVisible(true);
         grid.setLayoutX(700);
         grid.setLayoutY(10);
-
-tempy=50;
-tempx=100;
+        tempy=50;
+        tempx=100;
         List<ImageView> imgObjs=new ArrayList();// list of images
         List<boxcreator> boxes = new ArrayList();
         //For loop to iterate through everypiece
         for(int i=0;i<12;i++){//12 pieces
             imgObjs.add(new ImageView());
             ImageView ivo=imgObjs.get(i);
-            //need to make it syntatically sugar
-            double imageWidth = (new Image(Viewer.class.getResource(URI_BASE+ ((char) (i +97)) +".png").toString())).getWidth();
-            double imageHeight=(new Image(Viewer.class.getResource(URI_BASE+ ((char) (i +97)) +".png").toString()).getHeight());
-            ivo.setImage((new Image(Viewer.class.getResource(URI_BASE+ ((char) (i +97)) +".png").toString(),imageWidth*0.5,imageHeight*0.5,false,false)));
-            double width = ivo.getImage().getWidth()/2; // divide by 2 so to have cursor in middle of it when dragging
-            double height= ivo.getImage().getHeight()/2;
-           boxes.add(new boxcreator(((char)(i+97)),height*2,width*2));
-           boxcreator b = boxes.get(i);
+            Image img= (new Image(Viewer.class.getResource(URI_BASE+ ((char) (i +97)) +".png").toString()));
+            ivo.setImage((new Image(Viewer.class.getResource(URI_BASE+ ((char) (i +97)) +".png").toString(),img.getWidth()*0.5,img.getHeight()*0.5,false,false)));
+            double width = ivo.getImage().getWidth(); // divide by 2 so to have cursor in middle of it when dragging
+            double height= ivo.getImage().getHeight();
+            boxes.add(new boxcreator(((char)(i+97)),height,width));
+            boxcreator b = boxes.get(i);
             if(i==4){
                 tempx=340;
                 tempy=50; }
             else if(i==7){
                 tempx+=300;
-                tempy=230;
-            }
+                tempy=230; }
             else if(i>7){
                 tempy=230;
-                tempx+=50;
-            }
-           tempy+=b.measurement;
+                tempx+=50; }
+            tempy+=b.measurement;
             ivo.setX(tempx);
             ivo.setY(tempy);
             b.defaultxy(tempx,tempy);
-            Glow g = new Glow();
-            g.setLevel(0.9);
-            Glow g2 = new Glow();
             g.setLevel(0);
-            ivo.setOnMouseEntered(e-> {
-            ivo.setEffect(g2);});
-            ivo.setOnMouseExited(e-> {ivo.setEffect(g);});
-            ivo.setOnScroll(e-> {
-                b.rotate();
-                ivo.setRotate(b.rotate);});
-                ivo.setOnMouseDragged(m->{ivo.setY(m.getSceneY()-height);//for centering piece upon drag
-                ivo.setEffect(g2);
-                ivo.setX(m.getSceneX()-width);
-          ivo.setOnMouseReleased(t->{
-              if(m.getSceneX()>700&&m.getSceneY()<1100&&m.getSceneY()<230&&m.getSceneY()>10){//if it is within the board
-                  double y=m.getSceneY()-height;
-                  double x= m.getSceneX()-width;
-                  double rotval=b.rotate;
-                  if(b.rotate==90&&!(b.getchar()=='g'||b.getchar()=='e')){
-                      System.out.println("in");
-                      if(b.getchar()=='h'){
-                          ivo.setTranslateX(-50);
-                      }
-                      else{
-                      ivo.setTranslateX(-75);
-                  }}
-                  else if (b.getchar()=='g'||b.getchar()=='e'){//rotation does'nt need any translation
-              rotval=0; }
-                  System.out.println((x) +" "+(y));
-
-                  if(b.rotate==270&&!(b.getchar()=='g'||b.getchar()=='e')){
-                      System.out.println("in");
-                      if(b.getchar()=='h'){
-                          ivo.setTranslateX(-50);
-                      }
-                      else{
-                          ivo.setTranslateX(-25);
-                      }}
-                  else if (b.getchar()=='g'||b.getchar()=='e'){//rotation does'nt need any translation
-                      rotval=0; }
-                  System.out.println((x) +" "+(y));
-
-              int[] xyval=getrowcol(x,y,rotval,b.getchar());
-              //b.updateGridVal(xyval[1],xyval[0],);
-                  System.out.println("width/2 is "+width);
-                  System.out.println("height/2 is "+height);
-                  int[] csrs={(int)height/25,(int)width/25};
-                  if((b.rotate/90)%2!=0){
-                      csrs[0]=(int)width/25;
-                      csrs[1]=(int)height/25;
-                  }
-                System.out.println(" ci is: " + xyval[0]+  " ri is: " +xyval[1]+" colspan is:  "+ csrs[1]+" rowspan is: " + csrs[0]);
-                grid.add(ivo,xyval[0],xyval[1],csrs[1],csrs[0]);//use an outer function ,for loop might be causing troubles
-
-                //column index, rowindex, colspan, rowspan
-              }});
+               ivo.setOnMouseEntered(e-> {
+               ivo.setEffect(g2);});
+               ivo.setOnMouseExited(e-> {ivo.setEffect(g);});
+               ivo.setOnScroll(e-> {b.rotate();ivo.setRotate(b.rotate);});
+               ivo.setOnMouseDragged(m->{
+                     ivo.setY(m.getSceneY()-height/2);//for centering piece upon drag
+                     ivo.setEffect(g2);
+                     ivo.setX(m.getSceneX()-width/2);
+               ivo.setOnMouseReleased(t->{
+                    if(m.getSceneX()>700&&m.getSceneY()<1100&&m.getSceneY()<230&&m.getSceneY()>10){//if it is within the board
+                        double y=m.getSceneY()-height/2;
+                        double x= m.getSceneX()-width/2;
+                        double rotval=b.rotate;
+                        if(b.rotate/90%2!=0&&!(b.getchar()=='g'||b.getchar()=='e')){
+                                 int translatex = (b.getchar()=='h')?-50:(b.rotate==90)?-75:-25;
+                                 ivo.setTranslateX(translatex); }
+                        int[] xyval=getrowcol(x,y,rotval,b.getchar());
+                        int[] csrs={(int)height/50,(int)width/50};
+                        if((b.rotate/90)%2!=0){//Switch cs and rs .
+                            csrs[0]=(int)width/50;
+                            csrs[1]=(int)height/50; }
+                        try{grid.add(ivo,xyval[0],xyval[1],csrs[1],csrs[0]);}//column index, rowindex, colspan, rowspan
+                        catch(IllegalArgumentException e){
+                            //make the piece go back to default place
+                        } } });
             });
-        root.getChildren().add(ivo);
+            root.getChildren().add(ivo);
         }
         Scene scene = new Scene(root, VIEWER_WIDTH, VIEWER_HEIGHT);
         root.getChildren().add(grid);
@@ -138,52 +100,28 @@ tempx=100;
 
     public int[] getrowcol(double x,double y,double rotate,char ptype) {//returns respective grid row values
         int[] xyvals = new int[2];
-        System.out.println("rotate of this piece is "+ rotate);
         if (rotate == 0||rotate==180||rotate==360) {
             x = (x - 675 < 10) ? x + 10 : Math.ceil(x);
             y = Math.ceil(y);
             xyvals[0] = (int) Math.round((x - 700) / 50);//ci
             xyvals[1] = (int) Math.round(((y - 10)) / 50);//ri
+            return xyvals; }
+        else {
+            if( ptype=='c'){
+            x=Math.ceil(x)+55;
+            y=Math.ceil(y)-56; }
+            else if(ptype=='h'){
+             x = Math.ceil(x)+55;
+             y = Math.ceil(y)-50; }
+            else {
+            x = (rotate==90.0)?Math.ceil(x)+55:Math.ceil(x)+25;
+            y = (rotate==90.0)?Math.ceil(y)-5:Math.ceil(y)-25;}
+            xyvals[0] = (int) Math.round(((x - 700)) / 50);//ci
+            xyvals[1] = (int) Math.round(((y - 10)) / 50);//ri
+            return xyvals; }
 
-            return xyvals;
-        }
-        else if(rotate==90.0){
-            if( ptype=='c'){
-                x=Math.ceil(x)+55;
-                y=Math.ceil(y)-56;
-            }
-            else if(ptype=='h'){
-                x = Math.ceil(x)+55;
-                y = Math.ceil(y)-50;
-            }
-            else{
-            x = Math.ceil(x)+55;
-            y = Math.ceil(y)-5;}
-            System.out.println("inner x "+x+"inner y "+ y);
-            xyvals[0] = (int) Math.round(((x - 700)) / 50);//ci
-            xyvals[1] = (int) Math.round(((y - 10)) / 50);//ri
-         //
-            return xyvals;
-        }
-        else{//rotate==270.0
-            if( ptype=='c'){
-                x=Math.ceil(x)+55;
-                y=Math.ceil(y)-56;
-            }
-            else if(ptype=='h'){
-                x = Math.ceil(x)+55;
-                y = Math.ceil(y)-50;
-            }
-            else{
-                x = Math.ceil(x)+25;
-                y = Math.ceil(y)-25;}
-            System.out.println("inner x "+x+"inner y "+ y);
-            xyvals[0] = (int) Math.round(((x - 700)) / 50);//ci
-            xyvals[1] = (int) Math.round(((y - 10)) / 50);//ri
-            //
-            return xyvals;
-           }
     }
+
 
     class boxcreator{//containers which will hold the pieces
         // each piece will have it's container
@@ -199,7 +137,7 @@ tempx=100;
             this.ptype=ptype;
             this.width=width;
             this.height=height;
-                measurement=(ptype=='a'||ptype=='e'||(int)ptype>104)? 0 :(height > width) ? height : width; }
+            measurement=(ptype=='a'||ptype=='e'||(int)ptype>104)? 0 :(height > width) ? height : width; }
 
         void rotate() {
             if (rotate > 360) {
@@ -208,35 +146,26 @@ tempx=100;
                 rotate += 90;
             }
         }
-
-        double getx(){
-            return x;
-        }
-        double gety(){
-            return y;
-        }
         int getrotate(){
-     return rotate;
+            return rotate;
         }
-
         void defaultxy(double x,double y){
             this.x=x;
             this.y=y;
         }
-
-
-    char getchar(){
-        return ptype;
-    }
+        char getchar(){
+            return ptype;
+        }
         void updateGridVal(int[]vals){
 
 
         }
 
-
+    }
+    class PieceStats{
 
     }
-    class DragPieces  {
+    class GameStatus  {
         int pX, pY;
         double x, y; // the position in the window where the mask should be when not on the board
         public void attachtoGrid(){
