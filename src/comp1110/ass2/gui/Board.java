@@ -165,7 +165,7 @@ public class Board extends Application {
 
     }
     class PieceStats{//Will inherit from boxcontainer
-        //holds rotate,default x coordinat and y coordinate
+        //holds rotate,default x coordinate and y coordinate
         //if is on board or not
         //if on board it  will contain the piece placement(the piece string form )
         //update piece if needed
@@ -175,9 +175,6 @@ public class Board extends Application {
         //
     }
 
-    // FIXME Task 7: Implement a basic playable Twist Game in JavaFX that only allows pieces to be placed in valid places
-    //uses task 8(creates the base for the game) and 5 (check pieces can be used or not).6 should be used here
-    //private void start_play(){ }
 
     public static String start_Placements(){
         int numofpiece ; //number of the pieces

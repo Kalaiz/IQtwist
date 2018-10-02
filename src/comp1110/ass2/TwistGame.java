@@ -194,6 +194,12 @@ public class TwistGame {
 
   public static void main(String[] args) {
     System.out.println((char)97);
+      for(int i=00;i<0100;i+=8){
+          //hm.put()
+
+          System.out.println(i);
+
+      }
     /*GameBoard g =new GameBoard();
     g.resetBoardvalues("c");
     g.pieceTobeAdded("f1A6","c");

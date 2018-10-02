@@ -1,23 +1,23 @@
 package comp1110.ass2;
+import java.util.HashMap;
 
+import static comp1110.ass2.PieceData.*;
 public class Pieces {
      /*Pieces are represented as a multidimensional array in which 1 represents
     the occupied places .
      */
     public final char piece_name;
     public String[][] actual_piece;
-    String[][] aactual_piece={{"or","r","or"},{"x","x","r"}};
-    String[][] bactual_piece={{"r","r","x"},{"x","or","r"}};
-    String[][] cactual_piece={{"b","ob","b","b"}};
-    String[][] dactual_piece={{"b","b","b"},{"x","ob","ob"}};
-    String[][] eactual_piece={{"g","og"},{"x","og"}};
-    String[][] factual_piece={{"g","g","og"},{"x","og","x"}};
-    String[][] gactual_piece={{"oy","x","x"},{"oy","y","y"},{"x","oy","x"}};
-    String[][] hactual_piece={{"oy","y","y"}};
-    String[][] iactual_piece={{"pr"}};
-    String[][] jactual_piece={{"pb"}};
-    String[][] kactual_piece={{"pg"}};
-    String[][] lactual_piece={{"py"}};
+   /*Numbers to denote the key of hashmap are unique
+    *a0-1,a1-2.....goes on as such
+    * Why not use String as keys?
+    * https://stackoverflow.com/questions/1516549/bad-idea-to-use-string-key-in-hashmap
+    *Because an integer literal prefixed with 0 is treated as octal, and '8' and '9' aren't valid octal digits.
+    */
+
+   static HashMap<Integer,String[][]> hm=new HashMap<>();
+
+
 
 
     Pieces(char piece_name){
@@ -38,6 +38,17 @@ public class Pieces {
 
         }
 
+
+        void initialisehms(){
+        for(int i=0,t=0;i<64;i+=8){// t be the hashmap index
+            String piece[][]=new Pieces((char)((int)(i/8)+97)).getactual_piece();
+            for(int m=0;m<8;m++){
+               piece=GameBoard.rotator(piece);
+            }
+            //hm.put(i,GameBoard.rotator(new Pieces((char))))
+
+        }
+        }
 
     /**
      * @return  A multidimensional array of the respective piece.
