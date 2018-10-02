@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * This class provides the text interface for the Twist Game
+ * This class provides the text interface for the TwistGame
  * <p>
  * The game is based directly on Smart Games' IQ-Twist game
  * (http://www.smartgames.eu/en/smartgames/iq-twist)
