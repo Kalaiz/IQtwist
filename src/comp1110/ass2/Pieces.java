@@ -40,13 +40,19 @@ public class Pieces {
 
 
         void initialisehms(){
-        for(int i=0,t=0;i<64;i+=8){// t be the hashmap index
-            String piece[][]=new Pieces((char)((int)(i/8)+97)).getactual_piece();
-            for(int m=0;m<8;m++){
+            String piece[][];
+        for(int innerval=-1,t=0;t<64;t++){// t be the hashmap index
+            innerval=(innerval>8)?-1:++innerval;
+           piece=new Pieces((char)((t/8)+97)).getactual_piece();
+       for(int m=0;m<innerval;m++){
+                if(((((float)t/8f)-(t/8))*8)>3){//truncating and some mathematical operation
+                      innerval-=4;
+                      piece=GameBoard.flipper(piece);
+                      m=0;
+                }
                piece=GameBoard.rotator(piece);
             }
-            //hm.put(i,GameBoard.rotator(new Pieces((char))))
-
+            hm.put(t,piece);
         }
         }
 

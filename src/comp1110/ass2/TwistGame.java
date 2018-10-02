@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import static comp1110.ass2.Pieces.hm;
+
 /**
  * This class provides the text interface for the TwistGame
  * <p>
@@ -194,12 +196,20 @@ public class TwistGame {
 
   public static void main(String[] args) {
     System.out.println((char)97);
-      for(int i=00;i<0100;i+=8){
-          //hm.put()
-
+Pieces p=new Pieces('c');
+GameBoard test=new GameBoard();
+p.initialisehms();
+int i=59;
+test.resetBoardvalues("ac");
+      System.out.println(((((float)6/8f)-(6/8))*8));
+      //System.out.println(((((float)i/8f- (i/8))*8)));
+      //displayBoard(boardcreator("a1B6",'a'));
+       String[][] board= test.placer(test.getaboard(),hm.get(6),0,0,0);
+     displayBoard(board);
+      /*for(int i=00;i<0100;i+=8){
           System.out.println(i);
 
-      }
+      }*/
     /*GameBoard g =new GameBoard();
     g.resetBoardvalues("c");
     g.pieceTobeAdded("f1A6","c");
