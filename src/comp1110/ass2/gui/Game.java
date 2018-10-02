@@ -1,10 +1,8 @@
 package comp1110.ass2.gui;
-import com.sun.prism.paint.Color;
 import javafx.application.Application;
-import javafx.geometry.Point3D;
-import javafx.geometry.Pos;
+
 import javafx.scene.Group;
-import javafx.scene.Node;
+
 import javafx.scene.Scene;
 import javafx.scene.effect.Glow;
 import javafx.scene.image.Image;
@@ -12,12 +10,10 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
-import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
-
 import java.util.ArrayList;
 import java.util.List;
-//USE BUFFERED IMAGES
+
 public class Game extends Application{
     private static final int VIEWER_WIDTH = 1280;
     private static final int VIEWER_HEIGHT = 640;
@@ -43,16 +39,7 @@ public class Game extends Application{
         grid.setGridLinesVisible(true);
         grid.setLayoutX(700);
         grid.setLayoutY(10);
-  /*      ImageView iv=new ImageView();
-        iv.setImage((new Image(Viewer.class.getResource(URI_BASE+ "h" +".png").toString())));
-        iv.setFitWidth(iv.getImage().getWidth()*0.5);
-        iv.setFitHeight(iv.getImage().getHeight()*0.5);*/
-        /*iv.setScaleY(0.5);//causing problems
-        iv.setScaleX(0.5);*/
-        /*iv.setTranslateX(-50);
-        iv.setTranslateY(-25);*/
 
-        //grid.add(iv,7,2,1,3);
 tempy=50;
 tempx=100;
         List<ImageView> imgObjs=new ArrayList();// list of images
@@ -69,13 +56,6 @@ tempx=100;
             double height= ivo.getImage().getHeight()/2;
            boxes.add(new boxcreator(((char)(i+97)),height*2,width*2));
            boxcreator b = boxes.get(i);
-
-           //ivo.setTranslateX(b.getTranslation());
-           // System.out.println(ivo.getImage().getWidth());
-            /*ivo.setScaleX(0.5);
-            ivo.setScaleY(0.5);*///CAUSING PROBLEMS DO NOT USE !!!!!
-            //ivo.resize(iv.getImage().getWidth()*0.25,iv.getImage().getHeight()*0.25);
-            //ivo.setFitHeight(iv.getImage().getHeight()*50/100);
             if(i==4){
                 tempx=340;
                 tempy=50; }
@@ -87,7 +67,6 @@ tempx=100;
                 tempy=230;
                 tempx+=50;
             }
-            System.out.println(b.measurement);
            tempy+=b.measurement;
             ivo.setX(tempx);
             ivo.setY(tempy);
@@ -97,74 +76,114 @@ tempx=100;
             Glow g2 = new Glow();
             g.setLevel(0);
             ivo.setOnMouseEntered(e-> {
-         ivo.setEffect(g2);});
+            ivo.setEffect(g2);});
             ivo.setOnMouseExited(e-> {ivo.setEffect(g);});
             ivo.setOnScroll(e-> {
                 b.rotate();
                 ivo.setRotate(b.rotate);});
-            ivo.setOnMouseDragged(m->{ivo.setY(m.getSceneY()-height);//for centering piece upon drag
-               ivo.setEffect(g2);
-           /*    System.out.println("Screen x"+m.getScreenX());
-                System.out.println(m.getScreenY());
-                System.out.println(m.getSceneX());*/
-            ivo.setX(m.getSceneX()-width);
-
-
+                ivo.setOnMouseDragged(m->{ivo.setY(m.getSceneY()-height);//for centering piece upon drag
+                ivo.setEffect(g2);
+                ivo.setX(m.getSceneX()-width);
           ivo.setOnMouseReleased(t->{
               if(m.getSceneX()>700&&m.getSceneY()<1100&&m.getSceneY()<230&&m.getSceneY()>10){//if it is within the board
-                  System.out.println((m.getSceneX()-width) +" "+(m.getSceneY()-height));
-                  //Add condition here stating that if rotation has occured you shd change th g
                   double y=m.getSceneY()-height;
                   double x= m.getSceneX()-width;
-    /*if(b.rotate==90){
-        x+=25;
-        //if(getrowcol(x,y)[])
-        ivo.setTranslateY(-49);
-        ivo.setTranslateX(-24);
-    }*/
-              int[] xyval=getrowcol(x,y);
+                  double rotval=b.rotate;
+                  if(b.rotate==90&&!(b.getchar()=='g'||b.getchar()=='e')){
+                      System.out.println("in");
+                      if(b.getchar()=='h'){
+                          ivo.setTranslateX(-50);
+                      }
+                      else{
+                      ivo.setTranslateX(-75);
+                  }}
+                  else if (b.getchar()=='g'||b.getchar()=='e'){//rotation does'nt need any translation
+              rotval=0; }
+                  System.out.println((x) +" "+(y));
+
+                  if(b.rotate==270&&!(b.getchar()=='g'||b.getchar()=='e')){
+                      System.out.println("in");
+                      if(b.getchar()=='h'){
+                          ivo.setTranslateX(-50);
+                      }
+                      else{
+                          ivo.setTranslateX(-25);
+                      }}
+                  else if (b.getchar()=='g'||b.getchar()=='e'){//rotation does'nt need any translation
+                      rotval=0; }
+                  System.out.println((x) +" "+(y));
+
+              int[] xyval=getrowcol(x,y,rotval,b.getchar());
               //b.updateGridVal(xyval[1],xyval[0],);
-                  System.out.println("width is "+width);
-                  System.out.println("height is "+height);
+                  System.out.println("width/2 is "+width);
+                  System.out.println("height/2 is "+height);
                   int[] csrs={(int)height/25,(int)width/25};
                   if((b.rotate/90)%2!=0){
-
                       csrs[0]=(int)width/25;
                       csrs[1]=(int)height/25;
                   }
-
-                  System.out.println(xyval[0]+  " " +xyval[1]+" "+ csrs[1]+" " + csrs[0]);
+                System.out.println(" ci is: " + xyval[0]+  " ri is: " +xyval[1]+" colspan is:  "+ csrs[1]+" rowspan is: " + csrs[0]);
                 grid.add(ivo,xyval[0],xyval[1],csrs[1],csrs[0]);//use an outer function ,for loop might be causing troubles
+
                 //column index, rowindex, colspan, rowspan
               }});
-
             });
-
         root.getChildren().add(ivo);
-
         }
-
-
-
         Scene scene = new Scene(root, VIEWER_WIDTH, VIEWER_HEIGHT);
         root.getChildren().add(grid);
         primaryStage.setScene(scene);
         primaryStage.show();
-
-
-
     }
 
-    public int[] getrowcol(double x,double y){//returns respective grid row values
-          int[] xyvals= new int[2];
+    public int[] getrowcol(double x,double y,double rotate,char ptype) {//returns respective grid row values
+        int[] xyvals = new int[2];
+        System.out.println("rotate of this piece is "+ rotate);
+        if (rotate == 0||rotate==180||rotate==360) {
+            x = (x - 675 < 10) ? x + 10 : Math.ceil(x);
+            y = Math.ceil(y);
+            xyvals[0] = (int) Math.round((x - 700) / 50);//ci
+            xyvals[1] = (int) Math.round(((y - 10)) / 50);//ri
 
-          x=(x-675<10)?x+10:Math.ceil(x);
-          y=Math.ceil(y);
-          xyvals[0]=(int) Math.round((x-700)/50);
-          xyvals[1]=(int)Math.round(((y-10))/50);
-
-    return xyvals;}
-
+            return xyvals;
+        }
+        else if(rotate==90.0){
+            if( ptype=='c'){
+                x=Math.ceil(x)+55;
+                y=Math.ceil(y)-56;
+            }
+            else if(ptype=='h'){
+                x = Math.ceil(x)+55;
+                y = Math.ceil(y)-50;
+            }
+            else{
+            x = Math.ceil(x)+55;
+            y = Math.ceil(y)-5;}
+            System.out.println("inner x "+x+"inner y "+ y);
+            xyvals[0] = (int) Math.round(((x - 700)) / 50);//ci
+            xyvals[1] = (int) Math.round(((y - 10)) / 50);//ri
+         //
+            return xyvals;
+        }
+        else{//rotate==270.0
+            if( ptype=='c'){
+                x=Math.ceil(x)+55;
+                y=Math.ceil(y)-56;
+            }
+            else if(ptype=='h'){
+                x = Math.ceil(x)+55;
+                y = Math.ceil(y)-50;
+            }
+            else{
+                x = Math.ceil(x)+25;
+                y = Math.ceil(y)-25;}
+            System.out.println("inner x "+x+"inner y "+ y);
+            xyvals[0] = (int) Math.round(((x - 700)) / 50);//ci
+            xyvals[1] = (int) Math.round(((y - 10)) / 50);//ri
+            //
+            return xyvals;
+           }
+    }
 
     class boxcreator{//containers which will hold the pieces
         // each piece will have it's container
@@ -205,33 +224,15 @@ tempx=100;
             this.y=y;
         }
 
-    /*    int[]csrs(){
-            int[] csrs={(int)height/100,(int)width/100};
-            if((rotate/90)%2!=0){
-                csrs[0]=(int)width/100;
-                csrs[1]=(int)height/100;
-            }
-           return csrs;
-        }*/
+
+    char getchar(){
+        return ptype;
+    }
         void updateGridVal(int[]vals){
 
 
         }
-        int getTranslation() {
-            if (rotate / 90 % 2 == 0) {
-                return translation = 0;
-            } else {
-                switch (ptype) {
-                    case 'a': case 'b':
-                     case 'd': case 'f':
-                        return translation = -45;
-                    case 'c':
-                       return  translation = -140;
-                    default:
-                         return  translation = 0;
-                }
-            }
-        }
+
 
 
     }
@@ -245,3 +246,61 @@ tempx=100;
 
     }
 }
+    /*BufferedImage img = null;//Trying to use buffered image
+        try {
+                img = ImageIO.read(new File((Viewer.class.getResource(URI_BASE +"aCopy.png").toString())));
+        } catch (IOException e) {
+        System.out.println("nope");
+        }
+        AffineTransform tx = new AffineTransform();
+        tx.rotate(0.5, img.getWidth() / 2, img.getHeight() / 2);
+
+        AffineTransformOp op = new AffineTransformOp(tx,
+        AffineTransformOp.TYPE_BILINEAR);
+        img = op.filter(img, null);
+
+        try {
+        // retrieve image
+        File outputfile = new File("aCopy.png");
+        ImageIO.write(img, "png", outputfile);
+        } catch (IOException e) {
+
+        }
+  *//*    GraphicsContext gc=canvas.getGraphicsContext2D();
+        SnapshotParameters params = new SnapshotParameters();
+        //params.setFill(Color.TRANSPARENT);
+        Image rotatedImage = iv.snapshot(params, null);
+        gc.drawImage(rotatedImage, 0, 0);*//*
+        //ImageView image=new ImageView(iv.getImage());
+
+        grid.add(iv,0,1,2,3);*/
+
+/*   ImageView iv=new ImageView();
+        double imageWidth2 = (new Image(Viewer.class.getResource(URI_BASE +"a.png").toString())).getWidth();
+        double imageHeight2=(new Image(Viewer.class.getResource(URI_BASE+"a.png").toString()).getHeight());
+        iv.setImage((new Image(Viewer.class.getResource(URI_BASE+"a.png").toString(),imageWidth2*0.5,imageHeight2*0.5,false,false)));
+        iv.setRotate(90);*/
+
+ /*    int[]csrs(){
+            int[] csrs={(int)height/100,(int)width/100};
+            if((rotate/90)%2!=0){
+                csrs[0]=(int)width/100;
+                csrs[1]=(int)height/100;
+            }
+           return csrs;
+        }*/
+ /*int getTranslation() {
+     if (rotate / 90 % 2 == 0) {
+         return translation = 0;
+     } else {
+         switch (ptype) {
+             case 'a': case 'b':
+             case 'd': case 'f':
+                 return translation = -45;
+             case 'c':
+                 return  translation = -140;
+             default:
+                 return  translation = 0;
+         }
+     }
+ }*/
