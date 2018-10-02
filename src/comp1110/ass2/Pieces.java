@@ -4,11 +4,8 @@ public class Pieces {
      /*Pieces are represented as a multidimensional array in which 1 represents
     the occupied places .
      */
-
-
     public final char piece_name;
     public String[][] actual_piece;
-    PieceColours color;
     String[][] aactual_piece={{"or","r","or"},{"x","x","r"}};
     String[][] bactual_piece={{"r","r","x"},{"x","or","r"}};
     String[][] cactual_piece={{"b","ob","b","b"}};
@@ -39,29 +36,6 @@ public class Pieces {
         else if(piece_name=='k'){this.actual_piece=kactual_piece;}
         else if(piece_name=='l'){this.actual_piece=lactual_piece;}
 
-        }
-
-
-    /**
-     *Applies color to the given Piece object
-     *@param  piece_name
-     *
-     */
-        void applycolor(char piece_name){
-            int seqnum=(int)piece_name;
-            if(seqnum>104){
-                seqnum-=96; }
-            else{
-                seqnum-=104; }
-        if(seqnum<3){
-            this.color=color.RED; }
-        else if(seqnum<5){
-            this.color=color.BLUE; }
-        else if(seqnum <7){
-            this.color=color.GREEN; }
-        else{
-            this.color=color.YELLOW;
-        }
         }
 
 

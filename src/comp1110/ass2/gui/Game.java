@@ -139,97 +139,29 @@ public class Game extends Application{
             this.height=height;
             measurement=(ptype=='a'||ptype=='e'||(int)ptype>104)? 0 :(height > width) ? height : width; }
 
-        void rotate() {
+            void rotate() {
             if (rotate > 360) {
                 rotate = 90;
             } else {
-                rotate += 90;
+                rotate += 90; }
             }
-        }
-        int getrotate(){
-            return rotate;
-        }
-        void defaultxy(double x,double y){
-            this.x=x;
-            this.y=y;
-        }
+             void defaultxy(double x,double y){
+             this.x=x;
+             this.y=y; }
+
         char getchar(){
-            return ptype;
-        }
-        void updateGridVal(int[]vals){
+            return ptype; }
 
-
-        }
 
     }
-    class PieceStats{
-
+    class PieceStats{//Will inherit from boxcontainer
+        //holds rotate,default x coordinat and y coordinate
+        //if is on board or not
+        //if on board it  will contain the piece placement(the piece string form )
+        //update piece if needed
     }
     class GameStatus  {
-        int pX, pY;
-        double x, y; // the position in the window where the mask should be when not on the board
-        public void attachtoGrid(){
-
-        }
-
-
+       //contains the game data
+        //
     }
 }
-    /*BufferedImage img = null;//Trying to use buffered image
-        try {
-                img = ImageIO.read(new File((Viewer.class.getResource(URI_BASE +"aCopy.png").toString())));
-        } catch (IOException e) {
-        System.out.println("nope");
-        }
-        AffineTransform tx = new AffineTransform();
-        tx.rotate(0.5, img.getWidth() / 2, img.getHeight() / 2);
-
-        AffineTransformOp op = new AffineTransformOp(tx,
-        AffineTransformOp.TYPE_BILINEAR);
-        img = op.filter(img, null);
-
-        try {
-        // retrieve image
-        File outputfile = new File("aCopy.png");
-        ImageIO.write(img, "png", outputfile);
-        } catch (IOException e) {
-
-        }
-  *//*    GraphicsContext gc=canvas.getGraphicsContext2D();
-        SnapshotParameters params = new SnapshotParameters();
-        //params.setFill(Color.TRANSPARENT);
-        Image rotatedImage = iv.snapshot(params, null);
-        gc.drawImage(rotatedImage, 0, 0);*//*
-        //ImageView image=new ImageView(iv.getImage());
-
-        grid.add(iv,0,1,2,3);*/
-
-/*   ImageView iv=new ImageView();
-        double imageWidth2 = (new Image(Viewer.class.getResource(URI_BASE +"a.png").toString())).getWidth();
-        double imageHeight2=(new Image(Viewer.class.getResource(URI_BASE+"a.png").toString()).getHeight());
-        iv.setImage((new Image(Viewer.class.getResource(URI_BASE+"a.png").toString(),imageWidth2*0.5,imageHeight2*0.5,false,false)));
-        iv.setRotate(90);*/
-
- /*    int[]csrs(){
-            int[] csrs={(int)height/100,(int)width/100};
-            if((rotate/90)%2!=0){
-                csrs[0]=(int)width/100;
-                csrs[1]=(int)height/100;
-            }
-           return csrs;
-        }*/
- /*int getTranslation() {
-     if (rotate / 90 % 2 == 0) {
-         return translation = 0;
-     } else {
-         switch (ptype) {
-             case 'a': case 'b':
-             case 'd': case 'f':
-                 return translation = -45;
-             case 'c':
-                 return  translation = -140;
-             default:
-                 return  translation = 0;
-         }
-     }
- }*/
