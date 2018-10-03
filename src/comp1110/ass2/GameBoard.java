@@ -1,16 +1,20 @@
 package comp1110.ass2;
 
-import java.util.Arrays;
 import static comp1110.ass2.Pieces.hm;
-
+/*
+*Class which creates a set of boards and does operation over them whenever needed.
+* 1)checkingBoard - specially meant for isPlacementStringValid method.
+* 2)actualBoard- specially meant for the running game.
+* Authorship:LingYu Xia (rotator)
+*            Kalai (Everthing else)
+*/
 public class GameBoard {
-    private String[][] checkingBoard = new String[10][14];// Inclusive of the main board(4x8)
-    private String[][] actualBoard = new String[4][8]; //The actual board
+    private String[][] checkingBoard = new String[10][14];
+    private String[][] actualBoard = new String[4][8];
 
     /**
      * Adds a piece to the respective board and updates it.
-     *
-     * @param piece
+     * @param piece  piece String
      * @param bt    represents board-type(either actual or checking)
      */
     void pieceTobeAdded(String piece, String bt) {
@@ -19,7 +23,7 @@ public class GameBoard {
         int col = Character.getNumericValue(piece.charAt(1)) - 1;
         int row = piece.charAt(2) - 65;
         int hashmapkeyvalue=(pname>104)?pname-104+63:(pname-97)*8+orientation_no;//(pname - 97)*8 to get the corresponding piece base number
-        if (bt == "a") {
+        if (bt.equals("a")) {
             this.actualBoard = placer(actualBoard,hm.get(hashmapkeyvalue) , row, col, 0);
         } else {
             this.checkingBoard = placer(checkingBoard,hm.get(hashmapkeyvalue)  , row, col, 3);

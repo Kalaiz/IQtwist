@@ -1,11 +1,9 @@
 package comp1110.ass2;
-
 import comp1110.ass2.gui.Viewer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import static comp1110.ass2.Pieces.hm;
 
 /**
  * This class provides the text interface for the TwistGame
@@ -16,7 +14,7 @@ import static comp1110.ass2.Pieces.hm;
 
 public class TwistGame {
   public static int[][] test = new int[4][8];
-  static GameBoard gobj = new GameBoard();
+  private static GameBoard gobj = new GameBoard();
 
 
   /**
@@ -29,8 +27,9 @@ public class TwistGame {
    *
    * @param piecePlacement A string describing a single piece or peg placement
    * @return True if the placement is well-formed
+   * Authorship:Kalai
    */
-  //  Task 2: determine whether a piece or peg placement is well-formed
+
   public static boolean isPlacementWellFormed(String piecePlacement){
     char[]data ={'a','l','1','8','A','D','0','7'};
     /*For the fourth character;In situation where given input represents a peg,
@@ -148,6 +147,7 @@ public class TwistGame {
    *
    *@param board2  Modified board
    *@return  True if there is a piece  on the outerboard
+   *Authorship:Kalai
    */
   public static boolean checkboard(String [][] board2){//check if  pieces are in the outer board
     int row=board2.length;
@@ -193,13 +193,6 @@ public class TwistGame {
   }
 
 
-  /*public static void main(String[] args) {
-
-
-      }
-*/
-
-
   /**
    *Modifies respective board based on the placement string
    *and checks whether place is valid or not concurrently
@@ -210,9 +203,10 @@ public class TwistGame {
    *                checkingboard (10x12 board specifically for is_onboard and isvalidPlacement )
    *@local temp used as the initial value for is_onboard or else will get updated as per requirement and return itself
    *@return Updated board
+   *Authorship:Kalai
    */
   public static String[][] boardcreator(String placement,char bt ) {
-    String[][] temp = {{"z"}};//For task5
+    String[][] temp = {{"z"}};//For task5 return value if game status is not valid
     gobj.resetBoardvalues(Character.toString(bt));//resets the respective board
     for (int i = 0; i < placement.length() / 4; i++) {
       String ch=placement.substring(4*i,4*i+4);
@@ -239,6 +233,7 @@ public class TwistGame {
    *
    * @param placement A placement sequence string
    * @return True if the placement sequence is valid
+   *  Authorship:Yuqing Zhang & Kalai
    */
   public static boolean isPlacementStringValid(String placement) {
       Pieces.initialisehms();

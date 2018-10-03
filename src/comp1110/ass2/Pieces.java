@@ -1,47 +1,58 @@
 package comp1110.ass2;
 import java.util.Arrays;
 import java.util.HashMap;
-
 import static comp1110.ass2.PieceData.*;
+
+/**
+ *Class which creates pieces for the game.
+ *Pieces are represented as a multidimensional array in which alphabets represents
+ *the occupied places and the colour.
+ *Authorship:Kalai
+ */
+
 public class Pieces {
-     /*Pieces are represented as a multidimensional array in which 1 represents
-    the occupied places .
+    private char piece_name;
+    private String[][] actual_piece;
+    /**
+     *hm:Hashmap which holds all types of pieces.
+     *Numbers are used to denote the key of hashmap.
+     *Values are the multidimensional piece array
+     *=======Details of the key numbers=======
+     * a0=1,a1=2..... where the character is the piece type
+     * and the integer is the orientation number.
      */
-    public final char piece_name;
-    public String[][] actual_piece;
     static HashMap<Integer,String[][]> hm=new HashMap<>();
-   /*Numbers to denote the key of hashmap are unique
-    *a0-1,a1-2.....goes on as such
-    * Why not use String as keys?
-    * https://stackoverflow.com/questions/1516549/bad-idea-to-use-string-key-in-hashmap
-    * Source used on how to use streams to copy elements -https://www.baeldung.com/java-array-copy
-    * https://jaxenter.com/java-performance-tutorial-how-fast-are-the-java-8-streams-118830.html
+
+
+    /**
+    *Creates a Piece based on PieceData class
+    *and piece_name.
+    * @param piece_name : Respective piece character
     */
-
-
     Pieces(char piece_name){
         int i = piece_name-97;//gets the 'i'th element of the 3D array
-        //parallel streams are usually faster than sequencial ones**
+        //parallel streams are usually faster than sequential ones**
         //Will be testing if it is really faster than for loop or not later
         actual_piece= Arrays.stream(all_pieces[i]).parallel().toArray(String[][]::new);
-        this.piece_name=piece_name;
-    }
+        this.piece_name=piece_name; }
 
-
-        static void initialisehms(){//Hash Map with all pieces with orientations  except for pegs
+    /**
+     *Initialises the Hashmap with all the required values
+     */
+    static void initialisehms(){
             String piece[][];
        hmloop: for(int innerval=-1,t=0;t<68;t++){// -1 for initialisation;t be the hashmap index
             innerval=(innerval==7)?0:++innerval;
             if(t>63){
-                hm.put(t,(new Pieces((char)((t-64)+105))).getactual_piece());
-                        continue hmloop;
+              hm.put(t,(new Pieces((char)((t-64)+105))).getactual_piece());
+              continue hmloop;
             }
            piece=new Pieces((char)((t/8)+97)).getactual_piece();
            int orientation_no=innerval;
-     rotationloop:  for(int m=0;m<orientation_no;++m){
+       rotationloop:for(int m=0;m<orientation_no;++m){
                 if(orientation_no>3){
-                      orientation_no-=4;
-                    piece=GameBoard.flipper(piece);
+                   orientation_no-=4;
+                   piece=GameBoard.flipper(piece);
                     if(orientation_no==0){break rotationloop;}//if orientation number is 0 no further rotation is required
                       m=-1;
                 continue;}
@@ -62,7 +73,6 @@ public class Pieces {
     /**
      *Changes the current placement array with a updated one
      *@param  changingplace
-     *@return  A multidimensional array of the respective piece.
      */
     void changeactualplace(String[][] changingplace){
         this.actual_piece=changingplace;

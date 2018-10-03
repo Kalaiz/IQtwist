@@ -2,16 +2,23 @@ package comp1110.ass2.gui;
 
 import comp1110.ass2.GameBoard;
 import comp1110.ass2.TwistGame;
+import javafx.animation.PathTransition;
+import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.effect.Glow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseButton;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
+import javafx.scene.shape.CubicCurveTo;
+import javafx.scene.shape.MoveTo;
+import javafx.scene.shape.Path;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -22,14 +29,14 @@ public class Board extends Application {
     private static final int BOARD_WIDTH = 933;
     private static final int BOARD_HEIGHT = 700;
     static GameBoard g = new GameBoard();
-    static TwistGame t = new TwistGame();
+    private static TwistGame t = new TwistGame();
     private static final int VIEWER_WIDTH = 1280;
     private static final int VIEWER_HEIGHT = 640;
     private static final String URI_BASE = "assets/";
     private final Group root = new Group();
     private final Group controls = new Group();
-    static double tempx;//for positioning
-    static double tempy;//for positioning
+    private  static double tempx;//for positioning
+    private  static double tempy;//for positioning
     Glow g2 = new Glow();
     Glow g1 = new Glow();
 
@@ -61,21 +68,21 @@ public class Board extends Application {
             boxes.add(new boxcreator(((char)(i+97)),height,width));
             boxcreator b = boxes.get(i);
             if(i==4){
-                tempx=340;
-                tempy=50; }
+                tempx=340; tempy=50; }
             else if(i==7){
-                tempx+=300;
-                tempy=230; }
+                tempx+=300; tempy=230; }
             else if(i>7){
-                tempy=230;
-                tempx+=50; }
+                tempy=230; tempx+=50; }
             tempy+=b.measurement;
             ivo.setX(tempx);
             ivo.setY(tempy);
             b.defaultxy(tempx,tempy);
             g1.setLevel(0);
-            ivo.setOnMouseEntered(e-> {
-                ivo.setEffect(g2);});
+            ivo.setOnMouseEntered(e-> { ivo.setEffect(g2); });
+            ivo.setOnMouseClicked(t->{
+                if(t.getButton()== MouseButton.SECONDARY){
+                    int sy=(ivo.getScaleY()==-1)?1:-1;
+                   ivo.setScaleY(sy); }});
             ivo.setOnMouseExited(e-> {ivo.setEffect(g1);});
             ivo.setOnScroll(e-> {b.rotate();ivo.setRotate(b.rotate);});
             ivo.setOnMouseDragged(m->{
@@ -83,8 +90,11 @@ public class Board extends Application {
                 ivo.setEffect(g2);
                 ivo.setX(m.getSceneX()-width/2);
                 ivo.setOnMouseReleased(t->{
-                    if(m.getSceneX()>700&&m.getSceneY()<1100&&m.getSceneY()<230&&m.getSceneY()>10){//if it is within the board
-                        double y=m.getSceneY()-height/2;
+                    if(ivo.getX()<650||ivo.getY()>200||ivo.getX()>1100){//If out of board image goes back to the default place
+                        ivo.setX(b.x);
+                        ivo.setY(b.y); }
+                    else if(m.getSceneX()>700&&m.getSceneY()<1100&&m.getSceneY()<230&&m.getSceneY()>10){//if it is within the board
+                        double y=m.getSceneY()-height/2;//for moving piece with cursor being centerd
                         double x= m.getSceneX()-width/2;
                         double rotval=b.rotate;
                         if(b.rotate/90%2!=0&&!(b.getchar()=='g'||b.getchar()=='e')){
@@ -95,10 +105,12 @@ public class Board extends Application {
                         if((b.rotate/90)%2!=0){//Switch cs and rs .
                             csrs[0]=(int)width/50;
                             csrs[1]=(int)height/50; }
-                        try{grid.add(ivo,xyval[0],xyval[1],csrs[1],csrs[0]);}//column index, rowindex, colspan, rowspan
+                        try{grid.add(ivo,xyval[0],xyval[1],csrs[1],csrs[0]);
+                        }//column index, rowindex, colspan, rowspan
                         catch(IllegalArgumentException e){
-                            //make the piece go back to default place
-                        } } });
+                            ivo.setX(b.x);//make the piece go back to default place
+                            ivo.setY(b.y); }
+                        } });
             });
             root.getChildren().add(ivo);
         }
@@ -108,13 +120,12 @@ public class Board extends Application {
         primaryStage.show();
     }
 
-    public int[] getrowcol(double x,double y,double rotate,char ptype) {//returns respective grid row values
+    private int[] getrowcol(double x,double y,double rotate,char ptype) {//returns respective grid row values
         int[] xyvals = new int[2];
         if (rotate == 0||rotate==180||rotate==360) {
             x = (x - 675 < 10) ? x + 10 : Math.ceil(x);
-            y = Math.ceil(y);
             xyvals[0] = (int) Math.round((x - 700) / 50);//ci
-            xyvals[1] = (int) Math.round(((y - 10)) / 50);//ri
+            xyvals[1] = (int) Math.round(((Math.ceil(y) - 10)) / 50);//ri
             return xyvals; }
         else {
             if( ptype=='c'){
@@ -128,9 +139,7 @@ public class Board extends Application {
                 y = (rotate==90.0)?Math.ceil(y)-5:Math.ceil(y)-25;}
             xyvals[0] = (int) Math.round(((x - 700)) / 50);//ci
             xyvals[1] = (int) Math.round(((y - 10)) / 50);//ri
-            return xyvals; }
-
-    }
+            return xyvals; } }
 
 
     class boxcreator{//containers which will hold the pieces
@@ -147,7 +156,7 @@ public class Board extends Application {
             this.ptype=ptype;
             this.width=width;
             this.height=height;
-            measurement=(ptype=='a'||ptype=='e'||(int)ptype>104)? 0 :(height > width) ? height : width; }
+            measurement=(ptype=='a'||ptype=='e'||(int)ptype>104)? 0:(height > width) ? height : width; }
 
         void rotate() {
             if (rotate > 360) {
@@ -161,10 +170,9 @@ public class Board extends Application {
 
         char getchar(){
             return ptype; }
-
-
     }
-    class PieceStats{//Will inherit from boxcontainer
+    class PieceStats{
+        //Will inherit from boxcontainer
         //holds rotate,default x coordinate and y coordinate
         //if is on board or not
         //if on board it  will contain the piece placement(the piece string form )
@@ -350,13 +358,7 @@ public class Board extends Application {
          */
     }
 
-   /* public static void main(String[] args) {
-       *//* Board b = new Board();
-        b.makeBoard();*//*
-        String str = validStartPlacement();
-        System.out.println(t.isPlacementStringValid(str));
-        System.out.println(str);
-    }*/
+
 
     /*set opacity of selected pieces to a certain percentage  or
     use Blur effect for that certain piece (using setEffect) Use task 9 code for the solutions.*/
