@@ -1,8 +1,10 @@
 package comp1110.ass2;
 
 import comp1110.ass2.gui.Viewer;
-
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * This class provides the text interface for the Twist Game
@@ -36,7 +38,7 @@ public class TwistGame {
     for(int i=0;i<4;i++){
       //Characters compared in accordance to ascii encoding values
       if( !(piecePlacement.charAt(i)>=data[i*2]&& piecePlacement.charAt(i)<=data[i*2+1])){
-        return false;}
+     return false;}
     }
     return true; }
 
@@ -161,15 +163,13 @@ public class TwistGame {
     }
     return false;
   }
-/*
-  public static void main(String[] args) {
-    Pieces.initialisehms();
-    String[][]board =  boardcreator("a1A0",'a');
-    Arrays.stream(board).forEach(ch->Arrays.stream(ch).forEach(ich->ich="x") );
-    Arrays.stream(board[0]).forEach((ich->ich="x") );
-    displayBoard(board);
-  }*/
 
+  /*
+   *check if there is overlap or badpegs on the checkingboard
+   * according to the length of the String element
+   * and each char value of the String element
+   * Authorship: Yuqing Zhang
+   */
   public static boolean checkBoard2(){//checks for colourpeg and overlap
     for (int row = 3; row < 7; row++) {
       for (int col = 3; col < 11; col++) {
@@ -209,17 +209,17 @@ public class TwistGame {
    * Authorship:Kalai
    */
   public static String[][] boardcreator(String placement,char bt ) {
-    String[][] temp = {{"z"}};//The return array if placement is not valid
+    String[][] temp = {{"z"}};//For task5
     gobj.resetBoardvalues(Character.toString(bt));//resets the respective board
     for (int i = 0; i < placement.length() / 4; i++) {
       String ch=placement.substring(4*i,4*i+4);
       if(bt=='a'){
-        gobj.pieceTobeAdded(ch,"a"); }
+         gobj.pieceTobeAdded(ch,"a"); }
       else{
-        gobj.pieceTobeAdded(ch,"c");
-        if(checkboard(gobj.getcboard())|| !checkBoard2()){
-          return temp;
-        }}
+      gobj.pieceTobeAdded(ch,"c");
+      if(checkboard(gobj.getcboard())|| !checkBoard2()){
+        return temp;
+      }}
     }
     temp = (bt =='a') ? gobj.getaboard() : gobj.getcboard();
     return temp;}
