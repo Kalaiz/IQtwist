@@ -37,9 +37,8 @@ public class TwistGame {
       return false;}
     for(int i=0;i<4;i++){
       //Characters compared in accordance to ascii encoding values
-      if( piecePlacement.charAt(i)>=data[i*2]&& piecePlacement.charAt(i)<=data[i*2+1]){
-      }
-      else{return false;}
+      if( !(piecePlacement.charAt(i)>=data[i*2]&& piecePlacement.charAt(i)<=data[i*2+1])){
+     return false;}
     }
     return true; }
 
@@ -219,7 +218,6 @@ public class TwistGame {
     }
     temp = (bt =='a') ? gobj.getaboard() : gobj.getcboard();
     return temp;}
-
 
   /**
    * Determine whether a placement string is valid.  To be valid, the placement
