@@ -263,7 +263,7 @@ public class TwistGame {
       if(placed_pieces.indexOf(String.valueOf((char)i))==-1)
         unplaced_pieces = unplaced_pieces + String.valueOf((char)i);
     }
-    System.out.print(unplaced_pieces);
+    //System.out.print(unplaced_pieces);
     //System.out.println();
     List<int[]> emptyGrid = getEmptyGrid();
     String newPiece = "";
@@ -271,52 +271,34 @@ public class TwistGame {
     String newPlacement = "";
     boolean boo = true;
 
-    for (int i = 0; i < unplaced_pieces.length(); i++){
+    loop: for (int i = 0; i < unplaced_pieces.length(); i++){
 
       for (int j = 0; j < emptyGrid.size(); j++){
 
-        if (emptyGrid.get(j)[0]==0){
-          row = "A";
-        }else if (emptyGrid.get(j)[0]==1){
-          row = "B";
-        }else if (emptyGrid.get(j)[0]==2){
-          row = "C";
-        }else if (emptyGrid.get(j)[0]==3){
-          row = "D";
-        }
+        for (int l = 'A'; l <= 'D'; l++) {
 
-        for (int k = 0; k < 8; k++) {
+          for (int k = 0; k < 8; k++) {
 
-          if (unplaced_pieces.charAt(i)>='i') {
-            break;
-          }else {
-            newPiece = String.valueOf(unplaced_pieces.charAt(i)) + emptyGrid.get(j)[1] + row + k;
-            newPlacement = placement + newPiece;
-          }
+            if (unplaced_pieces.charAt(i) >= 'i') {
+              break;
+            } else {
+              newPiece = String.valueOf(unplaced_pieces.charAt(i)) + emptyGrid.get(j)[1] + String.valueOf((char)l) + k;
+              newPlacement = placement + newPiece;
+            }
 
-          //System.out.println(placement + newPiece);
+            //System.out.println(placement + newPiece);
 
-          if (isPlacementStringValid(newPlacement)){
-            //System.out.println(newPlacement);
-            viablePiece.add(newPiece);
-
+            if (isPlacementStringValid(newPlacement)) {
+              //System.out.println(newPlacement);
+              viablePiece.add(newPiece);
+              //if (unplaced_pieces.charAt(i) == 'c' || unplaced_pieces.charAt(i) == 'h' || unplaced_pieces.charAt(i) == 'f')
+              if (unplaced_pieces.charAt(i) != 'a')
+                continue loop;
+            }
           }
         }
       }
     }
-
-    /*
-    Iterator<String> it = viablePiece.iterator();
-    while (it.hasNext()){
-      samePiece = it.next();
-      if (it.hasNext()){
-        samePiece2 = it.next();
-        if (samePiece.substring(0,3).equals(samePiece2.substring(0,3))){
-          viablePiece.remove(it.next());
-        }
-      }
-    }*/
-
 
     if (viablePiece.isEmpty())
       return null;
