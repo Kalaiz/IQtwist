@@ -1,16 +1,20 @@
 package comp1110.ass2;
 
-import java.util.Arrays;
 import static comp1110.ass2.Pieces.hm;
-
+/*
+*Class which creates a set of boards and does operation over them whenever needed.
+* 1)checkingBoard - specially meant for isPlacementStringValid method.
+* 2)actualBoard- specially meant for the running game.
+* Authorship:LingYu Xia (rotator)
+*            Kalai (Everthing else)
+*/
 public class GameBoard {
-    private String[][] checkingBoard = new String[10][14];// Inclusive of the main board(4x8)
-    private String[][] actualBoard = new String[4][8]; //The actual board
+    private String[][] checkingBoard = new String[10][14];
+    private String[][] actualBoard = new String[4][8];
 
     /**
      * Adds a piece to the respective board and updates it.
-     *
-     * @param piece
+     * @param piece  piece String
      * @param bt    represents board-type(either actual or checking)
      */
     void pieceTobeAdded(String piece, String bt) {
@@ -19,7 +23,7 @@ public class GameBoard {
         int col = Character.getNumericValue(piece.charAt(1)) - 1;
         int row = piece.charAt(2) - 65;
         int hashmapkeyvalue=(pname>104)?pname-104+63:(pname-97)*8+orientation_no;//(pname - 97)*8 to get the corresponding piece base number
-        if (bt == "a") {
+        if (bt.equals("a")) {
             this.actualBoard = placer(actualBoard,hm.get(hashmapkeyvalue) , row, col, 0);
         } else {
             this.checkingBoard = placer(checkingBoard,hm.get(hashmapkeyvalue)  , row, col, 3);
@@ -99,22 +103,22 @@ public class GameBoard {
         int endr = prow + row2;
         int endc = pcol + col2;
         String[][] oboard= board;
-           try { for (int cr = 0; row2 < endr; row2++, cr++) {
-                int col2_temp = col2;
-                for (int cc = 0; col2_temp < endc; col2_temp++, cc++) {
-                    if (oboard[row2 + modifier][col2_temp + modifier] == "x") {
-                        oboard[row2 + modifier][col2_temp + modifier] = piecearr[cr][cc];
-                    } else if (piecearr[cr][cc] == "x") {// if the piece part is empty dont update the output board
-                    } else {
-                        //adding 3 so to add the first segment of the piece to the inner board(mandatory)
+        try { for (int cr = 0; row2 < endr; row2++, cr++) {
+            int col2_temp = col2;
+            for (int cc = 0; col2_temp < endc; col2_temp++, cc++) {
+                if (oboard[row2 + modifier][col2_temp + modifier] == "x") {
+                    oboard[row2 + modifier][col2_temp + modifier] = piecearr[cr][cc];
+                } else if (piecearr[cr][cc] == "x") {// if the piece part is empty dont update the output board
+                } else {
+                    //adding 3 so to add the first segment of the piece to the inner board(mandatory)
                     oboard[row2 + modifier][col2_temp + modifier] = piecearr[cr][cc] + oboard[row2 + modifier][col2_temp + modifier];
-                    }
-                } } }
-                 //if piecearr size is more than than board or the board has null value(i.e Values of the board not declared)
-                catch(ArrayIndexOutOfBoundsException|NullPointerException e){
-                  return board;
-               }
-            return oboard;
+                }
+            } } }
+        //if piecearr size is more than than board or the board has null value(i.e Values of the board not declared)
+        catch(ArrayIndexOutOfBoundsException|NullPointerException e){
+            return board;
+        }
+        return oboard;
     }
 
     /**

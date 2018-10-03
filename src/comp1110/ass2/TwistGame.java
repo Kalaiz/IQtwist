@@ -2,22 +2,19 @@ package comp1110.ass2;
 
 import comp1110.ass2.gui.Viewer;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import static comp1110.ass2.Pieces.hm;
-
 /**
- * This class provides the text interface for the TwistGame
+ * This class provides the text interface for the Twist Game
  * <p>
  * The game is based directly on Smart Games' IQ-Twist game
  * (http://www.smartgames.eu/en/smartgames/iq-twist)
  */
-
 public class TwistGame {
   public static int[][] test = new int[4][8];
   static GameBoard gobj = new GameBoard();
-
 
   /**
    * Determine whether a piece or peg placement is well-formed according to the following:
@@ -30,6 +27,8 @@ public class TwistGame {
    * @param piecePlacement A string describing a single piece or peg placement
    * @return True if the placement is well-formed
    */
+
+
   //  Task 2: determine whether a piece or peg placement is well-formed
   public static boolean isPlacementWellFormed(String piecePlacement){
     char[]data ={'a','l','1','8','A','D','0','7'};
@@ -39,8 +38,9 @@ public class TwistGame {
       return false;}
     for(int i=0;i<4;i++){
       //Characters compared in accordance to ascii encoding values
-      if( !(piecePlacement.charAt(i)>=data[i*2]&& piecePlacement.charAt(i)<=data[i*2+1])){
-     return false;}
+      if( piecePlacement.charAt(i)>=data[i*2]&& piecePlacement.charAt(i)<=data[i*2+1]){
+      }
+      else{return false;}
     }
     return true; }
 
@@ -129,7 +129,7 @@ public class TwistGame {
 
 
   /**
-   *Checks if any pieces is on the outerboard
+   *Checks if any pieces is in the outerboard
    *
    *          o o o o o o o o o o o o o o
    *          o o o o o o o o o o o o o o
@@ -180,7 +180,7 @@ public class TwistGame {
           return false;
         }
         else if((ccs.length() == 2) ){
-          //shouldn't start with any character other than o or p
+          //shouldnt start with any character other than o or p
           if(!((ccs.charAt(0) == 'p') || (ccs.charAt(0) == 'o'))){
             return false;
           }
@@ -191,14 +191,6 @@ public class TwistGame {
     }
     return true;
   }
-
-
-  /*public static void main(String[] args) {
-
-
-      }
-*/
-
 
   /**
    *Modifies respective board based on the placement string
@@ -241,7 +233,6 @@ public class TwistGame {
    * @return True if the placement sequence is valid
    */
   public static boolean isPlacementStringValid(String placement) {
-      Pieces.initialisehms();
     if (boardcreator(placement, 'c')[0][0] == "z") {
       return false;
     }
@@ -264,21 +255,54 @@ public class TwistGame {
    */
   public static Set<String> getViablePiecePlacements(String placement) {
     // FIXME Task 6: determine the set of valid next piece placements
+    Set<String> viablePiece = new HashSet();
     Viewer v = new Viewer();
     String placed_pieces = v.returner(placement,0);
     String unplaced_pieces = "";
     boardcreator(placement,'a');//Creates* an  actualboard
-    for (int i = 'a' ; i <= 'l' ; i++){
+    for (int i = 'a' ; i <= 'h' ; i++){
       if(placed_pieces.indexOf(String.valueOf((char)i))==-1)
         unplaced_pieces = unplaced_pieces + String.valueOf((char)i);
     }
-
+    //System.out.print(unplaced_pieces);
+    //System.out.println();
     List<int[]> emptyGrid = getEmptyGrid();
-    /*for (int i = 0; i < emptyGrid.size(); i++) {
-      System.out.println(emptyGrid.get(i));
-    }*/
+    String newPiece = "";
+    String newPlacement = "";
 
-    return null;
+    loop: for (int i = 0; i < unplaced_pieces.length(); i++){
+
+      for (int j = 0; j < emptyGrid.size(); j++){
+
+        for (int l = 'A'; l <= 'D'; l++) {
+
+          for (int k = 0; k < 8; k++) {
+
+            if (unplaced_pieces.charAt(i) >= 'i') {
+              break;
+            } else {
+              newPiece = String.valueOf(unplaced_pieces.charAt(i)) + emptyGrid.get(j)[1] + String.valueOf((char)l) + k;
+              newPlacement = placement + newPiece;
+            }
+
+            //System.out.println(placement + newPiece);
+
+            if (isPlacementStringValid(newPlacement)) {
+              //System.out.println(newPlacement);
+              viablePiece.add(newPiece);
+              //if (unplaced_pieces.charAt(i) == 'c' || unplaced_pieces.charAt(i) == 'h' || unplaced_pieces.charAt(i) == 'f')
+              if (unplaced_pieces.charAt(i) != 'a')
+                continue loop;
+            }
+          }
+        }
+      }
+    }
+
+    if (viablePiece.isEmpty())
+      return null;
+
+    return viablePiece;
   }
 
   /*
