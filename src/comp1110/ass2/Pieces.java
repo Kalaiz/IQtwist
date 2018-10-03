@@ -30,15 +30,19 @@ public class Pieces {
 
         static void initialisehms(){//Hash Map with all pieces with orientations  except for pegs
             String piece[][];
-        for(int innerval=-1,t=0;t<64;t++){// -1 for initialisation;t be the hashmap index
+       hmloop: for(int innerval=-1,t=0;t<68;t++){// -1 for initialisation;t be the hashmap index
             innerval=(innerval==7)?0:++innerval;
+            if(t>63){
+                hm.put(t,(new Pieces((char)((t-64)+105))).getactual_piece());
+                        continue hmloop;
+            }
            piece=new Pieces((char)((t/8)+97)).getactual_piece();
            int orientation_no=innerval;
-       for(int m=0;m<orientation_no;++m){
+     rotationloop:  for(int m=0;m<orientation_no;++m){
                 if(orientation_no>3){
                       orientation_no-=4;
                     piece=GameBoard.flipper(piece);
-                    if(orientation_no==0){break;}//if orientation number is 0 no further rotation is required
+                    if(orientation_no==0){break rotationloop;}//if orientation number is 0 no further rotation is required
                       m=-1;
                 continue;}
            piece= GameBoard.rotator(piece);
