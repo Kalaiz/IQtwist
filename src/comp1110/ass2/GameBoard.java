@@ -1,6 +1,7 @@
 package comp1110.ass2;
 
 import java.util.Arrays;
+import static comp1110.ass2.Pieces.hm;
 
 public class GameBoard {
     private String[][] checkingBoard = new String[10][14];// Inclusive of the main board(4x8)
@@ -17,22 +18,11 @@ public class GameBoard {
         int orientation_no = Character.getNumericValue(piece.charAt(3));
         int col = Character.getNumericValue(piece.charAt(1)) - 1;
         int row = piece.charAt(2) - 65;
-        Pieces p = new Pieces(pname);
-        if (orientation_no > 3) {
-            orientation_no -= 4;
-            if (pname == 'c' || pname == 'h') {//flipping these pieces will not cause any problem for on_board function
-            } else {
-                p.changeactualplace(flipper(p.getactual_piece()));//flipping the actual piece obj
-            }
-        }
-        while (orientation_no != 0) {
-            p.changeactualplace(rotator(p.getactual_piece()));
-            orientation_no--;
-        }
+        int hashmapkeyvalue=(pname-97)*8+orientation_no;//(pname - 97)*8 to get the corresponding piece base number
         if (bt == "a") {
-            this.actualBoard = placer(actualBoard, p.getactual_piece(), row, col, 0);
+            this.actualBoard = placer(actualBoard,hm.get(hashmapkeyvalue) , row, col, 0);
         } else {
-            this.checkingBoard = placer(checkingBoard, p.getactual_piece(), row, col, 3);
+            this.checkingBoard = placer(checkingBoard,hm.get(hashmapkeyvalue)  , row, col, 3);
         }
 
     }
