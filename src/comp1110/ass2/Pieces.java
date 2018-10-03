@@ -28,7 +28,7 @@ public class Pieces {
     }
 
 
-        void initialisehms(){//Hash Map with all pieces with orientations  except for pegs
+        static void initialisehms(){//Hash Map with all pieces with orientations  except for pegs
             String piece[][];
         for(int innerval=-1,t=0;t<64;t++){// -1 for initialisation;t be the hashmap index
             innerval=(innerval==7)?0:++innerval;

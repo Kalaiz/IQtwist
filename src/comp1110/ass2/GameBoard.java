@@ -18,6 +18,7 @@ public class GameBoard {
         int orientation_no = Character.getNumericValue(piece.charAt(3));
         int col = Character.getNumericValue(piece.charAt(1)) - 1;
         int row = piece.charAt(2) - 65;
+        //String[][] piecearr=(pname>103):
         int hashmapkeyvalue=(pname-97)*8+orientation_no;//(pname - 97)*8 to get the corresponding piece base number
         if (bt == "a") {
             this.actualBoard = placer(actualBoard,hm.get(hashmapkeyvalue) , row, col, 0);

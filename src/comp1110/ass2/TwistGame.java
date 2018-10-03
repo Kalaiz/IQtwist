@@ -193,57 +193,11 @@ public class TwistGame {
   }
 
 
-  public static void main(String[] args) {
-    System.out.println((char)97);
-Pieces p=new Pieces('c');
-GameBoard test=new GameBoard();
-p.initialisehms();
-int i=59;
-test.resetBoardvalues("ac");
-      System.out.println(((((float)6/8f)-(6/8))*8));
-      //System.out.println(((((float)i/8f- (i/8))*8)));
-      //System.out.println(-97);
-      //displayBoard(boardcreator("a1B7",'a'));
-      String[][] board= test.placer(test.getaboard(),hm.get(63),0,0,0);
-    displayBoard(board);
+  /*public static void main(String[] args) {
 
-      for(int innerval=-1,t=0;t<17;t++){// -1 for initialisation;t be the hashmap index
 
-          if(t==9){
-          System.out.println(innerval);}
-          innerval=(innerval==7)?0:++innerval;
-          if(t==9){
-              System.out.println(innerval);}
-          //piece=new Pieces((char)((t/8)+97)).getactual_piece();
-          int orientation_no=innerval;
-          for(int m=0;m<orientation_no;++m){
-              if(orientation_no>3){
-                  orientation_no-=4;
-                  //piece=GameBoard.flipper(piece);
-                  if(orientation_no==0){break;}//if orientation number is 0 no further rotation is required
-                  m=-1;
-                  continue;}
-              //piece= GameBoard.rotator(piece);
-          }
-          //hm.put(t,piece);
       }
-     /* for(int innerval=0,t=0;t<8;t++){// t be the hashmap index
-          innerval=(innerval>7)?0:++innerval;
-          System.out.println("innerval " +innerval);
-         // piece=new Pieces((char)((t/8)+97)).getactual_piece();
-          for(int m=0;m<innerval-1;m++){
-              if(((((float)t/8f)-(t/8))*8)>3){//truncating and some mathematical operation
-                  innerval-=4;
-                  System.out.println("flips");
-                 // piece=GameBoard.flipper(piece);
-                  m=0;
-              }if(innerval==0){break;}
-              System.out.println("rotated");
-             // piece=GameBoard.rotator(piece);
-          }*/
-         // hm.put(t,piece);
-      }
-
+*/
 
 
   /**
@@ -287,6 +241,7 @@ test.resetBoardvalues("ac");
    * @return True if the placement sequence is valid
    */
   public static boolean isPlacementStringValid(String placement) {
+      Pieces.initialisehms();
     if (boardcreator(placement, 'c')[0][0] == "z") {
       return false;
     }
