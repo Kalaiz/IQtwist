@@ -11,4 +11,4 @@ We declare that the work we have submitted for Stage F of this assignment and al
 -- Learned how to use streams
     (https://www.sitepoint.com/java-8-streams-filter-map-reduce/)   
 
-Signed: Mary Jones (u2345678), Kalaiarasan (u6555407), and Lingyu Xia (u6483756)
+Signed: Yuqing Zhang (u6767747), Kalaiarasan (u6555407), and Lingyu Xia (u6483756)
