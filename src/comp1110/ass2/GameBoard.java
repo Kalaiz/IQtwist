@@ -152,6 +152,7 @@ public class GameBoard {
      *
      * @param actualpiece2 multidimensional array (Respective piece)
      * @return a Rotated array
+     *  author: Lingyu Xia
      */
     public static String[][] rotator(String[][] actualpiece2) {
         String[][] rotated = new String[actualpiece2[0].length][actualpiece2.length];

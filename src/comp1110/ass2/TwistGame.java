@@ -52,6 +52,7 @@ public class TwistGame {
    *
    * @param placement A string describing a placement of one or more pieces and pegs
    * @return True if the placement is well-formed
+   *  author: Lingyu Xia
    */
   public static boolean isPlacementStringWellFormed(String placement) {
     // FIXME Task 3: determine whether a placement is well-formed
@@ -258,6 +259,7 @@ public class TwistGame {
    *
    * @param placement A valid placement string (comprised of peg and piece placements)
    * @return An set of viable piece placements, or null if there are none.
+   *  author: Lingyu Xia
    */
   public static Set<String> getViablePiecePlacements(String placement) {
     // FIXME Task 6: determine the set of valid next piece placements
@@ -317,7 +319,7 @@ public class TwistGame {
    *
    * @param placement details of the piece location
    * @return list of required indices
-   *
+   *  author: Lingyu Xia
    */
   public static List<int[]> getEmptyGrid() {
     List<int[]> emptyGrid = new ArrayList<>();
