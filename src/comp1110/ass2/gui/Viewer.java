@@ -45,6 +45,7 @@ public class Viewer extends Application {
      *           2 - for row
      *           3 - for orientation
      * @return Respective "n" string
+     * Authorship:Kalai
      */
     public String returner(String input,int n ){
         String s="";
@@ -66,6 +67,7 @@ public class Viewer extends Application {
      * @param rotations2 is the String which consist of the entire rotation values of the input placement
      * @param e - index
      * @return Respective Rotation ,Translation & flipping  value .
+     * Authorship:Kalai
      */
     private int[] rotator_translate(String rotations2,int e){
         int[] rts=new int[3];
@@ -84,8 +86,6 @@ public class Viewer extends Application {
                 case 'c':
                     rts[1]=-140;
                     break;
-                default:
-
             }
         }
         return  rts;
@@ -98,6 +98,7 @@ public class Viewer extends Application {
      * @param col column
      * @param  row row
      * @return array of  the respective row and column for the single image_objs
+     * Authorship:Kalai
      */
     private int[] orientation_shw(char col,char row){
         int[] iric=new int[2];
@@ -110,6 +111,9 @@ public class Viewer extends Application {
      * Draw a placement in the window, removing any previously drawn one
      *
      * @param placement  A valid placement string
+     * Authorship:LingYu Xia & Kalai
+     * Idea: LingYu Xia - Usage of gridpane
+     *       Kalai - Forming a grid interface and putting pieces over them .
      */
     //  Task 4: implement the simple placement viewer
     private void makePlacement(String placement) {
