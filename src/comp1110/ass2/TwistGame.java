@@ -316,13 +316,14 @@ public class TwistGame {
     List<int[]> emptyGrid = new ArrayList<>();
     for (int x = 0; x < 4; x++){
       for(int y = 0; y < 8; y++){
-        if (gobj.getaboard()[x][y]=="x"){
+        if (gobj.getaboard()[x][y]=="x" || gobj.getaboard()[x][y]=="pr" || gobj.getaboard()[x][y]=="pb"
+                || gobj.getaboard()[x][y]=="pg" || gobj.getaboard()[x][y]=="py"){
           int[] gridIndex = new int[2];
           gridIndex[0] = x;
-          gridIndex[1] = y;
+          gridIndex[1] = y + 1;
           emptyGrid.add(gridIndex);
-          System.out.print(x);
-          System.out.println(y);
+          //System.out.print(x);
+          //System.out.println(y);
         }
       }
     }
