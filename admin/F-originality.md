@@ -9,4 +9,4 @@ We declare that the work we have submitted for Stage F of this assignment and al
 -- The decision of using streams over for loops partially depends ons:
     * https://jaxenter.com/java-performance-tutorial-how-fast-are-the-java-8-streams-118830.html
 
-Signed: Mary Jones (u2345678), Kalaiarasan Somasundaram (u6555407), and Sue Black (u0123456)
+Signed: Mary Jones (u2345678), Kalaiarasan (u6555407), and Lingyu Xia (u6483756)
