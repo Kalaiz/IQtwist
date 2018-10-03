@@ -13,9 +13,11 @@ import static comp1110.ass2.Pieces.hm;
  * The game is based directly on Smart Games' IQ-Twist game
  * (http://www.smartgames.eu/en/smartgames/iq-twist)
  */
+
 public class TwistGame {
   public static int[][] test = new int[4][8];
   static GameBoard gobj = new GameBoard();
+
 
   /**
    * Determine whether a piece or peg placement is well-formed according to the following:
@@ -28,8 +30,6 @@ public class TwistGame {
    * @param piecePlacement A string describing a single piece or peg placement
    * @return True if the placement is well-formed
    */
-
-
   //  Task 2: determine whether a piece or peg placement is well-formed
   public static boolean isPlacementWellFormed(String piecePlacement){
     char[]data ={'a','l','1','8','A','D','0','7'};
@@ -39,9 +39,8 @@ public class TwistGame {
       return false;}
     for(int i=0;i<4;i++){
       //Characters compared in accordance to ascii encoding values
-      if( piecePlacement.charAt(i)>=data[i*2]&& piecePlacement.charAt(i)<=data[i*2+1]){
-      }
-      else{return false;}
+      if( !(piecePlacement.charAt(i)>=data[i*2]&& piecePlacement.charAt(i)<=data[i*2+1])){
+     return false;}
     }
     return true; }
 
@@ -130,7 +129,7 @@ public class TwistGame {
 
 
   /**
-   *Checks if any pieces is in the outerboard
+   *Checks if any pieces is on the outerboard
    *
    *          o o o o o o o o o o o o o o
    *          o o o o o o o o o o o o o o
@@ -181,7 +180,7 @@ public class TwistGame {
           return false;
         }
         else if((ccs.length() == 2) ){
-          //shouldnt start with any character other than o or p
+          //shouldn't start with any character other than o or p
           if(!((ccs.charAt(0) == 'p') || (ccs.charAt(0) == 'o'))){
             return false;
           }
@@ -203,21 +202,49 @@ int i=59;
 test.resetBoardvalues("ac");
       System.out.println(((((float)6/8f)-(6/8))*8));
       //System.out.println(((((float)i/8f- (i/8))*8)));
-      //displayBoard(boardcreator("a1B6",'a'));
-       String[][] board= test.placer(test.getaboard(),hm.get(6),0,0,0);
-     displayBoard(board);
-      /*for(int i=00;i<0100;i+=8){
-          System.out.println(i);
+      //System.out.println(-97);
+      //displayBoard(boardcreator("a1B7",'a'));
+      String[][] board= test.placer(test.getaboard(),hm.get(63),0,0,0);
+    displayBoard(board);
 
-      }*/
-    /*GameBoard g =new GameBoard();
-    g.resetBoardvalues("c");
-    g.pieceTobeAdded("f1A6","c");
-    g.pieceTobeAdded("g3A7","c");
-    System.out.println(checkboard(g.getcboard()));
-    displayCheckingBoard(g.getcboard());*/
+      for(int innerval=-1,t=0;t<17;t++){// -1 for initialisation;t be the hashmap index
 
-  }
+          if(t==9){
+          System.out.println(innerval);}
+          innerval=(innerval==7)?0:++innerval;
+          if(t==9){
+              System.out.println(innerval);}
+          //piece=new Pieces((char)((t/8)+97)).getactual_piece();
+          int orientation_no=innerval;
+          for(int m=0;m<orientation_no;++m){
+              if(orientation_no>3){
+                  orientation_no-=4;
+                  //piece=GameBoard.flipper(piece);
+                  if(orientation_no==0){break;}//if orientation number is 0 no further rotation is required
+                  m=-1;
+                  continue;}
+              //piece= GameBoard.rotator(piece);
+          }
+          //hm.put(t,piece);
+      }
+     /* for(int innerval=0,t=0;t<8;t++){// t be the hashmap index
+          innerval=(innerval>7)?0:++innerval;
+          System.out.println("innerval " +innerval);
+         // piece=new Pieces((char)((t/8)+97)).getactual_piece();
+          for(int m=0;m<innerval-1;m++){
+              if(((((float)t/8f)-(t/8))*8)>3){//truncating and some mathematical operation
+                  innerval-=4;
+                  System.out.println("flips");
+                 // piece=GameBoard.flipper(piece);
+                  m=0;
+              }if(innerval==0){break;}
+              System.out.println("rotated");
+             // piece=GameBoard.rotator(piece);
+          }*/
+         // hm.put(t,piece);
+      }
+
+
 
   /**
    *Modifies respective board based on the placement string
