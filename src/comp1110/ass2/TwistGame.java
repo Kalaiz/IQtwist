@@ -1,10 +1,8 @@
 package comp1110.ass2;
 
 import comp1110.ass2.gui.Viewer;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+
+import java.util.*;
 
 /**
  * This class provides the text interface for the Twist Game
@@ -163,7 +161,14 @@ public class TwistGame {
     }
     return false;
   }
-
+/*
+  public static void main(String[] args) {
+    Pieces.initialisehms();
+    String[][]board =  boardcreator("a1A0",'a');
+    Arrays.stream(board).forEach(ch->Arrays.stream(ch).forEach(ich->ich="x") );
+    Arrays.stream(board[0]).forEach((ich->ich="x") );
+    displayBoard(board);
+  }*/
 
   public static boolean checkBoard2(){//checks for colourpeg and overlap
     for (int row = 3; row < 7; row++) {
@@ -204,7 +209,7 @@ public class TwistGame {
    * Authorship:Kalai
    */
   public static String[][] boardcreator(String placement,char bt ) {
-    String[][] temp = {{"z"}};//For task5
+    String[][] temp = {{"z"}};//The return array if placement is not valid
     gobj.resetBoardvalues(Character.toString(bt));//resets the respective board
     for (int i = 0; i < placement.length() / 4; i++) {
       String ch=placement.substring(4*i,4*i+4);

@@ -25,10 +25,10 @@ public class Pieces {
 
 
     /**
-    *Creates a Piece based on PieceData class
-    *and piece_name.
-    * @param piece_name : Respective piece character
-    */
+     *Creates a Piece based on PieceData class
+     *and piece_name.
+     * @param piece_name : Respective piece character
+     */
     Pieces(char piece_name){
         int i = piece_name-97;//gets the 'i'th element of the 3D array
         //parallel streams are usually faster than sequential ones**
@@ -40,27 +40,27 @@ public class Pieces {
      *Initialises the Hashmap with all the required values
      */
     static void initialisehms(){
-            String piece[][];
-       hmloop: for(int innerval=-1,t=0;t<68;t++){// -1 for initialisation;t be the hashmap index
+        String piece[][];
+        hmloop: for(int innerval=-1,t=0;t<68;t++){// -1 for initialisation;t be the hashmap index
             innerval=(innerval==7)?0:++innerval;
             if(t>63){
-              hm.put(t,(new Pieces((char)((t-64)+105))).getactual_piece());
-              continue hmloop;
+                hm.put(t,(new Pieces((char)((t-64)+105))).getactual_piece());
+                continue hmloop;
             }
-           piece=new Pieces((char)((t/8)+97)).getactual_piece();
-           int orientation_no=innerval;
-       rotationloop:for(int m=0;m<orientation_no;++m){
+            piece=new Pieces((char)((t/8)+97)).getactual_piece();
+            int orientation_no=innerval;
+            rotationloop:for(int m=0;m<orientation_no;++m){
                 if(orientation_no>3){
-                   orientation_no-=4;
-                   piece=GameBoard.flipper(piece);
+                    orientation_no-=4;
+                    piece=GameBoard.flipper(piece);
                     if(orientation_no==0){break rotationloop;}//if orientation number is 0 no further rotation is required
-                      m=-1;
-                continue;}
-           piece= GameBoard.rotator(piece);
+                    m=-1;
+                    continue;}
+                piece= GameBoard.rotator(piece);
             }
             hm.put(t,piece);
         }
-        }
+    }
 
     /**
      * @return  A multidimensional array of the respective piece.

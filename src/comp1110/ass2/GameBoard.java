@@ -2,12 +2,12 @@ package comp1110.ass2;
 
 import static comp1110.ass2.Pieces.hm;
 /*
-*Class which creates a set of boards and does operation over them whenever needed.
-* 1)checkingBoard - specially meant for isPlacementStringValid method.
-* 2)actualBoard- specially meant for the running game.
-* Authorship:LingYu Xia (rotator)
-*            Kalai (Everthing else)
-*/
+ *Class which creates a set of boards and does operation over them whenever needed.
+ * 1)checkingBoard - specially meant for isPlacementStringValid method.
+ * 2)actualBoard- specially meant for the running game.
+ *Authorship:LingYu Xia (rotator)
+ *           Kalai (Everything else)
+ */
 public class GameBoard {
     private String[][] checkingBoard = new String[10][14];
     private String[][] actualBoard = new String[4][8];
@@ -18,15 +18,15 @@ public class GameBoard {
      * @param bt    represents board-type(either actual or checking)
      */
     void pieceTobeAdded(String piece, String bt) {
-        char pname = piece.charAt(0);
-        int orientation_no = Character.getNumericValue(piece.charAt(3));
+        char pName = piece.charAt(0);
+        int orientationNo = Character.getNumericValue(piece.charAt(3));
         int col = Character.getNumericValue(piece.charAt(1)) - 1;
         int row = piece.charAt(2) - 65;
-        int hashmapkeyvalue=(pname>104)?pname-104+63:(pname-97)*8+orientation_no;//(pname - 97)*8 to get the corresponding piece base number
+        int hashMapKeyValue=(pName>104)?pName-104+63:(pName-97)*8+orientationNo;//(pname - 97)*8 to get the corresponding piece base number
         if (bt.equals("a")) {
-            this.actualBoard = placer(actualBoard,hm.get(hashmapkeyvalue) , row, col, 0);
+            this.actualBoard = placer(actualBoard,hm.get(hashMapKeyValue) , row, col, 0);
         } else {
-            this.checkingBoard = placer(checkingBoard,hm.get(hashmapkeyvalue)  , row, col, 3);
+            this.checkingBoard = placer(checkingBoard,hm.get(hashMapKeyValue)  , row, col, 3);
         }
 
     }
