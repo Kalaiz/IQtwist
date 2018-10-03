@@ -36,7 +36,7 @@ public class TwistGame {
     for(int i=0;i<4;i++){
       //Characters compared in accordance to ascii encoding values
       if( !(piecePlacement.charAt(i)>=data[i*2]&& piecePlacement.charAt(i)<=data[i*2+1])){
-     return false;}
+        return false;}
     }
     return true; }
 
@@ -214,12 +214,12 @@ public class TwistGame {
     for (int i = 0; i < placement.length() / 4; i++) {
       String ch=placement.substring(4*i,4*i+4);
       if(bt=='a'){
-         gobj.pieceTobeAdded(ch,"a"); }
+        gobj.pieceTobeAdded(ch,"a"); }
       else{
-      gobj.pieceTobeAdded(ch,"c");
-      if(checkboard(gobj.getcboard())|| !checkBoard2()){
-        return temp;
-      }}
+        gobj.pieceTobeAdded(ch,"c");
+        if(checkboard(gobj.getcboard())|| !checkBoard2()){
+          return temp;
+        }}
     }
     temp = (bt =='a') ? gobj.getaboard() : gobj.getcboard();
     return temp;}

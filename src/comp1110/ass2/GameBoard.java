@@ -1,6 +1,7 @@
 package comp1110.ass2;
 
 import static comp1110.ass2.Pieces.hm;
+
 /*
  *Class which creates a set of boards and does operation over them whenever needed.
  * 1)checkingBoard - specially meant for isPlacementStringValid method.
@@ -14,7 +15,8 @@ public class GameBoard {
 
     /**
      * Adds a piece to the respective board and updates it.
-     * @param piece  piece String
+     *
+     * @param piece piece String
      * @param bt    represents board-type(either actual or checking)
      */
     void pieceTobeAdded(String piece, String bt) {
@@ -22,11 +24,11 @@ public class GameBoard {
         int orientationNo = Character.getNumericValue(piece.charAt(3));
         int col = Character.getNumericValue(piece.charAt(1)) - 1;
         int row = piece.charAt(2) - 65;
-        int hashMapKeyValue=(pName>104)?pName-104+63:(pName-97)*8+orientationNo;//(pname - 97)*8 to get the corresponding piece base number
+        int hashMapKeyValue = (pName > 104) ? pName - 104 + 63 : (pName - 97) * 8 + orientationNo;//(pname - 97)*8 to get the corresponding piece base number
         if (bt.equals("a")) {
-            this.actualBoard = placer(actualBoard,hm.get(hashMapKeyValue) , row, col, 0);
+            this.actualBoard = placer(actualBoard, hm.get(hashMapKeyValue), row, col, 0);
         } else {
-            this.checkingBoard = placer(checkingBoard,hm.get(hashMapKeyValue)  , row, col, 3);
+            this.checkingBoard = placer(checkingBoard, hm.get(hashMapKeyValue), row, col, 3);
         }
 
     }
@@ -61,7 +63,7 @@ public class GameBoard {
      */
     void resetBoardvalues(String s) { //TODO-Try to implement Map function using streams
         int row = 10, col = 14;
-        if (s .equals("ac") ) {
+        if (s.equals("ac")) {
             resetBoardvalues("a");
             resetBoardvalues("c");
         } else if (s.equals("a")) {
@@ -87,7 +89,7 @@ public class GameBoard {
      * piecearr is larger than the board or if the input values
      * aren't valid.
      *
-     * @param board   Non-modified board
+     * @param board    Non-modified board
      * @param piecearr Multidimensional array of the piece
      * @param row2     the row on which the top-most piece resides
      * @param col2     the column in which the left-most piece resides
@@ -95,27 +97,30 @@ public class GameBoard {
      * @return (Updated) board
      */
     public static String[][] placer(String[][] board, String[][] piecearr, int row2, int col2, int modifier) {
-        if(row2<0 || col2<0){
+        if (row2 < 0 || col2 < 0) {
             return board;
         }
         int prow = piecearr.length;
         int pcol = piecearr[0].length;
         int endr = prow + row2;
         int endc = pcol + col2;
-        String[][] oboard= board;
-        try { for (int cr = 0; row2 < endr; row2++, cr++) {
-            int col2_temp = col2;
-            for (int cc = 0; col2_temp < endc; col2_temp++, cc++) {
-                if (oboard[row2 + modifier][col2_temp + modifier] == "x") {
-                    oboard[row2 + modifier][col2_temp + modifier] = piecearr[cr][cc];
-                } else if (piecearr[cr][cc] == "x") {// if the piece part is empty dont update the output board
-                } else {
-                    //adding 3 so to add the first segment of the piece to the inner board(mandatory)
-                    oboard[row2 + modifier][col2_temp + modifier] = piecearr[cr][cc] + oboard[row2 + modifier][col2_temp + modifier];
+        String[][] oboard = board;
+        try {
+            for (int cr = 0; row2 < endr; row2++, cr++) {
+                int col2_temp = col2;
+                for (int cc = 0; col2_temp < endc; col2_temp++, cc++) {
+                    if (oboard[row2 + modifier][col2_temp + modifier] == "x") {
+                        oboard[row2 + modifier][col2_temp + modifier] = piecearr[cr][cc];
+                    } else if (piecearr[cr][cc] == "x") {// if the piece part is empty dont update the output board
+                    } else {
+                        //adding 3 so to add the first segment of the piece to the inner board(mandatory)
+                        oboard[row2 + modifier][col2_temp + modifier] = piecearr[cr][cc] + oboard[row2 + modifier][col2_temp + modifier];
+                    }
                 }
-            } } }
+            }
+        }
         //if piecearr size is more than than board or the board has null value(i.e Values of the board not declared)
-        catch(ArrayIndexOutOfBoundsException|NullPointerException e){
+        catch (ArrayIndexOutOfBoundsException | NullPointerException e) {
             return board;
         }
         return oboard;
