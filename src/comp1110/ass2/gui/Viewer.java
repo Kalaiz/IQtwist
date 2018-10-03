@@ -31,7 +31,7 @@ public class Viewer extends Application {
     private static final String URI_BASE = "assets/";
     private final Group root = new Group();
     private final Group controls = new Group();
-    public static String iimages=""; //String of pieces in accordance to the input placement String .
+    private static String iimages=""; //String of pieces in accordance to the input placement String .
     TextField textField;
 
 
@@ -67,7 +67,7 @@ public class Viewer extends Application {
      * @param e - index
      * @return Respective Rotation ,Translation & flipping  value .
      */
-    public int[] rotator_translate(String rotations2,int e){
+    private int[] rotator_translate(String rotations2,int e){
         int[] rts=new int[3];
         int r=Character.getNumericValue(rotations2.charAt(e));
         if(r>=4){
@@ -85,7 +85,7 @@ public class Viewer extends Application {
                     rts[1]=-140;
                     break;
                 default:
-                    rts[1]=0;
+
             }
         }
         return  rts;
@@ -99,7 +99,7 @@ public class Viewer extends Application {
      * @param  row row
      * @return array of  the respective row and column for the single image_objs
      */
-    public int[] orientation_shw(char col,char row){
+    private int[] orientation_shw(char col,char row){
         int[] iric=new int[2];
         iric[0]=Character.getNumericValue(col)-1;
         iric[1]=(int) row-65;//using ascii encoding
@@ -112,7 +112,7 @@ public class Viewer extends Application {
      * @param placement  A valid placement string
      */
     //  Task 4: implement the simple placement viewer
-    void makePlacement(String placement) {
+    private void makePlacement(String placement) {
         //StackPane stack = new StackPane();
         GridPane grid = new GridPane(); //Creating Grid
         for(int i=0;i<8;i++){
@@ -124,7 +124,7 @@ public class Viewer extends Application {
             RowConstraints row = new RowConstraints(92);
             grid.getRowConstraints().add(row);
         }
-        grid.setLayoutX(8);
+        grid.setLayoutX(8);//adjusting the grid
 
         grid.setGridLinesVisible(true);
         String row_val=returner(placement,2);
@@ -138,20 +138,15 @@ public class Viewer extends Application {
             (image_objs.get(i)).setImage(new Image(Viewer.class.getResource(URI_BASE+ Viewer.iimages.charAt(i)+".png").toString()));
             (image_objs.get(i)).setFitWidth((image_objs.get(i)).getImage().getWidth()*92/100);
             (image_objs.get(i)).setFitHeight((image_objs.get(i)).getImage().getHeight()*92/100);
-
         }
 
         for(int i=0;i<image_objs.size();i++){//Configuring all image_obj
-            int[] t= rotator_translate(rotations,i);
+            int[] t= rotator_translate(rotations,i);//Gets the  respective rotation ,translation  and flipping value
             if(t[2]==-1){
-                image_objs.get(i).setScaleY(-1);//For Flip Horizontal set the scaleY variable of the ImageView to -1.
+                image_objs.get(i).setScaleY(t[2]);//For Flip Horizontal set the scaleY variable of the ImageView to -1.
             }
             image_objs.get(i).setRotate(t[0]);
             image_objs.get(i).setTranslateX(t[1]);//to adjust the offset caused by rotation
-
-        }
-
-        for(int i=0;i<image_objs.size();i++){
             int rowspan=(int)((image_objs.get(i).getImage())).getHeight()/100;
             int colspan=(int)((image_objs.get(i).getImage()).getWidth())/100;
             int[] gridvalues=orientation_shw(col_value.charAt(i),row_val.charAt(i));
@@ -161,7 +156,6 @@ public class Viewer extends Application {
                 grid.add(image_objs.get(i),gridvalues[0],gridvalues[1],rowspan,colspan);}
 
         }
-
      /*TRANSLATION DATA
         R90    R180    R270  RS
       a -45     0      -45   N
@@ -172,9 +166,7 @@ public class Viewer extends Application {
       f -45     0      -45   N
       g 0       0        0   N
       h 0       0        0   N
-        stack.getChildren().addAll(grid);//Trying to use StackPane to center the Grid
-        stack.setAlignment(Pos.TOP_RIGHT);
-        controls.getChildren().addAll(stack);*/
+        */
 
         controls.getChildren().addAll(grid);
     }
