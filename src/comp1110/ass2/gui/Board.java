@@ -185,9 +185,14 @@ public class Board extends Application {
     // FIXME Task 7: Implement a basic playable Twist Game in JavaFX that only allows pieces to be placed in valid places
     //uses task 8(creates the base for the game) and 5 (check pieces can be used or not).6 should be used here
     //private void start_play(){ }
-/*
-task 8 return valid_Placement()
- */
+    /*
+     *piece() returns a String represents one random piece
+     *peg() returns a String represents one random peg
+     * start_Placement() return a String represents 0 or 1 piece plus 1-5 pegs
+     * if the placement is valid, then return by valid_Placement()
+     * otherwise, start again
+     * Authorship: Yuqing Zhang & Kalai
+     */
     public static String piece() {
         char[] piece = new char[4];
         Random rand = new Random();
@@ -217,17 +222,18 @@ task 8 return valid_Placement()
         String str = "";
         int numofpiece = rand.nextInt(2);
         int numofpeg = rand.nextInt(5) + 1;
-        if (numofpiece == 1) {
+        if (numofpiece == 1) {//if randomly select one piece, add it to the String
             str = str + piece();
         }
-        for (int i = 0; i < numofpeg; i++) {
+        for (int i = 0; i < numofpeg; i++) {//add every peg to the String
             str = str + peg();
         }
 
         return str;
     }
 
-    public static String valid_Placement() {
+    public static String valid_Placement() {//if the String requires well-form and valid-placement requirements,
+        // return it, otherwise randomly select again
         String str = start_Placements();
         while(!t.isPlacementStringWellFormed(str)){
             str = start_Placements();
