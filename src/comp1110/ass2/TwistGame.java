@@ -1,9 +1,8 @@
 package comp1110.ass2;
 
 import comp1110.ass2.gui.Viewer;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+
+import java.util.*;
 
 /**
  * This class provides the text interface for the Twist Game
@@ -191,18 +190,6 @@ public class TwistGame {
     return true;
   }
 
-
-  public static void main(String[] args) {
-    System.out.println((char)97);
-    /*GameBoard g =new GameBoard();
-    g.resetBoardvalues("c");
-    g.pieceTobeAdded("f1A6","c");
-    g.pieceTobeAdded("g3A7","c");
-    System.out.println(checkboard(g.getcboard()));
-    displayCheckingBoard(g.getcboard());*/
-
-  }
-
   /**
    *Modifies respective board based on the placement string
    *and checks whether place is valid or not concurrently
@@ -266,21 +253,75 @@ public class TwistGame {
    */
   public static Set<String> getViablePiecePlacements(String placement) {
     // FIXME Task 6: determine the set of valid next piece placements
+    Set<String> viablePiece = new HashSet();
     Viewer v = new Viewer();
     String placed_pieces = v.returner(placement,0);
     String unplaced_pieces = "";
+    String row = "";
     boardcreator(placement,'a');//Creates* an  actualboard
-    for (int i = 'a' ; i <= 'l' ; i++){
+    for (int i = 'a' ; i <= 'h' ; i++){
       if(placed_pieces.indexOf(String.valueOf((char)i))==-1)
         unplaced_pieces = unplaced_pieces + String.valueOf((char)i);
     }
-
+    System.out.print(unplaced_pieces);
+    //System.out.println();
     List<int[]> emptyGrid = getEmptyGrid();
-    /*for (int i = 0; i < emptyGrid.size(); i++) {
-      System.out.println(emptyGrid.get(i));
+    String newPiece = "";
+    String samePiece = "";
+    String newPlacement = "";
+    boolean boo = true;
+
+    for (int i = 0; i < unplaced_pieces.length(); i++){
+
+      for (int j = 0; j < emptyGrid.size(); j++){
+
+        if (emptyGrid.get(j)[0]==0){
+          row = "A";
+        }else if (emptyGrid.get(j)[0]==1){
+          row = "B";
+        }else if (emptyGrid.get(j)[0]==2){
+          row = "C";
+        }else if (emptyGrid.get(j)[0]==3){
+          row = "D";
+        }
+
+        for (int k = 0; k < 8; k++) {
+
+          if (unplaced_pieces.charAt(i)>='i') {
+            break;
+          }else {
+            newPiece = String.valueOf(unplaced_pieces.charAt(i)) + emptyGrid.get(j)[1] + row + k;
+            newPlacement = placement + newPiece;
+          }
+
+          //System.out.println(placement + newPiece);
+
+          if (isPlacementStringValid(newPlacement)){
+            //System.out.println(newPlacement);
+            viablePiece.add(newPiece);
+
+          }
+        }
+      }
+    }
+
+    /*
+    Iterator<String> it = viablePiece.iterator();
+    while (it.hasNext()){
+      samePiece = it.next();
+      if (it.hasNext()){
+        samePiece2 = it.next();
+        if (samePiece.substring(0,3).equals(samePiece2.substring(0,3))){
+          viablePiece.remove(it.next());
+        }
+      }
     }*/
 
-    return null;
+
+    if (viablePiece.isEmpty())
+      return null;
+
+    return viablePiece;
   }
 
   /*
@@ -294,13 +335,14 @@ public class TwistGame {
     List<int[]> emptyGrid = new ArrayList<>();
     for (int x = 0; x < 4; x++){
       for(int y = 0; y < 8; y++){
-        if (gobj.getaboard()[x][y]=="x"){
+        if (gobj.getaboard()[x][y]=="x"||gobj.getaboard()[x][y]=="pr"||gobj.getaboard()[x][y]=="pb"
+                ||gobj.getaboard()[x][y]=="py"||gobj.getaboard()[x][y]=="pg"){
           int[] gridIndex = new int[2];
           gridIndex[0] = x;
-          gridIndex[1] = y;
+          gridIndex[1] = y + 1;
           emptyGrid.add(gridIndex);
-          System.out.print(x);
-          System.out.println(y);
+          //System.out.print(x);
+          //System.out.println(y);
         }
       }
     }
