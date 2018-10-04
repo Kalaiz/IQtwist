@@ -109,10 +109,9 @@ public class GameBoard {
             for (int cr = 0; row2 < endr; row2++, cr++) {
                 int col2_temp = col2;
                 for (int cc = 0; col2_temp < endc; col2_temp++, cc++) {
-                    if (oboard[row2 + modifier][col2_temp + modifier] == "x") {
+                    if (oboard[row2 + modifier][col2_temp + modifier] .equals("x")) {
                         oboard[row2 + modifier][col2_temp + modifier] = piecearr[cr][cc];
-                    } else if (piecearr[cr][cc] == "x") {// if the piece part is empty dont update the output board
-                    } else {
+                    } else if (!piecearr[cr][cc].equals("x")) {// if the piece part is empty don't update the output board
                         //adding 3 so to add the first segment of the piece to the inner board(mandatory)
                         oboard[row2 + modifier][col2_temp + modifier] = piecearr[cr][cc] + oboard[row2 + modifier][col2_temp + modifier];
                     }
