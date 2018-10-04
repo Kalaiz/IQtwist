@@ -327,6 +327,36 @@ public class TwistGame {
         }
 
 
+  public static Set<String> bettergetViablePiecePlacements(String placement) {//Take note that this does not check if board is valid or not
+
+  Set<String> viablePiece = new HashSet();
+  Pieces.initialisehms();//initialise hashmap just for the sake of task tests
+  boardcreator(placement,'a');//creates a board in accordance to the placement string
+  Viewer access=new Viewer();
+  String unplaced ="";
+  String nonAvailcharpieces=access.returner(placement,0);
+   //will give an int array of numbers which represent ascii encodings
+   int[] output=IntStream.rangeClosed(97, 104).filter(i-> !nonAvailcharpieces.contains((char)i+"")).parallel().toArray();
+   for(int i:output){ unplaced+=(Character.toString((char)i)); }//converting to String- not necessary
+
+            /*
+            *   -> choose the containers you want from ppContainers by 1)checking the size of the empty spaces
+            *
+            *                                                           2)check in accordance with unplaced for example:
+            *                                                             if piece c - b b ob b  is not in unplaced
+            *                                                             there is no necessity to use container 3 and 4
+            *
+            *   -> Create and Use the indexContainer required to produce the data structure for container exact position
+            *      (basically a list of indices):I think indexContainer must be static.
+            *   -> check if pieces can fit using ppContainer in relation to unplaced and indexContainer
+            *   -> If yes then based on the information form the piece and insert it into the output set
+            */
+
+
+            return null;
+  }
+
+
   /**Initialise the possible piece container values  which will be used in task6
    * for example
    *  for this container
@@ -338,7 +368,7 @@ public class TwistGame {
    *
    *   Containers
    *
-   *   1)         2)          3)         4)       5)
+   *   0)         1)          2)         3)       4)
    *    X X         X X X       X X X       X       X X X X
    *    X X         X X X       X X X       X
    *    X X                     X X X       X
@@ -447,19 +477,6 @@ public class TwistGame {
   }
 }
 
-/*
-  Set<String> viablePiece = new HashSet();
-    Pieces.initialisehms();//initialise hashmap just for the sake of task tests
-            boardcreator(placement,'a');//creates a board in accordance to the placement string
-            Viewer access=new Viewer();
-            String unplaced ="";
-            String nonAvailcharpieces=access.returner(placement,0);
-            //will give an int array of numbers which represent ascii encodings
-            int[] output=IntStream.rangeClosed(97, 104).filter(i-> !nonAvailcharpieces.contains((char)i+"")).parallel().toArray();
-            for(int i:output){ unplaced+=(Character.toString((char)i)); }//converting to String- not necessary
 
-
-
-            return null;*/
 
 
