@@ -350,6 +350,7 @@ public class TwistGame {
             *      (basically a list of indices):I think indexContainer must be static.
             *   -> check if pieces can fit using ppContainer in relation to unplaced and indexContainer
             *   -> If yes then based on the information form the piece and insert it into the output set
+            *   **Take note of Strictly symmetric pieces c and h and in Weakly symmetric places it should return the lowest orientation number.
             */
 
 
