@@ -213,12 +213,12 @@ public class Board extends Application {
         //
     }
 
-    public static void main(String[] args) {
+   /* public static void main(String[] args) {
         for(int m=0;m<10;m++){
             System.out.println(piece());
             System.out.println(t.isPlacementStringValid(piece()));  ;
     }
-    }
+    }*/
 
     // FIXME Task 7: Implement a basic playable Twist Game in JavaFX that only allows pieces to be placed in valid places
     //uses task 8(creates the base for the game) and 5 (check pieces can be used or not).6 should be used here
