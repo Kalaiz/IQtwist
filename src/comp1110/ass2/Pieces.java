@@ -38,28 +38,34 @@ public class Pieces {
 
     /**
      *Initialises the Hashmap with all the required values
+     * t is the hashmap key
      */
     static void initialisehms(){
         String piece[][];
-        hmloop: for(int innerval=-1,t=0;t<68;t++){// -1 for initialisation;t be the hashmap index
+         for(int innerval=-1,t=0;t<68;t++){// Main hashmap loop :-1 for initialisation;
             innerval=(innerval==7)?0:++innerval;
-            if(t>63){
+            if(t>63){//need to change
                 hm.put(t,(new Pieces((char)((t-64)+105))).getactual_piece());
-                continue hmloop;
+                continue;
+            }
+            else if(t>19&&t<24||t>59&&t<63){//neglecting strong symmetric pieces which are redundant
+                continue;
             }
             piece=new Pieces((char)((t/8)+97)).getactual_piece();
             int orientation_no=innerval;
-            rotationloop:for(int m=0;m<orientation_no;++m){
+            for(int m=0;m<orientation_no;++m){//rotation loop
                 if(orientation_no>3){
                     orientation_no-=4;
                     piece=GameBoard.flipper(piece);
-                    if(orientation_no==0){break rotationloop;}//if orientation number is 0 no further rotation is required
+                    if(orientation_no==0){break;}//if orientation number is 0 no further rotation is required
                     m=-1;
                     continue;}
                 piece= GameBoard.rotator(piece);
             }
+
             hm.put(t,piece);
         }
+
     }
 
     /**
@@ -70,13 +76,6 @@ public class Pieces {
     }
 
 
-    /**
-     *Changes the current placement array with a updated one
-     *@param  changingplace
-     */
-    void changeactualplace(String[][] changingplace){
-        this.actual_piece=changingplace;
-    }
 
 
 }

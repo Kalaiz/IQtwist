@@ -348,19 +348,23 @@ c.replace("a","");
     for(int cno:containerscanbeused) {
       for (; minx < maxx + 1; minx++) {
         for (; miny < maxy + 1; miny++) {
-          if (cno == 0 && minx + 2 < maxx + 1 && miny + 3 < maxy + 1) {//if container does not go pass the board
+          if (cno == 0 && minx + 1 < maxx + 1 && miny + 2 < maxy + 1) {//if container does not go pass the board
             //do something to link to for loop
-          } else if (cno == 1 && minx + 3 < maxx + 1 && miny + 2 < maxy + 1) {//if container does not go pass the board
 
-          } else if (cno == 2 && minx + 3 < maxx + 1 && miny + 3 < maxy + 1) {//if container does not go pass the board
+          } else if (cno == 1 && minx + 2 < maxx + 1 && miny + 1 < maxy + 1) {//if container does not go pass the board
 
-          } else if (cno == 3 && minx + 3 < maxx + 1 && miny + 3 < maxy + 1) {//if container does not go pass the board
+          } else if (cno == 2 && minx + 2 < maxx + 1 && miny + 2 < maxy + 1) {//if container does not go pass the board
 
-          } else {//for last container
+          } else if (cno == 3 &&   miny + 3 < maxy + 1) {//if container does not go pass the board
+
+          } else if (cno==4 && minx +3 <maxy+1) {//for last container
+          }
+          else{
+            //if nothing is valid
           }
           {
             for (int pno : ppContainer[cno]) {
-              //generate piece data to check with isValidPlacement  and then check
+              //generate piece data  accordingly to check with isValidPlacement  and then check
               //if valid add to viablePiece set
             }
           }
@@ -411,7 +415,14 @@ c.replace("a","");
    *          X X
    *          X X
    *          X X
-   *    ppContainer[0][]=[10,12,14,16,20,22,24,26,40,42,44,46,(all of of 50 series)60,62,64,66,(all of 8 series)]
+   *
+   *
+   *    ppContainer[0][]=[10,12,14,16,20,22,24,26,40,42,44,46,(all of 50 series)60,62,64,66,81,83]
+   *    ppContainer[1][]=[11,13,15,17,21,23,25,27,41,43,45,47,(all of 50 series),61,63,65,67,80,82]
+   *    ppContainer[2][]=[all of 70 series]
+   *    ppContainer[3][]=[31,33]
+   *    ppContainer[4][]=[30,32]
+   *
    *    Related to existing hashmap: add 10 to the key value to obtain such numbers
    *
    *   Containers

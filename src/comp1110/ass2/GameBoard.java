@@ -24,11 +24,14 @@ public class GameBoard {
         int orientationNo = Character.getNumericValue(piece.charAt(3));
         int col = Character.getNumericValue(piece.charAt(1)) - 1;
         int row = piece.charAt(2) - 65;
-        int hashMapKeyValue = (pName > 104) ? pName - 104 + 63 : (pName - 97) * 8 + orientationNo;//(pname - 97)*8 to get the corresponding piece base number
+        int hashMapKey = (pName > 104) ? pName - 104 + 63 : (pName - 97) * 8 + orientationNo;//(pname - 97)*8 to get the corresponding piece base number
+        //Strong symmetric pieces dont have redudndant piece orientations
+        if((hashMapKey>19&& hashMapKey<24 )||(hashMapKey>59 && hashMapKey<64))
+        {hashMapKey-=4;}
         if (bt.equals("a")) {
-            this.actualBoard = placer(actualBoard, hm.get(hashMapKeyValue), row, col, 0);
+            this.actualBoard = placer(actualBoard, hm.get(hashMapKey), row, col, 0);
         } else {
-            this.checkingBoard = placer(checkingBoard, hm.get(hashMapKeyValue), row, col, 3);
+            this.checkingBoard = placer(checkingBoard, hm.get(hashMapKey), row, col, 3);
         }
 
     }
