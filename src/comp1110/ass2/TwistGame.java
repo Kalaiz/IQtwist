@@ -7,6 +7,9 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import static comp1110.ass2.Pieces.hm;
+import static comp1110.ass2.Pieces.initialisehms;
+
 /**
  * This class provides the text interface for the Twist Game
  * <p>
@@ -16,6 +19,7 @@ import java.util.stream.IntStream;
 public class TwistGame {
   static GameBoard gobj = new GameBoard();
   static int[][] ppContainer=new int[5][];//Jagged array for task 6
+  static int[] containerSpecs={3,2,2,3,3,3,4,1,1,4};//rcrcrc.. where r represents row and c represents column
 
 
   /**
@@ -251,11 +255,32 @@ public class TwistGame {
   }
 
   public static void main(String[] args) {
-String c="abc";
-c.replace("a","");
-    System.out.println(c.length());
+ /*   int arr2[][]= new int[3][];
+    int arr[]= new int[5];
+    arr[0]=1;
+    arr[1]=2;
+    arr[2]=3;
+    arr[3]=4;
+    arr[4]=5;
+    arr2[0]=arr;
 
+    arr2[0]=Arrays.stream(arr2[0]).filter(no->!(no>=2 &&no<=4)).toArray();
+    Arrays.stream(arr2[0]).forEach(ch-> System.out.println(ch));*/
 
+    initialisehms();
+    initialiseContainersSpecs();
+    //Arrays.stream(ppContainer[1]).forEach(ch-> System.out.println(ch));
+
+ getViablePiecePlacements("b6A7c1A3d2A6e2C3f3C2g4A7h6D0i6B0j2B0j1C0k3C0l4B0l5C0");
+    //displayBoard(boardcreator("a1A1",'a'));
+   /* int arr2[][]= new int[3][];
+    int arr[]= new int[3];
+    arr[0]=1;
+    arr[1]=2;
+    arr[2]=3;
+   arr2[0]=arr;
+
+    System.out.println(arr2[0][2]);*/
   }
   /**
    * Given a string describing a placement of pieces and pegs, return a set
@@ -329,49 +354,71 @@ c.replace("a","");
         }
 
 
-  public static Set<String> bettergetViablePiecePlacements(String placement) {//Take note that this does not check if board is valid or not
+  public static Set<String> kgetViablePiecePlacements(String placement) {//Take note that this does not check if board is valid or not
   Set<String> viablePiece = new HashSet();
   Pieces.initialisehms();//initialise hashmap just for the sake of task tests
   boardcreator(placement,'a');//creates a board in accordance to the placement string
+    if(getEmptyGrid2('x').length==0){
+      return null;
+    }
+    initialiseContainersSpecs();
   Viewer access=new Viewer();
   String unplaced ="";
   String nonAvailcharpieces=access.returner(placement,0);
    //will give an int array of numbers which represent ascii encodings
    int[] output=IntStream.rangeClosed(97, 104).filter(i-> !nonAvailcharpieces.contains((char)i+"")).parallel().toArray();
    for(int i:output){ unplaced+=(Character.toString((char)i)); }//converting to String- not necessary
+    System.out.println(unplaced);
     List<Integer> containerscanbeused=listofcontainersused(unplaced);
+    int[][] mainppdata=updateppcandnew(nonAvailcharpieces);
+    for(int i=0;i<5;i++) {
+      System.out.println("mainppdata" + i);
+      Arrays.stream(mainppdata[i]).forEach(ch -> System.out.println(ch));
+    }
+    //update ppcontainer value in accordance to unplaced
+
+
    //find range of the containers in accordance to the emptyindices
     int minx= getEmptyGrid2('x')[0];
+    System.out.println("min x is " + minx);
     int maxx= getEmptyGrid2('x')[getEmptyGrid2('x').length-1];
+    System.out.println("max x is " + maxx);
     int miny= getEmptyGrid2('y')[0];
+    System.out.println("min y is " +miny);
     int maxy= getEmptyGrid2('y')[getEmptyGrid2('y').length-1];
+    System.out.println("max y is " +maxy);
     for(int cno:containerscanbeused) {
-      for (; minx < maxx + 1; minx++) {
-        for (; miny < maxy + 1; miny++) {
-          if (cno == 0 && minx + 1 < maxx + 1 && miny + 2 < maxy + 1) {//if container does not go pass the board
-            //do something to link to for loop
+      System.out.println("cno is " + cno);
+      for (int mx=minx; mx < maxx + 1; mx++) {
+        for (int my=miny; my < maxy + 1; my++) {
+          System.out.println(my+containerSpecs[2*cno]<maxy+1&& mx+containerSpecs[2*cno+1]>maxx+1);
+          if(mx+containerSpecs[2*cno]-1<maxx+1 || my+containerSpecs[(2*cno)+1]-1<maxy+1){
+            char row=(char)(65+mx);
+            String col=Integer.toString(my);
+            {
+              for (int pno : mainppdata[cno]) {
 
-          } else if (cno == 1 && minx + 2 < maxx + 1 && miny + 1 < maxy + 1) {//if container does not go pass the board
-
-          } else if (cno == 2 && minx + 2 < maxx + 1 && miny + 2 < maxy + 1) {//if container does not go pass the board
-
-          } else if (cno == 3 &&   miny + 3 < maxy + 1) {//if container does not go pass the board
-
-          } else if (cno==4 && minx +3 <maxy+1) {//for last container
-          }
-          else{
-            //if nothing is valid
-          }
-          {
-            for (int pno : ppContainer[cno]) {
-              //generate piece data  accordingly to check with isValidPlacement  and then check
-              //if valid add to viablePiece set
+                String piece=(char) ((pno/8)+97)+""+col+row+Integer.toString(pno-((pno/8)*8));
+                System.out.println(piece);
+                System.out.println("placement is " + placement);
+                System.out.println("placement + piece is " + placement + piece );
+                System.out.println(isPlacementStringValid(placement+piece));
+                if(isPlacementStringValid(placement+piece)&&isPlacementWellFormed(piece)){
+                  viablePiece.add(piece);
+                }
+                //generate piece data  accordingly to check with isValidPlacement  and then check
+                //if valid add to viablePiece set
+              }
             }
           }
         }
       }
     }
+    if(viablePiece.isEmpty())
+    {return null;}
+
     //filter set accordingly
+
 
             /*
             *   -> choose the containers you want from ppContainers by 1)checking the size of the empty spaces
@@ -389,7 +436,25 @@ c.replace("a","");
             */
 
 
-            return null;
+            return viablePiece;
+  }
+
+  static int[][]  updateppcandnew(String shouldnotbeonrefdata){
+    int[][] maincontainerva=ppContainer;
+    System.out.println(shouldnotbeonrefdata);
+    for(int c=0;c<shouldnotbeonrefdata.length();c++){
+      if(shouldnotbeonrefdata.charAt(c)>='i'){continue;}
+
+      int startnum=(int)(shouldnotbeonrefdata.charAt(c)-97) * 8;
+      int endnum=startnum+7;
+      System.out.println("Startnum is " + startnum + " Endnum is " +endnum);
+
+      for(int i=0;i<5;i++){
+       maincontainerva[i]=Arrays.stream(maincontainerva[i]).filter(no->!(no>=startnum &&no<=endnum)).toArray();
+      }
+    }
+
+return maincontainerva;
   }
 
 
@@ -402,7 +467,7 @@ c.replace("a","");
       ap.add(3);
       ap.add(4);
     }
-    else if(availpieces.length()>2){
+    else {
       ap.add(0);
       ap.add(1);
     }
@@ -416,12 +481,11 @@ c.replace("a","");
    *          X X
    *          X X
    *
-   *
-   *    ppContainer[0][]=[10,12,14,16,20,22,24,26,40,42,44,46,(all of 50 series)60,62,64,66,81,83]
-   *    ppContainer[1][]=[11,13,15,17,21,23,25,27,41,43,45,47,(all of 50 series),61,63,65,67,80,82]
-   *    ppContainer[2][]=[all of 70 series]
-   *    ppContainer[3][]=[31,33]
-   *    ppContainer[4][]=[30,32]
+   *    ppContainer[0][]=[0,2,4,6,8,10,12,14,24,26,28,30,(32 to 39 inclusive),40,42,44,46,56,58]
+   *    ppContainer[1][]=[1,3,5,7,9,11,13,15,25,27,29,31,(32 to 39 inclusive),41,43,45,47,57,59]
+   *    ppContainer[2][]=[48 to 55]
+   *    ppContainer[3][]=[17,19]
+   *    ppContainer[4][]=[16,18]
    *
    *    Related to existing hashmap: add 10 to the key value to obtain such numbers
    *
@@ -434,13 +498,20 @@ c.replace("a","");
    *                                        X
    * */
 
-  void initialiseContainers(){
-    for(int i=0;i<6;i++){
-      //for(int )
+  static void initialiseContainersSpecs(){
+
+    for(int i=0;i<5;i++){
+      List<Integer> cs= new ArrayList<>();
+      for(int t=0;t<60;t++){
+        if(t>19&&t<24){//neglecting strong symmetric pieces which are redundant
+          // do nothing
+        }
+       else if( hm.get(t).length<=containerSpecs[i*2] && hm.get(t)[0].length<=containerSpecs[i*2+1]){
+             cs.add(t); } }
+     int oarr[]= cs.stream().mapToInt(no->no).toArray();
+      //ppContainer[i] =new int[oarr.length];   //not necessary
+      ppContainer[i]=oarr;
     }
-
-    //ppContainer[]
-
   }
 
 
@@ -448,7 +519,7 @@ c.replace("a","");
   /** Gives the indices of the empty grids
    *
    * @return list of required indices
-   *  author: Lingyu Xia
+   *  author: Kalai
    */
   public static int[] getEmptyGrid2(char coordinate) {
     List<Integer> emptyGridcoord= new ArrayList<>();
@@ -462,6 +533,8 @@ c.replace("a","");
     Arrays.sort(sortcoord);
     return sortcoord;
   }
+
+
   /** Gives the indices of the empty grids
    *
    * @return list of required indices
@@ -471,7 +544,9 @@ c.replace("a","");
     List<int[]> emptyGrid = new ArrayList<>();
     for (int x = 0; x < 4; x++){
       for(int y = 0; y < 8; y++){
-        if (gobj.getaboard()[x][y].equals("x")|| gobj.getaboard()[x][y].contains("p")&&gobj.getaboard()[x][y].length()==2){
+        if (gobj.getaboard()[x][y]=="x" || gobj.getaboard()[x][y]=="pr" || gobj.getaboard()[x][y]=="pb"
+                || gobj.getaboard()[x][y]=="pg" || gobj.getaboard()[x][y]=="py"){
+
           int[] gridIndex = new int[2];
           gridIndex[0] = x;
           gridIndex[1] = y + 1;
@@ -555,5 +630,15 @@ c.replace("a","");
 }
 
 
+/*if (cno == 0 && minx + 1 < maxx + 1 && miny + 2 < maxy + 1) {//if container does not go pass the board
+            //do something to link to for loop
 
+          } else if (cno == 1 && minx + 2 < maxx + 1 && miny + 1 < maxy + 1) {//if container does not go pass the board
+
+          } else if (cno == 2 && minx + 2 < maxx + 1 && miny + 2 < maxy + 1) {//if container does not go pass the board
+
+          } else if (cno == 3 &&   miny + 3 < maxy + 1) {//if container does not go pass the board
+
+          } else if (cno==4 && minx +3 <maxy+1) {//for last container
+          }*/
 

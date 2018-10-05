@@ -103,13 +103,12 @@ public class GameBoard {
         if (row2 < 0 || col2 < 0) {
             return board;
         }
+        String[][] oboard = board;
         int prow = piecearr.length;
         int pcol = piecearr[0].length;
         int endr = prow + row2;
         int endc = pcol + col2;
-        String[][] oboard = board;
-        try {
-            for (int cr = 0; row2 < endr; row2++, cr++) {
+        try {  for (int cr = 0; row2 < endr; row2++, cr++) {
                 int col2_temp = col2;
                 for (int cc = 0; col2_temp < endc; col2_temp++, cc++) {
                     if (oboard[row2 + modifier][col2_temp + modifier] .equals("x")) {
