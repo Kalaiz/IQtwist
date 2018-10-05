@@ -346,24 +346,28 @@ c.replace("a","");
     int miny= getEmptyGrid2('y')[0];
     int maxy= getEmptyGrid2('y')[getEmptyGrid2('y').length-1];
     for(int cno:containerscanbeused) {
-      for (; minx < maxx+1; minx++) {
-        for (; miny < maxy+1; miny++) {
-          if(cno==0){
+      for (; minx < maxx + 1; minx++) {
+        for (; miny < maxy + 1; miny++) {
+          if (cno == 0 && minx + 2 < maxx + 1 && miny + 3 < maxy + 1) {//if container does not go pass the board
+            //do something to link to for loop
+          } else if (cno == 1 && minx + 3 < maxx + 1 && miny + 2 < maxy + 1) {//if container does not go pass the board
 
+          } else if (cno == 2 && minx + 3 < maxx + 1 && miny + 3 < maxy + 1) {//if container does not go pass the board
 
+          } else if (cno == 3 && minx + 3 < maxx + 1 && miny + 3 < maxy + 1) {//if container does not go pass the board
+
+          } else {//for last container
           }
-          //access containers
-
-
+          {
+            for (int pno : ppContainer[cno]) {
+              //generate piece data to check with isValidPlacement  and then check
+              //if valid add to viablePiece set
+            }
+          }
         }
       }
     }
-
-
-
-    //if(nonAvailcharpieces.contains())
-
-
+    //filter set accordingly
 
             /*
             *   -> choose the containers you want from ppContainers by 1)checking the size of the empty spaces
