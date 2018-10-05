@@ -251,7 +251,9 @@ public class TwistGame {
   }
 
   public static void main(String[] args) {
-
+String c="abc";
+c.replace("a","");
+    System.out.println(c.length());
 
 
   }
@@ -328,7 +330,6 @@ public class TwistGame {
 
 
   public static Set<String> bettergetViablePiecePlacements(String placement) {//Take note that this does not check if board is valid or not
-
   Set<String> viablePiece = new HashSet();
   Pieces.initialisehms();//initialise hashmap just for the sake of task tests
   boardcreator(placement,'a');//creates a board in accordance to the placement string
@@ -338,17 +339,43 @@ public class TwistGame {
    //will give an int array of numbers which represent ascii encodings
    int[] output=IntStream.rangeClosed(97, 104).filter(i-> !nonAvailcharpieces.contains((char)i+"")).parallel().toArray();
    for(int i:output){ unplaced+=(Character.toString((char)i)); }//converting to String- not necessary
+    List<Integer> containerscanbeused=listofcontainersused(unplaced);
+   //find range of the containers in accordance to the emptyindices
+    int minx= getEmptyGrid2('x')[0];
+    int maxx= getEmptyGrid2('x')[getEmptyGrid2('x').length-1];
+    int miny= getEmptyGrid2('y')[0];
+    int maxy= getEmptyGrid2('y')[getEmptyGrid2('y').length-1];
+    for(int cno:containerscanbeused) {
+      for (; minx < maxx+1; minx++) {
+        for (; miny < maxy+1; miny++) {
+          if(cno==0){
+
+
+          }
+          //access containers
+
+
+        }
+      }
+    }
+
+
+
+    //if(nonAvailcharpieces.contains())
+
+
 
             /*
             *   -> choose the containers you want from ppContainers by 1)checking the size of the empty spaces
             *
-            *                                                           2)check in accordance with unplaced for example:
-            *                                                             if piece c - b b ob b  is not in unplaced
-            *                                                             there is no necessity to use container 3 and 4
+            *                                                          2)check in accordance with unplaced for example:
+            *                                                            if piece c - b b ob b  is not in unplaced
+            *                                                            there is no necessity to use container 3 and 4
             *
             *   -> Create and Use the indexContainer required to produce the data structure for container exact position
             *      (basically a list of indices):I think indexContainer must be static.
-            *   -> check if pieces can fit using ppContainer in relation to unplaced and indexContainer
+            *      indexContainer can be created based on the chosen container and the current status of the board.
+            *   -> check if pieces can fit using ppContainer and task-5  in relation to unplaced and indexContainer
             *   -> If yes then based on the information form the piece and insert it into the output set
             *   **Take note of Strictly symmetric pieces c and h and in Weakly symmetric places it should return the lowest orientation number.
             */
@@ -356,6 +383,22 @@ public class TwistGame {
 
             return null;
   }
+
+
+  static  List<Integer> listofcontainersused(String availpieces){
+    List<Integer> ap = new ArrayList();
+    if(availpieces.contains("g")){
+      ap.add(2);
+    }
+    if(availpieces.contains("c")){
+      ap.add(3);
+      ap.add(4);
+    }
+    else if(availpieces.length()>2){
+      ap.add(0);
+      ap.add(1);
+    }
+  return ap;}
 
 
   /**Initialise the possible piece container values  which will be used in task6
@@ -386,6 +429,24 @@ public class TwistGame {
   }
 
 
+
+  /** Gives the indices of the empty grids
+   *
+   * @return list of required indices
+   *  author: Lingyu Xia
+   */
+  public static int[] getEmptyGrid2(char coordinate) {
+    List<Integer> emptyGridcoord= new ArrayList<>();
+    int[][] egxy= new int[2][];
+    for (int x = 0; x < 4; x++){
+      for(int y = 0; y < 8; y++){
+        if (gobj.getaboard()[x][y].equals("x")|| gobj.getaboard()[x][y].contains("p")&&gobj.getaboard()[x][y].length()==2){
+          if(coordinate=='x'){emptyGridcoord.add(x);}
+          else{emptyGridcoord.add(y);} } } }
+          int[] sortcoord=emptyGridcoord.stream().mapToInt(x->x).toArray();
+    Arrays.sort(sortcoord);
+    return sortcoord;
+  }
   /** Gives the indices of the empty grids
    *
    * @return list of required indices
