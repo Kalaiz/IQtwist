@@ -305,8 +305,8 @@ public class TwistGame {
    * @return An set of viable piece placements, or null if there are none.
    * author: Lingyu Xia
    */
-  public static Set<String> lgetViablePiecePlacements(String placement) //Take note that this does not check if board is valid or not
-{
+  public static Set<String> getViablePiecePlacements(String placement) //Take note that this does not check if board is valid or not
+{   List<String> fakeset=new ArrayList<>();
         // FIXME Task 6: determine the set of valid next piece placements
         Set<String> viablePiece = new HashSet();
         Pieces.initialisehms();
@@ -343,8 +343,27 @@ public class TwistGame {
         //System.out.println(placement + newPiece);
         methodcallctr++;
         if (isPlacementStringValid(newPlacement)) {
+            Iterator <String> test=viablePiece.iterator();
+            while (test.hasNext()){
+                String ch = test.next();
+             if(ch.substring(0,2).equals(newPiece.substring(0,2))){
+                 if(Integer.parseInt(ch.substring(3))>Integer.parseInt(newPiece.substring(3))){
+                     viablePiece.remove(ch);
+
+                     viablePiece.add(newPiece);
+
+                 }
+                 else{
+
+                 }
+
+             }
+         }
+         if(!viablePiece.contains(newPiece)){
+             viablePiece.add(newPiece);
+         }
         //System.out.println(newPlacement);
-        viablePiece.add(newPiece);
+       // viablePiece.add(newPiece);
         //if (unplaced_pieces.charAt(i) == 'c' || unplaced_pieces.charAt(i) == 'h' || unplaced_pieces.charAt(i) == 'f')
         if (unplaced_pieces.charAt(i) != 'a')
         continue loop;
@@ -362,7 +381,7 @@ public class TwistGame {
         }
 
 
-  public static Set<String> getViablePiecePlacements(String placement) {//Take note that this does not check if board is valid or not
+  public static Set<String> kgetViablePiecePlacements(String placement) {//Take note that this does not check if board is valid or not
     Set<String> viablePiece = new HashSet();
    // List <String> fakeset=new ArrayList<>();
     Pieces.initialisehms();//initialise hashmap just for the sake of task tests
@@ -478,9 +497,9 @@ public class TwistGame {
             *   **Take note of Strictly symmetric pieces c and h and in Weakly symmetric places it should return the lowest orientation number.
             */
       //System.out.println("End result is " );
-    for(int i =0;i<TwistGame.fakeset.size(); i++){
+    for(int i =0;i<fakeset.size(); i++){
         //System.out.print(fakeset.get(i) +"  ");
-      viablePiece.add(TwistGame.fakeset.get(i));
+      viablePiece.add(fakeset.get(i));
     }
             return viablePiece;
   }
