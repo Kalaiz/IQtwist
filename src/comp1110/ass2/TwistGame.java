@@ -274,7 +274,7 @@ public class TwistGame {
      * @return An set of viable piece placements, or null if there are none.
      * author: Lingyu Xia
      */
-    public static Set<String> getViablePiecePlacements(String placement) //Take note that this does not check if board is valid or not
+    public static Set<String> lgetViablePiecePlacements(String placement) //Take note that this does not check if board is valid or not
     {
         // FIXME Task 6: determine the set of valid next piece placements
         Set<String> viablePiece = new HashSet();
@@ -331,7 +331,7 @@ public class TwistGame {
     }
 
 
-    public static Set<String> kgetViablePiecePlacements(String placement) {//Take note that this does not check if board is valid or not
+    public static Set<String> getViablePiecePlacements(String placement) {//Take note that this does not check if board is valid or not
         Set<String> viablePiece = new HashSet();
         fakeset.clear();
         Pieces.initialisehms();//initialise hashmap just for the sake of task tests
@@ -405,17 +405,38 @@ public class TwistGame {
         } else {
             for (int i = 0; i < fakeset.size(); i++) {
                 if (piece.substring(0, 2).equals(fakeset.get(i).substring(0, 2)) && !(piece.startsWith("a") || piece.startsWith("d") || piece.startsWith("g"))) {
+                   int piecer=Integer.parseInt(piece.substring(3));
+                   int alrsetpr=Integer.parseInt(fakeset.get(i).substring(3));
+                    System.out.println("rotation num for alr in set piece " +alrsetpr);
+                    System.out.println("rotation num for piece rotation " +piecer);
+                    System.out.println("Alrdy in set :" +fakeset.get(i));
+                    System.out.println("piece " +piece);
                     if (piece.equals(fakeset.get(i))) {
-                        break;
-                    } else if (Integer.parseInt(piece.substring(3)) > Integer.parseInt(fakeset.get(i).substring(3))) {
-                        break;
-                        //do nothing
-                        // must exit this method
-                    } else {
+                        System.out.println("equals activated");
+                        break;//
+                        //((piecer<4&&alrsetpr<4)||(piecer>3&&alrsetpr>3))&&alrsetpr>piecer
+                    } /*else if (((piecer<4&&alrsetpr<4)||(piecer>3&&alrsetpr>3))&& piecer < alrsetpr) {
+                        System.out.println("piece  " +piece+" replaces "+ fakeset.get(i));
                         fakeset.set(i, piece);
                         break;
+
+                    }*/
+                   /* else if(Math.abs(piecer-alrsetpr)>=4){
+                        fakeset.add(piece);
+                    }*/
+                    else  {
+                        switch(piece.charAt(0)){
+                            case 'b':case 'c': case 'h':
+                                /*if((piecer==0||piecer==2)&&(alrsetpr==0||alrsetpr==2)){
+
+                                }*/
+                        }
+                        //fakeset.add(piece);
+                        //do nothing
+                        // must exit this method
+                        break;
                     }
-                } else if (i == fakeset.size() - 1) {
+                } else if (i == fakeset.size() - 1) {//if no other piece in the fakeset is similar
                     fakeset.add(piece);
                     break;
                 }
