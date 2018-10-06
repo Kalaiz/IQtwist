@@ -333,11 +333,10 @@ public class TwistGame {
 
     public static Set<String> kgetViablePiecePlacements(String placement) {//Take note that this does not check if board is valid or not
         Set<String> viablePiece = new HashSet();
-        // List <String> fakeset=new ArrayList<>();
+        fakeset.clear();
         Pieces.initialisehms();//initialise hashmap just for the sake of task tests
         boardcreator(placement,'a');//creates a board in accordance to the placement string
         int[][] ppContainer =  new int[5][];
-        fakeset.clear();
         Viewer access=new Viewer();
         String unplaced ="";
         String nonAvailcharpieces=access.returner(placement,0);
@@ -346,7 +345,7 @@ public class TwistGame {
         for(int i:output){ unplaced+=(Character.toString((char)i)); }//converting to String- not necessary
         List<Integer> containerscanbeused=listofcontainersused(unplaced);
         ppContainer=updateppcandnew(nonAvailcharpieces,initialiseContainersSpecs(ppContainer));
-
+ int ctr=0;
         //update ppcontainer value in accordance to unplaced
         //find range of the containers in accordance to the emptyindices
         int minx= getEmptyGrid2('x')[0];
@@ -354,7 +353,6 @@ public class TwistGame {
         int miny= getEmptyGrid2('y')[0];
         int maxy= getEmptyGrid2('y')[getEmptyGrid2('y').length-1];
         for(int cno:containerscanbeused) {
-
             for (int mx=minx; mx < maxx + 1; mx++) {
                 for (int my=miny; my < maxy + 1; my++) {
                     if(mx+containerSpecs[2*cno]-1<maxx+1 || my+containerSpecs[(2*cno)+1]-1<maxy+1){//if the row are same? minx = maxx hence no &&
@@ -367,7 +365,7 @@ public class TwistGame {
                                         for(int iy=my;iy<my+containerSpecs[2*cno+1];iy++){
                                             String piece=(char) ((pno/8)+97)+""+col+row+Integer.toString(pno-((pno/8)*8));
                                             if(isPlacementStringValid(placement+piece) && isPlacementWellFormed(piece)){
-                                                insertinfakeset(piece);
+                                              insertinfakeset(piece);
                                             }
                                         }
                                     }//within the container change the  piece e and h placements
@@ -375,8 +373,10 @@ public class TwistGame {
 
                                 else {
                                     String piece = (char) ((pno / 8) + 97) + "" + col + row + Integer.toString(pno - ((pno / 8) * 8));
-                                    if (isPlacementStringValid(placement + piece)&& isPlacementWellFormed(piece)) {
-                                        insertinfakeset(piece);
+
+                                    if (isPlacementStringValid(placement + piece)) {
+                                       insertinfakeset(piece);
+                                       ctr++;
                                     }
                                     //generate piece data  accordingly to check with isValidPlacement  and then check
                                     //if valid add to viablePiece set
@@ -388,12 +388,13 @@ public class TwistGame {
             }
         }
 
-        if(TwistGame.fakeset.size()==0)
+        if(fakeset.size()==0)
         { return null;}
 
-        for(int i =0;i<TwistGame.fakeset.size(); i++){
-            viablePiece.add(TwistGame.fakeset.get(i));
+        for(int i =0;i<fakeset.size(); i++){
+            viablePiece.add(fakeset.get(i));
         }
+        System.out.println(ctr);
         return viablePiece;
     }
 
@@ -416,9 +417,34 @@ public class TwistGame {
                     }
                 } else if (i == fakeset.size() - 1) {
                     fakeset.add(piece);
+                    break;
                 }
             }
         }
+    }
+    static List<String> insertinfakeset2(String piece,List<String> fakeset) {
+        if (fakeset.size() == 0) {
+            fakeset.add(piece);
+        } else {
+            for (int i = 0; i < fakeset.size(); i++) {
+                if (piece.substring(0, 2).equals(fakeset.get(i).substring(0, 2)) && !(piece.startsWith("a") || piece.startsWith("d") || piece.startsWith("g"))) {
+                    if (piece.equals(fakeset.get(i))) {
+                        break;
+                    } else if (Integer.parseInt(piece.substring(3)) > Integer.parseInt(fakeset.get(i).substring(3))) {
+                        break;
+                        //do nothing
+                        // must exit this method
+                    } else {
+                        fakeset.set(i, piece);
+                        break;
+                    }
+                } else if (i == fakeset.size() - 1) {
+                   fakeset.add(piece);
+                     break;
+                }
+            }
+        }
+        return fakeset;
     }
 
 
