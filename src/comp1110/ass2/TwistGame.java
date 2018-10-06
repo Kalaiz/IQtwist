@@ -26,6 +26,7 @@ public class TwistGame {
    static final int[] eWeakSymmetricpair={0,7,1,4,2,5,3,6};
    static final int[] fWeakSymmetricpair={0,6,1,7,2,4,3,5};
    static int testval=0;
+   static  int totalmethodcalls=0;
 
 
 
@@ -331,7 +332,9 @@ public class TwistGame {
 
         if (viablePiece.isEmpty())
             return null;
-        System.out.println("Test" + (++testval) +" calls Task 5  " + Integer.toString(methodcallctr)+ " Times ");
+        totalmethodcalls+=methodcallctr;
+
+        System.out.println("Test" + (++testval) +" calls Task 5  " + Integer.toString(methodcallctr)+ " Times. Total Average is : " +( totalmethodcalls/testval) );
         return viablePiece;
     }
 
@@ -399,8 +402,9 @@ public class TwistGame {
         { return null;}
 
             viablePiece.addAll(fakeset);
+        totalmethodcalls+=ctr;
 
-        System.out.println("Test" + (++testval) +" calls Task 5  " + Integer.toString(ctr)+ " Times ");
+        System.out.println("Test" + (++testval) +" calls Task 5  " + Integer.toString(ctr)+ " Times. Total Average is : " +( totalmethodcalls/testval) );
         return viablePiece;
     }
 
