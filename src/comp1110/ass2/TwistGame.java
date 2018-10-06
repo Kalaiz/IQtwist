@@ -19,9 +19,13 @@ import static comp1110.ass2.Pieces.initialisehms;
 public class TwistGame {
     static GameBoard gobj = new GameBoard();
     static List<String> fakeset=new ArrayList<>(10000000);
-    static int[] containerSpecs={3,2,2,3,3,3,4,1,1,4};//rcrcrc.. where r represents row and c represents column
+    static final  int[] containerSpecs={3,2,2,3,3,3,4,1,1,4};//rcrcrc.. where r represents row and c represents column
     static int[][] ppContainer=new int[5][];//Jagged array for task 6
    static int[][] ppContainer2 = new int[5][];
+   static final int[] bWeakSymmetricpair={0,2,1,3,4,6,5,7};
+   static final int[] eWeakSymmetricpair={0,7,1,4,2,5,3,6};
+   static final int[] fWeakSymmetricpair={0,6,1,7,2,4,3,5};
+
 
 
     /**
@@ -403,7 +407,7 @@ public class TwistGame {
         if (fakeset.size() == 0) {
             fakeset.add(piece);
         } else {
-            for (int i = 0; i < fakeset.size(); i++) {
+         insertloop:   for (int i = 0; i < fakeset.size(); i++) {
                 if (piece.substring(0, 2).equals(fakeset.get(i).substring(0, 2)) && !(piece.startsWith("a") || piece.startsWith("d") || piece.startsWith("g"))) {
                    int piecer=Integer.parseInt(piece.substring(3));
                    int alrsetpr=Integer.parseInt(fakeset.get(i).substring(3));
@@ -413,30 +417,65 @@ public class TwistGame {
                     System.out.println("piece " +piece);
                     if (piece.equals(fakeset.get(i))) {
                         System.out.println("equals activated");
-                        break;//
+                        //
                         //((piecer<4&&alrsetpr<4)||(piecer>3&&alrsetpr>3))&&alrsetpr>piecer
-                    } /*else if (((piecer<4&&alrsetpr<4)||(piecer>3&&alrsetpr>3))&& piecer < alrsetpr) {
-                        System.out.println("piece  " +piece+" replaces "+ fakeset.get(i));
-                        fakeset.set(i, piece);
-                        break;
+                    }
 
-                    }*/
-                   /* else if(Math.abs(piecer-alrsetpr)>=4){
-                        fakeset.add(piece);
-                    }*/
                     else  {
+                        System.out.println("in");
+                        int[] temparr=new int[8];
                         switch(piece.charAt(0)){
-                            case 'b':case 'c': case 'h':
-                                /*if((piecer==0||piecer==2)&&(alrsetpr==0||alrsetpr==2)){
+                            case 'c': case'h':
+                                if (alrsetpr-piecer==2){
+                                    fakeset.set(i, piece);
+                                    continue insertloop;
+                                }
+                            case 'b':
+                                temparr= bWeakSymmetricpair;
+                                break;
 
-                                }*/
+                            case 'f':
+                               temparr=fWeakSymmetricpair;
+                               break;
+
+                            case 'e':
+                                temparr=eWeakSymmetricpair;
+                                break;
                         }
-                        //fakeset.add(piece);
+                        System.out.println("in2");
+                        for(int t=0;t<4;t++){
+                           // Arrays.stream(temparr).forEach(ch-> System.out.println(ch));
+                            System.out.println(temparr[t*2]  + " piece r : " +piecer + " temp arrbound : " + temparr[(2*t)+1] + " alrspt : " + alrsetpr);
+                            if(temparr[t*2]==piecer&&temparr[(2*t)+1]==alrsetpr){
+                                System.out.println("temp" + temparr[t]);
+                                fakeset.set(i, piece);
+                                continue insertloop;
+                            }
+                            else if(temparr[t*2]==alrsetpr&&temparr[(2*t)+1]==piecer) {
+                                if(fakeset.contains(piece.substring(0,3)+Integer.toString(piecer))){
+                                    fakeset.remove(piece.substring(0,3)+Integer.toString(piecer));
+                                    continue insertloop;
+                                }
+                                else if (i == fakeset.size() - 1) {
+                                    break insertloop;
+                                } else {
+                                    continue insertloop;
+                                }
+                            }
+                        }
+                        System.out.println("Adding " + piece);
+                        fakeset.add(piece);
+                      if(i+1==fakeset.size()){
+                          System.out.println("Last element break ");
+                          break ;
+                      }
+
                         //do nothing
                         // must exit this method
-                        break;
                     }
-                } else if (i == fakeset.size() - 1) {//if no other piece in the fakeset is similar
+                }
+                else if (i == fakeset.size() - 1) {//if no other piece in the fakeset is similar
+                    System.out.println("Adding if no other pieces are similar and this is the last piece  " + piece);
                     fakeset.add(piece);
                     break;
                 }
