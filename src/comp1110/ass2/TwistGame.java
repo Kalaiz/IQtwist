@@ -30,6 +30,7 @@ public class TwistGame {
 
 
 
+
     /**
      * Determine whether a piece or peg placement is well-formed according to the following:
      * - it consists of exactly four characters
@@ -345,6 +346,7 @@ public class TwistGame {
         Pieces.initialisehms();//initialise hashmap just for the sake of task tests
         boardcreator(placement,'a');//creates a board in accordance to the placement string
         int[][] ppContainer =  new int[5][];
+        int ctr=0;
         Viewer access=new Viewer();
         String unplaced ="";
         String nonAvailcharpieces=access.returner(placement,0);
@@ -353,7 +355,7 @@ public class TwistGame {
         for(int i:output){ unplaced+=(Character.toString((char)i)); }//converting to String- not necessary
         List<Integer> containerscanbeused=listofcontainersused(unplaced);
         ppContainer=updateppcandnew(nonAvailcharpieces,initialiseContainersSpecs(ppContainer));
- int ctr=0;
+        ctr+=2;
 
 
         //update ppcontainer value in accordance to unplaced
@@ -375,6 +377,7 @@ public class TwistGame {
                                         for(int iy=my;iy<my+containerSpecs[2*cno+1];iy++){
                                             String piece=(char) ((pno/8)+97)+""+col+row+Integer.toString(pno-((pno/8)*8));
                                             if(isPlacementStringValid(placement+piece) && isPlacementWellFormed(piece)){
+                                                ctr++;
                                               insertinfakeset(piece);
                                             }
                                         }
@@ -404,7 +407,7 @@ public class TwistGame {
             viablePiece.addAll(fakeset);
         totalmethodcalls+=ctr;
 
-        System.out.println("Test" + (++testval) +" calls Task 5  " + Integer.toString(ctr)+ " Times. Total Average is : " +( totalmethodcalls/testval) );
+        System.out.println("Test" + (++testval) +" calls helper functions (inclusive of task5) " + Integer.toString(ctr)+ " Times. Total Average is : " +( totalmethodcalls/testval) );
         return viablePiece;
     }
 
