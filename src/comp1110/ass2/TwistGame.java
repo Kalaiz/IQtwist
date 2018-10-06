@@ -20,8 +20,8 @@ public class TwistGame {
     static GameBoard gobj = new GameBoard();
     static List<String> fakeset=new ArrayList<>(10000000);
     static int[] containerSpecs={3,2,2,3,3,3,4,1,1,4};//rcrcrc.. where r represents row and c represents column
-/*  static int[][] ppContainer=new int[5][];//Jagged array for task 6
-  static int[][] ppContainer2 = new int[5][];*/
+    static int[][] ppContainer=new int[5][];//Jagged array for task 6
+   static int[][] ppContainer2 = new int[5][];
 
 
     /**
@@ -258,37 +258,6 @@ public class TwistGame {
 
     public static void main(String[] args) {
 
-
-   /*   System.out.println(fakeset.size());
-      //fakeset.add("hi");
-      System.out.println(fakeset.size());*/
-
- /*   int arr2[][]= new int[3][];
-    int arr[]= new int[5];
-    arr[0]=1;
-    arr[1]=2;
-    arr[2]=3;
-    arr[3]=4;
-    arr[4]=5;
-    arr2[0]=arr;
-
-    arr2[0]=Arrays.stream(arr2[0]).filter(no->!(no>=2 &&no<=4)).toArray();
-    Arrays.stream(arr2[0]).forEach(ch-> System.out.println(ch));*/
-
-        //initialisehms();
-        //initialiseContainersSpecs();
-        //Arrays.stream(ppContainer[1]).forEach(ch-> System.out.println(ch));
-
-//getViablePiecePlacements("b6C0c5A2d1B3e4A5f4C2g2B3h1A2i7D0j7B0k5B0k5C0l3A0l3D0");
-        //displayBoard(boardcreator("a1A1",'a'));
-   /* int arr2[][]= new int[3][];
-    int arr[]= new int[3];
-    arr[0]=1;
-    arr[1]=2;
-    arr[2]=3;
-   arr2[0]=arr;
-
-    System.out.println(arr2[0][2]);*/
     }
     /**
      * Given a string describing a placement of pieces and pegs, return a set
@@ -369,40 +338,25 @@ public class TwistGame {
         boardcreator(placement,'a');//creates a board in accordance to the placement string
         int[][] ppContainer =  new int[5][];
         fakeset.clear();
-        //int[][] ppContainer2 = new int[5][];
-   /* if(getEmptyGrid2('x').length==0){
-      return null;
-    }*/
-
-
         Viewer access=new Viewer();
         String unplaced ="";
         String nonAvailcharpieces=access.returner(placement,0);
         //will give an int array of numbers which represent ascii encodings
         int[] output=IntStream.rangeClosed(97, 104).filter(i-> !nonAvailcharpieces.contains((char)i+"")).parallel().toArray();
         for(int i:output){ unplaced+=(Character.toString((char)i)); }//converting to String- not necessary
-        //System.out.println("unplaced is " + unplaced);
         List<Integer> containerscanbeused=listofcontainersused(unplaced);
         ppContainer=updateppcandnew(nonAvailcharpieces,initialiseContainersSpecs(ppContainer));
-    /*for(int i=0;i<5;i++) {
-      //System.out.println("mainppdata" + i);
-      //Arrays.stream(mainppdata[i]).forEach(ch -> System.out.println(ch));
-    }*/
+
         //update ppcontainer value in accordance to unplaced
         //find range of the containers in accordance to the emptyindices
         int minx= getEmptyGrid2('x')[0];
-        //System.out.println("min x is " + minx);
         int maxx= getEmptyGrid2('x')[getEmptyGrid2('x').length-1];
-        //System.out.println("max x is " + maxx);
         int miny= getEmptyGrid2('y')[0];
-        //System.out.println("min y is " +miny);
         int maxy= getEmptyGrid2('y')[getEmptyGrid2('y').length-1];
-        //System.out.println("max y is " +maxy);
         for(int cno:containerscanbeused) {
-            //System.out.println("cno is " + cno);
+
             for (int mx=minx; mx < maxx + 1; mx++) {
                 for (int my=miny; my < maxy + 1; my++) {
-                    // System.out.println((mx+containerSpecs[2*cno] -1 <maxx+1&& my+containerSpecs[2*cno+1]-1<maxy+1) +" for mx " + mx +"  my "  + my );
                     if(mx+containerSpecs[2*cno]-1<maxx+1 || my+containerSpecs[(2*cno)+1]-1<maxy+1){//if the row are same? minx = maxx hence no &&
                         char row=(char)(65+mx);
                         String col=Integer.toString(my+1);//string col starts from 1
@@ -413,23 +367,16 @@ public class TwistGame {
                                         for(int iy=my;iy<my+containerSpecs[2*cno+1];iy++){
                                             String piece=(char) ((pno/8)+97)+""+col+row+Integer.toString(pno-((pno/8)*8));
                                             if(isPlacementStringValid(placement+piece) && isPlacementWellFormed(piece)){
-
-                                                //viablePiece.add(piece);
                                                 insertinfakeset(piece);
                                             }
                                         }
                                     }//within the container change the  piece e and h placements
-
                                 }
+
                                 else {
                                     String piece = (char) ((pno / 8) + 97) + "" + col + row + Integer.toString(pno - ((pno / 8) * 8));
-                                    //System.out.println(piece);
-                                    //System.out.println("placement is " + placement);
-                                    //System.out.println("placement + piece is " + placement + piece);
-                                    // System.out.println(isPlacementStringValid(placement + piece));
                                     if (isPlacementStringValid(placement + piece)&& isPlacementWellFormed(piece)) {
                                         insertinfakeset(piece);
-                                        // viablePiece.add(piece);
                                     }
                                     //generate piece data  accordingly to check with isValidPlacement  and then check
                                     //if valid add to viablePiece set
@@ -442,44 +389,9 @@ public class TwistGame {
         }
 
         if(TwistGame.fakeset.size()==0)
-        {
-            //System.out.println("null");
-            return null;}
- /*   if(viablePiece.isEmpty())
-    {return null;}*/
-        //convert list to set
+        { return null;}
 
-    /*Notice that if we ignore the holes , aside from a, d and g,
-    all pieces exhibit symmetry.  We describe these as 'weakly
-    symmetric', and thus take up exactly the same space on the
-    board.  We ignore the redundant rotations with higher numberings (e.g.
-    if a solution could be made with eithere0 or e7 then we ignore the
-    solution with e7 because it is weakly symmetric and has a higher
-    rotation number).  Other examples include b0 & b2, c0 & c2,
-            f0 & f6, and h0 & h2, each of which are identical pairs if we
-    ignore the holes.*/
-
-
-        //filter set accordingly
-
-
-        /*
-         *   -> choose the containers you want from ppContainers by 1)checking the size of the empty spaces
-         *
-         *                                                          2)check in accordance with unplaced for example:
-         *                                                            if piece c - b b ob b  is not in unplaced
-         *                                                            there is no necessity to use container 3 and 4
-         *
-         *   -> Create and Use the indexContainer required to produce the data structure for container exact position
-         *      (basically a list of indices):I think indexContainer must be static.
-         *      indexContainer can be created based on the chosen container and the current status of the board.
-         *   -> check if pieces can fit using ppContainer and task-5  in relation to unplaced and indexContainer
-         *   -> If yes then based on the information form the piece and insert it into the output set
-         *   **Take note of Strictly symmetric pieces c and h and in Weakly symmetric places it should return the lowest orientation number.
-         */
-        //System.out.println("End result is " );
         for(int i =0;i<TwistGame.fakeset.size(); i++){
-            //System.out.print(fakeset.get(i) +"  ");
             viablePiece.add(TwistGame.fakeset.get(i));
         }
         return viablePiece;
@@ -487,7 +399,6 @@ public class TwistGame {
 
 
     static void insertinfakeset(String piece) {
-        // String test=piece;
         if (fakeset.size() == 0) {
             fakeset.add(piece);
         } else {
@@ -512,20 +423,16 @@ public class TwistGame {
 
 
     static int[][] updateppcandnew(String shouldnotbeonrefdata,int[][] ppContainer){
-        //System.out.println(shouldnotbeonrefdata);
         for(int c=0;c<shouldnotbeonrefdata.length();c++){
             if(shouldnotbeonrefdata.charAt(c)>='i'){continue;}
 
             int startnum=(int)(shouldnotbeonrefdata.charAt(c)-97) * 8;
             int endnum=startnum+7;
-            //System.out.println("Startnum is " + startnum + " Endnum is " +endnum);
-
             for(int i=0;i<5;i++){
                 ppContainer[i]=Arrays.stream(ppContainer[i]).filter(no->!(no>=startnum &&no<=endnum)).toArray();
             }
         }
         return ppContainer;
-//return maincontainerva;
     }
 
 
@@ -720,3 +627,36 @@ public class TwistGame {
           } else if (cno==4 && minx +3 <maxy+1) {//for last container
           }*/
 
+/*   if(viablePiece.isEmpty())
+    {return null;}*/
+//convert list to set
+
+    /*Notice that if we ignore the holes , aside from a, d and g,
+    all pieces exhibit symmetry.  We describe these as 'weakly
+    symmetric', and thus take up exactly the same space on the
+    board.  We ignore the redundant rotations with higher numberings (e.g.
+    if a solution could be made with eithere0 or e7 then we ignore the
+    solution with e7 because it is weakly symmetric and has a higher
+    rotation number).  Other examples include b0 & b2, c0 & c2,
+            f0 & f6, and h0 & h2, each of which are identical pairs if we
+    ignore the holes.*/
+
+
+//filter set accordingly
+
+
+/*
+ *   -> choose the containers you want from ppContainers by 1)checking the size of the empty spaces
+ *
+ *                                                          2)check in accordance with unplaced for example:
+ *                                                            if piece c - b b ob b  is not in unplaced
+ *                                                            there is no necessity to use container 3 and 4
+ *
+ *   -> Create and Use the indexContainer required to produce the data structure for container exact position
+ *      (basically a list of indices):I think indexContainer must be static.
+ *      indexContainer can be created based on the chosen container and the current status of the board.
+ *   -> check if pieces can fit using ppContainer and task-5  in relation to unplaced and indexContainer
+ *   -> If yes then based on the information form the piece and insert it into the output set
+ *   **Take note of Strictly symmetric pieces c and h and in Weakly symmetric places it should return the lowest orientation number.
+ */
+//System.out.println("End result is " );
