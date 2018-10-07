@@ -10,7 +10,7 @@ import static comp1110.ass2.Pieces.hm;
  *           Kalai (Everything else)
  */
 public class GameBoard {
-    private String[][] checkingBoard = new String[10][14];
+    private String[][] checkingBoard = new String[4][8];
     private String[][] actualBoard = new String[4][8];
 
     /**
@@ -29,9 +29,9 @@ public class GameBoard {
         if((hashMapKey>19&& hashMapKey<24 )||(hashMapKey>59 && hashMapKey<64))
         {hashMapKey-=4;}
         if (bt.equals("a")) {
-            this.actualBoard = placer(actualBoard, hm.get(hashMapKey), row, col, 0);
+            this.actualBoard = placer(actualBoard, hm.get(hashMapKey), row, col );
         } else {
-            this.checkingBoard = placer(checkingBoard, hm.get(hashMapKey), row, col, 3);
+            this.checkingBoard = placer(checkingBoard, hm.get(hashMapKey), row, col);
         }
 
     }
@@ -65,26 +65,27 @@ public class GameBoard {
      *          "ac"-both the boards
      */
     void resetBoardvalues(String s) { //TODO-Try to implement Map function using streams
-        int row = 10, col = 14;
+        int row = 4, col = 8;
+        String[][] board = new String[4][8];
         if (s.equals("ac")) {
             resetBoardvalues("a");
             resetBoardvalues("c");
-        } else if (s.equals("a")) {
-            row = 4;
-            col = 8;
         }
         for (int trow = 0; trow < row; trow++) {
             for (int tcol = 0; tcol < col; tcol++) {
-                if (!s.equals("a")) {
-                    this.checkingBoard[trow][tcol] = "x";
-                } else {
-                    this.actualBoard[trow][tcol] = "x";
+                    board[trow][tcol] = "x";
                 }
+            }
+            if(s.equals("c") ){
+                this.checkingBoard=board;
+            }
+            else{
+                this.actualBoard=board;
             }
         }
 
 
-    }
+
 
     /**
      * Places the piece on the board multidimensional array
@@ -96,35 +97,34 @@ public class GameBoard {
      * @param piecearr Multidimensional array of the piece
      * @param row2     the row on which the top-most piece resides
      * @param col2     the column in which the left-most piece resides
-     * @param modifier value added for the sake of differentiating actual and checking board  (Default should be 0)
-     * @return (Updated) board
+     * @return (Updated) board or null if invalid position
      */
-    public static String[][] placer(String[][] board, String[][] piecearr, int row2, int col2, int modifier) {
+    public static String[][] placer(String[][] board, String[][] piecearr, int row2, int col2) {
         if (row2 < 0 || col2 < 0) {
-            return board;
+            return null;
         }
-        String[][] oboard = board;
+        try {
         int prow = piecearr.length;
         int pcol = piecearr[0].length;
         int endr = prow + row2;
         int endc = pcol + col2;
-        try {  for (int cr = 0; row2 < endr; row2++, cr++) {
+         for (int cr = 0; row2 < endr; row2++, cr++) {
                 int col2_temp = col2;
                 for (int cc = 0; col2_temp < endc; col2_temp++, cc++) {
-                    if (oboard[row2 + modifier][col2_temp + modifier] .equals("x")) {
-                        oboard[row2 + modifier][col2_temp + modifier] = piecearr[cr][cc];
+                    if (board[row2 ][col2_temp ] .equals("x")) {
+                        board[row2 ][col2_temp ] = piecearr[cr][cc];
                     } else if (!piecearr[cr][cc].equals("x")) {// if the piece part is empty don't update the output board
                         //adding 3 so to add the first segment of the piece to the inner board(mandatory)
-                        oboard[row2 + modifier][col2_temp + modifier] = piecearr[cr][cc] + oboard[row2 + modifier][col2_temp + modifier];
+                        board[row2 ][col2_temp ] = piecearr[cr][cc] + board[row2 ][col2_temp];
                     }
                 }
             }
         }
         //if piecearr size is more than than board or the board has null value(i.e Values of the board not declared)
         catch (ArrayIndexOutOfBoundsException | NullPointerException e) {
-            return board;
+            return null;
         }
-        return oboard;
+        return board;
     }
 
     /**
