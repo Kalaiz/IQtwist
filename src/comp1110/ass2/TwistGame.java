@@ -660,7 +660,7 @@ public class TwistGame {
       String[][] difPie = new String [unplaced_pieces.length()][];
       char c = itStr.get(0).charAt(0);
       int row = 1;
-      int column = 1;
+      int column = 0;
       for (int i = 0; i < itStr.size(); i++) {
         if (itStr.get(i).charAt(0)==c){
           //difPie[row][column] = itStr.get(i);
@@ -680,7 +680,7 @@ public class TwistGame {
 
 
       /*
-      * assign the piece to the multi-dimensional string
+      * assign the piece value to the multi-dimensional string
       * got IndexOutOfBoundsException
       * */
       for (int i = 0; i < difPie.length; i++){
@@ -690,6 +690,9 @@ public class TwistGame {
         }
       }
 
+      /*
+      *    Give the multi-dimentional string to combination() to find all the possible combinations
+      * */
       for (int i = 0; i < row; i++){
         if (!solutions.isEmpty()){
           String[] temp = new String[solutions.size()];
@@ -697,7 +700,9 @@ public class TwistGame {
             temp[j] = solutions.get(j);
           }
           solutions = combination(solutions,temp,difPie[i]);
-        }else solutions = combination(solutions,difPie[i],difPie[i+1]);
+        }else {
+            solutions = combination(solutions,difPie[i],difPie[i+1]);
+        }
       }
 
       Collections.sort(solutions);
@@ -751,8 +756,9 @@ public class TwistGame {
 
       String[] finalSols = new String[solutions.size()];
       for (int i = 0; i < solutions.size(); i++){
-        finalSols[i] = solutions.get(i);
-        System.out.println(finalSols[i]);
+          finalSols[i] = solutions.get(i);
+        //finalSols[i] = solutions.get(i) + formalPlacement[0];
+        //System.out.println(finalSols[i]);
       }
 
       return finalSols;
@@ -769,6 +775,17 @@ public class TwistGame {
       }
 
       return result;
+    }
+
+
+    public static List<String> getFormalPieces(String formalPiece){
+
+        List<String> fp = new ArrayList<>();
+        for (int i = 0; i < formalPiece.length() / 4; i++) {
+            fp.add(formalPiece.substring(i * 4, i * 4 + 4));
+        }
+
+        return fp;
     }
 
 
