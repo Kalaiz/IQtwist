@@ -1,14 +1,10 @@
 package comp1110.ass2;
 
 import comp1110.ass2.gui.Viewer;
-
-import java.lang.reflect.Array;
 import java.util.*;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-
 import static comp1110.ass2.Pieces.hm;
-import static comp1110.ass2.Pieces.initialisehms;
+
 
 /**
  * This class provides the text interface for the Twist Game
@@ -17,16 +13,15 @@ import static comp1110.ass2.Pieces.initialisehms;
  * (http://www.smartgames.eu/en/smartgames/iq-twist)
  */
 public class TwistGame {
-    static GameBoard gobj = new GameBoard();
-    static List<String> fakeset=new ArrayList<>(10000000);
-    static final  int[] containerSpecs={3,2,2,3,3,3,4,1,1,4};//rcrcrc.. where r represents row and c represents column
+    private static GameBoard gobj = new GameBoard();
+    private static List<String> fakeset=new ArrayList<>(20);
+    private static final  int[] containerSpecs={3,2,2,3,3,3,4,1,1,4};//rcrcrc.. where r represents row and c represents column
     static int[][] ppContainer=new int[5][];//Jagged array for task 6
-   static int[][] ppContainer2 = new int[5][];
-   static final int[] bWeakSymmetricpair={0,2,1,3,4,6,5,7};
-   static final int[] eWeakSymmetricpair={0,7,1,4,2,5,3,6};
-   static final int[] fWeakSymmetricpair={0,6,1,7,2,4,3,5};
-   static int testval=0;
-   static  int totalmethodcalls=0;
+    private static final int[] bWeakSymmetricpair={0,2,1,3,4,6,5,7};
+    private static final int[] eWeakSymmetricpair={0,7,1,4,2,5,3,6};
+    private static final int[] fWeakSymmetricpair={0,6,1,7,2,4,3,5};
+    private static int testval=0;
+    private static  int totalmethodcalls=0;
 
 
 
@@ -73,7 +68,7 @@ public class TwistGame {
      * author: Lingyu Xia
      */
     public static boolean isPlacementStringWellFormed(String placement) {
-        // FIXME Task 3: determine whether a placement is well-formed
+        //  Task 3: determine whether a placement is well-formed
         String[] items = new String[placement.length() / 4];                      //Using a loop to store all four-character placements into a String[]
         int countRed = 0;
         int countGre = 0;
@@ -145,41 +140,6 @@ public class TwistGame {
     }
 
 
-    /**
-     * Checks if any pieces is in the outerboard
-     *
-     * o o o o o o o o o o o o o o
-     * o o o o o o o o o o o o o o
-     * o o o o o o o o o o o o o o
-     * o o o I I I I I I I I o o o
-     * o o o I I I I I I I I o o o
-     * o o o I I I I I I I I o o o
-     * o o o I I I I I I I I o o o
-     * o o o o o o o o o o o o o o
-     * o o o o o o o o o o o o o o
-     * o o o o o o o o o o o o o o
-     *
-     * 'o' fields represent the outer board
-     * meanwhile 'I' fields represent the inner board
-     *
-     * @param board2 Modified board
-     * @return True if there is a piece  on the outerboard
-     * Authorship:Kalai
-     */
-    private static boolean checkboard(String[][] board2) {//check if  pieces are in the outer board
-        int row = board2.length;
-        int col = board2[0].length;
-        for (int cr = 0; cr < row; cr++) {
-            for (int cc = 0; cc < col; cc++) {
-                if ((cr < 3 || cr > 6) && !board2[cr][cc].equals("x") ) {
-                    return true;
-                } else if ((cc < 3 || cc > 10) && !board2[cr][cc].equals("x")) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
 
     /*
      *check if there is overlap or badpegs on the checkingboard
@@ -188,9 +148,9 @@ public class TwistGame {
      * Authorship: Yuqing Zhang
      */
     private static boolean checkBoard2() {//checks for colourpeg and overlap
-        for (int row = 3; row < 7; row++) {
-            for (int col = 3; col < 11; col++) {
-                String ccs = gobj.getcboard()[row][col];//ccs-Current checking piece string
+        for (int row = 0; row < 4; row++) {
+            for (int col = 0; col < 8; col++) {
+                    String ccs = gobj.getcboard()[row][col];//ccs-Current checking piece string
                 if (ccs.length() == 4) {
                     if (ccs.charAt(1) != ccs.charAt(3)) {//pror (or)  orpr
                         return false;
@@ -222,24 +182,24 @@ public class TwistGame {
      *                  checkingboard (10x12 board specifically for is_onboard and isvalidPlacement )
      * @return Updated board
      * Authorship:Kalai
-     * local:temp used as the initial value for is_onboard or else will get updated as per requirement and return itself
+     *
      */
     public static String[][] boardcreator(String placement, char bt) {
-        String[][] temp = {{"z"}};//For task5
-        gobj.resetBoardvalues(Character.toString(bt));//resets the respective board
+            gobj.resetBoardvalues(Character.toString(bt));//resets the respective board ( test reasons)
+        //ToDo : make a static board fr task 6 operations so that there wont be any need to reset the board
+        //if static board(temp) is same as placement string-4 or same as placment  dont reset and update placement to just the piece and
+        // change checking board to temp--better than calling :Placer,piecetobeAdded,access to hashmap,and reseting the board
         for (int i = 0; i < placement.length() / 4; i++) {
             String ch = placement.substring(4 * i, 4 * i + 4);
             if (bt == 'a') {
                 gobj.pieceTobeAdded(ch, "a");
             } else {
                 gobj.pieceTobeAdded(ch, "c");
-                if (checkboard(gobj.getcboard()) || !checkBoard2()) {
-                    return temp;
-                }
+                if(gobj.getcboard()==null||!checkBoard2()){
+                    return null; }
             }
         }
-        temp = (bt == 'a') ? gobj.getaboard() : gobj.getcboard();
-        return temp;
+        return (bt == 'a') ? gobj.getaboard() : gobj.getcboard();
     }
 
     /**
@@ -257,10 +217,8 @@ public class TwistGame {
      */
     public static boolean isPlacementStringValid(String placement) {
         Pieces.initialisehms();
-        if (boardcreator(placement, 'c')[0][0].equals("z")) {
-            return false;
-        }
-        return true;
+        return (!(boardcreator(placement, 'c')==null));
+
     }
 
     public static void main(String[] args) {
@@ -341,11 +299,11 @@ public class TwistGame {
 
 
     public static Set<String> getViablePiecePlacements(String placement) {//Take note that this does not check if board is valid or not
-        Set<String> viablePiece = new HashSet();
         fakeset.clear();
         Pieces.initialisehms();//initialise hashmap just for the sake of task tests
-        boardcreator(placement,'a');//creates a board in accordance to the placement string
-        int[][] ppContainer =  new int[5][];
+        initialiseContainersSpecs();//can be done only once
+        boardcreator(placement,'c');//creates a board in accordance to the placement string
+        int[][] ppContainer2 ;
         int ctr=0;
         Viewer access=new Viewer();
         String unplaced ="";
@@ -354,10 +312,8 @@ public class TwistGame {
         int[] output=IntStream.rangeClosed(97, 104).filter(i-> !nonAvailcharpieces.contains((char)i+"")).parallel().toArray();
         for(int i:output){ unplaced+=(Character.toString((char)i)); }//converting to String- not necessary
         List<Integer> containerscanbeused=listofcontainersused(unplaced);
-        ppContainer=updateppcandnew(nonAvailcharpieces,initialiseContainersSpecs(ppContainer));
+        ppContainer2=updateppcandnew(nonAvailcharpieces,ppContainer);
         ctr+=2;
-
-
         //update ppcontainer value in accordance to unplaced
         //find range of the containers in accordance to the emptyindices
         int minx= getEmptyGrid2('x')[0];
@@ -371,8 +327,9 @@ public class TwistGame {
                         char row=(char)(65+mx);
                         String col=Integer.toString(my+1);//string col starts from 1
                         {
-                            for (int pno : ppContainer[cno]) {
+                            for (int pno : ppContainer2[cno]) {
                                 if((pno>31&&pno<40)||(pno>55&&pno<60)){
+                                    //within the container change the  piece e and h placements
                                     for(int ix=mx;ix<mx+containerSpecs[2*cno];ix++){//removed -1 from bound
                                         for(int iy=my;iy<my+containerSpecs[2*cno+1];iy++){
                                             String piece=(char) ((pno/8)+97)+""+col+row+Integer.toString(pno-((pno/8)*8));
@@ -381,12 +338,11 @@ public class TwistGame {
                                               insertinfakeset(piece);
                                             }
                                         }
-                                    }//within the container change the  piece e and h placements
+                                    }
                                 }
 
                                 else {
                                     String piece = (char) ((pno / 8) + 97) + "" + col + row + Integer.toString(pno - ((pno / 8) * 8));
-
                                     if (isPlacementStringValid(placement + piece)) {
                                        insertinfakeset(piece);
                                        ctr++;
@@ -404,15 +360,14 @@ public class TwistGame {
         if(fakeset.size()==0)
         { return null;}
 
-            viablePiece.addAll(fakeset);
+        Set<String> viablePiece = new HashSet<String>(fakeset);
         totalmethodcalls+=ctr;
-
-        System.out.println("Test" + (++testval) +" calls helper functions (inclusive of task5) " + Integer.toString(ctr)+ " Times. Total Average is : " +( totalmethodcalls/testval) );
+        //System.out.println("Test" + (++testval) +" calls helper functions (inclusive of task5) " + Integer.toString(ctr)+ " Times. Total Average is : " +( totalmethodcalls/testval) );
         return viablePiece;
     }
 
 
-    static void insertinfakeset(String piece) {
+    private static void insertinfakeset(String piece) {
         if (fakeset.size() == 0) {
             fakeset.add(piece);
         } else {
@@ -477,10 +432,9 @@ public class TwistGame {
 
 
 
-    static int[][] updateppcandnew(String shouldnotbeonrefdata,int[][] ppContainer){
+    private static int[][] updateppcandnew(String shouldnotbeonrefdata,int[][] ppContainer){
         for(int c=0;c<shouldnotbeonrefdata.length();c++){
             if(shouldnotbeonrefdata.charAt(c)>='i'){continue;}
-
             int startnum=(shouldnotbeonrefdata.charAt(c)-97) * 8;
             int endnum=startnum+7;
             for(int i=0;i<5;i++){
@@ -491,8 +445,8 @@ public class TwistGame {
     }
 
 
-    static  List<Integer> listofcontainersused(String availpieces){
-        List<Integer> ap = new ArrayList();
+   private  static  List<Integer> listofcontainersused(String availpieces){
+        List<Integer> ap = new ArrayList<Integer>();
         if(availpieces.contains("g")){
             ap.add(2);
         }
@@ -520,7 +474,7 @@ public class TwistGame {
      *    ppContainer[3][]=[17,19]
      *    ppContainer[4][]=[16,18]
      *
-     *    Related to existing hashmap: add 10 to the key value to obtain such numbers
+     *
      *
      *   Containers
      *
@@ -531,7 +485,7 @@ public class TwistGame {
      *                                        X
      * */
 
-    static int[][] initialiseContainersSpecs(int[][] ppContainer){
+    private static void initialiseContainersSpecs(){
 
         for(int i=0;i<5;i++){
             List<Integer> cs= new ArrayList<>();
@@ -540,7 +494,7 @@ public class TwistGame {
                     // do nothing
                 }
                 else if( hm.get(t).length<=containerSpecs[i*2] && hm.get(t)[0].length<=containerSpecs[i*2+1]){
-                    if((i==3||i==4)&&(t>55&&t<60)){
+                    if((i==3||i==4)&&(t>55)){//skipping redundants
                         continue;
                     }
                     else if(i==2&&!(t>47&&t<56)){
@@ -551,7 +505,7 @@ public class TwistGame {
             //ppContainer[i] =new int[oarr.length];   //not necessary
             ppContainer[i]=oarr;
         }
-        return ppContainer;
+
     }
 
 
@@ -559,14 +513,16 @@ public class TwistGame {
     /** Gives the indices of the empty grids
      *
      * @return list of required indices
-     *  author: Kalai
+     *  author: Lingyu Xia & Kalai
+     *
      */
-    public static int[] getEmptyGrid2(char coordinate) {
+    private static int[] getEmptyGrid2(char coordinate) {
         List<Integer> emptyGridcoord= new ArrayList<>();
-        int[][] egxy= new int[2][];
         for (int x = 0; x < 4; x++){
             for(int y = 0; y < 8; y++){
-                if (gobj.getaboard()[x][y].equals("x")|| gobj.getaboard()[x][y].contains("p")&&gobj.getaboard()[x][y].length()==2){
+        /*    gobj.getcboard()[x][y].contains("p")&&gobj.getcboard()[x][y].length()==2    */
+                if (gobj.getcboard()[x][y].equals("x")|| gobj.getcboard()[x][y].equals("pr") || gobj.getcboard()[x][y].equals("pb")//this runs faster
+                        || gobj.getcboard()[x][y].equals("pg") || gobj.getcboard()[x][y].equals("py")){
                     if(coordinate=='x'){emptyGridcoord.add(x);}
                     else{emptyGridcoord.add(y);} } } }
         int[] sortcoord=emptyGridcoord.stream().mapToInt(x->x).toArray();
@@ -647,71 +603,4 @@ public class TwistGame {
                     System.out.print(displayerboard[row][col]);
                 }} } }
 
-    //TESTING PROGRAM: Displays the checkingboard (must be 10x14)
-    public static void displayCheckingBoard(String[][] board){
-        for (int row = 0; row < 10; row++) {// initialize the board
-            for (int col = 0; col < 14; col++) {
-                if(board[row][col].length()>=2&& col==13){//gobj.getaboard()[row][col].length()>=2
-                    System.out.println("#");
-                }
-                else if(board[row][col].length()>=2) {
-                    System.out.print(board[row][col]);
-                }
-                else if(col==13){
-                    System.out.println(board[row][col]);
-                }
-                else{
-                    System.out.print(board[row][col]);
-                }
-            }
-        }
-
-    }
 }
-
-
-/*if (cno == 0 && minx + 1 < maxx + 1 && miny + 2 < maxy + 1) {//if container does not go pass the board
-            //do something to link to for loop
-
-          } else if (cno == 1 && minx + 2 < maxx + 1 && miny + 1 < maxy + 1) {//if container does not go pass the board
-
-          } else if (cno == 2 && minx + 2 < maxx + 1 && miny + 2 < maxy + 1) {//if container does not go pass the board
-
-          } else if (cno == 3 &&   miny + 3 < maxy + 1) {//if container does not go pass the board
-
-          } else if (cno==4 && minx +3 <maxy+1) {//for last container
-          }*/
-
-/*   if(viablePiece.isEmpty())
-    {return null;}*/
-//convert list to set
-
-    /*Notice that if we ignore the holes , aside from a, d and g,
-    all pieces exhibit symmetry.  We describe these as 'weakly
-    symmetric', and thus take up exactly the same space on the
-    board.  We ignore the redundant rotations with higher numberings (e.g.
-    if a solution could be made with eithere0 or e7 then we ignore the
-    solution with e7 because it is weakly symmetric and has a higher
-    rotation number).  Other examples include b0 & b2, c0 & c2,
-            f0 & f6, and h0 & h2, each of which are identical pairs if we
-    ignore the holes.*/
-
-
-//filter set accordingly
-
-
-/*
- *   -> choose the containers you want from ppContainers by 1)checking the size of the empty spaces
- *
- *                                                          2)check in accordance with unplaced for example:
- *                                                            if piece c - b b ob b  is not in unplaced
- *                                                            there is no necessity to use container 3 and 4
- *
- *   -> Create and Use the indexContainer required to produce the data structure for container exact position
- *      (basically a list of indices):I think indexContainer must be static.
- *      indexContainer can be created based on the chosen container and the current status of the board.
- *   -> check if pieces can fit using ppContainer and task-5  in relation to unplaced and indexContainer
- *   -> If yes then based on the information form the piece and insert it into the output set
- *   **Take note of Strictly symmetric pieces c and h and in Weakly symmetric places it should return the lowest orientation number.
- */
-//System.out.println("End result is " );
