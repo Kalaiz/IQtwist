@@ -647,6 +647,7 @@ public class TwistGame {
       }else if (placement.contains("k")){
         formalPlacement = placement.split("k",2);
       }else formalPlacement = placement.split("l",2);
+        //System.out.println(formalPlacement[0]);
 
       Collections.sort(itStr);
 
@@ -755,11 +756,25 @@ public class TwistGame {
       */
 
       String[] finalSols = new String[solutions.size()];
+      List<List> unorderedPlacement = new ArrayList<>();
       for (int i = 0; i < solutions.size(); i++){
-          finalSols[i] = solutions.get(i);
-        //finalSols[i] = solutions.get(i) + formalPlacement[0];
-        //System.out.println(finalSols[i]);
+          //finalSols[i] = solutions.get(i);
+          finalSols[i] = solutions.get(i) + formalPlacement[0];
+          unorderedPlacement.add(getFormalPieces(finalSols[i]));
+          //System.out.println(finalSols[i]);
       }
+
+        for (int i = 0; i < solutions.size(); i++){
+            //finalSols[i] = solutions.get(i);
+            Collections.sort(unorderedPlacement.get(i));
+            StringBuilder des = new StringBuilder();
+            for (Object o : unorderedPlacement.get(i)){
+                des.append(o);
+            }
+
+            finalSols[i] = des.toString();
+            //System.out.println(finalSols[i]);
+        }
 
       return finalSols;
     }
@@ -770,7 +785,7 @@ public class TwistGame {
       for (int j = 0; j < madePieces.length; j++){
         for (int i = 0; i < missingPieces.length; i++){
           result.add(madePieces[j] + missingPieces[i]);
-          System.out.println(madePieces[j] + missingPieces[i]);
+          //System.out.println(madePieces[j] + missingPieces[i]);
         }
       }
 
