@@ -16,7 +16,7 @@ public class TwistGame {
     private static GameBoard gobj = new GameBoard();
     private static List<String> fakeset=new ArrayList<>(20);
     private static final  int[] containerSpecs={3,2,2,3,3,3,4,1,1,4};//rcrcrc.. where r represents row and c represents column
-    static int[][] ppContainer=new int[5][];//Jagged array for task 6
+    static   int[][] ppContainer=new int[5][];//Jagged array for task 6
     private static final int[] bWeakSymmetricpair={0,2,1,3,4,6,5,7};
     private static final int[] eWeakSymmetricpair={0,7,1,4,2,5,3,6};
     private static final int[] fWeakSymmetricpair={0,6,1,7,2,4,3,5};
@@ -223,7 +223,10 @@ public class TwistGame {
 
     public static void main(String[] args) {
 
+
+
     }
+
     /**
      * Given a string describing a placement of pieces and pegs, return a set
      * of all possible next viable piece placements.   To be viable, a piece
@@ -242,6 +245,7 @@ public class TwistGame {
     public static Set<String> lgetViablePiecePlacements(String placement) //Take note that this does not check if board is valid or not
     {
         // FIXME Task 6: determine the set of valid next piece placements
+
         Set<String> viablePiece = new HashSet();
         Pieces.initialisehms();
         int methodcallctr=0;
@@ -289,11 +293,13 @@ public class TwistGame {
         }
 
 
-        if (viablePiece.isEmpty())
-            return null;
+
         totalmethodcalls+=methodcallctr;
 
-        System.out.println("Test" + (++testval) +" calls Task 5  " + Integer.toString(methodcallctr)+ " Times. Total Average is : " +( totalmethodcalls/testval) );
+        if (viablePiece.isEmpty()){
+            return null;}
+
+      //  System.out.println("Test" + (++testval) +" calls Task 5  " + Integer.toString(methodcallctr)+ " Times. Total Average is : " +( totalmethodcalls/testval) );
         return viablePiece;
     }
 
@@ -301,7 +307,7 @@ public class TwistGame {
     public static Set<String> getViablePiecePlacements(String placement) {//Take note that this does not check if board is valid or not
         fakeset.clear();
         Pieces.initialisehms();//initialise hashmap just for the sake of task tests
-        initialiseContainersSpecs();//can be done only once
+        initialiseContainersSpecs();
         boardcreator(placement,'c');//creates a board in accordance to the placement string
         int[][] ppContainer2 ;
         int ctr=0;
@@ -316,10 +322,12 @@ public class TwistGame {
         ctr+=2;
         //update ppcontainer value in accordance to unplaced
         //find range of the containers in accordance to the emptyindices
-        int minx= getEmptyGrid2('x')[0];
-        int maxx= getEmptyGrid2('x')[getEmptyGrid2('x').length-1];
-        int miny= getEmptyGrid2('y')[0];
-        int maxy= getEmptyGrid2('y')[getEmptyGrid2('y').length-1];
+        int[] emptygridval=getEmptyGrid2('x');
+        int[] emptygridvaly=getEmptyGrid2('y');
+        int minx= emptygridval[0];
+        int maxx= emptygridval[emptygridval.length-1];
+        int miny= emptygridvaly[0];
+        int maxy= emptygridvaly[emptygridvaly.length-1];
         for(int cno:containerscanbeused) {
             for (int mx=minx; mx < maxx + 1; mx++) {
                 for (int my=miny; my < maxy + 1; my++) {
@@ -359,10 +367,9 @@ public class TwistGame {
 
         if(fakeset.size()==0)
         { return null;}
-
         Set<String> viablePiece = new HashSet<String>(fakeset);
         totalmethodcalls+=ctr;
-        //System.out.println("Test" + (++testval) +" calls helper functions (inclusive of task5) " + Integer.toString(ctr)+ " Times. Total Average is : " +( totalmethodcalls/testval) );
+       // System.out.println("Test" + (++testval) +" calls helper functions (inclusive of task5) " + Integer.toString(ctr)+ " Times. Total Average is : " +( totalmethodcalls/testval) );
         return viablePiece;
     }
 
@@ -432,16 +439,16 @@ public class TwistGame {
 
 
 
-    private static int[][] updateppcandnew(String shouldnotbeonrefdata,int[][] ppContainer){
+    private static int[][] updateppcandnew(String shouldnotbeonrefdata,int[][] ppContainer3){
         for(int c=0;c<shouldnotbeonrefdata.length();c++){
             if(shouldnotbeonrefdata.charAt(c)>='i'){continue;}
             int startnum=(shouldnotbeonrefdata.charAt(c)-97) * 8;
             int endnum=startnum+7;
             for(int i=0;i<5;i++){
-                ppContainer[i]=Arrays.stream(ppContainer[i]).filter(no->!(no>=startnum &&no<=endnum)).toArray();
+                ppContainer3[i]=Arrays.stream(ppContainer3[i]).parallel().filter(no->!(no>=startnum &&no<=endnum)).toArray();
             }
         }
-        return ppContainer;
+        return ppContainer3;
     }
 
 
@@ -485,8 +492,7 @@ public class TwistGame {
      *                                        X
      * */
 
-    private static void initialiseContainersSpecs(){
-
+    private  static void  initialiseContainersSpecs(){
         for(int i=0;i<5;i++){
             List<Integer> cs= new ArrayList<>();
             for(int t=0;t<60;t++){
@@ -502,10 +508,9 @@ public class TwistGame {
                     }
                     cs.add(t); } }
             int oarr[]= cs.stream().mapToInt(no->no).toArray();
-            //ppContainer[i] =new int[oarr.length];   //not necessary
+           //ppContainer[i] =new int[oarr.length];   //not necessary
             ppContainer[i]=oarr;
         }
-
     }
 
 
