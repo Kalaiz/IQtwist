@@ -231,53 +231,67 @@ public class Board extends Application {
      * otherwise, start again
      * Authorship: Yuqing Zhang & Kalai
      */
-    public static String piece() {
-        char[] piece = new char[4];
-        Random rand = new Random();
-        piece[0] = (char) (rand.nextInt(8) + 97);
-        piece[1] = (char) (rand.nextInt(8) + 49);
-        piece[2] = (char) (rand.nextInt(4) + 65);
-        piece[3] = (char) (rand.nextInt(8) + 48);
-        String finalpiece = new String(piece);
 
-        return finalpiece;
-    }
 
-    public static String peg() {
-        char[] peg = new char[4];
-        Random rand = new Random();
-        peg[0] = (char) (rand.nextInt(4) + 105);
-        peg[1] = (char) (rand.nextInt(8) + 49);
-        peg[2] = (char) (rand.nextInt(4) + 65);
-        peg[3] = (char) (rand.nextInt(8) + 48);
-        String finalpeg = new String(peg);
+//    public static String piece() {
+//        char[] piece = new char[4];
+//        Random rand = new Random();
+//        piece[0] = (char) (rand.nextInt(8) + 97);
+//        piece[1] = (char) (rand.nextInt(8) + 49);
+//        piece[2] = (char) (rand.nextInt(4) + 65);
+//        piece[3] = (char) (rand.nextInt(8) + 48);
+//        String finalpiece = new String(piece);
+//
+//        return finalpiece;
+//    }
+//
+//    public static String peg() {
+//        char[] peg = new char[4];
+//        Random rand = new Random();
+//        peg[0] = (char) (rand.nextInt(4) + 105);
+//        peg[1] = (char) (rand.nextInt(8) + 49);
+//        peg[2] = (char) (rand.nextInt(4) + 65);
+//        peg[3] = (char) (rand.nextInt(8) + 48);
+//        String finalpeg = new String(peg);
+//
+//        return finalpeg;
+//    }
+//
+//    public static String start_Placements() {
+//        Random rand = new Random();
+//        String str = "                               ";
+//        int numofpiece = rand.nextInt(2);
+//        int numofpeg = rand.nextInt(5) + 1;
+//        if (numofpiece == 1) {//if randomly select one piece, add it to the String
+//            String piece = piece();
+//            str = str + piece;
+//        }
+//        for (int i = 0; i < numofpeg; i++) {//add every peg to the String
+//            String peg = peg();
+//            str = str + peg;
+//        }
+//
+//        return str;
+//    }
+//
+//    public static String valid_Placement() {//if the String requires well-form and valid-placement requirements,
+//        // return it, otherwise randomly select again
+//        String str = start_Placements();
+//        while (!t.isPlacementStringWellFormed(str)) {
+//            str = start_Placements();
+//        }
+//        return str;
+//    }
 
-        return finalpeg;
-    }
-
-    public static String start_Placements() {
-        Random rand = new Random();
-        String str = "";
-        int numofpiece = rand.nextInt(2);
-        int numofpeg = rand.nextInt(5) + 1;
-        if (numofpiece == 1) {//if randomly select one piece, add it to the String
-            str = str + piece();
-        }
-        for (int i = 0; i < numofpeg; i++) {//add every peg to the String
-            str = str + peg();
-        }
-
-        return str;
-    }
-
-    public static String valid_Placement() {//if the String requires well-form and valid-placement requirements,
-        // return it, otherwise randomly select again
-        String str = start_Placements();
-        while (!t.isPlacementStringWellFormed(str)) {
-            str = start_Placements();
-        }
-        return str;
-    }
+//    public static void main(String[] args) {
+//        String str = peg();
+//        int i = 0;
+////        while (t.isPlacementStringValid(str) && i < 10){
+//            //System.out.println(t.isPlacementStringValid(str));
+//            System.out.println(str);
+////            i ++;
+////        }
+//    }
 
     // FIXME Task 8: Implement starting placements
 
