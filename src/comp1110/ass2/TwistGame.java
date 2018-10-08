@@ -669,12 +669,12 @@ public class TwistGame {
             difPie[row] = new String[column];
           }
         }else {
-          difPie[row] = new String[column];
+          difPie[row++] = new String[column];
           c = itStr.get(i).charAt(0);
           column = 1;
           if (i == itStr.size()-1){
             difPie[row] = new String[column];
-          }else row++;
+          }
         }
           //System.out.println(column);
       }
