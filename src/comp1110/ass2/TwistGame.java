@@ -619,8 +619,6 @@ public class TwistGame {
       Set<String> nextPieces = getViablePiecePlacements(placement);
       List<String> solutions = new ArrayList<>();
       int index = 0;
-      String solution = "";
-      String nextPiece = "";
       String[] formalPlacement = new String[2];
       Iterator<String> it = nextPieces.iterator();
       List<String> itStr = new ArrayList<>();
@@ -633,7 +631,7 @@ public class TwistGame {
         if(placed_pieces.indexOf(String.valueOf((char)i))==-1)
           unplaced_pieces = unplaced_pieces + String.valueOf((char)i);
       }
-
+       // System.out.println(unplaced_pieces);
 
       while (it.hasNext()){
         itStr.add(it.next());
@@ -658,25 +656,27 @@ public class TwistGame {
         e.g. aaabbcc is a String[][] with String[0] = new String[3]; String[1] = new String[2]; String[2] = new String[2]
         still have some problems
       */
-      String[][] difPie = new String [unplaced_pieces.length()][];
+      String[][] difPie = new String [unplaced_pieces.length()][];  //The length of unplaced_pieces defines the rows of String[][]
       char c = itStr.get(0).charAt(0);
-      int row = 1;
+      int row = 0;
       int column = 0;
       for (int i = 0; i < itStr.size(); i++) {
+          //System.out.println(itStr.get(i));
         if (itStr.get(i).charAt(0)==c){
           //difPie[row][column] = itStr.get(i);
           column++;
           if (i == itStr.size()-1){
-            difPie[row-1] = new String[column];
+            difPie[row] = new String[column];
           }
         }else {
-          difPie[row-1] = new String[column];
+          difPie[row] = new String[column];
           c = itStr.get(i).charAt(0);
           column = 1;
           if (i == itStr.size()-1){
-            difPie[row-1] = new String[column];
+            difPie[row] = new String[column];
           }else row++;
         }
+          //System.out.println(column);
       }
 
 
@@ -694,13 +694,16 @@ public class TwistGame {
       /*
       *    Give the multi-dimentional string to combination() to find all the possible combinations
       * */
+        System.out.println(row);
       for (int i = 0; i < row; i++){
         if (!solutions.isEmpty()){
           String[] temp = new String[solutions.size()];
           for (int j = 0; j < solutions.size(); j++){
             temp[j] = solutions.get(j);
+              //System.out.println(solutions.get(j));
           }
-          solutions = combination(solutions,temp,difPie[i]);
+          solutions.clear();
+          solutions = combination(solutions,temp,difPie[i+1]);
         }else {
             solutions = combination(solutions,difPie[i],difPie[i+1]);
         }
