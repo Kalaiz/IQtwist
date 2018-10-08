@@ -661,7 +661,7 @@ public class TwistGame {
       int row = 0;
       int column = 0;
       for (int i = 0; i < itStr.size(); i++) {
-          System.out.println(itStr.get(i));
+          //System.out.println(itStr.get(i));
         if (itStr.get(i).charAt(0)==c){
           //difPie[row][column] = itStr.get(i);
           column++;
@@ -685,8 +685,8 @@ public class TwistGame {
       * got NullPointerException
       * */
       for (int i = 0; i < difPie.length; i++) {
-          System.out.println("row: " + i);
-          System.out.println("difPie[" + i + "].length: " + difPie[i].length);
+          //System.out.println("row: " + i);
+          //System.out.println("difPie[" + i + "].length: " + difPie[i].length);
           if (difPie[i]!=null) {
               for (int j = 0; j < difPie[i].length; j++) {
                   difPie[i][j] = itStr.get(index++);
