@@ -631,7 +631,7 @@ public class TwistGame {
         if(placed_pieces.indexOf(String.valueOf((char)i))==-1)
           unplaced_pieces = unplaced_pieces + String.valueOf((char)i);
       }
-       // System.out.println(unplaced_pieces);
+      //System.out.println(unplaced_pieces);
 
       while (it.hasNext()){
         itStr.add(it.next());
@@ -661,7 +661,7 @@ public class TwistGame {
       int row = 0;
       int column = 0;
       for (int i = 0; i < itStr.size(); i++) {
-          //System.out.println(itStr.get(i));
+          System.out.println(itStr.get(i));
         if (itStr.get(i).charAt(0)==c){
           //difPie[row][column] = itStr.get(i);
           column++;
@@ -682,19 +682,22 @@ public class TwistGame {
 
       /*
       * assign the piece value to the multi-dimensional string
-      * got IndexOutOfBoundsException
+      * got NullPointerException
       * */
-      for (int i = 0; i < difPie.length; i++){
-        //System.out.println(i);
-        for (int j = 0; j < difPie[i].length; j++){
-          difPie[i][j] = itStr.get(index++);
-        }
+      for (int i = 0; i < difPie.length; i++) {
+          System.out.println("row: " + i);
+          System.out.println("difPie[" + i + "].length: " + difPie[i].length);
+          if (difPie[i]!=null) {
+              for (int j = 0; j < difPie[i].length; j++) {
+                  difPie[i][j] = itStr.get(index++);
+              }
+          }
       }
 
       /*
       *    Give the multi-dimentional string to combination() to find all the possible combinations
       * */
-        System.out.println(row);
+        //System.out.println(row);
       for (int i = 0; i < row; i++){
         if (!solutions.isEmpty()){
           String[] temp = new String[solutions.size()];
@@ -703,7 +706,7 @@ public class TwistGame {
               //System.out.println(solutions.get(j));
           }
           solutions.clear();
-          solutions = combination(solutions,temp,difPie[i+1]);
+          solutions = combination(solutions, temp, difPie[i + 1]);
         }else {
             solutions = combination(solutions,difPie[i],difPie[i+1]);
         }
