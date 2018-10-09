@@ -20,6 +20,10 @@ import javafx.scene.shape.Path;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.LineNumberReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -222,78 +226,35 @@ public class Board extends Application {
 
     // FIXME Task 7: Implement a basic playable Twist Game in JavaFX that only allows pieces to be placed in valid places
     //uses task 8(creates the base for the game) and 5 (check pieces can be used or not).6 should be used here
-    //private void start_play(){ }
-    /*
-     *piece() returns a String represents one random piece
-     *peg() returns a String represents one random peg
-     * start_Placement() return a String represents 0 or 1 piece plus 1-5 pegs
-     * if the placement is valid, then return by valid_Placement()
-     * otherwise, start again
-     * Authorship: Yuqing Zhang & Kalai
-     */
+
+        // FIXME Task 8: Implement starting placements
 
 
-//    public static String piece() {
-//        char[] piece = new char[4];
-//        Random rand = new Random();
-//        piece[0] = (char) (rand.nextInt(8) + 97);
-//        piece[1] = (char) (rand.nextInt(8) + 49);
-//        piece[2] = (char) (rand.nextInt(4) + 65);
-//        piece[3] = (char) (rand.nextInt(8) + 48);
-//        String finalpiece = new String(piece);
-//
-//        return finalpiece;
-//    }
-//
-//    public static String peg() {
-//        char[] peg = new char[4];
-//        Random rand = new Random();
-//        peg[0] = (char) (rand.nextInt(4) + 105);
-//        peg[1] = (char) (rand.nextInt(8) + 49);
-//        peg[2] = (char) (rand.nextInt(4) + 65);
-//        peg[3] = (char) (rand.nextInt(8) + 48);
-//        String finalpeg = new String(peg);
-//
-//        return finalpeg;
-//    }
-//
-//    public static String start_Placements() {
-//        Random rand = new Random();
-//        String str = "                               ";
-//        int numofpiece = rand.nextInt(2);
-//        int numofpeg = rand.nextInt(5) + 1;
-//        if (numofpiece == 1) {//if randomly select one piece, add it to the String
-//            String piece = piece();
-//            str = str + piece;
-//        }
-//        for (int i = 0; i < numofpeg; i++) {//add every peg to the String
-//            String peg = peg();
-//            str = str + peg;
-//        }
-//
-//        return str;
-//    }
-//
-//    public static String valid_Placement() {//if the String requires well-form and valid-placement requirements,
-//        // return it, otherwise randomly select again
-//        String str = start_Placements();
-//        while (!t.isPlacementStringWellFormed(str)) {
-//            str = start_Placements();
-//        }
-//        return str;
-//    }
+    private String start_play() throws IOException {
+        File filename = new File("assets/1.txt");
+        FileReader read = new FileReader(filename);
+        LineNumberReader reader = new LineNumberReader(read);
 
-//    public static void main(String[] args) {
-//        String str = peg();
-//        int i = 0;
-////        while (t.isPlacementStringValid(str) && i < 10){
-//            //System.out.println(t.isPlacementStringValid(str));
-//            System.out.println(str);
-////            i ++;
-////        }
-//    }
+        Random rand = new Random();
+        int line = rand.nextInt(100);
+        String txt = "";
+        int i = 0;
+        while (txt != null) {
+            i ++;
+            txt = reader.readLine();
+            if (i == line) {
+                //System.out.println("Line" + line + ": " + reader.readLine());
+                System.exit(0);
+            }
+        }
+        reader.close();;
+        read.close();
 
-    // FIXME Task 8: Implement starting placements
+        return txt;
+    }
+
+    public static void main(String[] args) {
+    }
 
     private void makeBoard() {
         Random rn = new Random();

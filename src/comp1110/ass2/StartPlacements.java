@@ -1,8 +1,6 @@
 package comp1110.ass2;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
+import java.io.*;
 import java.util.*;
 
 
@@ -69,8 +67,8 @@ public class StartPlacements {
 
         //1 piece
         for (String p1 : fpiecee) {
-            //String[] start = obj.getSolutions(p1);
-            if (obj.isPlacementStringValid(p1) ) {
+            String[] start = obj.getSolutions(p1);
+            if (obj.isPlacementStringValid(p1) && start.length == 1) {
                 finalpegs.add(p1);
             }
         }
@@ -89,8 +87,8 @@ public class StartPlacements {
         //2 piece
         for (String p1 : fpiecee) {
             for (String p2 : level3) {
-                String[] start = obj.getSolutions(p1 + p2);
-                if (obj.isPlacementStringValid(p1 + p2) && start.length == 1) {
+                //String[] start = obj.getSolutions(p1 + p2);
+                if (obj.isPlacementStringValid(p1 + p2) && obj.isPlacementStringWellFormed(p1 + p2)) {
                     finalpegs.add(p1 + p2);
                 }
             }
@@ -99,7 +97,10 @@ public class StartPlacements {
         return finalpegs;
     }
 
-    //public static void main(String[] args) {
+    public static void main(String[] args) {
+        String placement = "a7A7b6A7c1A3";
+        String[] pl = obj.getSolutions(placement);
+        System.out.println(pl.length);
 //        Set<String> piecelist = pieces();
 //        Set<String> peglist = pegs();
 //
@@ -116,22 +117,23 @@ public class StartPlacements {
 //        } else {
 //            System.out.println("false");
 //        }
-    //}
-
-        public static void main(String[] args) throws Exception{
-            File filename=new File("assets/1.txt");
-            if (!filename.exists()) {
-                filename.createNewFile();
-            }
-
-            Set<String> level3 = level3();
-            BufferedWriter bw=new BufferedWriter(new FileWriter(filename));
-            for(String pi : level3){
-                bw.write(pi);
-                bw.newLine();
-            }
-            bw.close();
-
     }
+
+//        public static void main(String[] args) throws Exception{
+//            File filename=new File("assets/1.txt");
+//            if (filename.exists()) {
+//                filename.delete();
+//                filename.createNewFile();
+//            }
+//
+//            Set<String> level3 = level3();
+//            BufferedWriter bw=new BufferedWriter(new FileWriter(filename));
+//            for(String pi : level3){
+//                bw.write(pi);
+//                bw.newLine();
+//            }
+//            bw.close();
+//
+//    }
 
 }
