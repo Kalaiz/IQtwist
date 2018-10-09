@@ -20,6 +20,10 @@ import javafx.scene.shape.Path;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.LineNumberReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -31,7 +35,7 @@ public class Board extends Application {
     static GameBoard g = new GameBoard();
     private static TwistGame t = new TwistGame();
     private static final int VIEWER_WIDTH = 1280;
-    private static final int VIEWER_HEIGHT = 640;
+    private static final int VIEWER_HEIGHT = 649;
     private static final String URI_BASE = "assets/";
     private final Group root = new Group();
     private final Group controls = new Group();
@@ -39,6 +43,7 @@ public class Board extends Application {
     private static double tempy;//for positioning
     Glow g2 = new Glow();
     Glow g1 = new Glow();
+    static String boardStr="";
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -57,6 +62,9 @@ public class Board extends Application {
         grid.setLayoutY(10);
         tempy = 50;
         tempx = 100;
+        TwistGame game =new TwistGame();
+        GameBoard board= new GameBoard();
+
         List<ImageView> imgObjs = new ArrayList();// list of images
         List<boxcreator> boxes = new ArrayList();
         //For loop to iterate through everypiece
@@ -87,9 +95,11 @@ public class Board extends Application {
             ivo.setOnMouseEntered(e -> {
                 ivo.setEffect(g2);
             });
+            b.updateflip(1);
             ivo.setOnMouseClicked(t -> {
                 if (t.getButton() == MouseButton.SECONDARY) {
                     int sy = (ivo.getScaleY() == -1) ? 1 : -1;
+                    b.updateflip(sy);
                     ivo.setScaleY(sy);
                 }
             });
@@ -101,6 +111,7 @@ public class Board extends Application {
                 ivo.setRotate(b.rotate);
             });
             ivo.setOnMouseDragged(m -> {
+
                 ivo.setY(m.getSceneY() - height / 2);//for centering piece upon drag
                 ivo.setEffect(g2);
                 ivo.setX(m.getSceneX() - width / 2);
@@ -112,18 +123,41 @@ public class Board extends Application {
                         double y = m.getSceneY() - height / 2;//for moving piece with cursor being centerd
                         double x = m.getSceneX() - width / 2;
                         double rotval = b.rotate;
-                        if (b.rotate / 90 % 2 != 0 && !(b.getchar() == 'g' || b.getchar() == 'e')) {
-                            int translatex = (b.getchar() == 'h') ? -50 : (b.rotate == 90) ? -75 : -25;
-                            ivo.setTranslateX(translatex);
-                        }
+
                         int[] xyval = getrowcol(x, y, rotval, b.getchar());
+                        System.out.println("col index : "+ xyval[0]+ " row index :  "+ xyval[1] + "  Game board : "+ boardStr);
                         int[] csrs = {(int) height / 50, (int) width / 50};
                         if ((b.rotate / 90) % 2 != 0) {//Switch cs and rs .
                             csrs[0] = (int) width / 50;
                             csrs[1] = (int) height / 50;
                         }
+                        switch(b.rotate) {
+                            case 0:
+
+                        }
+                        int[] gridVal={ xyval[0], xyval[1], csrs[1], csrs[0]};
+                        b.updategridval(gridVal);
+                        b.setOrientation();
+                        b.updatepieceinfo();
+                        String piece=b.getPieceinfo();
+                        updateboard(piece);
+
                         try {
-                            grid.add(ivo, xyval[0], xyval[1], csrs[1], csrs[0]);
+                            System.out.println(piece);
+                            if(game.isPlacementStringValid(boardStr)){
+                                if (b.rotate / 90 % 2 != 0 && !(b.getchar() == 'g' || b.getchar() == 'e')) {
+                                    int translatex = (b.getchar() == 'h') ? -50 : (b.rotate == 90) ? -75 : -25;
+                                    ivo.setTranslateX(translatex);
+                                }
+                                grid.add(ivo, xyval[0], xyval[1], csrs[1], csrs[0]);
+                            }
+                            else{
+                                boardStr=boardStr.substring(0,boardStr.length()-4);
+                                ivo.setX(b.x);//make the piece go back to default place
+                                ivo.setY(b.y);
+                            }
+
+
                         }//column index, rowindex, colspan, rowspan
                         catch (IllegalArgumentException e) {
                             ivo.setX(b.x);//make the piece go back to default place
@@ -133,11 +167,16 @@ public class Board extends Application {
                 });
             });
             root.getChildren().add(ivo);
+
         }
         Scene scene = new Scene(root, VIEWER_WIDTH, VIEWER_HEIGHT);
         root.getChildren().add(grid);
         primaryStage.setScene(scene);
         primaryStage.show();
+    }
+
+    void updateboard(String piece){
+        boardStr+=(piece);
     }
 
     private int[] getrowcol(double x, double y, double rotate, char ptype) {//returns respective grid row values
@@ -172,8 +211,21 @@ public class Board extends Application {
         int rotate;
         double x, y;// default x position and y position
         double height, width;
-        int gridVal[];
-        int translation;
+        int gridVal[];//column index, rowindex, colspan, rowspan
+        String pieceinfo;
+        String orientation;
+        int flip;//-1 means it is flipped
+
+
+        void updateflip(int flip){
+            this.flip=flip;
+        }
+        void setOrientation(){
+            int rno=(rotate/90==4)?0:rotate/90;
+            int orientationno=(flip==1)?rno:rno+4;
+            orientation=Integer.toString(orientationno);
+            //orientation=()
+        }
 
         boxcreator(char ptype, double height, double width) {
             this.ptype = ptype;
@@ -190,6 +242,12 @@ public class Board extends Application {
             }
         }
 
+
+        String getPieceinfo(){
+            return pieceinfo;
+        }
+
+
         void defaultxy(double x, double y) {
             this.x = x;
             this.y = y;
@@ -198,6 +256,16 @@ public class Board extends Application {
         char getchar() {
             return ptype;
         }
+
+        void updategridval(int[] gridVal){
+            this.gridVal=gridVal;
+        }
+
+        void updatepieceinfo(){
+            pieceinfo=ptype+Integer.toString(gridVal[0]+1)+((char)(gridVal[1]+65))+orientation;
+        }
+
+
     }
 
     class PieceStats {
@@ -222,78 +290,35 @@ public class Board extends Application {
 
     // FIXME Task 7: Implement a basic playable Twist Game in JavaFX that only allows pieces to be placed in valid places
     //uses task 8(creates the base for the game) and 5 (check pieces can be used or not).6 should be used here
-    //private void start_play(){ }
-    /*
-     *piece() returns a String represents one random piece
-     *peg() returns a String represents one random peg
-     * start_Placement() return a String represents 0 or 1 piece plus 1-5 pegs
-     * if the placement is valid, then return by valid_Placement()
-     * otherwise, start again
-     * Authorship: Yuqing Zhang & Kalai
-     */
-
-
-//    public static String piece() {
-//        char[] piece = new char[4];
-//        Random rand = new Random();
-//        piece[0] = (char) (rand.nextInt(8) + 97);
-//        piece[1] = (char) (rand.nextInt(8) + 49);
-//        piece[2] = (char) (rand.nextInt(4) + 65);
-//        piece[3] = (char) (rand.nextInt(8) + 48);
-//        String finalpiece = new String(piece);
-//
-//        return finalpiece;
-//    }
-//
-//    public static String peg() {
-//        char[] peg = new char[4];
-//        Random rand = new Random();
-//        peg[0] = (char) (rand.nextInt(4) + 105);
-//        peg[1] = (char) (rand.nextInt(8) + 49);
-//        peg[2] = (char) (rand.nextInt(4) + 65);
-//        peg[3] = (char) (rand.nextInt(8) + 48);
-//        String finalpeg = new String(peg);
-//
-//        return finalpeg;
-//    }
-//
-//    public static String start_Placements() {
-//        Random rand = new Random();
-//        String str = "                               ";
-//        int numofpiece = rand.nextInt(2);
-//        int numofpeg = rand.nextInt(5) + 1;
-//        if (numofpiece == 1) {//if randomly select one piece, add it to the String
-//            String piece = piece();
-//            str = str + piece;
-//        }
-//        for (int i = 0; i < numofpeg; i++) {//add every peg to the String
-//            String peg = peg();
-//            str = str + peg;
-//        }
-//
-//        return str;
-//    }
-//
-//    public static String valid_Placement() {//if the String requires well-form and valid-placement requirements,
-//        // return it, otherwise randomly select again
-//        String str = start_Placements();
-//        while (!t.isPlacementStringWellFormed(str)) {
-//            str = start_Placements();
-//        }
-//        return str;
-//    }
-
-//    public static void main(String[] args) {
-//        String str = peg();
-//        int i = 0;
-////        while (t.isPlacementStringValid(str) && i < 10){
-//            //System.out.println(t.isPlacementStringValid(str));
-//            System.out.println(str);
-////            i ++;
-////        }
-//    }
 
     // FIXME Task 8: Implement starting placements
+
+
+    private String start_play() throws IOException {
+        File filename = new File("assets/1.txt");
+        FileReader read = new FileReader(filename);
+        LineNumberReader reader = new LineNumberReader(read);
+
+        Random rand = new Random();
+        int line = rand.nextInt(100);
+        String txt = "";
+        int i = 0;
+        while (txt != null) {
+            i ++;
+            txt = reader.readLine();
+            if (i == line) {
+                //System.out.println("Line" + line + ": " + reader.readLine());
+                System.exit(0);
+            }
+        }
+        reader.close();;
+        read.close();
+
+        return txt;
+    }
+
+    public static void main(String[] args) {
+    }
 
     private void makeBoard() {
         Random rn = new Random();
@@ -330,6 +355,7 @@ public class Board extends Application {
     use Blur effect for that certain piece (using setEffect) Use task 9 code for the solutions.*/
     // FIXME Task 10: Implement hints
     public static void hint() {
+
     }
 
     // FIXME Task 11: Generate interesting starting placements
