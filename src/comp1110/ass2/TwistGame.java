@@ -594,20 +594,8 @@ public class TwistGame {
 //        solutions[i] = placement.substring(0, pieceIndex * 4) + nextPiece + placement.substring(pieceIndex * 4, placement.length() - 24);
 //      }
       String[] solutions = reorderPlacementStrings(placement);
-      List<String> finalSols = new ArrayList<>();
 
-      for (int i = 0; i < solutions.length; i++) {
-        if (isPlacementStringValid(solutions[i])){
-          finalSols.add(solutions[i]);
-        }
-      }
-
-      String[] fss = new String[finalSols.size()];
-      for (int i = 0; i < finalSols.size(); i++) {
-        fss[i] = finalSols.get(i);
-      }
-
-      return fss;
+      return solutions;
     }
 
     /*
@@ -682,7 +670,6 @@ public class TwistGame {
 
       /*
       * assign the piece value to the multi-dimensional string
-      * got NullPointerException
       * */
       for (int i = 0; i < difPie.length; i++) {
           //System.out.println("row: " + i);
@@ -762,15 +749,33 @@ public class TwistGame {
       }
       */
 
-      String[] finalSols = new String[solutions.size()];
+      List<String> finalSols = new ArrayList<>();
       List<List> unorderedPlacement = new ArrayList<>();
       for (int i = 0; i < solutions.size(); i++){
           //finalSols[i] = solutions.get(i);
-          finalSols[i] = solutions.get(i) + formalPlacement[0];
-          unorderedPlacement.add(getFormalPieces(finalSols[i]));
+          //finalSols[i] = solutions.get(i) + formalPlacement[0];
+          unorderedPlacement.add(getFormalPieces(solutions.get(i) + formalPlacement[0]));
+
+
+          Collections.sort(unorderedPlacement.get(i));
+          StringBuilder des = new StringBuilder();
+          for (Object o : unorderedPlacement.get(i)){
+              des.append(o);
+          }
+
+          if (isPlacementStringValid(des.toString())){
+              finalSols.add(des.toString());
+          }
+          des = null;
+
           //System.out.println(finalSols[i]);
       }
 
+      String[] retVal = new String[finalSols.size()];
+      for (int i = 0; i < finalSols.size(); i++){
+          retVal[i] = finalSols.get(i);
+      }
+/*
         for (int i = 0; i < solutions.size(); i++){
             //finalSols[i] = solutions.get(i);
             Collections.sort(unorderedPlacement.get(i));
@@ -782,9 +787,9 @@ public class TwistGame {
             finalSols[i] = des.toString();
             des = null;
             //System.out.println(finalSols[i]);
-        }
+        }*/
 
-      return finalSols;
+      return retVal;
     }
 
     //Combine all the different pieces.  e.g. a1,a2,a3,b1,b2,c1 --> a1,b1,c1; a1,b2,c1; a2, b1, c1; a2, b2, c1; ....
