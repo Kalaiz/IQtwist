@@ -131,13 +131,10 @@ public class Board extends Application {
                             csrs[0] = (int) width / 50;
                             csrs[1] = (int) height / 50;
                         }
-                        switch(b.rotate) {
-                            case 0:
 
-                        }
                         int[] gridVal={ xyval[0], xyval[1], csrs[1], csrs[0]};
-                        b.updategridval(gridVal);
                         b.setOrientation();
+                        b.updategridval(gridVal);
                         b.updatepieceinfo();
                         String piece=b.getPieceinfo();
                         updateboard(piece);
@@ -258,7 +255,23 @@ public class Board extends Application {
         }
 
         void updategridval(int[] gridVal){
+            int r = Integer.parseInt(orientation);
             this.gridVal=gridVal;
+            if(r==1||r==5){
+                switch(ptype){
+                    case 'c': case 'h':
+                        break;
+                    default:
+                        this.gridVal[0]=gridVal[0]-1;
+                        break;
+                }
+
+            }
+            if(r==3&& ptype=='e'){
+
+            }
+
+
         }
 
         void updatepieceinfo(){
@@ -317,8 +330,6 @@ public class Board extends Application {
         return txt;
     }
 
-    public static void main(String[] args) {
-    }
 
     private void makeBoard() {
         Random rn = new Random();
