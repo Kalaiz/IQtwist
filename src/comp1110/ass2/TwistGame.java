@@ -707,6 +707,7 @@ public class TwistGame {
           }
           solutions.clear();
           solutions = combination(solutions, temp, difPie[i + 1]);
+          temp = null;
         }else {
             solutions = combination(solutions,difPie[i],difPie[i+1]);
         }
@@ -779,6 +780,7 @@ public class TwistGame {
             }
 
             finalSols[i] = des.toString();
+            des = null;
             //System.out.println(finalSols[i]);
         }
 
