@@ -222,7 +222,13 @@ public class TwistGame {
     }
 
     public static void main(String[] args) {
-
+        String placement = "d2A6e2C3f3C4g4A7i6B0j2B0j1C0";
+        Set<String> s = getViablePiecePlacements(placement);
+        Iterator<String> a= s.iterator();
+        while(a.hasNext()){
+            String h = a.next();
+            System.out.println(h);
+        }
 
 
     }

@@ -98,9 +98,17 @@ public class StartPlacements {
     }
 
     public static void main(String[] args) {
-        String placement = "a7A7b6A7c1A3";
-        String[] pl = obj.getSolutions(placement);
-        System.out.println(pl.length);
+        String placement = "d2A6e2C3f3C4g4A7";
+        String[] s = obj.getSolutions(placement);
+        for(String c : s){
+            System.out.println(c);
+        }
+        /*Iterator<String> a= s.iterator();
+        while(a.hasNext()){
+            System.out.println(a.next());
+        }*/
+
+
 //        Set<String> piecelist = pieces();
 //        Set<String> peglist = pegs();
 //

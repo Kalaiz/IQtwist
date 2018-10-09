@@ -88,6 +88,7 @@ public class Board extends Application {
                 tempx += 50;
             }
             tempy += b.measurement;
+
             ivo.setX(tempx);
             ivo.setY(tempy);
             b.defaultxy(tempx, tempy);
@@ -163,10 +164,20 @@ public class Board extends Application {
                     }
                 });
             });
+
+
             root.getChildren().add(ivo);
 
         }
+
         Scene scene = new Scene(root, VIEWER_WIDTH, VIEWER_HEIGHT);
+        scene.setOnKeyPressed(c->{if(!c.getCharacter().equals("r")){
+            String remove=  boardStr.substring(boardStr.length()-4);
+            char ptype=remove.charAt(0);
+            imgObjs.get(ptype-97).setX(boxes.get(ptype-97).x);
+            imgObjs.get(ptype-97).setY(boxes.get(ptype-97).y);
+        }
+        });
         root.getChildren().add(grid);
         primaryStage.setScene(scene);
         primaryStage.show();
