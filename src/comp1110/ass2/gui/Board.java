@@ -88,6 +88,7 @@ public class Board extends Application {
                 tempx += 50;
             }
             tempy += b.measurement;
+
             ivo.setX(tempx);
             ivo.setY(tempy);
             b.defaultxy(tempx, tempy);
@@ -131,13 +132,10 @@ public class Board extends Application {
                             csrs[0] = (int) width / 50;
                             csrs[1] = (int) height / 50;
                         }
-                        switch(b.rotate) {
-                            case 0:
 
-                        }
                         int[] gridVal={ xyval[0], xyval[1], csrs[1], csrs[0]};
-                        b.updategridval(gridVal);
                         b.setOrientation();
+                        b.updategridval(gridVal);
                         b.updatepieceinfo();
                         String piece=b.getPieceinfo();
                         updateboard(piece);
@@ -166,10 +164,20 @@ public class Board extends Application {
                     }
                 });
             });
+
+
             root.getChildren().add(ivo);
 
         }
+
         Scene scene = new Scene(root, VIEWER_WIDTH, VIEWER_HEIGHT);
+        scene.setOnKeyPressed(c->{if(!c.getCharacter().equals("r")){
+            String remove=  boardStr.substring(boardStr.length()-4);
+            char ptype=remove.charAt(0);
+            imgObjs.get(ptype-97).setX(boxes.get(ptype-97).x);
+            imgObjs.get(ptype-97).setY(boxes.get(ptype-97).y);
+        }
+        });
         root.getChildren().add(grid);
         primaryStage.setScene(scene);
         primaryStage.show();
@@ -258,7 +266,23 @@ public class Board extends Application {
         }
 
         void updategridval(int[] gridVal){
+            int r = Integer.parseInt(orientation);
             this.gridVal=gridVal;
+            if(r==1||r==5){
+                switch(ptype){
+                    case 'c': case 'h':
+                        break;
+                    default:
+                        this.gridVal[0]=gridVal[0]-1;
+                        break;
+                }
+
+            }
+            if(r==3&& ptype=='e'){
+
+            }
+
+
         }
 
         void updatepieceinfo(){
@@ -317,8 +341,6 @@ public class Board extends Application {
         return txt;
     }
 
-    public static void main(String[] args) {
-    }
 
     private void makeBoard() {
         Random rn = new Random();
