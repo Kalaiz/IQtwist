@@ -263,7 +263,7 @@ public class TwistGame {
      * @return An set of viable piece placements, or null if there are none.
      * author: Lingyu Xia
      */
-    public static Set<String> lgetViablePiecePlacements(String placement) //Take note that this does not check if board is valid or not
+    public static Set<String> ligetViablePiecePlacements(String placement) //Take note that this does not check if board is valid or not
     {
         // FIXME Task 6: determine the set of valid next piece placements
 
