@@ -403,60 +403,60 @@ public class TwistGame {
         if (viablePiece2.size() == 0) {//if set has nothing
             viablePiece2.add(piece);
         } else {
-            int check=0;
-            Iterator<String> iter=viablePiece2.iterator();
-         insertloop:while(iter.hasNext()) {
-                String x=iter.next();
+    try{        int check = 0;
+            Iterator<String> iter = viablePiece2.iterator();
+            insertloop:
+            while (iter.hasNext()) {
+                String x = iter.next();
                 if (piece.substring(0, 2).equals(x.substring(0, 2)) && !(piece.startsWith("a") || piece.startsWith("d") || piece.startsWith("g"))) {
-                   int piecer=Integer.parseInt(piece.substring(3));//rotation value of the input piece
-                   int alrsetpr=Integer.parseInt(x.substring(3));//rotation value of already in set (piece)
-                        int[] temparr=new int[8];
+                    int piecer = Integer.parseInt(piece.substring(3));//rotation value of the input piece
+                    int alrsetpr = Integer.parseInt(x.substring(3));//rotation value of already in set (piece)
+                    int[] temparr = new int[8];
                     //if there is a Weakly symmetric
-                        switch(piece.charAt(0)){
-                            case 'c': case'h':
-                                if (alrsetpr-piecer==2){
-                                    viablePiece2.remove(x);
-                                    viablePiece2.add(piece);
-                                    break ;
-                                }
-                            case 'b':
-                                temparr= bWeakSymmetricpair;
-                                break;
-
-                            case 'f':
-                               temparr=fWeakSymmetricpair;
-                               break;
-
-                            case 'e':
-                                temparr=eWeakSymmetricpair;
-                                break;
-                        }
-                        for(int t=0;t<4;t++){
-                            if(temparr[t*2]==piecer&&temparr[(2*t)+1]==alrsetpr){//
+                    switch (piece.charAt(0)) {
+                        case 'c':
+                        case 'h':
+                            if (alrsetpr - piecer == 2) {
                                 viablePiece2.remove(x);
                                 viablePiece2.add(piece);
-                                check++;
-                                break insertloop;//once updated the other values in the set must be checked too
+                                break;
                             }
-                             else if (temparr[t*2]==alrsetpr&&temparr[(2*t)+1]==piecer){
-                                    check++;//if vice versa then dont add
-                                    break insertloop;
-                                }
-                                else if(t==3){
-                                    continue insertloop;
-                            }
-                            }
-                        viablePiece2.add(piece);//if pieces are not weakly symmetric
-                       break ;
+                        case 'b':
+                            temparr = bWeakSymmetricpair;
+                            break;
 
-                            }
-                            }
-            if (check!=1) {
+                        case 'f':
+                            temparr = fWeakSymmetricpair;
+                            break;
+
+                        case 'e':
+                            temparr = eWeakSymmetricpair;
+                            break;
+                    }
+                    for (int t = 0; t < 4; t++) {
+                        if (temparr[t * 2] == piecer && temparr[(2 * t) + 1] == alrsetpr) {//
+                            viablePiece2.remove(x);
+                            viablePiece2.add(piece);
+                            check++;
+                            break insertloop;//once updated the other values in the set must be checked too
+                        } else if (temparr[t * 2] == alrsetpr && temparr[(2 * t) + 1] == piecer) {
+                            check++;//if vice versa then dont add
+                            break insertloop;
+                        } else if (t == 3) {
+                            continue insertloop;
+                        }
+                    }
+                    viablePiece2.add(piece);//if pieces are not weakly symmetric
+                    break;
+
+                }
+            }
+            if (check != 1) {
                 viablePiece2.add(piece);//if pieces are not weakly symmetric
             }
 
 
-                }
+        } catch(java.util.ConcurrentModificationException e){}  }
 
             }
 
