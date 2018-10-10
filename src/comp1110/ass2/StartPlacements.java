@@ -59,27 +59,37 @@ public class StartPlacements {
 
     /* choose a difficult level
      * each level contains a set of String(start placement)
-     * level 3 : one piece
+     * level 3 : five pieces
      */
     public static Set<String> level3() {
-        Set<String> finalpegs = new HashSet<>();
+        Set<String> finalstart = new HashSet<>();
         Set<String> fpiecee = pieces();
 
-        //1 piece
+        //5 piece
         for (String p1 : fpiecee) {
-            String[] start = obj.getSolutions(p1);
-            if (obj.isPlacementStringValid(p1) && start.length == 1) {
-                finalpegs.add(p1);
+            for (String p2 : fpiecee){
+                for (String p3 : fpiecee){
+                    for (String p4 : fpiecee){
+                        for (String p5 : fpiecee){
+                            for (String p6 : fpiecee) {
+                                String p = p1 + p2 + p3 + p4 + p5 + p6;
+                                if (obj.isPlacementStringWellFormed(p) && obj.isPlacementStringValid(p)) {
+                                    finalstart.add(p);
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
 
-        return finalpegs;
+        return finalstart;
     }
 
     /*
-     * level 2: two pieces
+     * level 1: 6 pieces
      */
-    public static Set<String> level2() {
+    public static Set<String> level1() {
         Set<String> finalpegs = new HashSet<>();
         Set<String> fpiecee = pieces();
         Set<String> level3 = level3();
@@ -97,18 +107,10 @@ public class StartPlacements {
         return finalpegs;
     }
 
-    public static void main(String[] args) {
-        String placement = "d2A6e2C3f3C4g4A7";
-        String[] s = obj.getSolutions(placement);
-        for(String c : s){
-            System.out.println(c);
-        }
-        /*Iterator<String> a= s.iterator();
-        while(a.hasNext()){
-            System.out.println(a.next());
-        }*/
-
-
+//    public static void main(String[] args) {
+//        String placement = "a7A7b6A7c1A3d2A6e2C3f3C2g4A7";
+//        String[] pl = obj.getSolutions(placement);
+//        System.out.println(pl.length);
 //        Set<String> piecelist = pieces();
 //        Set<String> peglist = pegs();
 //
@@ -125,23 +127,23 @@ public class StartPlacements {
 //        } else {
 //            System.out.println("false");
 //        }
-    }
-
-//        public static void main(String[] args) throws Exception{
-//            File filename=new File("assets/1.txt");
-//            if (filename.exists()) {
-//                filename.delete();
-//                filename.createNewFile();
-//            }
-//
-//            Set<String> level3 = level3();
-//            BufferedWriter bw=new BufferedWriter(new FileWriter(filename));
-//            for(String pi : level3){
-//                bw.write(pi);
-//                bw.newLine();
-//            }
-//            bw.close();
-//
 //    }
+
+        public static void main(String[] args) throws Exception{
+            File filename=new File("assets/1.txt");
+            if (filename.exists()) {
+                filename.delete();
+                filename.createNewFile();
+            }
+
+            Set<String> level3 = level3();
+            BufferedWriter bw=new BufferedWriter(new FileWriter(filename));
+            for(String pi : level3){
+                bw.write(pi);
+                bw.newLine();
+            }
+            bw.close();
+
+    }
 
 }
