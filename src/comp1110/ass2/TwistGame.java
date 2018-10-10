@@ -14,7 +14,7 @@ import static comp1110.ass2.Pieces.hm;
  */
 public class TwistGame {
     private static GameBoard gobj = new GameBoard();
-    private static List<String> fakeset=new ArrayList<>(20);
+    private static List<String> fakeset=new ArrayList<>(200);
     private static final  int[] containerSpecs={3,2,2,3,3,3,4,1,1,4};//rcrcrc.. where r represents row and c represents column
     static   int[][] ppContainer=new int[5][];//Jagged array for task 6
     private static final int[] bWeakSymmetricpair={0,2,1,3,4,6,5,7};
@@ -222,12 +222,14 @@ public class TwistGame {
     }
 
     public static void main(String[] args) {
-        String placement = "d2A6e2C3f3C4g4A7i6B0j2B0j1C0";
+     /*   String placement = "c1A3d2A6e2C3f3C2g4A7h6D0j2B0j1C0k3C0l4B0l5C0";
         Set<String> s = getViablePiecePlacements(placement);
+        int ctr=0;
         Iterator<String> a= s.iterator();
         while(a.hasNext()){
+            ctr++;
             String h = a.next();
-            System.out.println(h);
+            System.out.println(ctr+""+h);*/
         }
 
 
@@ -312,11 +314,13 @@ public class TwistGame {
 
     public static Set<String> getViablePiecePlacements(String placement) {//Take note that this does not check if board is valid or not
         fakeset.clear();
-        Pieces.initialisehms();//initialise hashmap just for the sake of task tests
-        initialiseContainersSpecs();
+        if(testval<1) {
+            Pieces.initialisehms();//initialise hashmap just for the sake of task tests
+            initialiseContainersSpecs();
+        }
         boardcreator(placement,'c');//creates a board in accordance to the placement string
         int[][] ppContainer2 ;
-        int ctr=0;
+       // int ctr=0;
         Viewer access=new Viewer();
         String unplaced ="";
         String nonAvailcharpieces=access.returner(placement,0);
@@ -325,7 +329,7 @@ public class TwistGame {
         for(int i:output){ unplaced+=(Character.toString((char)i)); }//converting to String- not necessary
         List<Integer> containerscanbeused=listofcontainersused(unplaced);
         ppContainer2=updateppcandnew(nonAvailcharpieces,ppContainer);
-        ctr+=2;
+       // ctr+=2;
         //update ppcontainer value in accordance to unplaced
         //find range of the containers in accordance to the emptyindices
         int[] emptygridval=getEmptyGrid2('x');
@@ -346,9 +350,9 @@ public class TwistGame {
                                     //within the container change the  piece e and h placements
                                     for(int ix=mx;ix<mx+containerSpecs[2*cno];ix++){//removed -1 from bound
                                         for(int iy=my;iy<my+containerSpecs[2*cno+1];iy++){
-                                            String piece=(char) ((pno/8)+97)+""+col+row+Integer.toString(pno-((pno/8)*8));
-                                            if(isPlacementStringValid(placement+piece) && isPlacementWellFormed(piece)){
-                                                ctr++;
+                                            String piece=(char) ((pno/8)+97)+col+row+Integer.toString(pno-((pno/8)*8));
+                                            if(isPlacementStringValid(placement+piece)){
+                                               // ctr++;
                                               insertinfakeset(piece);
                                             }
                                         }
@@ -356,10 +360,10 @@ public class TwistGame {
                                 }
 
                                 else {
-                                    String piece = (char) ((pno / 8) + 97) + "" + col + row + Integer.toString(pno - ((pno / 8) * 8));
+                                    String piece = (char) ((pno / 8) + 97)  + col + row + Integer.toString(pno - ((pno / 8) * 8));
                                     if (isPlacementStringValid(placement + piece)) {
                                        insertinfakeset(piece);
-                                       ctr++;
+                                      // ctr++;
                                     }
                                     //generate piece data  accordingly to check with isValidPlacement  and then check
                                     //if valid add to viablePiece set
@@ -374,7 +378,7 @@ public class TwistGame {
         if(fakeset.size()==0)
         { return null;}
         Set<String> viablePiece = new HashSet<String>(fakeset);
-        totalmethodcalls+=ctr;
+        //totalmethodcalls+=ctr;
        // System.out.println("Test" + (++testval) +" calls helper functions (inclusive of task5) " + Integer.toString(ctr)+ " Times. Total Average is : " +( totalmethodcalls/testval) );
         return viablePiece;
     }
@@ -389,9 +393,7 @@ public class TwistGame {
                    int piecer=Integer.parseInt(piece.substring(3));
                    int alrsetpr=Integer.parseInt(fakeset.get(i).substring(3));
                     if (piece.equals(fakeset.get(i))) {
-
                     }
-
                     else  {
                         int[] temparr=new int[8];
                         switch(piece.charAt(0)){
