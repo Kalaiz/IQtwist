@@ -234,16 +234,21 @@ public class TwistGame {
     }
 
     public static void main(String[] args) {
-//getViablePiecePlacements("c1A3d2A6e2C3f3C4g4A7h6D0i6B0j2B0j1C0k3C0l4B0l5C0");
-     /*   String placement = "c1A3d2A6e2C3f3C2g4A7h6D0j2B0j1C0k3C0l4B0l5C0";
-        Set<String> s = getViablePiecePlacements(placement);
-        int ctr=0;
-        Iterator<String> a= s.iterator();
-        while(a.hasNext()){
+        //getViablePiecePlacements("c1A3d2A6");
+        String placement = "f3C4i6B0j1C0k3C0l4B0l5C0";
+      // Set<String> s = getViablePiecePlacements(placement);
+        String[] s = getSolutions(placement);
+        int ctr = 0;
+        for (String x : s){
+            System.out.println(x);
+        }
+    /*    Iterator<String> a = s.iterator();
+        while (a.hasNext()) {
             ctr++;
             String h = a.next();
-            System.out.println(ctr+""+h);*/
-        }
+            System.out.println(ctr + "" + h);
+        }*/
+    }
 
 
 
@@ -601,6 +606,12 @@ public class TwistGame {
      * @return An array of strings, each 32-characters long, describing a unique
      * unordered solution to the game given the starting point provided by placement.
      */
+
+    // FIXME : IMPORTANT :
+    // 1)Whenever there is just one piece left to solve getSolution return null --
+    //     example : "b6A7c1A3d2A6e2C3f3C4g4A7h6D0i6B0j2B0j1C0k3C0l4B0" should return a7A7 added to it
+    // 2) combiner part of Task 9 is sometimes causing heap error : "f3C4i6B0j1C0k3C0l4B0l5C0"
+
     public static String[] getSolutions(String placement) {//Use task 6 code here
 
         // FIXME Task 9: determine all solutions to the game, given a particular starting placement
