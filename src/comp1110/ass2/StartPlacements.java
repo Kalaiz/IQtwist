@@ -13,103 +13,86 @@ public class StartPlacements {
     static TwistGame obj;
     static final int side = 4;
     static final String BASE = "assets/";
+    static StartPieces pi;
 
-    public static Set<String> pieces(){
-        Set<String> piecelist = new HashSet<>();
-        for (int i = 0; i < 8; i ++){
-            for (int j = 0; j < 8; j ++){
-                for (int k = 0; k < 4; k ++){
-                    for (int l = 0; l < 8; l ++){
-                        char[] piece = new char[side];
-                        piece[0] = (char)(97 + i);
-                        piece[1] = (char)(49 + j);
-                        piece[2] = (char)(65 + k);
-                        piece[3] = (char)(48 + l);
-                        String pi = new String(piece);
-                        if(obj.isPlacementStringValid(pi)){
-                        piecelist.add(pi);}
-                    }
-                }
-            }
-        }
-
-        return piecelist;
-    }
 
     /*
      * the start placements contain 1)1-5 pegs;
      * 2)pegs plus 1 piece
      */
-    public static Set<String> pegs(){
-        Set<String> peglist = new HashSet<>();
-        for (int i = 0; i < 4; i ++){
-            for (int j = 0; j < 8; j ++){
-                for (int k = 0; k < 4; k ++){
-                        char[] peg = new char[side];
-                        peg[0] = (char)(105 + i);
-                        peg[1] = (char)(49 + j);
-                        peg[2] = (char)(65 + k);
-                        peg[3] = (char)(48);
-                        String pi = new String(peg);
-                        peglist.add(pi);}
+    public static Set<String> pegs() {
+        Set<String> pegset1 = new HashSet<>();
+        Set<String> pegset = new HashSet<>();
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                for (int k = 0; k < 2; k++) {
+                    String peg = "";
+                    peg += (char) (105 + i);
+                    peg += (char) (49 + j);
+                    peg += (char) (65 + k);
+                    peg += (char) (48);
+                    pegset1.add(peg);
+                }
             }
         }
-        return peglist;
+
+        for (String p : pegset1) {
+            pegset.add(p);
+            if (pegset.size() > 10) {
+                break;
+            }
+        }
+
+        return pegset;
     }
 
     /* choose a difficult level
      * each level contains a set of String(start placement)
-     * level 3 : five pieces
+     * level 3 : 4 pieces + 2 pegs
      */
     public static Set<String> level3() {
         Set<String> finalstart = new HashSet<>();
-        Set<String> fpiecee = pieces();
+        Set<String> finalstart1 = new HashSet<>();
+        //Set<String> fpieces = pieces1();
 
-        //5 piece
-        for (String p1 : fpiecee) {
-            for (String p2 : fpiecee){
-                for (String p3 : fpiecee){
-                    for (String p4 : fpiecee){
-                        for (String p5 : fpiecee){
-                            for (String p6 : fpiecee) {
-                                String p = p1 + p2 + p3 + p4 + p5 + p6;
-                                if (obj.isPlacementStringWellFormed(p) && obj.isPlacementStringValid(p)) {
-                                    finalstart.add(p);
-                                }
+        //6 piece
+        for (String p1 : pi.pieces(0)) {
+            for (String p2 : pi.pieces(1))
+                for (String p3 : pi.pieces(2)) {
+                    for (String p4 : pi.pieces(3)) {
+                        for (String p5 : pegs()) {
+                            for (String p6 : pegs()) {
+                            String p = p1 + p2 + p3 + p4 + p5 +p6;
+                            if (obj.isPlacementStringWellFormed(p) && obj.isPlacementStringValid(p)) {
+                                finalstart.add(p);
+                            }
                             }
                         }
                     }
                 }
+        }
+
+        for (String p1 : finalstart){
+            if (obj.getSolutions(p1).length == 1){
+                finalstart1.add(p1);
             }
         }
 
-        return finalstart;
-    }
 
-    /*
-     * level 1: 6 pieces
-     */
-    public static Set<String> level1() {
-        Set<String> finalpegs = new HashSet<>();
-        Set<String> fpiecee = pieces();
-        Set<String> level3 = level3();
-
-        //2 piece
-        for (String p1 : fpiecee) {
-            for (String p2 : level3) {
-                //String[] start = obj.getSolutions(p1 + p2);
-                if (obj.isPlacementStringValid(p1 + p2) && obj.isPlacementStringWellFormed(p1 + p2)) {
-                    finalpegs.add(p1 + p2);
-                }
-            }
+            return finalstart1;
         }
 
-        return finalpegs;
-    }
+        /*
+         * level 1: 6 pieces
+         */
 
 //    public static void main(String[] args) {
-//        String placement = "a7A7b6A7c1A3d2A6e2C3f3C2g4A7";
+//        String placement = "c3A0d5B0e3C3h5D2j1B0l2B0";
 //        String[] pl = obj.getSolutions(placement);
+//        for (String pi : pl) {
+//            System.out.println(pi);
+//        }
+//    }
 //        System.out.println(pl.length);
 //        Set<String> piecelist = pieces();
 //        Set<String> peglist = pegs();
@@ -117,8 +100,8 @@ public class StartPlacements {
 //        System.out.println(piecelist.size());
 //        System.out.println(peglist.size());
 
-       // Set<String> start = level2();
-       // System.out.println(start.size());
+        // Set<String> start = level2();
+        // System.out.println(start.size());
 //        for(String piece : start){
 //            System.out.println(piece);
 //        }
@@ -129,21 +112,21 @@ public class StartPlacements {
 //        }
 //    }
 
-        public static void main(String[] args) throws Exception{
-            File filename=new File("assets/1.txt");
+        public static void main (String[]args) throws Exception {
+            File filename = new File("assets/level3.txt");
             if (filename.exists()) {
                 filename.delete();
                 filename.createNewFile();
             }
 
             Set<String> level3 = level3();
-            BufferedWriter bw=new BufferedWriter(new FileWriter(filename));
-            for(String pi : level3){
+            BufferedWriter bw = new BufferedWriter(new FileWriter(filename));
+            for (String pi : level3) {
                 bw.write(pi);
                 bw.newLine();
             }
             bw.close();
 
-    }
+        }
 
-}
+    }
