@@ -13,7 +13,7 @@ public class StartPlacements {
     static TwistGame obj;
     static final int side = 4;
     static final String BASE = "assets/";
-    //static StartPieces pi;
+    static StartPieces pi;
 
 
     /*
@@ -56,7 +56,7 @@ public class StartPlacements {
         //Set<String> fpieces = pieces1();
 
         //6 piece
-      /*  for (String p1 : pi.pieces(0)) {
+        for (String p1 : pi.pieces(0)) {
             for (String p2 : pi.pieces(1))
                 for (String p3 : pi.pieces(2)) {
                     for (String p4 : pi.pieces(3)) {
@@ -70,7 +70,7 @@ public class StartPlacements {
                         }
                     }
                 }
-        }*/
+        }
 
         for (String p1 : finalstart){
             if (obj.getSolutions(p1).length == 1){
