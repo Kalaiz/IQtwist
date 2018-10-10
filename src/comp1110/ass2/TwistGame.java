@@ -14,14 +14,15 @@ import static comp1110.ass2.Pieces.hm;
  */
 public class TwistGame {
     private static GameBoard gobj = new GameBoard();
-    private static List<String> fakeset=new ArrayList<>(200);
     private static final  int[] containerSpecs={3,2,2,3,3,3,4,1,1,4};//rcrcrc.. where r represents row and c represents column
-    static   int[][] ppContainer=new int[5][];//Jagged array for task 6
+    static int[][] ppContainer=new int[5][];//Jagged array for task 6
     private static final int[] bWeakSymmetricpair={0,2,1,3,4,6,5,7};
     private static final int[] eWeakSymmetricpair={0,7,1,4,2,5,3,6};
     private static final int[] fWeakSymmetricpair={0,6,1,7,2,4,3,5};
     private static int testval=0;
     private static  int totalmethodcalls=0;
+    static Set<String> viablePiece2 = new HashSet<String>();
+    static String[][] tempboard=new String[4][8];
 
 
 
@@ -185,7 +186,14 @@ public class TwistGame {
      *
      */
     public static String[][] boardcreator(String placement, char bt) {
+      /*  if(placement.equals(gobj.getcBoardName().substring(0,placement.length()-4))){
+
+
+            //placement=placement.substring(placement.length()-4);//so to not do so many operations
+        }
+        else {*/
             gobj.resetBoardvalues(Character.toString(bt));//resets the respective board ( test reasons)
+      /*  }*/
         //ToDo : make a static board fr task 6 operations so that there wont be any need to reset the board
         //if static board(temp) is same as placement string-4 or same as placment  dont reset and update placement to just the piece and
         // change checking board to temp--better than calling :Placer,piecetobeAdded,access to hashmap,and reseting the board
@@ -199,6 +207,7 @@ public class TwistGame {
                     return null; }
             }
         }
+       if (bt=='c'){ gobj.updateCBoardName(placement);}else{gobj.updateABoardName(placement);}
         return (bt == 'a') ? gobj.getaboard() : gobj.getcboard();
     }
 
@@ -216,12 +225,16 @@ public class TwistGame {
      * Authorship: Yuqing Zhang & Kalai
      */
     public static boolean isPlacementStringValid(String placement) {
-        Pieces.initialisehms();
+       // Pieces.initialisehms();  USE ONLY  FOR TESTS
+        if(!(boardcreator(placement, 'c')==null)){
+
+        }
         return (!(boardcreator(placement, 'c')==null));
 
     }
 
     public static void main(String[] args) {
+//getViablePiecePlacements("c1A3d2A6e2C3f3C4g4A7h6D0i6B0j2B0j1C0k3C0l4B0l5C0");
      /*   String placement = "c1A3d2A6e2C3f3C2g4A7h6D0j2B0j1C0k3C0l4B0l5C0";
         Set<String> s = getViablePiecePlacements(placement);
         int ctr=0;
@@ -233,7 +246,7 @@ public class TwistGame {
         }
 
 
-    }
+
 
     /**
      * Given a string describing a placement of pieces and pegs, return a set
@@ -313,14 +326,16 @@ public class TwistGame {
 
 
     public static Set<String> getViablePiecePlacements(String placement) {//Take note that this does not check if board is valid or not
-        fakeset.clear();
+        viablePiece2.clear();
+       /* boardcreator("",'c');
+        tempboard=gobj.getcboard();*/
         if(testval<1) {
             Pieces.initialisehms();//initialise hashmap just for the sake of task tests
             initialiseContainersSpecs();
         }
         boardcreator(placement,'c');//creates a board in accordance to the placement string
+        tempboard=gobj.getcboard();
         int[][] ppContainer2 ;
-       // int ctr=0;
         Viewer access=new Viewer();
         String unplaced ="";
         String nonAvailcharpieces=access.returner(placement,0);
@@ -351,7 +366,7 @@ public class TwistGame {
                                     for(int ix=mx;ix<mx+containerSpecs[2*cno];ix++){//removed -1 from bound
                                         for(int iy=my;iy<my+containerSpecs[2*cno+1];iy++){
                                             String piece=(char) ((pno/8)+97)+col+row+Integer.toString(pno-((pno/8)*8));
-                                            if(isPlacementStringValid(placement+piece)){
+                                            if(isPlacementStringValid(placement+piece)&&!viablePiece2.contains(piece)){
                                                // ctr++;
                                               insertinfakeset(piece);
                                             }
@@ -375,32 +390,34 @@ public class TwistGame {
             }
         }
 
-        if(fakeset.size()==0)
+        if(viablePiece2.size()==0)
         { return null;}
-        Set<String> viablePiece = new HashSet<String>(fakeset);
+        //Set<String> viablePiece = new HashSet<String>(fakeset);
         //totalmethodcalls+=ctr;
        // System.out.println("Test" + (++testval) +" calls helper functions (inclusive of task5) " + Integer.toString(ctr)+ " Times. Total Average is : " +( totalmethodcalls/testval) );
-        return viablePiece;
+        return viablePiece2;
     }
 
 
     private static void insertinfakeset(String piece) {
-        if (fakeset.size() == 0) {
-            fakeset.add(piece);
+        if (viablePiece2.size() == 0) {//if set has nothing
+            viablePiece2.add(piece);
         } else {
-         insertloop:   for (int i = 0; i < fakeset.size(); i++) {
-                if (piece.substring(0, 2).equals(fakeset.get(i).substring(0, 2)) && !(piece.startsWith("a") || piece.startsWith("d") || piece.startsWith("g"))) {
-                   int piecer=Integer.parseInt(piece.substring(3));
-                   int alrsetpr=Integer.parseInt(fakeset.get(i).substring(3));
-                    if (piece.equals(fakeset.get(i))) {
-                    }
-                    else  {
+            int check=0;
+            Iterator<String> iter=viablePiece2.iterator();
+         insertloop:while(iter.hasNext()) {
+                String x=iter.next();
+                if (piece.substring(0, 2).equals(x.substring(0, 2)) && !(piece.startsWith("a") || piece.startsWith("d") || piece.startsWith("g"))) {
+                   int piecer=Integer.parseInt(piece.substring(3));//rotation value of the input piece
+                   int alrsetpr=Integer.parseInt(x.substring(3));//rotation value of already in set (piece)
                         int[] temparr=new int[8];
+                    //if there is a Weakly symmetric
                         switch(piece.charAt(0)){
                             case 'c': case'h':
                                 if (alrsetpr-piecer==2){
-                                    fakeset.set(i, piece);
-                                    continue insertloop;
+                                    viablePiece2.remove(x);
+                                    viablePiece2.add(piece);
+                                    break ;
                                 }
                             case 'b':
                                 temparr= bWeakSymmetricpair;
@@ -415,35 +432,35 @@ public class TwistGame {
                                 break;
                         }
                         for(int t=0;t<4;t++){
-                            if(temparr[t*2]==piecer&&temparr[(2*t)+1]==alrsetpr){
-                                fakeset.set(i, piece);
-                                continue insertloop;
+                            if(temparr[t*2]==piecer&&temparr[(2*t)+1]==alrsetpr){//
+                                viablePiece2.remove(x);
+                                viablePiece2.add(piece);
+                                check++;
+                                break insertloop;//once updated the other values in the set must be checked too
                             }
-                            else if(temparr[t*2]==alrsetpr&&temparr[(2*t)+1]==piecer) {
-                                if(fakeset.contains(piece.substring(0,3)+Integer.toString(piecer))){
-                                    fakeset.remove(piece.substring(0,3)+Integer.toString(piecer));
-                                    continue insertloop;
-                                }
-                                else if (i == fakeset.size() - 1) {
+                             else if (temparr[t*2]==alrsetpr&&temparr[(2*t)+1]==piecer){
+                                    check++;//if vice versa then dont add
                                     break insertloop;
-                                } else {
-                                    continue insertloop;
                                 }
+                                else if(t==3){
+                                    continue insertloop;
                             }
-                        }
-                        fakeset.add(piece);
-                      if(i+1==fakeset.size()){
-                          break ;
-                      }
-                    }
-                }
-                else if (i == fakeset.size() - 1) {//if no other piece in the fakeset is similar
-                    fakeset.add(piece);
-                    break;
-                }
+                            }
+                        viablePiece2.add(piece);//if pieces are not weakly symmetric
+                       break ;
+
+                            }
+                            }
+            if (check!=1) {
+                viablePiece2.add(piece);//if pieces are not weakly symmetric
             }
-        }
-    }
+
+
+                }
+
+            }
+
+
 
 
 
@@ -560,8 +577,7 @@ public class TwistGame {
                     gridIndex[0] = x;
                     gridIndex[1] = y + 1;
                     emptyGrid.add(gridIndex);
-                    //System.out.print(x);
-                    //System.out.println(y);
+
                 }
             }
         }

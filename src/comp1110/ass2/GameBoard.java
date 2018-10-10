@@ -1,5 +1,8 @@
 package comp1110.ass2;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static comp1110.ass2.Pieces.hm;
 
 /*
@@ -12,6 +15,9 @@ import static comp1110.ass2.Pieces.hm;
 public class GameBoard {
     private String[][] checkingBoard = new String[4][8];
     private String[][] actualBoard = new String[4][8];
+    String checkingBoardName;
+    String actualBoardName;
+
 
     /**
      * Adds a piece to the respective board and updates it.
@@ -36,6 +42,40 @@ public class GameBoard {
 
     }
 
+   /* int getHashmapkey(){
+
+    }*/
+
+    void removepiece(String piece,char bt){
+        List<Integer> indices= new ArrayList<>();
+        if(bt=='c'){
+
+        }
+        else{
+
+        }
+
+    }
+
+   /* String[][] bruteremover(List indices,char bt ){
+
+
+    }*/
+    void updateCBoardName(String checkingBoardName){
+        this.checkingBoardName=checkingBoardName;
+    }
+
+    void updateABoardName(String actualBoardNameBoardName){
+        this.actualBoardName=actualBoardName;
+    }
+
+    String getcBoardName(){
+        return  checkingBoardName;
+    }
+
+    String getABoardName(){
+        return actualBoardName;
+    }
 
     /**
      * Obtains the actual board

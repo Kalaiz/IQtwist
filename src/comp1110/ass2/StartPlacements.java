@@ -13,7 +13,7 @@ public class StartPlacements {
     static TwistGame obj;
     static final int side = 4;
     static final String BASE = "assets/";
-    static StartPieces pi;
+    //static StartPieces pi;
 
 
     /*
@@ -56,21 +56,21 @@ public class StartPlacements {
         //Set<String> fpieces = pieces1();
 
         //6 piece
-        for (String p1 : pi.pieces(0)) {
+      /*  for (String p1 : pi.pieces(0)) {
             for (String p2 : pi.pieces(1))
                 for (String p3 : pi.pieces(2)) {
                     for (String p4 : pi.pieces(3)) {
                         for (String p5 : pegs()) {
                             for (String p6 : pegs()) {
-                            String p = p1 + p2 + p3 + p4 + p5 +p6;
-                            if (obj.isPlacementStringWellFormed(p) && obj.isPlacementStringValid(p)) {
-                                finalstart.add(p);
-                            }
+                                String p = p1 + p2 + p3 + p4 + p5 +p6;
+                                if (obj.isPlacementStringWellFormed(p) && obj.isPlacementStringValid(p)) {
+                                    finalstart.add(p);
+                                }
                             }
                         }
                     }
                 }
-        }
+        }*/
 
         for (String p1 : finalstart){
             if (obj.getSolutions(p1).length == 1){
@@ -79,12 +79,12 @@ public class StartPlacements {
         }
 
 
-            return finalstart1;
-        }
+        return finalstart1;
+    }
 
-        /*
-         * level 1: 6 pieces
-         */
+    /*
+     * level 1: 6 pieces
+     */
 
 //    public static void main(String[] args) {
 //        String placement = "c3A0d5B0e3C3h5D2j1B0l2B0";
@@ -100,8 +100,8 @@ public class StartPlacements {
 //        System.out.println(piecelist.size());
 //        System.out.println(peglist.size());
 
-        // Set<String> start = level2();
-        // System.out.println(start.size());
+    // Set<String> start = level2();
+    // System.out.println(start.size());
 //        for(String piece : start){
 //            System.out.println(piece);
 //        }
@@ -112,21 +112,21 @@ public class StartPlacements {
 //        }
 //    }
 
-        public static void main (String[]args) throws Exception {
-            File filename = new File("assets/level3.txt");
-            if (filename.exists()) {
-                filename.delete();
-                filename.createNewFile();
-            }
-
-            Set<String> level3 = level3();
-            BufferedWriter bw = new BufferedWriter(new FileWriter(filename));
-            for (String pi : level3) {
-                bw.write(pi);
-                bw.newLine();
-            }
-            bw.close();
-
+    public static void main (String[]args) throws Exception {
+        File filename = new File("assets/level3.txt");
+        if (filename.exists()) {
+            filename.delete();
+            filename.createNewFile();
         }
 
+        Set<String> level3 = level3();
+        BufferedWriter bw = new BufferedWriter(new FileWriter(filename));
+        for (String pi : level3) {
+            bw.write(pi);
+            bw.newLine();
+        }
+        bw.close();
+
     }
+
+}
