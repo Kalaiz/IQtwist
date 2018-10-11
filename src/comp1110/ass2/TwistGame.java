@@ -809,10 +809,12 @@ if (!initialisedhm&&!initilisedCs) {
                 des.append(o);
             }
 
-            if (isPlacementStringValid(des.toString())){
-                finalSols.add(des.toString());
+            if (des.length()==32) {
+                if (isPlacementStringValid(des.toString())) {
+                    finalSols.add(des.toString());
+                }
+                des = null;
             }
-            des = null;
 
             //System.out.println(finalSols[i]);
         }
