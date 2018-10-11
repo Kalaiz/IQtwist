@@ -15,8 +15,8 @@ import static comp1110.ass2.Pieces.hm;
 public class GameBoard {
     private String[][] checkingBoard = new String[4][8];
     private String[][] actualBoard = new String[4][8];
-    String checkingBoardName;
-    String actualBoardName;
+    private String checkingBoardName;
+    private String actualBoardName;
 
 
     /**
@@ -26,14 +26,9 @@ public class GameBoard {
      * @param bt    represents board-type(either actual or checking)
      */
     void pieceTobeAdded(String piece, String bt) {
-        char pName = piece.charAt(0);
-        int orientationNo = Character.getNumericValue(piece.charAt(3));
+        int hashMapKey= getHashmapkey(piece);
         int col = Character.getNumericValue(piece.charAt(1)) - 1;
         int row = piece.charAt(2) - 65;
-        int hashMapKey = (pName > 104) ? pName - 104 + 63 : (pName - 97) * 8 + orientationNo;//(pname - 97)*8 to get the corresponding piece base number
-        //Strong symmetric pieces dont have redudndant piece orientations
-        if((hashMapKey>19&& hashMapKey<24 )||(hashMapKey>59 && hashMapKey<64))
-        {hashMapKey-=4;}
         if (bt.equals("a")) {
             this.actualBoard = placer(actualBoard, hm.get(hashMapKey), row, col );
         } else {
@@ -42,22 +37,42 @@ public class GameBoard {
 
     }
 
-   /* int getHashmapkey(){
+   private int getHashmapkey(String piece){
+        char pName = piece.charAt(0);
+        int orientationNo = Character.getNumericValue(piece.charAt(3));
+        int hashMapKey = (pName > 104) ? pName - 104 + 63 : (pName - 97) * 8 + orientationNo;//(pname - 97)*8 to get the corresponding piece base number
+        //Strong symmetric pieces dont have redudndant piece orientations
+        if((hashMapKey>19&& hashMapKey<24 )||(hashMapKey>59 && hashMapKey<64))
+        {hashMapKey-=4;}
 
-    }*/
+return hashMapKey;
+    }
 
+    //piece must be valid placement
+    //only for checking board
     void removepiece(String piece,char bt){
-        List<Integer> indices= new ArrayList<>();
-        if(bt=='c'){
+        int row= piece.charAt(2) -65;
+        int col= Integer.parseInt(piece.charAt(1)+"") -1 ;
+        //String[][] board= (bt=='c')? checkingBoard:actualBoard;
+     /*    int hashmapkey =getHashmapkey(piece);
+         String[][] piecearr = hm.get(hashmapkey);*/
+         for(;row<4;row++){
+             for(int cc=col;cc<8;cc++){
+                 if(checkingBoard[row][cc].contains("p")&&checkingBoard[row][cc].length()>2){
+                     int piecestrsval=(checkingBoard[row][cc].length()==4)?2:3;
+                     //always be in format of orpr as pr will be always on board itself
+                     checkingBoard[row][cc]=checkingBoard[row][cc].substring(piecestrsval);
+                 }
+                 else if (!checkingBoard[row][cc].equals("x")){
+                     checkingBoard[row][cc]="x";
+                 }
+             }
+         }
 
-        }
-        else{
-
-        }
 
     }
 
-   /* String[][] bruteremover(List indices,char bt ){
+  /*  String[][] bruteremover(List indices,char bt ){
 
 
     }*/
@@ -65,11 +80,11 @@ public class GameBoard {
         this.checkingBoardName=checkingBoardName;
     }
 
-    void updateABoardName(String actualBoardNameBoardName){
+    void updateABoardName(String actualBoardName){
         this.actualBoardName=actualBoardName;
     }
 
-    String getcBoardName(){
+    String getCBoardName(){
         return  checkingBoardName;
     }
 
@@ -140,7 +155,7 @@ public class GameBoard {
      * @return (Updated) board or null if invalid position
      */
     public static String[][] placer(String[][] board, String[][] piecearr, int row2, int col2) {
-        if (row2 < 0 || col2 < 0) {
+        if (row2 < 0 || col2 < 0||row2>=board.length||col2>=board[0].length) {
             return null;
         }
         try {
@@ -154,7 +169,6 @@ public class GameBoard {
                     if (board[row2 ][col2_temp ] .equals("x")) {
                         board[row2 ][col2_temp ] = piecearr[cr][cc];
                     } else if (!piecearr[cr][cc].equals("x")) {// if the piece part is empty don't update the output board
-                        //adding 3 so to add the first segment of the piece to the inner board(mandatory)
                         board[row2 ][col2_temp ] = piecearr[cr][cc] + board[row2 ][col2_temp];
                     }
                 }
