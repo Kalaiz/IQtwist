@@ -14,14 +14,18 @@ import static comp1110.ass2.Pieces.hm;
  */
 public class TwistGame {
     private static GameBoard gobj = new GameBoard();
-    private static List<String> fakeset=new ArrayList<>(20);
     private static final  int[] containerSpecs={3,2,2,3,3,3,4,1,1,4};//rcrcrc.. where r represents row and c represents column
-    static   int[][] ppContainer=new int[5][];//Jagged array for task 6
+    static int[][] ppContainer=new int[5][];//Jagged array for task 6
     private static final int[] bWeakSymmetricpair={0,2,1,3,4,6,5,7};
     private static final int[] eWeakSymmetricpair={0,7,1,4,2,5,3,6};
     private static final int[] fWeakSymmetricpair={0,6,1,7,2,4,3,5};
-    private static int testval=0;
-    private static  int totalmethodcalls=0;
+    //private static int testval=0;
+    //private static  int totalmethodcalls=0;
+    static boolean  initialisedhm=false;
+    static boolean initilisedCs=false;
+
+    static Set<String> viablePiece2 = new HashSet<String>();
+    static String[][] tempboard=new String[4][8];
 
 
 
@@ -150,7 +154,7 @@ public class TwistGame {
     private static boolean checkBoard2() {//checks for colourpeg and overlap
         for (int row = 0; row < 4; row++) {
             for (int col = 0; col < 8; col++) {
-                    String ccs = gobj.getcboard()[row][col];//ccs-Current checking piece string
+                String ccs = gobj.getcboard()[row][col];//ccs-Current checking piece string
                 if (ccs.length() == 4) {
                     if (ccs.charAt(1) != ccs.charAt(3)) {//pror (or)  orpr
                         return false;
@@ -185,7 +189,13 @@ public class TwistGame {
      *
      */
     public static String[][] boardcreator(String placement, char bt) {
-            gobj.resetBoardvalues(Character.toString(bt));//resets the respective board ( test reasons)
+  /*   if(placement.equals(gobj.getCBoardName().substring(0,placement.length()-4))&&bt=='c'){
+         gobj.removepiece(gobj.getCBoardName().substring(gobj.getcboard().length-4),'c');
+         placement=placement.substring(placement.length()-4);//so to not do so many operations
+        }
+        else {*/
+        gobj.resetBoardvalues(Character.toString(bt));//resets the respective board ( test reasons)
+        /*  }*/
         //ToDo : make a static board fr task 6 operations so that there wont be any need to reset the board
         //if static board(temp) is same as placement string-4 or same as placment  dont reset and update placement to just the piece and
         // change checking board to temp--better than calling :Placer,piecetobeAdded,access to hashmap,and reseting the board
@@ -199,6 +209,7 @@ public class TwistGame {
                     return null; }
             }
         }
+        if (bt=='c'){ gobj.updateCBoardName(placement);}else{gobj.updateABoardName(placement);}
         return (bt == 'a') ? gobj.getaboard() : gobj.getcboard();
     }
 
@@ -216,22 +227,42 @@ public class TwistGame {
      * Authorship: Yuqing Zhang & Kalai
      */
     public static boolean isPlacementStringValid(String placement) {
-        Pieces.initialisehms();
+        if(!initialisedhm) {//for task test purposes
+          Pieces.initialisehms(); // USE ONLY  FOR TESTS
+            initialisedhm=true;
+        }
+       /* if(!(boardcreator(placement, 'c')==null)){
+
+        }*/
         return (!(boardcreator(placement, 'c')==null));
 
     }
 
     public static void main(String[] args) {
-        String placement = "d2A6e2C3f3C4g4A7i6B0j2B0j1C0";
-        Set<String> s = getViablePiecePlacements(placement);
-        Iterator<String> a= s.iterator();
-        while(a.hasNext()){
+        //getViablePiecePlacements("c1A3d2A6");
+       Pieces.initialisehms();
+        boardcreator("a7A7i8A0",'c');
+        displayBoard(gobj.getcboard());
+        gobj.removepiece("a7A7",'c');
+        displayBoard(gobj.getcboard());
+       /* String placement = "f3C4i6B0j1C0k3C0l4B0l5C0";
+        //System.out.println(placement.substring(0,placement.length()));
+        // Set<String> s = getViablePiecePlacements(placement);
+        String[] s = getSolutions(placement);
+        int ctr = 0;
+        for (String x : s){
+            System.out.println(x);
+        }*/
+    /*    Iterator<String> a = s.iterator();
+        while (a.hasNext()) {
+            ctr++;
             String h = a.next();
-            System.out.println(h);
-        }
-
-
+            System.out.println(ctr + "" + h);
+        }*/
     }
+
+
+
 
     /**
      * Given a string describing a placement of pieces and pegs, return a set
@@ -248,7 +279,7 @@ public class TwistGame {
      * @return An set of viable piece placements, or null if there are none.
      * author: Lingyu Xia
      */
-    public static Set<String> lgetViablePiecePlacements(String placement) //Take note that this does not check if board is valid or not
+    public static Set<String> ligetViablePiecePlacements(String placement) //Take note that this does not check if board is valid or not
     {
         // FIXME Task 6: determine the set of valid next piece placements
 
@@ -300,23 +331,28 @@ public class TwistGame {
 
 
 
-        totalmethodcalls+=methodcallctr;
+       // totalmethodcalls+=methodcallctr;
 
         if (viablePiece.isEmpty()){
             return null;}
 
-      //  System.out.println("Test" + (++testval) +" calls Task 5  " + Integer.toString(methodcallctr)+ " Times. Total Average is : " +( totalmethodcalls/testval) );
+        //  System.out.println("Test" + (++testval) +" calls Task 5  " + Integer.toString(methodcallctr)+ " Times. Total Average is : " +( totalmethodcalls/testval) );
         return viablePiece;
     }
 
 
     public static Set<String> getViablePiecePlacements(String placement) {//Take note that this does not check if board is valid or not
-        fakeset.clear();
-        Pieces.initialisehms();//initialise hashmap just for the sake of task tests
-        initialiseContainersSpecs();
+        viablePiece2.clear();
+       /* boardcreator("",'c');
+        tempboard=gobj.getcboard();*/
+if (!initialisedhm&&!initilisedCs) {
+    Pieces.initialisehms();//initialise hashmap just for the sake of task tests
+    initialiseContainersSpecs();
+    initialisedhm=initilisedCs=true;
+}
         boardcreator(placement,'c');//creates a board in accordance to the placement string
-        int[][] ppContainer2 ;
-        int ctr=0;
+        tempboard=gobj.getcboard();
+        int[][] ppContainer2=ppContainer.clone();
         Viewer access=new Viewer();
         String unplaced ="";
         String nonAvailcharpieces=access.returner(placement,0);
@@ -324,8 +360,8 @@ public class TwistGame {
         int[] output=IntStream.rangeClosed(97, 104).filter(i-> !nonAvailcharpieces.contains((char)i+"")).parallel().toArray();
         for(int i:output){ unplaced+=(Character.toString((char)i)); }//converting to String- not necessary
         List<Integer> containerscanbeused=listofcontainersused(unplaced);
-        ppContainer2=updateppcandnew(nonAvailcharpieces,ppContainer);
-        ctr+=2;
+        ppContainer2=updateppcandnew(nonAvailcharpieces,ppContainer2);
+        // ctr+=2;
         //update ppcontainer value in accordance to unplaced
         //find range of the containers in accordance to the emptyindices
         int[] emptygridval=getEmptyGrid2('x');
@@ -346,20 +382,20 @@ public class TwistGame {
                                     //within the container change the  piece e and h placements
                                     for(int ix=mx;ix<mx+containerSpecs[2*cno];ix++){//removed -1 from bound
                                         for(int iy=my;iy<my+containerSpecs[2*cno+1];iy++){
-                                            String piece=(char) ((pno/8)+97)+""+col+row+Integer.toString(pno-((pno/8)*8));
-                                            if(isPlacementStringValid(placement+piece) && isPlacementWellFormed(piece)){
-                                                ctr++;
-                                              insertinfakeset(piece);
+                                            String piece=(char) ((pno/8)+97)+col+row+Integer.toString(pno-((pno/8)*8));
+                                            if(isPlacementStringValid(placement+piece)&&!viablePiece2.contains(piece)){
+                                                // ctr++;
+                                                insertinfakeset(piece);
                                             }
                                         }
                                     }
                                 }
 
                                 else {
-                                    String piece = (char) ((pno / 8) + 97) + "" + col + row + Integer.toString(pno - ((pno / 8) * 8));
+                                    String piece = (char) ((pno / 8) + 97)  + col + row + Integer.toString(pno - ((pno / 8) * 8));
                                     if (isPlacementStringValid(placement + piece)) {
-                                       insertinfakeset(piece);
-                                       ctr++;
+                                        insertinfakeset(piece);
+                                        // ctr++;
                                     }
                                     //generate piece data  accordingly to check with isValidPlacement  and then check
                                     //if valid add to viablePiece set
@@ -371,77 +407,76 @@ public class TwistGame {
             }
         }
 
-        if(fakeset.size()==0)
+        if(viablePiece2.size()==0)
         { return null;}
-        Set<String> viablePiece = new HashSet<String>(fakeset);
-        totalmethodcalls+=ctr;
-       // System.out.println("Test" + (++testval) +" calls helper functions (inclusive of task5) " + Integer.toString(ctr)+ " Times. Total Average is : " +( totalmethodcalls/testval) );
-        return viablePiece;
+        //totalmethodcalls+=ctr;
+        // System.out.println("Test" + (++testval) +" calls helper functions (inclusive of task5) " + " Times. Total Average is : " +( totalmethodcalls/testval) );
+        return viablePiece2;
     }
 
 
     private static void insertinfakeset(String piece) {
-        if (fakeset.size() == 0) {
-            fakeset.add(piece);
+        if (viablePiece2.size() == 0) {//if set has nothing
+            viablePiece2.add(piece);
         } else {
-         insertloop:   for (int i = 0; i < fakeset.size(); i++) {
-                if (piece.substring(0, 2).equals(fakeset.get(i).substring(0, 2)) && !(piece.startsWith("a") || piece.startsWith("d") || piece.startsWith("g"))) {
-                   int piecer=Integer.parseInt(piece.substring(3));
-                   int alrsetpr=Integer.parseInt(fakeset.get(i).substring(3));
-                    if (piece.equals(fakeset.get(i))) {
-
-                    }
-
-                    else  {
-                        int[] temparr=new int[8];
-                        switch(piece.charAt(0)){
-                            case 'c': case'h':
-                                if (alrsetpr-piecer==2){
-                                    fakeset.set(i, piece);
-                                    continue insertloop;
+            try{ int check = 0;
+                Iterator<String> iter = viablePiece2.iterator();
+                insertloop:
+                while (iter.hasNext()) {
+                    String x = iter.next();
+                    if (piece.substring(0, 2).equals(x.substring(0, 2)) && !(piece.startsWith("a") || piece.startsWith("d") || piece.startsWith("g"))) {
+                        int piecer = Integer.parseInt(piece.substring(3));//rotation value of the input piece
+                        int alrsetpr = Integer.parseInt(x.substring(3));//rotation value of already in set (piece)
+                        int[] temparr = new int[8];
+                        //if there is a Weakly symmetric
+                        switch (piece.charAt(0)) {
+                            case 'c':
+                            case 'h':
+                                if (alrsetpr - piecer == 2) {
+                                    viablePiece2.remove(x);
+                                    viablePiece2.add(piece);
+                                    break;
                                 }
                             case 'b':
-                                temparr= bWeakSymmetricpair;
+                                temparr = bWeakSymmetricpair;
                                 break;
 
                             case 'f':
-                               temparr=fWeakSymmetricpair;
-                               break;
+                                temparr = fWeakSymmetricpair;
+                                break;
 
                             case 'e':
-                                temparr=eWeakSymmetricpair;
+                                temparr = eWeakSymmetricpair;
                                 break;
                         }
-                        for(int t=0;t<4;t++){
-                            if(temparr[t*2]==piecer&&temparr[(2*t)+1]==alrsetpr){
-                                fakeset.set(i, piece);
+                        for (int t = 0; t < 4; t++) {
+                            if (temparr[t * 2] == piecer && temparr[(2 * t) + 1] == alrsetpr) {//
+                                viablePiece2.remove(x);
+                                viablePiece2.add(piece);
+                                check++;
+                                break insertloop;//once updated the other values in the set must be checked too
+                            } else if (temparr[t * 2] == alrsetpr && temparr[(2 * t) + 1] == piecer) {
+                                check++;//if vice versa then dont add
+                                break insertloop;
+                            } else if (t == 3) {
                                 continue insertloop;
                             }
-                            else if(temparr[t*2]==alrsetpr&&temparr[(2*t)+1]==piecer) {
-                                if(fakeset.contains(piece.substring(0,3)+Integer.toString(piecer))){
-                                    fakeset.remove(piece.substring(0,3)+Integer.toString(piecer));
-                                    continue insertloop;
-                                }
-                                else if (i == fakeset.size() - 1) {
-                                    break insertloop;
-                                } else {
-                                    continue insertloop;
-                                }
-                            }
                         }
-                        fakeset.add(piece);
-                      if(i+1==fakeset.size()){
-                          break ;
-                      }
+                        viablePiece2.add(piece);//if pieces are not weakly symmetric
+                        break;
+
                     }
                 }
-                else if (i == fakeset.size() - 1) {//if no other piece in the fakeset is similar
-                    fakeset.add(piece);
-                    break;
+                if (check != 1) {
+                    viablePiece2.add(piece);//if pieces are not weakly symmetric
                 }
-            }
-        }
+
+
+            } catch(java.util.ConcurrentModificationException e){}  }
+
     }
+
+
 
 
 
@@ -458,7 +493,7 @@ public class TwistGame {
     }
 
 
-   private  static  List<Integer> listofcontainersused(String availpieces){
+    private  static  List<Integer> listofcontainersused(String availpieces){
         List<Integer> ap = new ArrayList<Integer>();
         if(availpieces.contains("g")){
             ap.add(2);
@@ -514,7 +549,7 @@ public class TwistGame {
                     }
                     cs.add(t); } }
             int oarr[]= cs.stream().mapToInt(no->no).toArray();
-           //ppContainer[i] =new int[oarr.length];   //not necessary
+            //ppContainer[i] =new int[oarr.length];   //not necessary
             ppContainer[i]=oarr;
         }
     }
@@ -531,7 +566,7 @@ public class TwistGame {
         List<Integer> emptyGridcoord= new ArrayList<>();
         for (int x = 0; x < 4; x++){
             for(int y = 0; y < 8; y++){
-        /*    gobj.getcboard()[x][y].contains("p")&&gobj.getcboard()[x][y].length()==2    */
+                /*    gobj.getcboard()[x][y].contains("p")&&gobj.getcboard()[x][y].length()==2    */
                 if (gobj.getcboard()[x][y].equals("x")|| gobj.getcboard()[x][y].equals("pr") || gobj.getcboard()[x][y].equals("pb")//this runs faster
                         || gobj.getcboard()[x][y].equals("pg") || gobj.getcboard()[x][y].equals("py")){
                     if(coordinate=='x'){emptyGridcoord.add(x);}
@@ -558,8 +593,7 @@ public class TwistGame {
                     gridIndex[0] = x;
                     gridIndex[1] = y + 1;
                     emptyGrid.add(gridIndex);
-                    //System.out.print(x);
-                    //System.out.println(y);
+
                 }
             }
         }
@@ -583,6 +617,12 @@ public class TwistGame {
      * @return An array of strings, each 32-characters long, describing a unique
      * unordered solution to the game given the starting point provided by placement.
      */
+
+    // FIXME : IMPORTANT :
+    // 1)Whenever there is just one piece left to solve getSolution return null --
+    //     example : "b6A7c1A3d2A6e2C3f3C4g4A7h6D0i6B0j2B0j1C0k3C0l4B0" should return a7A7 added to it
+    // 2) combiner part of Task 9 is sometimes causing heap error : "f3C4i6B0j1C0k3C0l4B0l5C0"
+
     public static String[] getSolutions(String placement) {//Use task 6 code here
 
         // FIXME Task 9: determine all solutions to the game, given a particular starting placement
@@ -599,49 +639,49 @@ public class TwistGame {
 //        System.out.println(pieceIndex);
 //        solutions[i] = placement.substring(0, pieceIndex * 4) + nextPiece + placement.substring(pieceIndex * 4, placement.length() - 24);
 //      }
-      String[] solutions = reorderPlacementStrings(placement);
+        String[] solutions = reorderPlacementStrings(placement);
 
-      return solutions;
+        return solutions;
     }
 
     /*
-    *  This method uses task 6 and construct a 32-character placement string
-    *  Reorder the string into a valid placement string
-    * */
+     *  This method uses task 6 and construct a 32-character placement string
+     *  Reorder the string into a valid placement string
+     * */
     public static String[] reorderPlacementStrings(String placement){
 
-      Set<String> nextPieces = getViablePiecePlacements(placement);
-      List<String> solutions = new ArrayList<>();
-      int index = 0;
-      String[] formalPlacement = new String[2];
-      Iterator<String> it = nextPieces.iterator();
-      List<String> itStr = new ArrayList<>();
+        Set<String> nextPieces = getViablePiecePlacements(placement);
+        List<String> solutions = new ArrayList<>();
+        int index = 0;
+        String[] formalPlacement = new String[2];
+        Iterator<String> it = nextPieces.iterator();
+        List<String> itStr = new ArrayList<>();
 
-      Viewer v = new Viewer();
-      String placed_pieces = v.returner(placement,0);
-      String unplaced_pieces = "";
-      boardcreator(placement,'a');//Creates* an actualboard
-      for (int i = 'a' ; i <= 'h' ; i++){
-        if(placed_pieces.indexOf(String.valueOf((char)i))==-1)
-          unplaced_pieces = unplaced_pieces + String.valueOf((char)i);
-      }
-      //System.out.println(unplaced_pieces);
+        Viewer v = new Viewer();
+        String placed_pieces = v.returner(placement,0);
+        String unplaced_pieces = "";
+        boardcreator(placement,'a');//Creates* an actualboard
+        for (int i = 'a' ; i <= 'h' ; i++){
+            if(placed_pieces.indexOf(String.valueOf((char)i))==-1)
+                unplaced_pieces = unplaced_pieces + String.valueOf((char)i);
+        }
+        //System.out.println(unplaced_pieces);
 
-      while (it.hasNext()){
-        itStr.add(it.next());
-      }
+        while (it.hasNext()){
+            itStr.add(it.next());
+        }
 
-      //maintain the placement string that only conatins the pieces
-      if (placement.contains("i")){
-        formalPlacement = placement.split("i",2);
-      }else if (placement.contains("j")){
-        formalPlacement = placement.split("j",2);
-      }else if (placement.contains("k")){
-        formalPlacement = placement.split("k",2);
-      }else formalPlacement = placement.split("l",2);
+        //maintain the placement string that only conatins the pieces
+        if (placement.contains("i")){
+            formalPlacement = placement.split("i",2);
+        }else if (placement.contains("j")){
+            formalPlacement = placement.split("j",2);
+        }else if (placement.contains("k")){
+            formalPlacement = placement.split("k",2);
+        }else formalPlacement = placement.split("l",2);
         //System.out.println(formalPlacement[0]);
 
-      Collections.sort(itStr);
+        Collections.sort(itStr);
 
       /*
         Transfer the list of pieces got from task 6 into String[][]
@@ -650,63 +690,63 @@ public class TwistGame {
         e.g. aaabbcc is a String[][] with String[0] = new String[3]; String[1] = new String[2]; String[2] = new String[2]
         still have some problems
       */
-      String[][] difPie = new String [unplaced_pieces.length()][];  //The length of unplaced_pieces defines the rows of String[][]
-      char c = itStr.get(0).charAt(0);
-      int row = 0;
-      int column = 0;
-      for (int i = 0; i < itStr.size(); i++) {
-          //System.out.println(itStr.get(i));
-        if (itStr.get(i).charAt(0)==c){
-          //difPie[row][column] = itStr.get(i);
-          column++;
-          if (i == itStr.size()-1){
-            difPie[row] = new String[column];
-          }
-        }else {
-          difPie[row++] = new String[column];
-          c = itStr.get(i).charAt(0);
-          column = 1;
-          if (i == itStr.size()-1){
-            difPie[row] = new String[column];
-          }
+        String[][] difPie = new String [unplaced_pieces.length()][];  //The length of unplaced_pieces defines the rows of String[][]
+        char c = itStr.get(0).charAt(0);
+        int row = 0;
+        int column = 0;
+        for (int i = 0; i < itStr.size(); i++) {
+            //System.out.println(itStr.get(i));
+            if (itStr.get(i).charAt(0)==c){
+                //difPie[row][column] = itStr.get(i);
+                column++;
+                if (i == itStr.size()-1){
+                    difPie[row] = new String[column];
+                }
+            }else {
+                difPie[row++] = new String[column];
+                c = itStr.get(i).charAt(0);
+                column = 1;
+                if (i == itStr.size()-1){
+                    difPie[row] = new String[column];
+                }
+            }
+            //System.out.println(column);
         }
-          //System.out.println(column);
-      }
 
 
-      /*
-      * assign the piece value to the multi-dimensional string
-      * */
-      for (int i = 0; i < difPie.length; i++) {
-          //System.out.println("row: " + i);
-          //System.out.println("difPie[" + i + "].length: " + difPie[i].length);
-          if (difPie[i]!=null) {
-              for (int j = 0; j < difPie[i].length; j++) {
-                  difPie[i][j] = itStr.get(index++);
-              }
-          }
-      }
+        /*
+         * assign the piece value to the multi-dimensional string
+         * */
+        for (int i = 0; i < difPie.length; i++) {
+            //System.out.println("row: " + i);
+            //System.out.println("difPie[" + i + "].length: " + difPie[i].length);
+            if (difPie[i]!=null) {
+                for (int j = 0; j < difPie[i].length; j++) {
+                    difPie[i][j] = itStr.get(index++);
+                }
+            }
+        }
 
-      /*
-      *    Give the multi-dimentional string to combination() to find all the possible combinations
-      * */
+        /*
+         *    Give the multi-dimentional string to combination() to find all the possible combinations
+         * */
         //System.out.println(row);
-      for (int i = 0; i < row; i++){
-        if (!solutions.isEmpty()){
-          String[] temp = new String[solutions.size()];
-          for (int j = 0; j < solutions.size(); j++){
-            temp[j] = solutions.get(j);
-              //System.out.println(solutions.get(j));
-          }
-          solutions.clear();
-          solutions = combination(solutions, temp, difPie[i + 1]);
-          temp = null;
-        }else {
-            solutions = combination(solutions,difPie[i],difPie[i+1]);
+        for (int i = 0; i < row; i++){
+            if (!solutions.isEmpty()){
+                String[] temp = new String[solutions.size()];
+                for (int j = 0; j < solutions.size(); j++){
+                    temp[j] = solutions.get(j);
+                    //System.out.println(solutions.get(j));
+                }
+                solutions.clear();
+                solutions = combination(solutions, temp, difPie[i + 1]);
+                temp = null;
+            }else {
+                solutions = combination(solutions,difPie[i],difPie[i+1]);
+            }
         }
-      }
 
-      Collections.sort(solutions);
+        Collections.sort(solutions);
 
 /*
       for (int i = 0; i < nextPieces.size(); i++) {
@@ -755,32 +795,32 @@ public class TwistGame {
       }
       */
 
-      List<String> finalSols = new ArrayList<>();
-      List<List> unorderedPlacement = new ArrayList<>();
-      for (int i = 0; i < solutions.size(); i++){
-          //finalSols[i] = solutions.get(i);
-          //finalSols[i] = solutions.get(i) + formalPlacement[0];
-          unorderedPlacement.add(getFormalPieces(solutions.get(i) + formalPlacement[0]));
+        List<String> finalSols = new ArrayList<>();
+        List<List> unorderedPlacement = new ArrayList<>();
+        for (int i = 0; i < solutions.size(); i++){
+            //finalSols[i] = solutions.get(i);
+            //finalSols[i] = solutions.get(i) + formalPlacement[0];
+            unorderedPlacement.add(getFormalPieces(solutions.get(i) + formalPlacement[0]));
 
 
-          Collections.sort(unorderedPlacement.get(i));
-          StringBuilder des = new StringBuilder();
-          for (Object o : unorderedPlacement.get(i)){
-              des.append(o);
-          }
+            Collections.sort(unorderedPlacement.get(i));
+            StringBuilder des = new StringBuilder();
+            for (Object o : unorderedPlacement.get(i)){
+                des.append(o);
+            }
 
-          if (isPlacementStringValid(des.toString())){
-              finalSols.add(des.toString());
-          }
-          des = null;
+            if (isPlacementStringValid(des.toString())){
+                finalSols.add(des.toString());
+            }
+            des = null;
 
-          //System.out.println(finalSols[i]);
-      }
+            //System.out.println(finalSols[i]);
+        }
 
-      String[] retVal = new String[finalSols.size()];
-      for (int i = 0; i < finalSols.size(); i++){
-          retVal[i] = finalSols.get(i);
-      }
+        String[] retVal = new String[finalSols.size()];
+        for (int i = 0; i < finalSols.size(); i++){
+            retVal[i] = finalSols.get(i);
+        }
 /*
         for (int i = 0; i < solutions.size(); i++){
             //finalSols[i] = solutions.get(i);
@@ -795,20 +835,20 @@ public class TwistGame {
             //System.out.println(finalSols[i]);
         }*/
 
-      return retVal;
+        return retVal;
     }
 
     //Combine all the different pieces.  e.g. a1,a2,a3,b1,b2,c1 --> a1,b1,c1; a1,b2,c1; a2, b1, c1; a2, b2, c1; ....
     public static List<String> combination(List<String> result, String[] madePieces, String[] missingPieces){
 
-      for (int j = 0; j < madePieces.length; j++){
-        for (int i = 0; i < missingPieces.length; i++){
-          result.add(madePieces[j] + missingPieces[i]);
-          //System.out.println(madePieces[j] + missingPieces[i]);
+        for (int j = 0; j < madePieces.length; j++){
+            for (int i = 0; i < missingPieces.length; i++){
+                result.add(madePieces[j] + missingPieces[i]);
+                //System.out.println(madePieces[j] + missingPieces[i]);
+            }
         }
-      }
 
-      return result;
+        return result;
     }
 
 

@@ -318,28 +318,34 @@ public class Board extends Application {
     // FIXME Task 8: Implement starting placements
 
 
-    private String start_play() throws IOException {
-        File filename = new File("assets/1.txt");
+    static String start_play() throws IOException {
+        File filename = new File("assets/level3.txt");
         FileReader read = new FileReader(filename);
         LineNumberReader reader = new LineNumberReader(read);
 
         Random rand = new Random();
-        int line = rand.nextInt(100);
+        int line = rand.nextInt(90);
         String txt = "";
         int i = 0;
-        while (txt != null) {
+        while (i != line) {
             i ++;
             txt = reader.readLine();
-            if (i == line) {
-                //System.out.println("Line" + line + ": " + reader.readLine());
-                System.exit(0);
-            }
+//            if (i == line) {
+//                return txt;
+//                //System.out.println("Line" + line + ": " + reader.readLine());
+//                //System.exit(0);
+//            }
         }
         reader.close();;
         read.close();
 
         return txt;
     }
+
+//    public static void main(String[] args) throws IOException{
+//        String txt = start_play();
+//        System.out.println(txt);
+//    }
 
 
     private void makeBoard() {
