@@ -1,17 +1,14 @@
-/*
 package comp1110.ass2;
 
 import java.io.*;
 import java.util.*;
 
 
-*/
 /* implements task9 public String[] getSolutions(String placement)
  * while the start plecement has exactly one solution
  * getSolutions.length = 1
  * the more constrained the player is, the fewer options they have, the solution is simpler
- *//*
-
+ */
 public class StartPlacements {
     static TwistGame obj;
     static final int side = 4;
@@ -19,12 +16,10 @@ public class StartPlacements {
     static StartPieces pi;
 
 
-    */
-/*
+    /*
      * the start placements contain 1)1-5 pegs;
      * 2)pegs plus 1 piece
-     *//*
-
+     */
     public static Set<String> pegs() {
         Set<String> pegset1 = new HashSet<>();
         Set<String> pegset = new HashSet<>();
@@ -51,12 +46,10 @@ public class StartPlacements {
         return pegset;
     }
 
-    */
-/* choose a difficult level
+    /* choose a difficult level
      * each level contains a set of String(start placement)
      * level 3 : 4 pieces + 2 pegs
-     *//*
-
+     */
     public static Set<String> level3() {
         Set<String> finalstart = new HashSet<>();
         Set<String> finalstart1 = new HashSet<>();
@@ -89,11 +82,9 @@ public class StartPlacements {
         return finalstart1;
     }
 
-    */
-/*
+    /*
      * level 1: 6 pieces
-     *//*
-
+     */
 
 //    public static void main(String[] args) {
 //        String placement = "c3A0d5B0e3C3h5D2j1B0l2B0";
@@ -139,4 +130,3 @@ public class StartPlacements {
     }
 
 }
-*/
