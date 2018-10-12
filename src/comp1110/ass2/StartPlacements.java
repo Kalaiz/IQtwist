@@ -183,22 +183,22 @@ public class StartPlacements {
 //        }
 //        bw.close();
 
-        public static void main (String[]args) throws Exception {
-            File filename = new File("assets/levels.txt");
-            if (filename.exists()) {
-                filename.delete();
-                filename.createNewFile();
-            }
-
-            BufferedWriter bw = new BufferedWriter(new FileWriter(filename));
-            for (String pi : level2()) {
-                bw.write(pi);
-                bw.newLine();
-            }
-            bw.close();
-
-        }
-
+//        public static void main (String[]args) throws Exception {
+//            File filename = new File("assets/levels.txt");
+//            if (filename.exists()) {
+//                filename.delete();
+//                filename.createNewFile();
+//            }
+//
+//            BufferedWriter bw = new BufferedWriter(new FileWriter(filename));
+//            for (String pi : level2()) {
+//                bw.write(pi);
+//                bw.newLine();
+//            }
+//            bw.close();
+//
+//        }
+//
 
     }
 
