@@ -3,8 +3,6 @@ package comp1110.ass2.gui;
 import comp1110.ass2.GameBoard;
 import comp1110.ass2.StartPieces;
 import comp1110.ass2.TwistGame;
-import javafx.animation.PathTransition;
-import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -16,18 +14,8 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
-import javafx.scene.shape.CubicCurveTo;
-import javafx.scene.shape.MoveTo;
-import javafx.scene.shape.Path;
 import javafx.stage.Stage;
-import javafx.util.Duration;
-
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.LineNumberReader;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -80,6 +68,7 @@ public class Board extends Application {
             double height = ivo.getImage().getHeight();
             boxes.add(new boxcreator(((char) (i + 97)), height, width));
             boxcreator b = boxes.get(i);
+
             if (i == 4) {
                 tempx = 340;
                 tempy = 50;
@@ -91,7 +80,7 @@ public class Board extends Application {
                 tempx += 50;
             }
             tempy += b.measurement;
-
+            System.out.println("for piece "+ ((char)(97+i))+" x is "+tempx +" y is "+tempy );
             ivo.setX(tempx);
             ivo.setY(tempy);
             b.defaultxy(tempx, tempy);
