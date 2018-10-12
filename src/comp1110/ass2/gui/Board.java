@@ -110,8 +110,10 @@ public class Board extends Application {
                 ivo.setEffect(g1);
             });
             ivo.setOnScroll(e -> {
-                b.rotate();
-                ivo.setRotate(b.rotate);
+                if(!grid.getChildren().contains(ivo)) {
+                    b.rotate();
+                    ivo.setRotate(b.rotate);
+                }
             });
             ivo.setOnMouseDragged(m -> {
 
