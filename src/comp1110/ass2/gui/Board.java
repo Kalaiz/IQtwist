@@ -11,6 +11,7 @@ import javafx.scene.Scene;
 import javafx.scene.effect.Glow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
@@ -95,12 +96,14 @@ public class Board extends Application {
             ivo.setY(tempy);
             b.defaultxy(tempx, tempy);
             g1.setLevel(0);
+
             ivo.setOnMouseEntered(e -> {
+
                 ivo.setEffect(g2);
             });
             b.updateflip(1);
             ivo.setOnMouseClicked(t -> {
-                if (t.getButton() == MouseButton.SECONDARY) {
+                if (t.getButton() == MouseButton.SECONDARY&& !grid.getChildren().contains(ivo)) {
                     int sy = (ivo.getScaleY() == -1) ? 1 : -1;
                     b.updateflip(sy);
                     ivo.setScaleY(sy);
@@ -175,13 +178,26 @@ public class Board extends Application {
         }
 
         Scene scene = new Scene(root, VIEWER_WIDTH, VIEWER_HEIGHT);
-        scene.setOnKeyPressed(c->{if(!c.getCharacter().equals("r")){
-            String remove=  boardStr.substring(boardStr.length()-4);
-            char ptype=remove.charAt(0);
-            imgObjs.get(ptype-97).setX(boxes.get(ptype-97).x);
-            imgObjs.get(ptype-97).setY(boxes.get(ptype-97).y);
+/*  scene.setOnKeyPressed(key->{
+        if(key.getCode()==KeyCode.BACK_SPACE){
+            System.out.println("yeah");
+            System.out.println(boardStr);
+           if (!(boardStr.length()==0)){
+
+               String remove=  boardStr.substring(boardStr.length()-4);
+               char ptype=remove.charAt(0);
+              // grid.getChildren().remove(imgObjs.get(ptype-97));
+               //imgObjs.set(ptype-97,new ImageView());
+               grid.getChildren().remove(imgObjs.get(ptype-97));
+
+               Image img = (new Image(Viewer.class.getResource(URI_BASE + ( ptype) + ".png").toString()));
+               imgObjs.get(ptype-97).setImage((new Image(Viewer.class.getResource(URI_BASE + (ptype) + ".png").toString(), img.getWidth() * 0.5, img.getHeight() * 0.5, false, false)));
+               imgObjs.get(ptype-97).setX(boxes.get(ptype-97).x);
+               imgObjs.get(ptype-97).setY(boxes.get(ptype-97).y);
+           }
         }
-        });
+    });*/
+
         root.getChildren().add(grid);
         primaryStage.setScene(scene);
         primaryStage.show();

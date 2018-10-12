@@ -249,7 +249,7 @@ public class TwistGame {
 
     public static void main(String[] args) {
         //getViablePiecePlacements("c1A3d2A6");
-        String placement= "b2A1d5B0e3C2h6D0i1A0j1B0";
+        String placement=   "d4C4e1C3f4A0g6A1h1A0j3B0j5C0";
         int ctr=0;
         String[] s = getSolutions(placement);
         if(s.length==0){
