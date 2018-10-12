@@ -37,7 +37,8 @@ public class GameBoard {
 
     }
 
-   private int getHashmapkey(String piece){
+
+    private int getHashmapkey(String piece){
         char pName = piece.charAt(0);
         int orientationNo = Character.getNumericValue(piece.charAt(3));
         int hashMapKey = (pName > 104) ? pName - 104 + 63 : (pName - 97) * 8 + orientationNo;//(pname - 97)*8 to get the corresponding piece base number
@@ -108,6 +109,10 @@ return hashMapKey;
      */
     String[][] getcboard() {
         return checkingBoard;
+    }
+
+    void updateBoard(String[][] cboard){
+        checkingBoard=cboard;
     }
 
 
@@ -221,3 +226,54 @@ return hashMapKey;
 
 
 }
+/*
+    void pieceTobeAdded(String piece, String bt) {
+        int hashMapKey= getHashmapkey(piece);
+        int col = Character.getNumericValue(piece.charAt(1)) - 1;
+        int row = piece.charAt(2) - 65;
+        if (bt.equals("a")) {
+            if((placer(actualBoard, hm.get(hashMapKey), row, col )!=null)){
+                actualBoard = placer(actualBoard, hm.get(hashMapKey), row, col );
+            }
+            else{//actual board hasnt been implemented yet as it does not require remove piece for now
+            }
+        } else {
+            if((placer(checkingBoard, hm.get(hashMapKey), row, col )!=null)){
+                checkingBoard = placer(checkingBoard, hm.get(hashMapKey), row, col );
+            }
+            else{
+                removepiece(piece,'c');
+            }
+        }
+
+    }*/
+/*
+public static String[][] boardcreator(String placement, char bt) {
+    if (gobj.getCBoardName()!=null){
+        if(placement.equals(gobj.getCBoardName().substring(0,placement.length()-4))&&bt=='c'){
+            gobj.removepiece(gobj.getCBoardName().substring(gobj.getcboard().length-4),'c');
+            placement=placement.substring(placement.length()-4);//so to not do so many operations
+        }
+        else {
+            gobj.resetBoardvalues(Character.toString(bt));//resets the respective board ( test reasons)
+        }}
+    else {
+        gobj.resetBoardvalues(Character.toString(bt));//resets the respective board ( test reasons)
+    }
+    //ToDo : make a static board fr task 6 operations so that there wont be any need to reset the board
+    //if static board(temp) is same as placement string-4 or same as placment  dont reset and update placement to just the piece and
+    // change checking board to temp--better than calling :Placer,piecetobeAdded,access to hashmap,and reseting the board
+    for (int i = 0; i < placement.length() / 4; i++) {
+        String ch = placement.substring(4 * i, 4 * i + 4);
+        if (bt == 'a') {
+            gobj.pieceTobeAdded(ch, "a");
+        } else {
+            gobj.pieceTobeAdded(ch, "c");
+            if(gobj.getcboard()==null||!checkBoard2()){
+                return null; }
+        }
+    }
+    if (bt=='c'){ gobj.updateCBoardName(placement);}else{gobj.updateABoardName(placement);}
+    return (bt == 'a') ? gobj.getaboard() : gobj.getcboard();
+}
+*/

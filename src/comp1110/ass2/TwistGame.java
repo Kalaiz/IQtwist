@@ -23,7 +23,6 @@ public class TwistGame {
     //private static  int totalmethodcalls=0;
     static boolean  initialisedhm=false;
     static boolean initilisedCs=false;
-
     static Set<String> viablePiece2 = new HashSet<String>();
     static String[][] tempboard=new String[4][8];
 
@@ -189,13 +188,23 @@ public class TwistGame {
      *
      */
     public static String[][] boardcreator(String placement, char bt) {
-  /*   if(placement.equals(gobj.getCBoardName().substring(0,placement.length()-4))&&bt=='c'){
+ /*if (gobj.getCBoardName()!=null){
+     if(placement.equals(gobj.getCBoardName().substring(0,placement.length()-4))&&bt=='c'){
          gobj.removepiece(gobj.getCBoardName().substring(gobj.getcboard().length-4),'c');
          placement=placement.substring(placement.length()-4);//so to not do so many operations
         }
+     else {
+         gobj.resetBoardvalues(Character.toString(bt));//resets the respective board ( test reasons)
+     }}
         else {*/
-        gobj.resetBoardvalues(Character.toString(bt));//resets the respective board ( test reasons)
-        /*  }*/
+ /*if(tempboard!=null){
+     gobj.updateBoard(tempboard);
+     placement=placement.substring(placement.length()-4);
+ }
+ else {*/
+     gobj.resetBoardvalues(Character.toString(bt));//resets the respective board ( test reasons)
+/* }*/
+         /* }*/
         //ToDo : make a static board fr task 6 operations so that there wont be any need to reset the board
         //if static board(temp) is same as placement string-4 or same as placment  dont reset and update placement to just the piece and
         // change checking board to temp--better than calling :Placer,piecetobeAdded,access to hashmap,and reseting the board
@@ -241,10 +250,7 @@ public class TwistGame {
     public static void main(String[] args) {
         //getViablePiecePlacements("c1A3d2A6");
        Pieces.initialisehms();
-        boardcreator("a7A7i8A0",'c');
-        displayBoard(gobj.getcboard());
-        gobj.removepiece("a7A7",'c');
-        displayBoard(gobj.getcboard());
+      getViablePiecePlacements("a7A7b6A7d2A6e2C3f3C2g4A7h6D0i6B0j2B0j1C0k3C0l4B0l5C0");
        /* String placement = "f3C4i6B0j1C0k3C0l4B0l5C0";
         //System.out.println(placement.substring(0,placement.length()));
         // Set<String> s = getViablePiecePlacements(placement);
@@ -343,15 +349,17 @@ public class TwistGame {
 
     public static Set<String> getViablePiecePlacements(String placement) {//Take note that this does not check if board is valid or not
         viablePiece2.clear();
+
        /* boardcreator("",'c');
         tempboard=gobj.getcboard();*/
 if (!initialisedhm&&!initilisedCs) {
+    //gobj.resetBoardvalues("ac");
     Pieces.initialisehms();//initialise hashmap just for the sake of task tests
     initialiseContainersSpecs();
     initialisedhm=initilisedCs=true;
 }
         boardcreator(placement,'c');//creates a board in accordance to the placement string
-        tempboard=gobj.getcboard();
+        //tempboard=gobj.getcboard();
         int[][] ppContainer2=ppContainer.clone();
         Viewer access=new Viewer();
         String unplaced ="";
