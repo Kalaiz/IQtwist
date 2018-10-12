@@ -167,7 +167,7 @@ public class Board extends Application {
         }
 
         Scene scene = new Scene(root, VIEWER_WIDTH, VIEWER_HEIGHT);
-/*  scene.setOnKeyPressed(key->{
+  scene.setOnKeyPressed(key->{
         if(key.getCode()==KeyCode.BACK_SPACE){
             System.out.println("yeah");
             System.out.println(boardStr);
@@ -175,17 +175,17 @@ public class Board extends Application {
 
                String remove=  boardStr.substring(boardStr.length()-4);
                char ptype=remove.charAt(0);
-              // grid.getChildren().remove(imgObjs.get(ptype-97));
+             grid.getChildren().remove(imgObjs.get(ptype-97));
                //imgObjs.set(ptype-97,new ImageView());
-               grid.getChildren().remove(imgObjs.get(ptype-97));
+              // grid.getChildren().remove(imgObjs.get(ptype-97));
 
-               Image img = (new Image(Viewer.class.getResource(URI_BASE + ( ptype) + ".png").toString()));
-               imgObjs.get(ptype-97).setImage((new Image(Viewer.class.getResource(URI_BASE + (ptype) + ".png").toString(), img.getWidth() * 0.5, img.getHeight() * 0.5, false, false)));
-               imgObjs.get(ptype-97).setX(boxes.get(ptype-97).x);
-               imgObjs.get(ptype-97).setY(boxes.get(ptype-97).y);
+              // Image img = (new Image(Viewer.class.getResource(URI_BASE + ( ptype) + ".png").toString()));
+              // imgObjs.get(ptype-97).setImage((new Image(Viewer.class.getResource(URI_BASE + (ptype) + ".png").toString(), img.getWidth() * 0.5, img.getHeight() * 0.5, false, false)));
+               imgObjs.get(ptype-97).setX((boxes.get(ptype-97).x));
+               imgObjs.get(ptype-97).setY((boxes.get(ptype-97).y));
            }
         }
-    });*/
+    });
 
         root.getChildren().add(grid);
         primaryStage.setScene(scene);

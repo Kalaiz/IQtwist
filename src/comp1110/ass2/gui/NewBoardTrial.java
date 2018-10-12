@@ -32,7 +32,7 @@ public class NewBoardTrial extends Application {
     private Group pieces = new Group();
 
     /* Default (home) x & y coordinates*/
-    static final double[] hxy= {100,50,100,200,100,400,740,380,340
+    static final double[] hxy= {100,50,100,200,100,400,840,380,340
                                 ,50,340,200,340,350,640,380};
 
 
@@ -74,17 +74,12 @@ public class NewBoardTrial extends Application {
             double width= img.getWidth()*0.5;
             setFitHeight(height);
             setFitWidth(width);
-            setXY(img);
-            this.pieceType = pieceType-97;//ascii encoding
-        }
+            setX(hxy[2*(pieceType-97)]);
+            setY(hxy[(2*(pieceType-97))+1]);
 
-        void setXY(Image img ){
-            for (int x =0;x<pieceType;x++){//in reference to home x and y
-                setLayoutX(hxy[2*x]);
-                setLayoutY(hxy[2*x+1]);
-            }
 
         }
+
     }
 
     /*Creates all required pieces -- for the start of the game*/
