@@ -357,6 +357,7 @@ public class Board extends Application {
 
         String startpoints = strs[number];
 
+        
         return startpoints;
     }
 
