@@ -249,7 +249,9 @@ public class TwistGame {
 
     public static void main(String[] args) {
         //getViablePiecePlacements("c1A3d2A6");
-        String placement=   "g6A1";
+        boolean f;
+        //System.out.println(f);
+        /*String placement=   "g6A1";
         int ctr=0;
         String[] s = getSolutions(placement);
         if(s.length==0){
@@ -258,7 +260,7 @@ public class TwistGame {
         for(String c : s){
 
             System.out.println(c);
-        }
+        }*/
         /*Set<String> p = getViablePiecePlacements(placement);
                 Iterator<String> a = p.iterator();
         while (a.hasNext()) {

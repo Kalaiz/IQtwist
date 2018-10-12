@@ -72,8 +72,7 @@ public class NewBoardTrial extends Application {
     class piece extends ImageView {
         int pieceType;
         double defaultX;//Default x coordinate position on start of the game
-        double defaultY;//Default y  coordinate position on start of the game
-
+        double defaultY;//Default y coordinate position on start of the game
 
         piece(char pieceType) {
             Image img = (new Image(Viewer.class.getResource(URI_BASE + pieceType + ".png").toString()));
@@ -82,19 +81,46 @@ public class NewBoardTrial extends Application {
             double width= img.getWidth()*0.5;
             setFitHeight(height);
             setFitWidth(width);
-            setX(hxy[2*(pieceType-97)]);
-            setY(hxy[(2*(pieceType-97))+1]);
+            this.pieceType=pieceType-97;// according to ascii encoding
+            defaultX=hxy[2*(pieceType-97)];
+            defaultY=hxy[(2*(pieceType-97))+1];
+            setX(defaultX);
+            setY(defaultY);
+        }
 
+    }
+    class eventPiece extends piece{
+        String pieceInfo;
+        double positionalX;
+        double positionalY;
+        boolean flip;
+        int rotate;
+
+        eventPiece(char piece){
+            super(piece);
+            flip=true;
+            setOnScroll(scroll->{setRotate(rotate);
+            rotate =(rotate>=360)?0:rotate+90;
+            });
+
+            setOnMouseClicked(click->{
+            if(click.getButton()==MouseButton.SECONDARY){
+                if(flip){setScaleX(1); flip=false;}else{setScaleX(-1); flip=true;}
+                }
+
+            });
 
         }
 
     }
 
+
+
     /*Creates all required pieces -- for the start of the game*/
     private void createPieces() {
         pieces.getChildren().clear();
         for (char ch = 'a'; ch <= 'h'; ch++) {//for only pieces not for pegs as pegs can't be placed by players
-            pieces.getChildren().add(new piece(ch));
+            pieces.getChildren().add(new eventPiece(ch));
         }
     }
 
