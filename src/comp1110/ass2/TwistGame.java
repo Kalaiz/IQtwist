@@ -249,22 +249,24 @@ public class TwistGame {
 
     public static void main(String[] args) {
         //getViablePiecePlacements("c1A3d2A6");
-       Pieces.initialisehms();
-      getViablePiecePlacements("a7A7b6A7d2A6e2C3f3C2g4A7h6D0i6B0j2B0j1C0k3C0l4B0l5C0");
-       /* String placement = "f3C4i6B0j1C0k3C0l4B0l5C0";
-        //System.out.println(placement.substring(0,placement.length()));
-        // Set<String> s = getViablePiecePlacements(placement);
+        String placement= "b2A1d5B0e3C2h6D0i1A0j1B0";
+        int ctr=0;
         String[] s = getSolutions(placement);
-        int ctr = 0;
-        for (String x : s){
-            System.out.println(x);
-        }*/
-    /*    Iterator<String> a = s.iterator();
+        if(s.length==0){
+            System.out.println("No Solutions found");
+        }
+        for(String c : s){
+
+            System.out.println(c);
+        }
+        /*Set<String> p = getViablePiecePlacements(placement);
+                Iterator<String> a = p.iterator();
         while (a.hasNext()) {
             ctr++;
             String h = a.next();
             System.out.println(ctr + "" + h);
         }*/
+
     }
 
 
