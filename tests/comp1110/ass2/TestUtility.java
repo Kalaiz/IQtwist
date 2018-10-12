@@ -90,7 +90,7 @@ public class TestUtility {
   };
 
 
-  static final String[][] SINGLE= {
+  static final String[][] SINGLE = {
           {
                   "c1A3d2A6e2C3f3C2g4A7h6D0i6B0j2B0j1C0k3C0l4B0l5C0",      //  1
                   "c5A2d1B3e4A5f4C2g2B3h1A2i7D0j7A0k5B0k5C0l3A0l3D0",      //  2
