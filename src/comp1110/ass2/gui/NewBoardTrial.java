@@ -5,8 +5,13 @@ import comp1110.ass2.Pieces;
 import comp1110.ass2.StartPieces;
 import comp1110.ass2.TwistGame;
 import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.effect.Glow;
 import javafx.scene.image.Image;
@@ -16,12 +21,14 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 public class NewBoardTrial extends Application {
+    private static String gameState = "";
     private static final int DISPLAY_WIDTH = 1280;
     private static final int DISPLAY_HEIGHT = 649;
     private static final String URI_BASE = "assets/";
@@ -30,6 +37,7 @@ public class NewBoardTrial extends Application {
     private Group root = new Group();
     private Group board = new Group();
     private Group pieces = new Group();
+    private Group controls = new Group();
 
     /* Default (home) x & y coordinates*/
     static final double[] hxy= {100,50,100,200,100,400,740,380,340
@@ -96,6 +104,69 @@ public class NewBoardTrial extends Application {
     }
 
 
+    /**
+     * Start a new game & clear the previous board
+     */
+    private void newGame() {
+
+
+    }
+
+
+    /**
+     * Show the completion message
+     */
+    private void showCompletion() {
+    }
+
+
+    /**
+     * Hide the completion message
+     */
+    private void hideCompletion() {
+    }
+
+
+    /**
+     * Create the controls that allow the game to be restarted and the difficulty
+     * level set.
+     */
+    private void makeControls() {
+        Button bt = new Button("Restart");
+        bt.setLayoutX(DISPLAY_WIDTH / 4 + 30);
+        bt.setLayoutY(DISPLAY_HEIGHT - 45);
+        bt.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                newGame();
+            }
+        });
+        controls.getChildren().add(bt);
+
+        difficulty.setMin(1);
+        difficulty.setMax(4);
+        difficulty.setValue(0);
+        difficulty.setShowTickLabels(true);
+        difficulty.setShowTickMarks(true);
+        difficulty.setMajorTickUnit(1);
+        difficulty.setMinorTickCount(1);
+        difficulty.setSnapToTicks(true);
+
+        difficulty.setLayoutX(DISPLAY_WIDTH / 4 - 140);
+        difficulty.setLayoutY(DISPLAY_HEIGHT - 40);
+        controls.getChildren().add(difficulty);
+
+        final Label difficultyCaption = new Label("Difficulty:");
+        difficultyCaption.setTextFill(Color.GREY);
+        difficultyCaption.setLayoutX(DISPLAY_WIDTH / 4 - 210);
+        difficultyCaption.setLayoutY(DISPLAY_HEIGHT - 40);
+        controls.getChildren().add(difficultyCaption);
+
+        root.getChildren().add(controls);
+    }
+
+
+
     /*Start of JavaFX operations */
     @Override
     public void start (Stage primaryStage) throws Exception {
@@ -105,10 +176,10 @@ public class NewBoardTrial extends Application {
         makeBoard();
         root.getChildren().add(board);
         root.getChildren().add(pieces);
+        makeControls();
         primaryStage.setScene(scene);
         primaryStage.show();
     }
-
 
 
 }
