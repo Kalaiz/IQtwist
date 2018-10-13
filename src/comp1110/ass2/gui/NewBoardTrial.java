@@ -1,14 +1,11 @@
 package comp1110.ass2.gui;
 
-import comp1110.ass2.GameBoard;
-import comp1110.ass2.Pieces;
-import comp1110.ass2.StartPieces;
-import comp1110.ass2.TwistGame;
+
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -16,16 +13,12 @@ import javafx.scene.control.Slider;
 import javafx.scene.effect.Glow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
 
 public class NewBoardTrial extends Application {
     private static String gameState = "";
@@ -107,6 +100,13 @@ public class NewBoardTrial extends Application {
         int rotate;
 
 
+        void reset(){
+            holder.setX(defaultX);
+            holder.setY(defaultY);
+            holder.setRotate(0);
+            holder.setScaleX(1);
+        }
+
 
         eventPiece(char piece){
             super(piece);
@@ -177,12 +177,6 @@ public class NewBoardTrial extends Application {
 
     }
 
-
-
-
-
-
-
     /*Creates all required pieces -- for the start of the game*/
     private void createPieces() {
         pieces.getChildren().clear();
@@ -197,11 +191,17 @@ public class NewBoardTrial extends Application {
      */
     private void newGame() {
         board.getChildren().clear();
-        grid= new GridPane();
-        pieces.getChildren().removeAll();
-        pieces.getChildren().clear();
-        createPieces();
+        resetgame();
         makeBoard();
+    }
+
+
+    private void resetgame(){
+        pieces.toFront();
+        for (Node n : pieces.getChildren()) {
+            ((eventPiece) n).reset();
+        }
+        grid = new GridPane();
     }
 
 
@@ -272,6 +272,5 @@ public class NewBoardTrial extends Application {
         primaryStage.setScene(scene);
         primaryStage.show();
     }
-
 
 }
