@@ -20,6 +20,8 @@ import javafx.scene.layout.RowConstraints;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
+import java.util.Iterator;
+
 public class NewBoardTrial extends Application {
     private static String gameState = "";
     private static final int DISPLAY_WIDTH = 1280;
@@ -192,18 +194,29 @@ public class NewBoardTrial extends Application {
      * Start a new game & clear the previous board
      */
     private void newGame() {
-        board.getChildren().clear();
-        resetgame();
+        createPieces();
         makeBoard();
     }
 
 
     private void resetgame(){
-        pieces.toFront();
+        board.getChildren().clear();
+        Iterator griditer=grid.getChildren().iterator();
+        grid = new GridPane();
+       /* while(griditer.hasNext()){
+          eventPiece p  = (eventPiece) griditer.next();
+         root.getChildren().add(new eventPiece((char)p.pieceType));
+       }*/
+
+
         for (Node n : pieces.getChildren()) {
             ((eventPiece) n).reset();
+           // grid.getChildren().remove(((eventPiece) n).holder);
         }
-        grid = new GridPane();
+        makeBoard();
+
+
+
     }
 
 
@@ -232,11 +245,10 @@ public class NewBoardTrial extends Application {
         bt.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
-                newGame();
+                resetgame();
             }
         });
         controls.getChildren().add(bt);
-
         difficulty.setMin(1);
         difficulty.setMax(4);
         difficulty.setValue(0);
@@ -264,8 +276,7 @@ public class NewBoardTrial extends Application {
     public void start (Stage primaryStage) throws Exception {
         primaryStage.setTitle("IQ-twist");//sets the title name on the bar
         Scene scene = new Scene(root, DISPLAY_WIDTH, DISPLAY_HEIGHT);
-        createPieces();
-        makeBoard();
+        newGame();
         root.getChildren().add(board);
         root.getChildren().add(pieces);
         makeControls();
