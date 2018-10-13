@@ -91,6 +91,8 @@ public class NewBoardTrial extends Application {
             holder.setY(defaultY);
         }
 
+
+
     }
     class eventPiece extends piece{
         String pieceInfo;
@@ -98,7 +100,6 @@ public class NewBoardTrial extends Application {
         int gridCol;
         boolean flip;
         int rotate;
-
 
         void reset(){
             holder.setX(defaultX);
@@ -161,6 +162,7 @@ public class NewBoardTrial extends Application {
 
             });
 
+
         }
 
 
@@ -176,6 +178,20 @@ public class NewBoardTrial extends Application {
 
         }
 
+        private void decodePieces(){
+
+            int col = gridCol + 1;
+            int num = 0;
+
+            if (flip){
+                num = (int) getRotate() + 4;
+            } else{ num = (int) getRotate();}
+
+            String decPie = (char)pieceType + "" + col + ((char) (gridRow + 65)) + num;
+            System.out.println(decPie);
+
+            pieceInfo=decPie;
+        }
 
     }
 
@@ -205,21 +221,6 @@ public class NewBoardTrial extends Application {
         }
         grid = new GridPane();
     }
-
-
-    /**
-     * Show the completion message
-     */
-    private void showCompletion() {
-    }
-
-
-    /**
-     * Hide the completion message
-     */
-    private void hideCompletion() {
-    }
-
 
     /**
      * Create the controls that allow the game to be restarted and the difficulty
@@ -256,8 +257,6 @@ public class NewBoardTrial extends Application {
 
         root.getChildren().add(controls);
     }
-
-
 
     /*Start of JavaFX operations */
     @Override
