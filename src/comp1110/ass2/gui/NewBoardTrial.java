@@ -39,19 +39,24 @@ public class NewBoardTrial extends Application {
     private Group pieces = new Group();
     private Group controls = new Group();
 
+
+    /* Grid  */
+    static GridPane grid = new GridPane();
+
     /* Default (home) x & y coordinates*/
     static final double[] hxy= {100,50,100,200,100,400,740,380,340
-                                 ,50,340,200,340,350,540,380};
-
+            ,50,340,200,340,350,540,380};
 
     /* the difficulty slider */
     private final Slider difficulty = new Slider();
 
+    /*Glow objects*/
+    private Glow g1=new Glow(0.5);
+    private Glow g2=new Glow();
+
     /*Sets up the board*/
     private void makeBoard() {
         board.getChildren().clear();
-        //Creating Grid
-        GridPane grid = new GridPane();
         for (int i = 0; i < 8; i++) {
             ColumnConstraints col = new ColumnConstraints(50);
             grid.getColumnConstraints().add(col);
@@ -68,51 +73,113 @@ public class NewBoardTrial extends Application {
     }
 
 
+
+
     /* Inner class for pieces*/
     class piece extends ImageView {
         int pieceType;
         double defaultX;//Default x coordinate position on start of the game
         double defaultY;//Default y coordinate position on start of the game
+        ImageView holder;
 
         piece(char pieceType) {
+            holder= new ImageView();//Since grid needs a node
             Image img = (new Image(Viewer.class.getResource(URI_BASE + pieceType + ".png").toString()));
-            setImage(img);
+            holder.setImage(img);
+            root.getChildren().add(holder);
             double height= img.getHeight()*0.5;
             double width= img.getWidth()*0.5;
-            setFitHeight(height);
-            setFitWidth(width);
+            holder.setFitHeight(height);
+            holder.setFitWidth(width);
             this.pieceType=pieceType-97;// according to ascii encoding
             defaultX=hxy[2*(pieceType-97)];
             defaultY=hxy[(2*(pieceType-97))+1];
-            setX(defaultX);
-            setY(defaultY);
+            holder.setX(defaultX);
+            holder.setY(defaultY);
         }
 
     }
     class eventPiece extends piece{
         String pieceInfo;
-        double positionalX;
-        double positionalY;
+        int gridRow;//placement on the grid
+        int gridCol;
         boolean flip;
         int rotate;
 
+
+
         eventPiece(char piece){
             super(piece);
-            flip=true;
-            setOnScroll(scroll->{setRotate(rotate);
-            rotate =(rotate>=360)?0:rotate+90;
+            flip=false;//Declaring
+
+            holder.setOnScroll(scroll->{//Rotation on scroll
+                holder.setRotate(rotate);
+                rotate =(rotate>=360)?0:rotate+90;
             });
 
-            setOnMouseClicked(click->{
-            if(click.getButton()==MouseButton.SECONDARY){
-                if(flip){setScaleX(1); flip=false;}else{setScaleX(-1); flip=true;}
+            holder.setOnMouseEntered(geffect->{ //Glow effect
+                holder.setEffect(g1);
+            });
+
+            holder.setOnMouseExited(ageffect->{//Anti glow effect
+                holder.setEffect(g2);
+            });
+
+            holder.setOnMouseClicked(click->{//Flip  on right click
+                if(click.getButton()==MouseButton.SECONDARY){
+                    if(flip){holder.setScaleX(1); flip=false;}else{holder.setScaleX(-1); flip=true;}
                 }
+
+
+            });
+
+            holder.setOnMouseDragged(drag->{
+                //Divide by 2 so to pull it by the center & using getScene for relative positioning
+                double centerX=drag.getSceneX()-holder.getFitWidth()/2;
+                double centerY=drag.getSceneY()-holder.getFitHeight()/2;
+                holder.setY(centerY);
+                holder. setX(centerX);
+                //Actual cursor position - image's top left corner.
+                double ScreenPositionX = drag.getScreenX();
+                double ScreenPositionY = drag.getScreenY();
+
+
+                // System.out.println("X is " +(drag.getScreenX()) +" Y is  " + (drag.getScreenY())+" ");//TESTING
+                holder.setOnMouseReleased(released->{
+                    if(ScreenPositionX<700||ScreenPositionX>1100||ScreenPositionY>210||ScreenPositionY<10){
+                        holder.setX(defaultX);
+                        holder.setY(defaultY);
+                    }
+                    else{ setOnGrid(ScreenPositionX,ScreenPositionY);
+
+
+                    }
+
+                });
 
             });
 
         }
 
+
+        void setOnGrid(double positionalX,double positionalY){
+            // 50- width of each grid
+            // 700 & 10 - the starting co-ordinates  of the grid
+            gridCol=(int)((positionalX-700)/50)-1;
+            gridRow=(int)((positionalY-10)/50)-1;
+            int rs= (int)getImage().getHeight()/50;
+            int cs= (int)getImage().getWidth()/50;
+            grid.add(holder,gridCol,gridRow,cs,rs);
+
+
+        }
+
+
     }
+
+
+
+
 
 
 
@@ -130,6 +197,8 @@ public class NewBoardTrial extends Application {
      */
     private void newGame() {
         board.getChildren().clear();
+        grid= new GridPane();
+        pieces.getChildren().removeAll();
         pieces.getChildren().clear();
         createPieces();
         makeBoard();
