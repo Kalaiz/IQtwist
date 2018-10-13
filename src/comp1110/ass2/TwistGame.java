@@ -822,9 +822,10 @@ if (!initialisedhm&&!initilisedCs) {
             }
 
             if (des.length()==32) {
-                if (isPlacementStringValid(des.toString())) {
+                /*if (isPlacementStringValid(des.toString())) {
                     finalSols.add(des.toString());
-                }
+                }*/
+                finalSols.add(des.toString());
                 des = null;
             }
 
@@ -857,7 +858,9 @@ if (!initialisedhm&&!initilisedCs) {
 
         for (int j = 0; j < madePieces.length; j++){
             for (int i = 0; i < missingPieces.length; i++){
-                result.add(madePieces[j] + missingPieces[i]);
+
+                if (isPlacementStringValid(madePieces[j] + missingPieces[i]))
+                    result.add(madePieces[j] + missingPieces[i]);
                 //System.out.println(madePieces[j] + missingPieces[i]);
             }
         }

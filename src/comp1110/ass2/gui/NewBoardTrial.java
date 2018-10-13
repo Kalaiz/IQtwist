@@ -129,8 +129,10 @@ public class NewBoardTrial extends Application {
      * Start a new game & clear the previous board
      */
     private void newGame() {
-
-
+        board.getChildren().clear();
+        pieces.getChildren().clear();
+        createPieces();
+        makeBoard();
     }
 
 
