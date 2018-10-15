@@ -119,9 +119,9 @@ public class NewBoardTrial extends Application {
 
         private void decodePieces(){
             int col = gridCol + 1;//As the string for the column (piece-encoding) starts from 1 .
-            int orientation=(flip)?(int)(holder.getRotate()/90)-4:(int)(holder.getRotate()/90);
+            int orientation=(flip)?(int)((holder.getRotate()/90)+4):(int)(holder.getRotate()/90);
                     // Character of the piece + Column:number + Row:Alpha + orientation:number
-            pieceInfo = Character.toString((char)pieceType)+ col + ((char) (gridRow + 65)) + orientation;
+            pieceInfo = Character.toString((char)pieceType)+ col + ((char) (gridRow + 65)) + Integer.toString(orientation);
         }
 
 
@@ -187,8 +187,8 @@ public class NewBoardTrial extends Application {
             // 50 - width of each grid
             // 700 & 10 - the starting co-ordinates  of the grid
             System.out.println("X: " + positionalX+"  Y: " + positionalY);
-            gridCol=(int)(positionalX-698)/50;
-            gridRow=(int)(positionalY-8)/50;
+            gridCol=(int)(positionalX-695)/50;
+            gridRow=(int)(positionalY-5)/50;
             int rowspan=(int)holder.getImage().getHeight()/100;
             int colspan=(int)holder.getImage().getWidth()/100;
             int rs=((rotate/90)%2==0)?rowspan:colspan;//Switching the row and col span upon rotation
@@ -212,20 +212,7 @@ public class NewBoardTrial extends Application {
 
         }
 
-        private void decodePieces(){
 
-            int col = gridCol + 1;
-            int num = 0;
-
-            if (flip){
-                num = (int) getRotate() + 4;
-            } else{ num = (int) getRotate();}
-
-            String decPie = (char)pieceType + "" + col + ((char) (gridRow + 65)) + num;
-            System.out.println(decPie);
-
-            pieceInfo=decPie;
-        }
 
     }
 
