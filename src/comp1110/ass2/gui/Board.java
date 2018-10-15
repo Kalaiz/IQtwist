@@ -1,13 +1,16 @@
 package comp1110.ass2.gui;
 
-import comp1110.ass2.GameBoard;
-import comp1110.ass2.StartPieces;
+
 import comp1110.ass2.TwistGame;
-import javafx.animation.PathTransition;
-import javafx.animation.Timeline;
 import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.Slider;
 import javafx.scene.effect.Glow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -15,39 +18,63 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
-import javafx.scene.shape.CubicCurveTo;
-import javafx.scene.shape.MoveTo;
-import javafx.scene.shape.Path;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.LineNumberReader;
+import java.awt.image.BufferedImage;
 import java.util.*;
+import java.util.stream.IntStream;
 
 public class Board extends Application {
-    private static final int BOARD_WIDTH = 933;
-    private static final int BOARD_HEIGHT = 700;
-    static GameBoard g = new GameBoard();
-    private static TwistGame t = new TwistGame();
-    private static final int VIEWER_WIDTH = 1280;
-    private static final int VIEWER_HEIGHT = 649;
-    private static final String URI_BASE = "assets/";
-    private final Group root = new Group();
-    private final Group controls = new Group();
-    private static double tempx;//for positioning
-    private static double tempy;//for positioning
-    Glow g2 = new Glow();
-    Glow g1 = new Glow();
-    static String boardStr="";
-    static StartPieces str;
+    /*ToDo:
+    1)Need a separate NewGame button.
+      Upon pressing new game a new  board with new starting placement should be created
+       *Make modification such that Pieces on the board(grid) should not be removed by the user.
+       *Pieces on the grid should not have duplicates (default position)
+       *gameState(String) must be updated in accordance to the new board.
+       *Solutions must be created before the user starts to place the pieces:For task 10
+    2)Need a separate Reset button
+      Upon pressing reset the game board should be back to the starting position of the
+      game which was being played.(A new starting board should bot be created.)
+    3)Upon pressing backspace the previously placed piece must be obtained back.
+       *gameState must be updated respectively
+    4)Add background image - beware of which computer you are going to use.(preferably dimension of HD (1280x 640))
+      OR use javafx itself(Most probably).
+    */
 
-    @Override
-    public void start(Stage primaryStage) throws Exception {
-        primaryStage.setTitle("Game");
-        GridPane grid = new GridPane(); //Creating Grid
+
+    private static String gameState = "";//The game String
+    private static final int DISPLAY_WIDTH = 1280;
+    private static final int DISPLAY_HEIGHT = 649;
+    private static final String URI_BASE = "assets/";
+
+    /*Game object*/
+    TwistGame game=new TwistGame();
+
+    /*NODE groups*/
+    private Group root = new Group();
+    private Group board = new Group();
+    private Group pieces = new Group();
+    private Group controls = new Group();
+
+
+    /* Grid */
+    private static GridPane grid = new GridPane();
+
+    /* Default (home) x & y coordinates*/
+    private static final double[] hxy= {100,50,100,200,100,400,740,380,340
+                                 ,50,340,200,340,350,540,380};
+
+    /* the difficulty slider */
+    private final Slider difficulty = new Slider();
+
+    /*Glow objects*/
+    private Glow g1=new Glow(0.5);
+    private Glow g2=new Glow();
+
+    /*Sets up the board*/
+    private void createBoard() {
+        board.getChildren().clear();
         for (int i = 0; i < 8; i++) {
             ColumnConstraints col = new ColumnConstraints(50);
             grid.getColumnConstraints().add(col);
@@ -59,263 +86,283 @@ public class Board extends Application {
         grid.setGridLinesVisible(true);
         grid.setLayoutX(700);
         grid.setLayoutY(10);
-        tempy = 50;
-        tempx = 100;
-        TwistGame game =new TwistGame();
-        GameBoard board= new GameBoard();
+        board.getChildren().add(grid);
+        //board.toBack();      //places the node it at the back
+    }
 
-        List<ImageView> imgObjs = new ArrayList();// list of images
-        List<boxcreator> boxes = new ArrayList();
-        //For loop to iterate through everypiece
-        for (int i = 0; i < 12; i++) {//12 pieces
-            imgObjs.add(new ImageView());
-            ImageView ivo = imgObjs.get(i);
-            Image img = (new Image(Viewer.class.getResource(URI_BASE + ((char) (i + 97)) + ".png").toString()));
-            ivo.setImage((new Image(Viewer.class.getResource(URI_BASE + ((char) (i + 97)) + ".png").toString(), img.getWidth() * 0.5, img.getHeight() * 0.5, false, false)));
-            double width = ivo.getImage().getWidth(); // divide by 2 so to have cursor in middle of it when dragging
-            double height = ivo.getImage().getHeight();
-            boxes.add(new boxcreator(((char) (i + 97)), height, width));
-            boxcreator b = boxes.get(i);
-            if (i == 4) {
-                tempx = 340;
-                tempy = 50;
-            } else if (i == 7) {
-                tempx += 300;
-                tempy = 230;
-            } else if (i > 7) {
-                tempy = 230;
-                tempx += 50;
-            }
-            tempy += b.measurement;
 
-            ivo.setX(tempx);
-            ivo.setY(tempy);
-            b.defaultxy(tempx, tempy);
-            g1.setLevel(0);
-            ivo.setOnMouseEntered(e -> {
-                ivo.setEffect(g2);
-            });
-            b.updateflip(1);
-            ivo.setOnMouseClicked(t -> {
-                if (t.getButton() == MouseButton.SECONDARY) {
-                    int sy = (ivo.getScaleY() == -1) ? 1 : -1;
-                    b.updateflip(sy);
-                    ivo.setScaleY(sy);
+    /* Inner class for pieces*/
+    class piece extends ImageView {
+        int pieceType;//The actual ascii number.
+        double defaultX;//Default x coordinate position on start of the game
+        double defaultY;//Default y coordinate position on start of the game
+        ImageView holder;
+
+        piece(char pieceType) {
+            holder= new ImageView();//Since grid needs a node
+            Image img = (new Image(Viewer.class.getResource(URI_BASE + pieceType + ".png").toString()));
+            holder.setImage(img);
+            root.getChildren().add(holder);
+            double height= img.getHeight()*0.5;//Resizing the image
+            double width= img.getWidth()*0.5;
+            holder.setFitHeight(height);
+            holder.setFitWidth(width);
+            this.pieceType=pieceType;// according to ascii encoding
+            defaultX=hxy[2*(pieceType-97)];
+            defaultY=hxy[(2*(pieceType-97))+1];
+            holder.setX(defaultX);
+            holder.setY(defaultY);
+
+        }
+
+    }
+    class eventPiece extends piece{
+        String pieceInfo;
+        int gridRow;//placement on the grid
+        int gridCol;
+        boolean flip;
+        int rotate;
+
+        void reset(){
+            holder.setX(defaultX);
+            holder.setY(defaultY);
+            holder.setRotate(0);
+            holder.setScaleY(1);
+        }
+
+        private void decodePieces(){
+            //As the string for the column (piece-encoding) starts from 1
+            int col = gridCol + 1;
+            int orientation=(flip)?(int)((holder.getRotate()/90)+4):(int)(holder.getRotate()/90);
+            // Character of the piece + Column:number + Row:Alpha + orientation:number
+            pieceInfo = Character.toString((char)pieceType)+ col + ((char) (gridRow + 65)) + Integer.toString(orientation);
+        }
+
+        eventPiece(char piece){
+            super(piece);
+            flip=false;//Declaring
+            holder.setOnScroll(scroll->{//Rotation on scroll
+                if(!grid.getChildren().contains(holder)){//If grid does not contain the piece .
+                    rotate+=90;
+                    rotate=(rotate>=360)?0:rotate;
+                    holder.setRotate(rotate);
                 }
             });
-            ivo.setOnMouseExited(e -> {
-                ivo.setEffect(g1);
-            });
-            ivo.setOnScroll(e -> {
-                b.rotate();
-                ivo.setRotate(b.rotate);
-            });
-            ivo.setOnMouseDragged(m -> {
 
-                ivo.setY(m.getSceneY() - height / 2);//for centering piece upon drag
-                ivo.setEffect(g2);
-                ivo.setX(m.getSceneX() - width / 2);
-                ivo.setOnMouseReleased(t -> {
-                    if (ivo.getX() < 650 || ivo.getY() > 200 || ivo.getX() > 1100) {//If out of board image goes back to the default place
-                        ivo.setX(b.x);
-                        ivo.setY(b.y);
-                    } else if (m.getSceneX() > 700 && m.getSceneY() < 1100 && m.getSceneY() < 230 && m.getSceneY() > 10) {//if it is within the board
-                        double y = m.getSceneY() - height / 2;//for moving piece with cursor being centerd
-                        double x = m.getSceneX() - width / 2;
-                        double rotval = b.rotate;
+            holder.setOnMouseEntered(geffect->{ //Glow effect
+                holder.setEffect(g1);
+            });
 
-                        int[] xyval = getrowcol(x, y, rotval, b.getchar());
-                        System.out.println("col index : "+ xyval[0]+ " row index :  "+ xyval[1] + "  Game board : "+ boardStr);
-                        int[] csrs = {(int) height / 50, (int) width / 50};
-                        if ((b.rotate / 90) % 2 != 0) {//Switch cs and rs .
-                            csrs[0] = (int) width / 50;
-                            csrs[1] = (int) height / 50;
+            holder.setOnMouseExited(ageffect->{//Anti glow effect
+                holder.setEffect(g2);
+            });
+
+            holder.setOnMouseClicked(click->{//Flip on right click
+                if(click.getButton()==MouseButton.SECONDARY&&!grid.getChildren().contains(holder) ){
+                    if(flip){holder.setScaleY(1); flip=false;}else{holder.setScaleY(-1); flip=true;}
+                }
+            });
+
+            holder.setOnMouseDragged(drag-> {
+                if (!grid.getChildren().contains(holder)) {
+
+                    double cornerX = drag.getSceneX();
+                    double cornerY = drag.getSceneY();
+                    //Divide by 2 so to pull it by the center & using getScene for relative positioning
+                    holder.setY(cornerY - holder.getFitHeight() / 2);
+                    holder.setX(cornerX - holder.getFitWidth() / 2);
+                    //Image remains non rotated according to Javafx(Grid).
+                    //Piece G is an exception as it does not cause any offset error
+                    double imgCornerx = ((rotate / 90) % 2 == 0 || pieceType == 103) ? holder.getX() : holder.getX() + holder.getFitWidth() / 2.5;
+                    double imgCornery = ((rotate / 90) % 2 == 0 || pieceType == 103) ? holder.getY() : cornerY - holder.getFitWidth() / 2.25;
+                    System.out.println("Height of image " + holder.getFitHeight() + " width of image " + holder.getFitWidth());
+                    System.out.println("X is " + (drag.getSceneX()) + " Y is  " + (drag.getSceneY()) + " ");
+                    System.out.println("getX is : " + holder.getX() + " getY is: " + holder.getY());
+                    System.out.println("imgCornerx: " + imgCornerx + "  imgcY:  " + imgCornery);
+                    holder.setOnMouseReleased(released -> {
+                        //not exactly the coordinates of the grid as to allow flexibility for the user
+                        if (imgCornerx < 680 || imgCornerx > 1080 || imgCornery > 200 || imgCornery < 0) {
+                            holder.setX(defaultX);
+                            holder.setY(defaultY);
+                        } else {// Image's top left corner.
+                            setOnGrid(imgCornerx, imgCornery);
                         }
-
-                        int[] gridVal={ xyval[0], xyval[1], csrs[1], csrs[0]};
-                        b.setOrientation();
-                        b.updategridval(gridVal);
-                        b.updatepieceinfo();
-                        String piece=b.getPieceinfo();
-                        updateboard(piece);
-
-                        try {
-                            System.out.println(piece);
-                            if(game.isPlacementStringValid(boardStr)){
-                                if (b.rotate / 90 % 2 != 0 && !(b.getchar() == 'g' || b.getchar() == 'e')) {
-                                    int translatex = (b.getchar() == 'h') ? -50 : (b.rotate == 90) ? -75 : -25;
-                                    ivo.setTranslateX(translatex);
-                                }
-                                grid.add(ivo, xyval[0], xyval[1], csrs[1], csrs[0]);
-                            }
-                            else{
-                                boardStr=boardStr.substring(0,boardStr.length()-4);
-                                ivo.setX(b.x);//make the piece go back to default place
-                                ivo.setY(b.y);
-                            }
-
-
-                        }//column index, rowindex, colspan, rowspan
-                        catch (IllegalArgumentException e) {
-                            ivo.setX(b.x);//make the piece go back to default place
-                            ivo.setY(b.y);
-                        }
-                    }
-                });
+                    });
+                }
             });
-
-
-            root.getChildren().add(ivo);
 
         }
 
-        Scene scene = new Scene(root, VIEWER_WIDTH, VIEWER_HEIGHT);
-        scene.setOnKeyPressed(c->{if(!c.getCharacter().equals("r")){
-            String remove=  boardStr.substring(boardStr.length()-4);
-            char ptype=remove.charAt(0);
-            imgObjs.get(ptype-97).setX(boxes.get(ptype-97).x);
-            imgObjs.get(ptype-97).setY(boxes.get(ptype-97).y);
+
+        void setOnGrid(double positionalX,double positionalY){// Image's top left corner.
+            // 50 - width/height of each grid
+            // 695 & 5 - the approximate starting co-ordinates  of the grid
+            System.out.println("X: " + positionalX+"  Y: " + positionalY);
+            gridCol=(int)(positionalX-695)/50;
+            gridRow=(int)(positionalY-5)/50;
+            int rowspan=(int)holder.getImage().getHeight()/100;
+            int colspan=(int)holder.getImage().getWidth()/100;
+            //Switching the row and col span upon rotation
+            int rs=((rotate/90)%2==0)?rowspan:colspan;
+            int cs= ((rotate/90)%2==0)?colspan:rowspan;
+            int translateX=((rotate/90)%2==0)?0:-(int)(holder.getFitWidth()-holder.getFitHeight())/2;
+            System.out.println("Translation value  " + translateX);
+            //to balance the offset created upon setting the image  on the grid
+            holder.setTranslateX(translateX);
+            decodePieces();//Converting available data into piece encoding
+            gameState+=pieceInfo;//Concatenating the piece encoding into the game String
+            System.out.println(gameState);
+            if(game.isPlacementStringValid(gameState)){
+                grid.add(holder,gridCol,gridRow,cs,rs);}
+            else{
+                holder.setX(defaultX);
+                holder.setY(defaultY);
+                //updating the gameState string if the position is not valid.
+                gameState=gameState.substring(0,gameState.length()-4);
+            }
+            System.out.println(rotate);
+            System.out.println("GridCol: " + gridCol + " GridRow: " +gridRow + " RowSpan: " + rs + " ColSpan: "+cs);
         }
+    }
+
+
+    /*Creates all required pieces -- for the start of the game*/
+    private void createPieces() {
+        pieces.getChildren().clear();
+        for (char ch = 'a'; ch <= 'h'; ch++) {//for only pieces not for pegs as pegs can't be placed by players
+            pieces.getChildren().add(new eventPiece(ch));
+        }
+    }
+
+    /**
+     * Start a new game & clear the previous board
+     */
+    private void newGame() {
+        createPieces();
+        createBoard();
+    }
+
+
+    private void resetgame(){
+        board.getChildren().clear();
+        Iterator griditer=grid.getChildren().iterator();
+        grid = new GridPane();
+       /* while(griditer.hasNext()){
+          eventPiece p  = (eventPiece) griditer.next();
+         root.getChildren().add(new eventPiece((char)p.pieceType));
+       }*/
+        for (Node n : pieces.getChildren()) {
+            ((eventPiece) n).reset();
+            // grid.getChildren().remove(((eventPiece) n).holder);
+        }
+        createBoard();
+    }
+
+
+    /**
+     * Create the controls that allow the game to be restarted and the difficulty
+     * level set.
+     * New Game - will create a new game board according to sliding level value
+     */
+    private void makeControls() {
+        Button newGame =new Button("New Game");
+        Button reset = new Button("Reset");
+        reset.setLayoutX(DISPLAY_WIDTH / 4 + 30);
+        reset.setLayoutY(DISPLAY_HEIGHT - 45);
+        newGame.setLayoutX(DISPLAY_WIDTH/4 + 100);
+        newGame.setLayoutY(DISPLAY_HEIGHT -45);
+        reset.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+                resetgame();
+            }
         });
-        root.getChildren().add(grid);
+        newGame.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+
+            }
+        });
+        controls.getChildren().add(newGame);
+        controls.getChildren().add(reset);
+        difficulty.setMin(1);
+        difficulty.setMax(4);
+        difficulty.setValue(0);
+        difficulty.setShowTickLabels(true);
+        difficulty.setShowTickMarks(true);
+        difficulty.setMajorTickUnit(1);
+        difficulty.setMinorTickCount(1);
+        difficulty.setSnapToTicks(true);
+        difficulty.setLayoutX(DISPLAY_WIDTH / 4 - 140);
+        difficulty.setLayoutY(DISPLAY_HEIGHT - 40);
+        controls.getChildren().add(difficulty);
+        final Label difficultyCaption = new Label("Difficulty:");
+        difficultyCaption.setTextFill(Color.GREY);
+        difficultyCaption.setLayoutX(DISPLAY_WIDTH / 4 - 210);
+        difficultyCaption.setLayoutY(DISPLAY_HEIGHT - 40);
+        controls.getChildren().add(difficultyCaption);
+        root.getChildren().add(controls);
+    }
+
+
+    /**
+     * Sets the background filled with miniature sized pieces with a different opacity level
+     * Miniature pieces must not be in the region of the grid
+     * Obtains data about the starting positions so to allow miniature pieces to fill empty areas
+     * @param startingPlacement - The board state at the start of the game.
+     */
+    private void setBackground(String startingPlacement){
+
+        /*
+         *IDEA- use the pieces group objects to know all offboard pieces
+         *makes about 15 pieces
+         *produce x and y coordinates randomly (updating starting x and y  and increasing upper bound of random value)
+         *check if x and y coordinate are not in
+         *                                       1)Grid
+         *                                       2)Placement area of pieces (not on board)
+         *
+         *                                       */
+        Viewer access= new Viewer();
+        Random rnd =new Random();
+        String onBoardPieces=access.returner(startingPlacement,0);
+        double rotate =rnd.nextInt(360);
+        int piecePicker=rnd.nextInt(8);
+
+        // offBoardPieces [] is going to contain the ascii encoding values of all pieces which are off board.
+        int[] offBoardPieces= IntStream.rangeClosed(97, 104).filter(i-> !onBoardPieces.contains((char)i+"")).parallel().toArray();
+        List<Integer> invalidArea =new ArrayList<>();
+        for (int offboardVal: offBoardPieces){
+            //invalidArea.add((int))
+
+        }
+        double tempx=0;
+        double tempy=0;
+
+
+
+    }
+
+    /*Start of JavaFX operations */
+    @Override
+    public void start (Stage primaryStage) throws Exception {
+        primaryStage.setTitle("IQ-twist");//sets the title name on the bar
+        //sets the icon
+        primaryStage.getIcons().add(new Image((Viewer.class.getResource(URI_BASE +  "e.png").toString())));
+        Scene scene = new Scene(root, DISPLAY_WIDTH, DISPLAY_HEIGHT);
+        newGame();
+        root.getChildren().add(board);
+        root.getChildren().add(pieces);
+        makeControls();
         primaryStage.setScene(scene);
         primaryStage.show();
     }
 
-    void updateboard(String piece){
-        boardStr+=(piece);
-    }
-
-    private int[] getrowcol(double x, double y, double rotate, char ptype) {//returns respective grid row values
-        int[] xyvals = new int[2];
-        if (rotate == 0 || rotate == 180 || rotate == 360) {
-            x = (x - 675 < 10) ? x + 10 : Math.ceil(x);
-            xyvals[0] = (int) Math.round((x - 700) / 50);//ci
-            xyvals[1] = (int) Math.round(((Math.ceil(y) - 10)) / 50);//ri
-            return xyvals;
-        } else {
-            if (ptype == 'c') {
-                x = Math.ceil(x) + 55;
-                y = Math.ceil(y) - 56;
-            } else if (ptype == 'h') {
-                x = Math.ceil(x) + 55;
-                y = Math.ceil(y) - 50;
-            } else {
-                x = (rotate == 90.0) ? Math.ceil(x) + 55 : Math.ceil(x) + 25;
-                y = (rotate == 90.0) ? Math.ceil(y) - 5 : Math.ceil(y) - 25;
-            }
-            xyvals[0] = (int) Math.round(((x - 700)) / 50);//ci
-            xyvals[1] = (int) Math.round(((y - 10)) / 50);//ri
-            return xyvals;
-        }
-    }
 
 
-    class boxcreator {//containers which will hold the pieces
-        // each piece will have it's container
-        char ptype;
-        double measurement;//the offset calculated for the piece placesment (default)
-        int rotate;
-        double x, y;// default x position and y position
-        double height, width;
-        int gridVal[];//column index, rowindex, colspan, rowspan
-        String pieceinfo;
-        String orientation;
-        int flip;//-1 means it is flipped
 
-
-        void updateflip(int flip){
-            this.flip=flip;
-        }
-        void setOrientation(){
-            int rno=(rotate/90==4)?0:rotate/90;
-            int orientationno=(flip==1)?rno:rno+4;
-            orientation=Integer.toString(orientationno);
-            //orientation=()
-        }
-
-        boxcreator(char ptype, double height, double width) {
-            this.ptype = ptype;
-            this.width = width;
-            this.height = height;
-            measurement = (ptype == 'a' || ptype == 'e' || (int) ptype > 104) ? 0 : (height > width) ? height : width;
-        }
-
-        void rotate() {
-            if (rotate > 360) {
-                rotate = 90;
-            } else {
-                rotate += 90;
-            }
-        }
-
-
-        String getPieceinfo(){
-            return pieceinfo;
-        }
-
-
-        void defaultxy(double x, double y) {
-            this.x = x;
-            this.y = y;
-        }
-
-        char getchar() {
-            return ptype;
-        }
-
-        void updategridval(int[] gridVal){
-            int r = Integer.parseInt(orientation);
-            this.gridVal=gridVal;
-            if(r==1||r==5){
-                switch(ptype){
-                    case 'c': case 'h':
-                        break;
-                    default:
-                        this.gridVal[0]=gridVal[0]-1;
-                        break;
-                }
-
-            }
-            if(r==3&& ptype=='e'){
-
-            }
-
-
-        }
-
-        void updatepieceinfo(){
-            pieceinfo=ptype+Integer.toString(gridVal[0]+1)+((char)(gridVal[1]+65))+orientation;
-        }
-
-
-    }
-
-    class PieceStats {
-        //Will inherit from boxcontainer
-        //holds rotate,default x coordinate and y coordinate
-        //if is on board or not
-        //if on board it  will contain the piece placement(the piece string form )
-        //update piece if needed
-    }
-
-    class GameStatus {
-        //contains the game data
-        //
-    }
-
-   /* public static void main(String[] args) {
-        for(int m=0;m<10;m++){
-            System.out.println(piece());
-            System.out.println(t.isPlacementStringValid(piece()));  ;
-    }
-    }*/
-
-    // FIXME Task 7: Implement a basic playable Twist Game in JavaFX that only allows pieces to be placed in valid places
-    //uses task 8(creates the base for the game) and 5 (check pieces can be used or not).6 should be used here
 
     // FIXME Task 8: Implement starting placements
-    public static String start_board(){
+    public static String makeBoard(){
         Random rand = new Random();
         String[] strs = {
                 "c1A3d2A6e2C3f3C2g4A7h6D0i6B0j2B0j1C0k3C0l4B0l5C0",
@@ -359,9 +406,9 @@ public class Board extends Application {
     }
 
 
-    private void makeBoard() {
+    /*private void makeBoard() {
         Random rn = new Random();
-        /*
+        *//*
          *1)create an (linked)hashset of string ,such that each string is a piece placement data.
          *  use hashsets to prevent duplicates
          *  This hashset contains the data about those value which needs pieces to be created.
@@ -386,10 +433,10 @@ public class Board extends Application {
          *               2nd-  standard bound value of 8
          *               3rd-  standard bound value of 3
          *               4th-  standard bound value of 7
-         */
+         *//*
     }
 
-
+*/
     /*set opacity of selected pieces to a certain percentage  or
     use Blur effect for that certain piece (using setEffect) Use task 9 code for the solutions.*/
     // FIXME Task 10: Implement hints
@@ -397,78 +444,11 @@ public class Board extends Application {
 
     }
 
-
-    //turn a String into a pi set
-    public static Set<String> turnintoset(String placement) {
-        //4 characters represents a pi
-        int numofp = placement.length() / 4;
-        Set<String> placesp = new HashSet<>();
-        String pi = "";
-        int i = 0;
-        while (placesp.size() < numofp) {
-            pi += placement.substring(i, i + 4);
-            placesp.add(pi);
-            pi = "";
-            i += 4;
-        }
-
-        return placesp;
-    }
-
-    //return a set of String which represents pieces that already placed (contains no pegs)
-    public static Set<String> placedPieces(String placement){
-        Set<String> placesp = turnintoset(placement);
-
-        //remove pegs
-        Set<String> placepiece = new HashSet<>();
-        for (String piece : placesp){
-            if (piece.charAt(0) <= (char)104){
-                placepiece.add(piece);
-            }
-        }
-
-        return placepiece;
-
-    }
-
-    //return a set of pieces help users towards a solution
-    public static Set<String> nextpieces(String placement){
-        Set<String> placedpieces = placedPieces(placement);
-        String[] solutions = t.getSolutions(placement);
-        int numofsolutions = solutions.length;
-        int i = 0;
-
-        //only consider single solution
-        Set<String> soluset = turnintoset(solutions[i]);
-        Set<String> nextposition = new HashSet<>();
-
-        for (String pi : placedpieces){
-            if (soluset.contains(pi)){
-                soluset.remove(pi);
-            }
-        }
-
-        return soluset;
-    }
-
-    // return one piece
-    public static String one_help_piece(String placement){
-        Set<String> nextpi = nextpieces(placement);
-        Iterator<String> obj = nextpi.iterator();
-
-        String pi = obj.next();
-
-        return pi;
-    }
-
-
-//    public static void main(String[] args) {
-//        String placement = "c2D0d7B1e1A3f2A2g4B2h4A2i7B0j3D0j7D0k3A0l6A0";
-//        String pi = one_help_piece(placement);
-//        System.out.println(pi);
-//    }
-
     // FIXME Task 11: Generate interesting starting placements
     /*In reference to Difficulty level choose a certain state from Difficulty_level */
+
+
+
+
 
 }

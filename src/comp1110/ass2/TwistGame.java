@@ -175,6 +175,9 @@ public class TwistGame {
         return true;
     }
 
+
+
+
     /**
      * Modifies respective board based on the placement string
      * and checks whether place is valid or not concurrently
@@ -240,31 +243,31 @@ public class TwistGame {
           Pieces.initialisehms(); // USE ONLY  FOR TESTS
             initialisedhm=true;
         }
-       /* if(!(boardcreator(placement, 'c')==null)){
-
-        }*/
         return (!(boardcreator(placement, 'c')==null));
 
     }
 
     public static void main(String[] args) {
         //getViablePiecePlacements("c1A3d2A6");
-       Pieces.initialisehms();
-      getViablePiecePlacements("a7A7b6A7d2A6e2C3f3C2g4A7h6D0i6B0j2B0j1C0k3C0l4B0l5C0");
-       /* String placement = "f3C4i6B0j1C0k3C0l4B0l5C0";
-        //System.out.println(placement.substring(0,placement.length()));
-        // Set<String> s = getViablePiecePlacements(placement);
+
+        String placement=   "b6A7c1A3d2A6e2C3f3C4g4A7h6D0i6B0j2B0j1C0k3C0l4B0";
+        int ctr=0;
         String[] s = getSolutions(placement);
-        int ctr = 0;
-        for (String x : s){
-            System.out.println(x);
-        }*/
-    /*    Iterator<String> a = s.iterator();
+        if(s.length==0){
+            System.out.println("No Solutions found");
+        }
+        for(String c : s){
+
+            System.out.println(c);
+        }
+        /*Set<String> p = getViablePiecePlacements(placement);
+                Iterator<String> a = p.iterator();
         while (a.hasNext()) {
             ctr++;
             String h = a.next();
             System.out.println(ctr + "" + h);
         }*/
+
     }
 
 
@@ -349,10 +352,7 @@ public class TwistGame {
 
     public static Set<String> getViablePiecePlacements(String placement) {//Take note that this does not check if board is valid or not
         viablePiece2.clear();
-
-       /* boardcreator("",'c');
-        tempboard=gobj.getcboard();*/
-if (!initialisedhm&&!initilisedCs) {
+     if (!initialisedhm&&!initilisedCs) {
     //gobj.resetBoardvalues("ac");
     Pieces.initialisehms();//initialise hashmap just for the sake of task tests
     initialiseContainersSpecs();
@@ -629,24 +629,11 @@ if (!initialisedhm&&!initilisedCs) {
     // FIXME : IMPORTANT :
     // 1)Whenever there is just one piece left to solve getSolution return null --
     //     example : "b6A7c1A3d2A6e2C3f3C4g4A7h6D0i6B0j2B0j1C0k3C0l4B0" should return a7A7 added to it
-    // 2) combiner part of Task 9 is sometimes causing heap error : "f3C4i6B0j1C0k3C0l4B0l5C0"
 
     public static String[] getSolutions(String placement) {//Use task 6 code here
 
         // FIXME Task 9: determine all solutions to the game, given a particular starting placement
-//      Set<String> nextPieces = getViablePiecePlacements(placement);
-//      String nextPiece = "";
-//      int pieceIndex = 0;
-//      String[] solutions = new String[nextPieces.size()];
-//      Iterator<String> it = nextPieces.iterator();
-//
-//      for (int i = 0; i < nextPieces.size(); i++){
-//        nextPiece = it.next();
-//        System.out.println(nextPiece);
-//        pieceIndex = nextPiece.charAt(0) - 'a';
-//        System.out.println(pieceIndex);
-//        solutions[i] = placement.substring(0, pieceIndex * 4) + nextPiece + placement.substring(pieceIndex * 4, placement.length() - 24);
-//      }
+
         String[] solutions = reorderPlacementStrings(placement);
 
         return solutions;
@@ -669,11 +656,16 @@ if (!initialisedhm&&!initilisedCs) {
         String placed_pieces = v.returner(placement,0);
         String unplaced_pieces = "";
         boardcreator(placement,'a');//Creates* an actualboard
+
+        /*Find the missing pieces*/
         for (int i = 'a' ; i <= 'h' ; i++){
+
             if(placed_pieces.indexOf(String.valueOf((char)i))==-1)
+
                 unplaced_pieces = unplaced_pieces + String.valueOf((char)i);
+
         }
-        //System.out.println(unplaced_pieces);
+
 
         while (it.hasNext()){
             itStr.add(it.next());
@@ -687,38 +679,51 @@ if (!initialisedhm&&!initilisedCs) {
         }else if (placement.contains("k")){
             formalPlacement = placement.split("k",2);
         }else formalPlacement = placement.split("l",2);
-        //System.out.println(formalPlacement[0]);
 
+        //sort the viable pieces so that it can be assigned to a String[][] precisely
         Collections.sort(itStr);
 
-      /*
+
+        /*
         Transfer the list of pieces got from task 6 into String[][]
         the same piece with different positions are placed in one dimension
         First calculate the length of each dimension
         e.g. aaabbcc is a String[][] with String[0] = new String[3]; String[1] = new String[2]; String[2] = new String[2]
-        still have some problems
-      */
+        */
         String[][] difPie = new String [unplaced_pieces.length()][];  //The length of unplaced_pieces defines the rows of String[][]
         char c = itStr.get(0).charAt(0);
         int row = 0;
         int column = 0;
+
+
+        /*
+        Initializing the multi-dimensional string. Accroding to the number of missing pieces defines the rows of String[][],
+        and the count of each missing pieces defines the length of each row.
+        */
         for (int i = 0; i < itStr.size(); i++) {
-            //System.out.println(itStr.get(i));
+
             if (itStr.get(i).charAt(0)==c){
-                //difPie[row][column] = itStr.get(i);
+
                 column++;
+
                 if (i == itStr.size()-1){
+
                     difPie[row] = new String[column];
+
                 }
+
             }else {
+
                 difPie[row++] = new String[column];
                 c = itStr.get(i).charAt(0);
                 column = 1;
+
                 if (i == itStr.size()-1){
+
                     difPie[row] = new String[column];
+
                 }
             }
-            //System.out.println(column);
         }
 
 
@@ -726,91 +731,53 @@ if (!initialisedhm&&!initilisedCs) {
          * assign the piece value to the multi-dimensional string
          * */
         for (int i = 0; i < difPie.length; i++) {
-            //System.out.println("row: " + i);
-            //System.out.println("difPie[" + i + "].length: " + difPie[i].length);
+
             if (difPie[i]!=null) {
+
                 for (int j = 0; j < difPie[i].length; j++) {
+
                     difPie[i][j] = itStr.get(index++);
+
                 }
+
             }
+
         }
 
         /*
          *    Give the multi-dimentional string to combination() to find all the possible combinations
          * */
-        //System.out.println(row);
         for (int i = 0; i < row; i++){
+
             if (!solutions.isEmpty()){
+
                 String[] temp = new String[solutions.size()];
+
                 for (int j = 0; j < solutions.size(); j++){
+
                     temp[j] = solutions.get(j);
-                    //System.out.println(solutions.get(j));
+
                 }
+
                 solutions.clear();
                 solutions = combination(solutions, temp, difPie[i + 1]);
                 temp = null;
-            }else {
-                solutions = combination(solutions,difPie[i],difPie[i+1]);
-            }
+
+            }else solutions = combination(solutions,difPie[i],difPie[i+1]);
+
         }
 
+        //sort the list in right order of the first letter of piece string
         Collections.sort(solutions);
-
-/*
-      for (int i = 0; i < nextPieces.size(); i++) {
-        int j = 0;
-
-        List<String> p = new ArrayList<>();
-        List<String> p2 = new ArrayList<>();
-        for (int k = 0; k < formalPlacement[0].length()/4; k++) {
-          p.add(formalPlacement[0].substring(4 * k, 4 * k + 4));
-        }
-
-        nextPiece = itStr.get(i);
-        p.add(nextPiece);
-        Collections.sort(p);
-
-        p2 = p;
-
-        StringBuilder des = new StringBuilder();
-        for (Object c : p) {
-          des.append(c);
-        }
-
-      //  pieceIndex = nextPiece.charAt(0) - 'a';
-      //  solution = placement.substring(0, pieceIndex * 4) + nextPiece + formalPlacement[0].substring(pieceIndex * 4);
-
-        while (formalPlacement[0].length() != 32 && j != itStr.size()) {
-            //if (itStr.get(j++).charAt(0) != nextPiece.charAt(0)) {
-          if (unplaced_pieces.contains(String.valueOf(itStr.get(j++).charAt(0)))){
-              nextPiece = itStr.get(j - 1);
-              p2.add(nextPiece);
-              Collections.sort(p2);
-              StringBuilder des2 = new StringBuilder();
-              for (Object c : p2) {
-                des2.append(c);
-              }
-              formalPlacement[0] = des2.toString();
-              //System.out.println(formalPlacement[0]);
-              solution = formalPlacement[0];
-              unplaced_pieces = unplaced_pieces.replace(String.valueOf(itStr.get(j++).charAt(0)),"");
-            //System.out.println(unplaced_pieces);
-            }
-          solutions.add(solution);
-        }
-        //System.out.println(formalPlacement[0]);
-        //System.out.println(formalPlacement[0].length());
-      }
-      */
 
         List<String> finalSols = new ArrayList<>();
         List<List> unorderedPlacement = new ArrayList<>();
+
+        //add the all the possible combination of viable pieces to the initial placement string
         for (int i = 0; i < solutions.size(); i++){
-            //finalSols[i] = solutions.get(i);
-            //finalSols[i] = solutions.get(i) + formalPlacement[0];
             unorderedPlacement.add(getFormalPieces(solutions.get(i) + formalPlacement[0]));
 
-
+            //sort the list in right order and append it into a formal string
             Collections.sort(unorderedPlacement.get(i));
             StringBuilder des = new StringBuilder();
             for (Object o : unorderedPlacement.get(i)){
@@ -818,50 +785,43 @@ if (!initialisedhm&&!initilisedCs) {
             }
 
             if (des.length()==32) {
-                if (isPlacementStringValid(des.toString())) {
-                    finalSols.add(des.toString());
-                }
+                finalSols.add(des.toString());
                 des = null;
             }
 
-            //System.out.println(finalSols[i]);
         }
 
+        //transfer the list into a string and return.
         String[] retVal = new String[finalSols.size()];
         for (int i = 0; i < finalSols.size(); i++){
             retVal[i] = finalSols.get(i);
         }
-/*
-        for (int i = 0; i < solutions.size(); i++){
-            //finalSols[i] = solutions.get(i);
-            Collections.sort(unorderedPlacement.get(i));
-            StringBuilder des = new StringBuilder();
-            for (Object o : unorderedPlacement.get(i)){
-                des.append(o);
-            }
-
-            finalSols[i] = des.toString();
-            des = null;
-            //System.out.println(finalSols[i]);
-        }*/
 
         return retVal;
     }
 
-    //Combine all the different pieces.  e.g. a1,a2,a3,b1,b2,c1 --> a1,b1,c1; a1,b2,c1; a2, b1, c1; a2, b2, c1; ....
+
+    //Combine all the different pieces, give all the possible combinations.  e.g. a1,a2,a3,b1,b2,c1 --> a1,b1,c1; a1,b2,c1; a2, b1, c1; a2, b2, c1; ....
     public static List<String> combination(List<String> result, String[] madePieces, String[] missingPieces){
 
         for (int j = 0; j < madePieces.length; j++){
+
             for (int i = 0; i < missingPieces.length; i++){
-                result.add(madePieces[j] + missingPieces[i]);
-                //System.out.println(madePieces[j] + missingPieces[i]);
+
+                //check if the new formed string is valid by using task 5 first, if it is valid, add it to the result list, else do nothing.
+                //Otherwise it may cause OutOfmemory Exception(heap problems)
+                if (isPlacementStringValid(madePieces[j] + missingPieces[i]))
+
+                    result.add(madePieces[j] + missingPieces[i]);
+
             }
+
         }
 
         return result;
     }
 
-
+    //Divid the string into single pieces so that it can be sorted.
     public static List<String> getFormalPieces(String formalPiece){
 
         List<String> fp = new ArrayList<>();
