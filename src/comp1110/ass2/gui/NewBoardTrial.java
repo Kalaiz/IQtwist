@@ -20,8 +20,6 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-
-import javax.xml.ws.Holder;
 import java.util.Iterator;
 
 public class NewBoardTrial extends Application {
@@ -38,6 +36,7 @@ public class NewBoardTrial extends Application {
     private Group board = new Group();
     private Group pieces = new Group();
     private Group controls = new Group();
+    private Group background =new Group();
 
 
     /* Grid  */
@@ -287,6 +286,11 @@ public class NewBoardTrial extends Application {
         controls.getChildren().add(difficultyCaption);
 
         root.getChildren().add(controls);
+    }
+
+    private void setBackground(){
+
+
     }
 
     /*Start of JavaFX operations */

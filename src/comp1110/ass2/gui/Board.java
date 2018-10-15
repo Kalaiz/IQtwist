@@ -20,6 +20,8 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+
+import java.awt.image.BufferedImage;
 import java.util.Iterator;
 import java.util.Random;
 
@@ -36,9 +38,12 @@ public class Board extends Application {
       game which was being played.(A new starting board should bot be created.)
     3)Upon pressing backspace the previously placed piece must be obtained back.
        *gameState must be updated respectively
-    4)Add background image - beware of which computer you are going to use.(preferably dimension of HD (1280x 640)).
+    4)Add background image - beware of which computer you are going to use.(preferably dimension of HD (1280x 640))
+      OR use javafx itself(Most probably).
     */
-    private static String gameState = "";
+
+
+    private static String gameState = "";//The game String
     private static final int DISPLAY_WIDTH = 1280;
     private static final int DISPLAY_HEIGHT = 649;
     private static final String URI_BASE = "assets/";
@@ -248,18 +253,29 @@ public class Board extends Application {
     /**
      * Create the controls that allow the game to be restarted and the difficulty
      * level set.
+     * New Game - will create a new game board according to sliding level value
      */
     private void makeControls() {
-        Button bt = new Button("Restart");
-        bt.setLayoutX(DISPLAY_WIDTH / 4 + 30);
-        bt.setLayoutY(DISPLAY_HEIGHT - 45);
-        bt.setOnAction(new EventHandler<ActionEvent>() {
+        Button newGame =new Button("New Game");
+        Button reset = new Button("Reset");
+        reset.setLayoutX(DISPLAY_WIDTH / 4 + 30);
+        reset.setLayoutY(DISPLAY_HEIGHT - 45);
+        newGame.setLayoutX(DISPLAY_WIDTH/4 + 100);
+        newGame.setLayoutY(DISPLAY_HEIGHT -45);
+        reset.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
                 resetgame();
             }
         });
-        controls.getChildren().add(bt);
+        newGame.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent e) {
+
+            }
+        });
+        controls.getChildren().add(newGame);
+        controls.getChildren().add(reset);
         difficulty.setMin(1);
         difficulty.setMax(4);
         difficulty.setValue(0);
@@ -276,8 +292,18 @@ public class Board extends Application {
         difficultyCaption.setLayoutX(DISPLAY_WIDTH / 4 - 210);
         difficultyCaption.setLayoutY(DISPLAY_HEIGHT - 40);
         controls.getChildren().add(difficultyCaption);
-
         root.getChildren().add(controls);
+    }
+
+
+    /**
+     * Sets the background filled with miniature sized pieces with a different opacity level
+     * Miniature pieces must not be in the region of the grid
+     * Obtains data about the starting positions so to allow miniature pieces to fill empty areas
+     *
+     */
+    private void setBackground(){
+
     }
 
     /*Start of JavaFX operations */
