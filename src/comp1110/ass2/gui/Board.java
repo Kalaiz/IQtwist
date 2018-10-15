@@ -514,6 +514,7 @@ public class Board extends Application {
     }
 
 
+    
 //    public static void main(String[] args) {
 //        String placement = "c2D0d7B1e1A3f2A2g4B2h4A2i7B0j3D0j7D0k3A0l6A0";
 //        String pi = one_help_piece(placement);
