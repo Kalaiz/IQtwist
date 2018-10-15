@@ -175,6 +175,9 @@ public class TwistGame {
         return true;
     }
 
+
+
+
     /**
      * Modifies respective board based on the placement string
      * and checks whether place is valid or not concurrently
@@ -240,9 +243,6 @@ public class TwistGame {
           Pieces.initialisehms(); // USE ONLY  FOR TESTS
             initialisedhm=true;
         }
-       /* if(!(boardcreator(placement, 'c')==null)){
-
-        }*/
         return (!(boardcreator(placement, 'c')==null));
 
     }
@@ -352,10 +352,7 @@ public class TwistGame {
 
     public static Set<String> getViablePiecePlacements(String placement) {//Take note that this does not check if board is valid or not
         viablePiece2.clear();
-
-       /* boardcreator("",'c');
-        tempboard=gobj.getcboard();*/
-if (!initialisedhm&&!initilisedCs) {
+     if (!initialisedhm&&!initilisedCs) {
     //gobj.resetBoardvalues("ac");
     Pieces.initialisehms();//initialise hashmap just for the sake of task tests
     initialiseContainersSpecs();

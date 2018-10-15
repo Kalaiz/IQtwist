@@ -170,8 +170,9 @@ public class Board extends Application {
                 holder.setY(cornerY-holder.getFitHeight()/2);
                 holder.setX(cornerX-holder.getFitWidth()/2);
                 //Image remains non rotated according to Javafx(Grid).
-                double imgCornerx=((rotate/90)%2==0)?holder.getX():holder.getX()+holder.getFitWidth()/2.5;
-                double imgCornery=((rotate/90)%2==0)?holder.getY():cornerY-holder.getFitWidth()/2.25;
+                //Piece G is an exception as it does not causde any offset error
+                double imgCornerx=((rotate/90)%2==0||pieceType==103)?holder.getX():holder.getX()+holder.getFitWidth()/2.5;
+                double imgCornery=((rotate/90)%2==0||pieceType==103)?holder.getY():cornerY-holder.getFitWidth()/2.25;
                 System.out.println("Height of image "+ holder.getFitHeight() +" width of image " + holder.getFitWidth());
                 System.out.println("X is " +(drag.getSceneX()) +" Y is  " + (drag.getSceneY())+" ");//TESTING
                 System.out.println("getX is : " + holder.getX()+" getY is: " +holder.getY());
