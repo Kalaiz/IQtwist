@@ -22,8 +22,8 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 import java.awt.image.BufferedImage;
-import java.util.Iterator;
-import java.util.Random;
+import java.util.*;
+import java.util.stream.IntStream;
 
 public class Board extends Application {
     /*ToDo:
@@ -163,29 +163,34 @@ public class Board extends Application {
                 }
             });
 
-            holder.setOnMouseDragged(drag->{
-                double cornerX=drag.getSceneX();
-                double cornerY=drag.getSceneY();
-                //Divide by 2 so to pull it by the center & using getScene for relative positioning
-                holder.setY(cornerY-holder.getFitHeight()/2);
-                holder.setX(cornerX-holder.getFitWidth()/2);
-                //Image remains non rotated according to Javafx(Grid).
-                //Piece G is an exception as it does not causde any offset error
-                double imgCornerx=((rotate/90)%2==0||pieceType==103)?holder.getX():holder.getX()+holder.getFitWidth()/2.5;
-                double imgCornery=((rotate/90)%2==0||pieceType==103)?holder.getY():cornerY-holder.getFitWidth()/2.25;
-                System.out.println("Height of image "+ holder.getFitHeight() +" width of image " + holder.getFitWidth());
-                System.out.println("X is " +(drag.getSceneX()) +" Y is  " + (drag.getSceneY())+" ");//TESTING
-                System.out.println("getX is : " + holder.getX()+" getY is: " +holder.getY());
-                System.out.println("imgCornerx: " + imgCornerx+"  imgcY:  " +imgCornery);
-                holder.setOnMouseReleased(released->{
-                    //not exactly the coordinates of the grid as to allow flexibility for the user
-                    if(imgCornerx<680||imgCornerx>1080||imgCornery>200||imgCornery<0){
-                        holder.setX(defaultX);
-                        holder.setY(defaultY);
-                    }
-                    else{ setOnGrid(imgCornerx,imgCornery); }// Image's top left corner.
-                });
+            holder.setOnMouseDragged(drag-> {
+                if (!grid.getChildren().contains(holder)) {
+
+                    double cornerX = drag.getSceneX();
+                    double cornerY = drag.getSceneY();
+                    //Divide by 2 so to pull it by the center & using getScene for relative positioning
+                    holder.setY(cornerY - holder.getFitHeight() / 2);
+                    holder.setX(cornerX - holder.getFitWidth() / 2);
+                    //Image remains non rotated according to Javafx(Grid).
+                    //Piece G is an exception as it does not cause any offset error
+                    double imgCornerx = ((rotate / 90) % 2 == 0 || pieceType == 103) ? holder.getX() : holder.getX() + holder.getFitWidth() / 2.5;
+                    double imgCornery = ((rotate / 90) % 2 == 0 || pieceType == 103) ? holder.getY() : cornerY - holder.getFitWidth() / 2.25;
+                    System.out.println("Height of image " + holder.getFitHeight() + " width of image " + holder.getFitWidth());
+                    System.out.println("X is " + (drag.getSceneX()) + " Y is  " + (drag.getSceneY()) + " ");
+                    System.out.println("getX is : " + holder.getX() + " getY is: " + holder.getY());
+                    System.out.println("imgCornerx: " + imgCornerx + "  imgcY:  " + imgCornery);
+                    holder.setOnMouseReleased(released -> {
+                        //not exactly the coordinates of the grid as to allow flexibility for the user
+                        if (imgCornerx < 680 || imgCornerx > 1080 || imgCornery > 200 || imgCornery < 0) {
+                            holder.setX(defaultX);
+                            holder.setY(defaultY);
+                        } else {// Image's top left corner.
+                            setOnGrid(imgCornerx, imgCornery);
+                        }
+                    });
+                }
             });
+
         }
 
 
@@ -304,9 +309,36 @@ public class Board extends Application {
      * Sets the background filled with miniature sized pieces with a different opacity level
      * Miniature pieces must not be in the region of the grid
      * Obtains data about the starting positions so to allow miniature pieces to fill empty areas
-     *
+     * @param startingPlacement - The board state at the start of the game.
      */
-    private void setBackground(){
+    private void setBackground(String startingPlacement){
+
+        /*
+         *IDEA- use the pieces group objects to know all offboard pieces
+         *makes about 15 pieces
+         *produce x and y coordinates randomly (updating starting x and y  and increasing upper bound of random value)
+         *check if x and y coordinate are not in
+         *                                       1)Grid
+         *                                       2)Placement area of pieces (not on board)
+         *
+         *                                       */
+        Viewer access= new Viewer();
+        Random rnd =new Random();
+        String onBoardPieces=access.returner(startingPlacement,0);
+        double rotate =rnd.nextInt(360);
+        int piecePicker=rnd.nextInt(8);
+
+        // offBoardPieces [] is going to contain the ascii encoding values of all pieces which are off board.
+        int[] offBoardPieces= IntStream.rangeClosed(97, 104).filter(i-> !onBoardPieces.contains((char)i+"")).parallel().toArray();
+        List<Integer> invalidArea =new ArrayList<>();
+        for (int offboardVal: offBoardPieces){
+            //invalidArea.add((int))
+
+        }
+        double tempx=0;
+        double tempy=0;
+
+
 
     }
 
