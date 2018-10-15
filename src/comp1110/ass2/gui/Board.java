@@ -24,6 +24,20 @@ import java.util.Iterator;
 import java.util.Random;
 
 public class Board extends Application {
+    /*ToDo:
+    1)Need a separate NewGame button.
+      Upon pressing new game a new  board with new starting placement should be created
+       *Make modification such that Pieces on the board(grid) should not be removed by the user.
+       *Pieces on the grid should not have duplicates (default position)
+       *gameState(String) must be updated in accordance to the new board.
+       *Solutions must be created before the user starts to place the pieces:For task 10
+    2)Need a separate Reset button
+      Upon pressing reset the game board should be back to the starting position of the
+      game which was being played.(A new starting board should bot be created.)
+    3)Upon pressing backspace the previously placed piece must be obtained back.
+       *gameState must be updated respectively
+    4)Add background image - beware of which computer you are going to use.(preferably dimension of HD (1280x 640)).
+    */
     private static String gameState = "";
     private static final int DISPLAY_WIDTH = 1280;
     private static final int DISPLAY_HEIGHT = 649;
@@ -32,19 +46,19 @@ public class Board extends Application {
     /*Game object*/
     TwistGame game=new TwistGame();
 
-    /*NODE Groups*/
+    /*NODE groups*/
     private Group root = new Group();
     private Group board = new Group();
     private Group pieces = new Group();
     private Group controls = new Group();
 
 
-    /* Grid  */
-    static GridPane grid = new GridPane();
+    /* Grid */
+    private static GridPane grid = new GridPane();
 
     /* Default (home) x & y coordinates*/
-    static final double[] hxy= {100,50,100,200,100,400,740,380,340
-            ,50,340,200,340,350,540,380};
+    private static final double[] hxy= {100,50,100,200,100,400,740,380,340
+                                 ,50,340,200,340,350,540,380};
 
     /* the difficulty slider */
     private final Slider difficulty = new Slider();
@@ -72,8 +86,6 @@ public class Board extends Application {
     }
 
 
-
-
     /* Inner class for pieces*/
     class piece extends ImageView {
         int pieceType;//The actual ascii number.
@@ -97,8 +109,6 @@ public class Board extends Application {
             holder.setY(defaultY);
 
         }
-
-
 
     }
     class eventPiece extends piece{
@@ -210,8 +220,6 @@ public class Board extends Application {
         }
     }
 
-
-
     /**
      * Start a new game & clear the previous board
      */
@@ -219,7 +227,6 @@ public class Board extends Application {
         createPieces();
         createBoard();
     }
-
 
 
     private void resetgame(){
@@ -236,7 +243,6 @@ public class Board extends Application {
         }
         createBoard();
     }
-
 
 
     /**
@@ -292,7 +298,7 @@ public class Board extends Application {
 
 
     // FIXME Task 8: Implement starting placements
-    public static String start_board(){
+    public static String makeBoard(){
         Random rand = new Random();
         String[] strs = {
                 "c1A3d2A6e2C3f3C2g4A7h6D0i6B0j2B0j1C0k3C0l4B0l5C0",
@@ -336,9 +342,9 @@ public class Board extends Application {
     }
 
 
-    private void makeBoard() {
+    /*private void makeBoard() {
         Random rn = new Random();
-        /*
+        *//*
          *1)create an (linked)hashset of string ,such that each string is a piece placement data.
          *  use hashsets to prevent duplicates
          *  This hashset contains the data about those value which needs pieces to be created.
@@ -363,10 +369,10 @@ public class Board extends Application {
          *               2nd-  standard bound value of 8
          *               3rd-  standard bound value of 3
          *               4th-  standard bound value of 7
-         */
+         *//*
     }
 
-
+*/
     /*set opacity of selected pieces to a certain percentage  or
     use Blur effect for that certain piece (using setEffect) Use task 9 code for the solutions.*/
     // FIXME Task 10: Implement hints
