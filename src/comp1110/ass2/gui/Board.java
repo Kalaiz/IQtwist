@@ -167,7 +167,7 @@ public class Board extends Application {
         }
 
         Scene scene = new Scene(root, VIEWER_WIDTH, VIEWER_HEIGHT);
-  scene.setOnKeyPressed(key->{
+        scene.setOnKeyPressed(key->{
         if(key.getCode()==KeyCode.BACK_SPACE){
             System.out.println("yeah");
             System.out.println(boardStr);

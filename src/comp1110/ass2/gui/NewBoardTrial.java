@@ -1,6 +1,7 @@
 package comp1110.ass2.gui;
 
 
+import comp1110.ass2.TwistGame;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -20,6 +21,7 @@ import javafx.scene.layout.RowConstraints;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
+import javax.xml.ws.Holder;
 import java.util.Iterator;
 
 public class NewBoardTrial extends Application {
@@ -27,6 +29,9 @@ public class NewBoardTrial extends Application {
     private static final int DISPLAY_WIDTH = 1280;
     private static final int DISPLAY_HEIGHT = 649;
     private static final String URI_BASE = "assets/";
+
+    /*Game object*/
+    TwistGame game=new TwistGame();
 
     /*NODE Groups*/
     private Group root = new Group();
@@ -40,7 +45,7 @@ public class NewBoardTrial extends Application {
 
     /* Default (home) x & y coordinates*/
     static final double[] hxy= {100,50,100,200,100,400,740,380,340
-            ,50,340,200,340,350,540,380};
+                                 ,50,340,200,340,350,540,380};
 
     /* the difficulty slider */
     private final Slider difficulty = new Slider();
@@ -72,7 +77,7 @@ public class NewBoardTrial extends Application {
 
     /* Inner class for pieces*/
     class piece extends ImageView {
-        int pieceType;
+        int pieceType;//The actual ascii number.
         double defaultX;//Default x coordinate position on start of the game
         double defaultY;//Default y coordinate position on start of the game
         ImageView holder;
@@ -82,15 +87,16 @@ public class NewBoardTrial extends Application {
             Image img = (new Image(Viewer.class.getResource(URI_BASE + pieceType + ".png").toString()));
             holder.setImage(img);
             root.getChildren().add(holder);
-            double height= img.getHeight()*0.5;
+            double height= img.getHeight()*0.5;//Resizing the image
             double width= img.getWidth()*0.5;
             holder.setFitHeight(height);
             holder.setFitWidth(width);
-            this.pieceType=pieceType-97;// according to ascii encoding
+            this.pieceType=pieceType;// according to ascii encoding
             defaultX=hxy[2*(pieceType-97)];
             defaultY=hxy[(2*(pieceType-97))+1];
             holder.setX(defaultX);
             holder.setY(defaultY);
+
         }
 
     }
@@ -110,14 +116,25 @@ public class NewBoardTrial extends Application {
         }
 
 
-        eventPiece(char piece){
+        private void decodePieces(){
+            int col = gridCol + 1;//As the string for the column (piece-encoding) starts from 1 .
+            int orientation=(flip)?(int)(holder.getRotate()/90)-4:(int)(holder.getRotate()/90);
+                    // Character of the piece + Column:number + Row:Alpha + orientation:number
+            pieceInfo = Character.toString((char)pieceType)+ col + ((char) (gridRow + 65)) + orientation;
+        }
+
+
+
+
+
+    eventPiece(char piece){
             super(piece);
             flip=false;//Declaring
-
             holder.setOnScroll(scroll->{//Rotation on scroll
                 if(!grid.getChildren().contains(holder)){//If grid does not contain the piece .
+                    rotate+=90;
+                    rotate=(rotate>=360)?0:rotate;
                     holder.setRotate(rotate);
-                    rotate =(rotate>=360)?0:rotate+90;
                 }
             });
 
@@ -129,7 +146,7 @@ public class NewBoardTrial extends Application {
                 holder.setEffect(g2);
             });
 
-            holder.setOnMouseClicked(click->{//Flip  on right click
+            holder.setOnMouseClicked(click->{//Flip on right click
                 if(click.getButton()==MouseButton.SECONDARY&&!grid.getChildren().contains(holder) ){
                     if(flip){holder.setScaleX(1); flip=false;}else{holder.setScaleX(-1); flip=true;}
                 }
@@ -138,27 +155,25 @@ public class NewBoardTrial extends Application {
             });
 
             holder.setOnMouseDragged(drag->{
+                double cornerX=drag.getSceneX();
+                double cornerY=drag.getSceneY();
                 //Divide by 2 so to pull it by the center & using getScene for relative positioning
-                double centerX=drag.getSceneX()-holder.getFitWidth()/2;
-                double centerY=drag.getSceneY()-holder.getFitHeight()/2;
-                holder.setY(centerY);
-                holder.setX(centerX);
-                //Actual cursor position - image's top left corner.
-                double ScreenPositionX = drag.getScreenX();
-                double ScreenPositionY = drag.getScreenY();
-
-
-                // System.out.println("X is " +(drag.getScreenX()) +" Y is  " + (drag.getScreenY())+" ");//TESTING
+                holder.setY(cornerY-holder.getFitHeight()/2);
+                holder.setX(cornerX-holder.getFitWidth()/2);
+                //Image remains non rotated according to Javafx(Grid).
+                double imgCornerx=((rotate/90)%2==0)?holder.getX():holder.getX()+holder.getFitWidth()/2.5;
+                double imgCornery=((rotate/90)%2==0)?holder.getY():cornerY-holder.getFitWidth()/2.25;
+                System.out.println("Height of image "+ holder.getFitHeight() +" width of image " + holder.getFitWidth());
+                System.out.println("X is " +(drag.getSceneX()) +" Y is  " + (drag.getSceneY())+" ");//TESTING
+                System.out.println("getX is : " + holder.getX()+" getY is: " +holder.getY());
+                System.out.println("imgCornerx: " + imgCornerx+"  imgcY:  " +imgCornery);
                 holder.setOnMouseReleased(released->{
-                    if(ScreenPositionX<700||ScreenPositionX>1100||ScreenPositionY>210||ScreenPositionY<10){
+                    //not exactly the coordinates of the grid as to allow flexibility for the user
+                    if(imgCornerx<680||imgCornerx>1080||imgCornery>200||imgCornery<0){
                         holder.setX(defaultX);
                         holder.setY(defaultY);
                     }
-                    else{ setOnGrid(ScreenPositionX,ScreenPositionY);
-
-
-                    }
-
+                    else{ setOnGrid(imgCornerx,imgCornery); }// Image's top left corner.
                 });
 
             });
@@ -166,15 +181,32 @@ public class NewBoardTrial extends Application {
         }
 
 
-        void setOnGrid(double positionalX,double positionalY){
-            // 50- width of each grid
+        void setOnGrid(double positionalX,double positionalY){// Image's top left corner.
+            // 50 - width of each grid
             // 700 & 10 - the starting co-ordinates  of the grid
-            gridCol=(int)((positionalX-700)/50)-1;
-            gridRow=(int)((positionalY-10)/50)-1;
-            int rs= (int)holder.getImage().getHeight()/100;
-            int cs= (int)holder.getImage().getWidth()/100;
-            grid.add(holder,gridCol,gridRow,cs,rs); //System.out.println("GridCol: " + gridCol + " GridRow:" +gridRow + " RowSpan : " + rs + "ColSpan: "+cs);
-
+            System.out.println("X: " + positionalX+"  Y: " + positionalY);
+            gridCol=(int)(positionalX-698)/50;
+            gridRow=(int)(positionalY-8)/50;
+            int rowspan=(int)holder.getImage().getHeight()/100;
+            int colspan=(int)holder.getImage().getWidth()/100;
+            int rs=((rotate/90)%2==0)?rowspan:colspan;//Switching the row and col span upon rotation
+            int cs= ((rotate/90)%2==0)?colspan:rowspan;
+            int translateX=((rotate/90)%2==0)?0:-(int)(holder.getFitWidth()-holder.getFitHeight())/2;//(-(int)(holder.getFitWidth()/2.65))
+            System.out.println("Translation value  " + translateX);
+            holder.setTranslateX(translateX);//offset created upon setting the image  on the grid
+            decodePieces();//Converting available data into piece encoding
+            gameState+=pieceInfo;
+            System.out.println(gameState);
+            if(game.isPlacementStringValid(gameState)){
+            grid.add(holder,gridCol,gridRow,cs,rs);}
+            else{
+                holder.setX(defaultX);
+                holder.setY(defaultY);
+                //updating the gameState string if the position is not valid.
+                gameState=gameState.substring(0,gameState.length()-4);
+            }
+            System.out.println(rotate);
+            System.out.println("GridCol: " + gridCol + " GridRow: " +gridRow + " RowSpan: " + rs + " ColSpan: "+cs);
 
         }
 
