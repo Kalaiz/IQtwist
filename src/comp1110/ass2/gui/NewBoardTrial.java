@@ -113,7 +113,7 @@ public class NewBoardTrial extends Application {
             holder.setX(defaultX);
             holder.setY(defaultY);
             holder.setRotate(0);
-            holder.setScaleX(1);
+            holder.setScaleY(1);
         }
 
 
@@ -149,7 +149,7 @@ public class NewBoardTrial extends Application {
 
             holder.setOnMouseClicked(click->{//Flip on right click
                 if(click.getButton()==MouseButton.SECONDARY&&!grid.getChildren().contains(holder) ){
-                    if(flip){holder.setScaleX(1); flip=false;}else{holder.setScaleX(-1); flip=true;}
+                    if(flip){holder.setScaleY(1); flip=false;}else{holder.setScaleY(-1); flip=true;}
                 }
 
 
