@@ -313,6 +313,8 @@ public class Board extends Application {
     @Override
     public void start (Stage primaryStage) throws Exception {
         primaryStage.setTitle("IQ-twist");//sets the title name on the bar
+        //sets the icon
+        primaryStage.getIcons().add(new Image((Viewer.class.getResource(URI_BASE +  "e.png").toString())));
         Scene scene = new Scene(root, DISPLAY_WIDTH, DISPLAY_HEIGHT);
         newGame();
         root.getChildren().add(board);
