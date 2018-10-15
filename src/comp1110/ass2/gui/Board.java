@@ -20,7 +20,11 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.LineNumberReader;
+import java.util.*;
 import java.awt.image.BufferedImage;
 import java.util.*;
 import java.util.stream.IntStream;
@@ -442,6 +446,78 @@ public class Board extends Application {
     // FIXME Task 10: Implement hints
     public static void hint() {
 
+    }
+
+
+    //turn a String into a pi set
+    public static Set<String> turnintoset(String placement) {
+        //4 characters represents a pi
+        int numofp = placement.length() / 4;
+        Set<String> placesp = new HashSet<>();
+        String pi = "";
+        int i = 0;
+        while (placesp.size() < numofp) {
+            pi += placement.substring(i, i + 4);
+            placesp.add(pi);
+            pi = "";
+            i += 4;
+        }
+
+        return placesp;
+    }
+
+    //return a set of String which represents pieces that already placed (contains no pegs)
+    public static Set<String> placedPieces(String placement){
+        Set<String> placesp = turnintoset(placement);
+
+        //remove pegs
+        Set<String> placepiece = new HashSet<>();
+        for (String piece : placesp){
+            if (piece.charAt(0) <= (char)104){
+                placepiece.add(piece);
+            }
+        }
+
+        return placepiece;
+
+    }
+
+    //return a set of pieces help users towards a solution
+    public static Set<String> nextpieces(String placement){
+        TwistGame t = new TwistGame();
+        Set<String> placedpieces = placedPieces(placement);
+        String[] solutions = t.getSolutions(placement);
+        int numofsolutions = solutions.length;
+        int i = 0;
+
+        //only consider single solution
+        Set<String> soluset = turnintoset(solutions[i]);
+        Set<String> nextposition = new HashSet<>();
+
+        for (String pi : placedpieces){
+            if (soluset.contains(pi)){
+                soluset.remove(pi);
+            }
+        }
+
+        return soluset;
+    }
+
+    // return one piece
+    public static String one_help_piece(String placement){
+        Set<String> nextpi = nextpieces(placement);
+        Iterator<String> obj = nextpi.iterator();
+
+        String pi = obj.next();
+
+        return pi;
+    }
+
+
+    public static void main(String[] args) {
+        String placement = "c2D0d7B1e1A3f2A2g4B2h4A2i7B0j3D0j7D0k3A0l6A0";
+        String pi = one_help_piece(placement);
+        System.out.println(pi);
     }
 
     // FIXME Task 11: Generate interesting starting placements
