@@ -131,7 +131,8 @@ public class Board extends Application {
         }
 
         private void decodePieces(){
-            int col = gridCol + 1;//As the string for the column (piece-encoding) starts from 1 .
+            //As the string for the column (piece-encoding) starts from 1
+            int col = gridCol + 1;
             int orientation=(flip)?(int)((holder.getRotate()/90)+4):(int)(holder.getRotate()/90);
             // Character of the piece + Column:number + Row:Alpha + orientation:number
             pieceInfo = Character.toString((char)pieceType)+ col + ((char) (gridRow + 65)) + Integer.toString(orientation);
@@ -188,20 +189,22 @@ public class Board extends Application {
 
 
         void setOnGrid(double positionalX,double positionalY){// Image's top left corner.
-            // 50 - width of each grid
-            // 700 & 10 - the starting co-ordinates  of the grid
+            // 50 - width/height of each grid
+            // 695 & 5 - the approximate starting co-ordinates  of the grid
             System.out.println("X: " + positionalX+"  Y: " + positionalY);
             gridCol=(int)(positionalX-695)/50;
             gridRow=(int)(positionalY-5)/50;
             int rowspan=(int)holder.getImage().getHeight()/100;
             int colspan=(int)holder.getImage().getWidth()/100;
-            int rs=((rotate/90)%2==0)?rowspan:colspan;//Switching the row and col span upon rotation
+            //Switching the row and col span upon rotation
+            int rs=((rotate/90)%2==0)?rowspan:colspan;
             int cs= ((rotate/90)%2==0)?colspan:rowspan;
-            int translateX=((rotate/90)%2==0)?0:-(int)(holder.getFitWidth()-holder.getFitHeight())/2;//(-(int)(holder.getFitWidth()/2.65))
+            int translateX=((rotate/90)%2==0)?0:-(int)(holder.getFitWidth()-holder.getFitHeight())/2;
             System.out.println("Translation value  " + translateX);
-            holder.setTranslateX(translateX);//offset created upon setting the image  on the grid
+            //to balance the offset created upon setting the image  on the grid
+            holder.setTranslateX(translateX);
             decodePieces();//Converting available data into piece encoding
-            gameState+=pieceInfo;
+            gameState+=pieceInfo;//Concatenating the piece encoding into the game String
             System.out.println(gameState);
             if(game.isPlacementStringValid(gameState)){
                 grid.add(holder,gridCol,gridRow,cs,rs);}
