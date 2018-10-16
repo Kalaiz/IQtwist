@@ -25,29 +25,20 @@ import java.util.stream.IntStream;
 
 public class Board extends Application {
     /*ToDo:
-    1)Need a separate NewGame button.
-      Upon pressing new game a new  board with new starting placement should be created
-       *Make modification such that Pieces on the board(grid) should not be removed by the user.
-       *Pieces on the grid should not have duplicates (default position)
-       *gameState(String) must be updated in accordance to the new board.
-       *Solutions must be created before the user starts to place the pieces:For task 10
-    2)Need a separate Reset button
-      Upon pressing reset the game board should be back to the starting position of the
-      game which was being played.(A new starting board should bot be created.)
-    3)Upon pressing backspace the previously placed piece must be obtained back.
+    1)Task 11 & 8
+    2)Upon pressing backspace the previously placed piece must be obtained back.
        *gameState must be updated respectively
+    3)Solutions must be created before the user starts to place the pieces:For task 10
     4)Add background image - beware of which computer you are going to use.(preferably dimension of HD (1280x 640))
       OR use javafx itself(Most probably).
+    5)Task 5 resetting the board
+    6)Removal of extra board
+    7)PPT
+    8)Code cleanup
 
-      RESET Piece implementation idea
-      *based on boardStr and starting placement string gain the
-      *pieceType of pieces  which are meant to be in the default place  upon starting the game-- the same starting placement
-      *make it into a char array (piecesToBeCreated (PTBC))
-      *using a for loop create the event pieces in accordance to PTBC
-      *make the grid null
-      *create a new grid
-      *
-      *
+
+
+
     */
 
 
@@ -613,14 +604,7 @@ public class Board extends Application {
 //        System.out.println(pi);
 //    }
 
-// FIXME Task 11: Generate interesting starting placements
-    /*
-    * 3 difficulty levels:
-    * 1: Place 6 、7 pegs on board which may lead to a single solution, because pegs limited the color of pieces and may have fixed solutions
-    * 2: Place 5 pegs on board which may have more possibilities but lead to a single solution
-    * 3: Place 3 、4 pegs on borad which have the most possibilities but lead to the single answer
-    * */
-    /*In reference to Difficulty level choose a certain state from SolutionData */
+
 
 }
 
