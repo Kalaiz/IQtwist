@@ -281,7 +281,7 @@ public class Board extends Application {
         eventPiece g = (eventPiece) im.next();
         g.delete();//Deleting the images formed by eventpieces
     }
-    pieces.getChildren().clear();//clears all the pieces in the node .
+    //pieces.getChildren().clear();//clears all the pieces in the node .
 
 
     }
@@ -322,15 +322,20 @@ public class Board extends Application {
     private void resetgame(){
        try{
            gameState=startingBoard;
-        for (Node n : pieces.getChildren()) {
-            if(((((eventPiece)n).pieceInfo))!=null){
-                 if(!startingBoard.contains(((eventPiece)n).pieceInfo)) {
-                  System.out.println(((eventPiece) n).pieceInfo);
-                  grid.getChildren().remove(((eventPiece) n).holder);
-                   pieces.getChildren().add(new eventPiece((((eventPiece)n).pieceInfo).charAt(0)));
+           Object[] arr =  pieces.getChildren().toArray();//casue of concurrentModificationerror
+        for (Object obj : arr) {
+            System.out.println((((eventPiece)obj).pieceInfo));
+            if(((((eventPiece)obj).pieceInfo))!=null){
+                 if(!startingBoard.contains(((eventPiece)obj).pieceInfo)) {
+                  System.out.println(((eventPiece) obj).pieceInfo);
+                  grid.getChildren().remove(((eventPiece) obj).holder);
+                   pieces.getChildren().remove((obj));
+                   pieces.getChildren().add(new eventPiece((((eventPiece)obj).pieceInfo).charAt(0)));
             }
             } }}
-            catch (ConcurrentModificationException e){}
+            catch (ConcurrentModificationException e){
+                System.out.println("Error");
+            }
     }
 
 
@@ -412,8 +417,6 @@ public class Board extends Application {
         }
         double tempx=0;
         double tempy=0;
-
-
 
     }
 
