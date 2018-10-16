@@ -614,7 +614,7 @@ public class Board extends Application {
 //    }
 
 // FIXME Task 11: Generate interesting starting placements
-    /*In reference to Difficulty level choose a certain state from Difficulty_level */
+    /*In reference to Difficulty level choose a certain state from SolutionData */
 
 }
 
