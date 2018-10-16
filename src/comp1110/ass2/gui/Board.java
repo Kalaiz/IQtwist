@@ -20,12 +20,6 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.LineNumberReader;
-import java.util.*;
-import java.awt.image.BufferedImage;
 import java.util.*;
 import java.util.stream.IntStream;
 
@@ -47,13 +41,11 @@ public class Board extends Application {
 
       RESET Piece implementation idea
       *based on boardStr and starting placement string gain the
-      *pieceType of pieces  which are meant to be in the default place  upon starting the game-- the same starrting placement
+      *pieceType of pieces  which are meant to be in the default place  upon starting the game-- the same starting placement
       *make it into a char array (piecesToBeCreated (PTBC))
       *using a for loop create the event pieces in accordance to PTBC
       *make the grid null
       *create a new grid
-      *
-      *
       *
       *
     */
@@ -74,13 +66,12 @@ public class Board extends Application {
     private Group pieces = new Group();
     private Group controls = new Group();
 
-
     /* Grid */
     private static GridPane grid = new GridPane();
 
     /* Default (home) x & y coordinates*/
     private static final double[] hxy= {100,50,100,200,100,400,740,380,340
-            ,50,340,200,340,350,540,380};
+                                         ,50,340,200,340,350,540,380};
 
     /* the difficulty slider */
     private final Slider difficulty = new Slider();
@@ -89,6 +80,8 @@ public class Board extends Application {
     private Glow g1=new Glow(0.5);
     private Glow g2=new Glow();
 
+    /*States whether game has started or not */
+    private static boolean gamestart;
     /*Sets up the board*/
     private void createBoard() {
         board.getChildren().clear();
@@ -125,16 +118,12 @@ public class Board extends Application {
             holder.setFitHeight(height);
             holder.setFitWidth(width);
             this.pieceType=pieceType;// according to ascii encoding
-            if(pieceType>104){
-                defaultX=0;
-                defaultY=0;
-            }
-            else {
+            if(!(pieceType>104)) {//pegs
                 defaultX = hxy[2 * (pieceType - 97)];
                 defaultY = hxy[(2 * (pieceType - 97)) + 1];
+                holder.setX(defaultX);
+                holder.setY(defaultY);
             }
-            holder.setX(defaultX);
-            holder.setY(defaultY);
 
         }
 
@@ -152,6 +141,10 @@ public class Board extends Application {
             holder.setRotate(0);
             holder.setScaleY(1);
             holder.setTranslateX(0);
+        }
+
+        void delete(){
+            holder.setImage(null);
         }
 
         eventPiece(String pieceInfo){
@@ -204,7 +197,6 @@ public class Board extends Application {
 
             holder.setOnMouseDragged(drag-> {
                 if (!grid.getChildren().contains(holder)) {
-
                     double cornerX = drag.getSceneX();
                     double cornerY = drag.getSceneY();
                     //Divide by 2 so to pull it by the center & using getScene for relative positioning
@@ -243,7 +235,6 @@ public class Board extends Application {
             //to balance the offset created upon setting the image  on the grid
             holder.setTranslateX(translateX);
             int[] csrs ={cs,rs};
-
         return csrs;}
 
 
@@ -284,6 +275,14 @@ public class Board extends Application {
 
 
     private void forceReset(){//Used for new game
+    grid=new GridPane();
+    Iterator im =pieces.getChildren().iterator();
+    while(im.hasNext()){
+        eventPiece g = (eventPiece) im.next();
+        g.delete();
+
+    }
+
 
     }
 
@@ -294,19 +293,23 @@ public class Board extends Application {
     private void newGame() {
         Viewer access = new Viewer();
         TwistGame t = new TwistGame();
-        forceReset();//clear the board and pieces using a seperate function
-        String startingBoard= makeBoard();
+        System.out.println(gamestart);
+        if(gamestart) {
+            forceReset();//clear the board and pieces using a seperate function
+        }
+        gamestart=true;
+        startingBoard= makeBoard();
         String placed=access.returner(startingBoard,0);
         String unplaced="";
         int[] output=IntStream.rangeClosed(97, 104).filter(i-> !placed.contains((char)i+"")).parallel().toArray();
         for(int i:output){ unplaced+=(Character.toString((char)i)); }//converting to String- not necessary
         for(int m=0;m<unplaced.length();m++){
-            root.getChildren().add(new eventPiece(unplaced.charAt(m)));
+            pieces.getChildren().add(new eventPiece(unplaced.charAt(m)));
         }
         System.out.println(startingBoard);
         List<String> listOfPieces=t.getFormalPieces(startingBoard);
         for(int i=0;i<listOfPieces.size();i++){
-            root.getChildren().add(new eventPiece(listOfPieces.get(i)));
+            pieces.getChildren().add(new eventPiece(listOfPieces.get(i)));
         }
         createBoard();
         //place all the pieces from  startingBoardplacement to the grid
@@ -319,6 +322,7 @@ public class Board extends Application {
         //board.getChildren().clear();
         Iterator griditer=grid.getChildren().iterator();
         grid = new GridPane();
+
        /* while(griditer.hasNext()){
           eventPiece p  = (eventPiece) griditer.next();
          root.getChildren().add(new eventPiece((char)p.pieceType));
@@ -353,6 +357,7 @@ public class Board extends Application {
         newGame.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
+                newGame();
 
             }
         });
@@ -400,7 +405,6 @@ public class Board extends Application {
         String onBoardPieces=access.returner(startingPlacement,0);
         double rotate =rnd.nextInt(360);
         int piecePicker=rnd.nextInt(8);
-
         // offBoardPieces [] is going to contain the ascii encoding values of all pieces which are off board.
         int[] offBoardPieces= IntStream.rangeClosed(97, 104).filter(i-> !onBoardPieces.contains((char)i+"")).parallel().toArray();
         List<Integer> invalidArea =new ArrayList<>();
