@@ -44,10 +44,23 @@ public class Board extends Application {
        *gameState must be updated respectively
     4)Add background image - beware of which computer you are going to use.(preferably dimension of HD (1280x 640))
       OR use javafx itself(Most probably).
+
+      RESET Piece implementation idea
+      *based on boardStr and starting placement string gain the
+      *pieceType of pieces  which are meant to be in the default place  upon starting the game-- the same starrting placement
+      *make it into a char array (piecesToBeCreated (PTBC))
+      *using a for loop create the event pieces in accordance to PTBC
+      *make the grid null
+      *create a new grid
+      *
+      *
+      *
+      *
     */
 
 
     private static String gameState = "";//The game String
+    private static String startingBoard="";//The starting board string
     private static final int DISPLAY_WIDTH = 1280;
     private static final int DISPLAY_HEIGHT = 649;
     private static final String URI_BASE = "assets/";
@@ -67,7 +80,7 @@ public class Board extends Application {
 
     /* Default (home) x & y coordinates*/
     private static final double[] hxy= {100,50,100,200,100,400,740,380,340
-                                 ,50,340,200,340,350,540,380};
+            ,50,340,200,340,350,540,380};
 
     /* the difficulty slider */
     private final Slider difficulty = new Slider();
@@ -132,6 +145,21 @@ public class Board extends Application {
             holder.setY(defaultY);
             holder.setRotate(0);
             holder.setScaleY(1);
+            holder.setTranslateX(0);
+        }
+
+        eventPiece(String pieceInfo){
+            super(pieceInfo.charAt(0));
+            gridCol=Integer.parseInt(pieceInfo.charAt(1)+"")-1;
+            gridRow=65-pieceInfo.charAt(2);
+            int orientation= Integer.parseInt(pieceInfo.charAt(3)+"");
+            int rotate=(orientation>4)?orientation-4:orientation;
+            int cs = (rotate%2==0)?(int)holder.getFitWidth()/100:(int)holder.getFitHeight()/100;
+            int rs= (rotate%2==0)?(int)holder.getFitHeight()/100:(int)holder.getFitWidth()/100;
+
+
+
+
         }
 
         private void decodePieces(){
@@ -217,7 +245,8 @@ public class Board extends Application {
             gameState+=pieceInfo;//Concatenating the piece encoding into the game String
             System.out.println(gameState);
             if(game.isPlacementStringValid(gameState)){
-                grid.add(holder,gridCol,gridRow,cs,rs);}
+                //grid.add(holder,gridCol,gridRow,cs,rs);
+            }
             else{
                 holder.setX(defaultX);
                 holder.setY(defaultY);
@@ -238,17 +267,29 @@ public class Board extends Application {
         }
     }
 
+
+
+
+    private void forceReset(){//USed for new game
+
+    }
+
+
     /**
      * Start a new game & clear the previous board
      */
     private void newGame() {
-        createPieces();
+        forceReset();//clear the board and pieces using a seperate function
+        String startingBoard= makeBoard();
         createBoard();
+        //place all the pieces from  startingBoardplacement to the grid
+        //update gameState & startingboard
+
     }
 
 
     private void resetgame(){
-        board.getChildren().clear();
+        //board.getChildren().clear();
         Iterator griditer=grid.getChildren().iterator();
         grid = new GridPane();
        /* while(griditer.hasNext()){
@@ -259,6 +300,7 @@ public class Board extends Application {
             ((eventPiece) n).reset();
             // grid.getChildren().remove(((eventPiece) n).holder);
         }
+        //grid.getChildren().get()
         createBoard();
     }
 
@@ -367,6 +409,7 @@ public class Board extends Application {
 
     // FIXME Task 8: Implement starting placements
     public static String makeBoard(){
+
         Random rand = new Random();
         String[] strs = {
                 "c1A3d2A6e2C3f3C2g4A7h6D0i6B0j2B0j1C0k3C0l4B0l5C0",
@@ -402,10 +445,7 @@ public class Board extends Application {
         };
         int radius = strs.length;
         int number = rand.nextInt(radius);
-
         String startpoints = strs[number];
-
-
         return startpoints;
     }
 
@@ -413,31 +453,31 @@ public class Board extends Application {
     /*private void makeBoard() {
         Random rn = new Random();
         *//*
-         *1)create an (linked)hashset of string ,such that each string is a piece placement data.
-         *  use hashsets to prevent duplicates
-         *  This hashset contains the data about those value which needs pieces to be created.
-         *  if insertion order is crucial use linked type hashset
-         *2)create a list of piece inclusive of pegs - alphas
-         *  represent pegs as with literal and 0 added behind
-         *  example: a0
-         *  Create a rng value specifically for the no of pieces to be placed
-         *  Create a string for the output
-         *3)run for loop (cond index should be greater than 1 and must us rng with a bound of x - 4 )
-         *   every iteration should check if such string exist
-         *   in the list and whether it is valid or not.
-         *  (if it exist then remove or else repeat for loop - counters updated)
-         *  then remove it from the list .After that  add it to the output string
-         *
-         *4)create a case such that Starting must at least contain a single peg
-         *  alter 4th rng to 0 just fr this case
-         *
-         *5) use rng to generate a random value
-         *      for 1st char- use list.size as reference to get the bound value
-         *                    then apply it to the list of char
-         *               2nd-  standard bound value of 8
-         *               3rd-  standard bound value of 3
-         *               4th-  standard bound value of 7
-         *//*
+     *1)create an (linked)hashset of string ,such that each string is a piece placement data.
+     *  use hashsets to prevent duplicates
+     *  This hashset contains the data about those value which needs pieces to be created.
+     *  if insertion order is crucial use linked type hashset
+     *2)create a list of piece inclusive of pegs - alphas
+     *  represent pegs as with literal and 0 added behind
+     *  example: a0
+     *  Create a rng value specifically for the no of pieces to be placed
+     *  Create a string for the output
+     *3)run for loop (cond index should be greater than 1 and must us rng with a bound of x - 4 )
+     *   every iteration should check if such string exist
+     *   in the list and whether it is valid or not.
+     *  (if it exist then remove or else repeat for loop - counters updated)
+     *  then remove it from the list .After that  add it to the output string
+     *
+     *4)create a case such that Starting must at least contain a single peg
+     *  alter 4th rng to 0 just fr this case
+     *
+     *5) use rng to generate a random value
+     *      for 1st char- use list.size as reference to get the bound value
+     *                    then apply it to the list of char
+     *               2nd-  standard bound value of 8
+     *               3rd-  standard bound value of 3
+     *               4th-  standard bound value of 7
+     *//*
     }
 
 */
@@ -447,7 +487,6 @@ public class Board extends Application {
     public static void hint() {
 
     }
-
 
     //turn a String into a pi set
     public static Set<String> turnintoset(String placement) {
@@ -514,7 +553,7 @@ public class Board extends Application {
     }
 
 
-    
+
 //    public static void main(String[] args) {
 //        String placement = "c2D0d7B1e1A3f2A2g4B2h4A2i7B0j3D0j7D0k3A0l6A0";
 //        String pi = one_help_piece(placement);
@@ -525,7 +564,21 @@ public class Board extends Application {
     /*In reference to Difficulty level choose a certain state from Difficulty_level */
 
 
-
-
-
 }
+
+
+
+//    public static void main(String[] args) {
+//        String placement = "c2D0d7B1e1A3f2A2g4B2h4A2i7B0j3D0j7D0k3A0l6A0";
+//        String pi = one_help_piece(placement);
+//        System.out.println(pi);
+//    }
+
+// FIXME Task 11: Generate interesting starting placements
+/*In reference to Difficulty level choose a certain state from Difficulty_level */
+
+
+
+
+
+
