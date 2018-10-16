@@ -614,6 +614,12 @@ public class Board extends Application {
 //    }
 
 // FIXME Task 11: Generate interesting starting placements
+    /*
+    * 3 difficulty levels:
+    * 1: Place 6 、7 pegs on board which may lead to a single solution, because pegs limited the color of pieces and may have fixed solutions
+    * 2: Place 5 pegs on board which may have more possibilities but lead to a single solution
+    * 3: Place 3 、4 pegs on borad which have the most possibilities but lead to the single answer
+    * */
     /*In reference to Difficulty level choose a certain state from SolutionData */
 
 }
