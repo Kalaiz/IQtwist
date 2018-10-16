@@ -299,6 +299,7 @@ public class Board extends Application {
         }
         gamestart=true;
         startingBoard= makeBoard();
+        gameState=startingBoard;
         String placed=access.returner(startingBoard,0);
         String unplaced="";
         int[] output=IntStream.rangeClosed(97, 104).filter(i-> !placed.contains((char)i+"")).parallel().toArray();
@@ -317,15 +318,10 @@ public class Board extends Application {
 
     }
 
-   /* RESET Piece implementation idea
-      *based on boardStr and starting placement string gain the
-      *pieceType of pieces  which are meant to be in the default place  upon starting the game-- the same starting placement
-      *make it into a char array (piecesToBeCreated (PTBC))
-      *using a for loop create the event pieces in accordance to PTBC
-      *make the grid null
-            *create a new grid*/
+
     private void resetgame(){
        try{
+           gameState=startingBoard;
         for (Node n : pieces.getChildren()) {
             if(((((eventPiece)n).pieceInfo))!=null){
                  if(!startingBoard.contains(((eventPiece)n).pieceInfo)) {
@@ -335,7 +331,6 @@ public class Board extends Application {
             }
             } }}
             catch (ConcurrentModificationException e){}
-
     }
 
 
