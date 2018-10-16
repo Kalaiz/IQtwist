@@ -125,8 +125,14 @@ public class Board extends Application {
             holder.setFitHeight(height);
             holder.setFitWidth(width);
             this.pieceType=pieceType;// according to ascii encoding
-            defaultX=hxy[2*(pieceType-97)];
-            defaultY=hxy[(2*(pieceType-97))+1];
+            if(pieceType>104){
+                defaultX=0;
+                defaultY=0;
+            }
+            else {
+                defaultX = hxy[2 * (pieceType - 97)];
+                defaultY = hxy[(2 * (pieceType - 97)) + 1];
+            }
             holder.setX(defaultX);
             holder.setY(defaultY);
 
@@ -151,15 +157,16 @@ public class Board extends Application {
         eventPiece(String pieceInfo){
             super(pieceInfo.charAt(0));
             gridCol=Integer.parseInt(pieceInfo.charAt(1)+"")-1;
-            gridRow=65-pieceInfo.charAt(2);
+            System.out.println(gridCol);
+            gridRow=pieceInfo.charAt(2)-65;
+            System.out.println(gridRow);
             int orientation= Integer.parseInt(pieceInfo.charAt(3)+"");
-            int rotate=(orientation>4)?orientation-4:orientation;
-            int cs = (rotate%2==0)?(int)holder.getFitWidth()/100:(int)holder.getFitHeight()/100;
-            int rs= (rotate%2==0)?(int)holder.getFitHeight()/100:(int)holder.getFitWidth()/100;
-
-
-
-
+            flip=(orientation>3);
+            if(flip){holder.setScaleY(-1);}else{holder.setScaleY(1);}
+            rotate=(orientation>4)?90*(orientation-4):90*orientation;
+            holder.setRotate(rotate);
+            int[] csrs= imgModifier();
+            grid.add(holder,gridCol,gridRow,csrs[0],csrs[1]);
         }
 
         private void decodePieces(){
@@ -225,13 +232,7 @@ public class Board extends Application {
 
         }
 
-
-        void setOnGrid(double positionalX,double positionalY){// Image's top left corner.
-            // 50 - width/height of each grid
-            // 695 & 5 - the approximate starting co-ordinates  of the grid
-            System.out.println("X: " + positionalX+"  Y: " + positionalY);
-            gridCol=(int)(positionalX-695)/50;
-            gridRow=(int)(positionalY-5)/50;
+        int[] imgModifier(){
             int rowspan=(int)holder.getImage().getHeight()/100;
             int colspan=(int)holder.getImage().getWidth()/100;
             //Switching the row and col span upon rotation
@@ -241,11 +242,23 @@ public class Board extends Application {
             System.out.println("Translation value  " + translateX);
             //to balance the offset created upon setting the image  on the grid
             holder.setTranslateX(translateX);
+            int[] csrs ={cs,rs};
+
+        return csrs;}
+
+
+        void setOnGrid(double positionalX,double positionalY){// Image's top left corner.
+            // 50 - width/height of each grid
+            // 695 & 5 - the approximate starting co-ordinates  of the grid
+            System.out.println("X: " + positionalX+"  Y: " + positionalY);
+            gridCol=(int)(positionalX-695)/50;
+            gridRow=(int)(positionalY-5)/50;
+            int[]csrs= imgModifier();
             decodePieces();//Converting available data into piece encoding
             gameState+=pieceInfo;//Concatenating the piece encoding into the game String
             System.out.println(gameState);
             if(game.isPlacementStringValid(gameState)){
-                //grid.add(holder,gridCol,gridRow,cs,rs);
+                grid.add(holder,gridCol,gridRow,csrs[0],csrs[1]);
             }
             else{
                 holder.setX(defaultX);
@@ -254,7 +267,7 @@ public class Board extends Application {
                 gameState=gameState.substring(0,gameState.length()-4);
             }
             System.out.println(rotate);
-            System.out.println("GridCol: " + gridCol + " GridRow: " +gridRow + " RowSpan: " + rs + " ColSpan: "+cs);
+            System.out.println("GridCol: " + gridCol + " GridRow: " +gridRow + " RowSpan: " + csrs[1] + " ColSpan: "+csrs[0]);
         }
     }
 
@@ -270,7 +283,7 @@ public class Board extends Application {
 
 
 
-    private void forceReset(){//USed for new game
+    private void forceReset(){//Used for new game
 
     }
 
@@ -279,8 +292,22 @@ public class Board extends Application {
      * Start a new game & clear the previous board
      */
     private void newGame() {
+        Viewer access = new Viewer();
+        TwistGame t = new TwistGame();
         forceReset();//clear the board and pieces using a seperate function
         String startingBoard= makeBoard();
+        String placed=access.returner(startingBoard,0);
+        String unplaced="";
+        int[] output=IntStream.rangeClosed(97, 104).filter(i-> !placed.contains((char)i+"")).parallel().toArray();
+        for(int i:output){ unplaced+=(Character.toString((char)i)); }//converting to String- not necessary
+        for(int m=0;m<unplaced.length();m++){
+            root.getChildren().add(new eventPiece(unplaced.charAt(m)));
+        }
+        System.out.println(startingBoard);
+        List<String> listOfPieces=t.getFormalPieces(startingBoard);
+        for(int i=0;i<listOfPieces.size();i++){
+            root.getChildren().add(new eventPiece(listOfPieces.get(i)));
+        }
         createBoard();
         //place all the pieces from  startingBoardplacement to the grid
         //update gameState & startingboard
