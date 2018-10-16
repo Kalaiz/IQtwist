@@ -279,9 +279,9 @@ public class Board extends Application {
     Iterator im =pieces.getChildren().iterator();
     while(im.hasNext()){
         eventPiece g = (eventPiece) im.next();
-        g.delete();
-
+        g.delete();//Deleting the images formed by eventpieces
     }
+    pieces.getChildren().clear();//clears all the pieces in the node .
 
 
     }
@@ -317,22 +317,25 @@ public class Board extends Application {
 
     }
 
-
+   /* RESET Piece implementation idea
+      *based on boardStr and starting placement string gain the
+      *pieceType of pieces  which are meant to be in the default place  upon starting the game-- the same starting placement
+      *make it into a char array (piecesToBeCreated (PTBC))
+      *using a for loop create the event pieces in accordance to PTBC
+      *make the grid null
+            *create a new grid*/
     private void resetgame(){
-        //board.getChildren().clear();
-        Iterator griditer=grid.getChildren().iterator();
-        grid = new GridPane();
-
-       /* while(griditer.hasNext()){
-          eventPiece p  = (eventPiece) griditer.next();
-         root.getChildren().add(new eventPiece((char)p.pieceType));
-       }*/
+       try{
         for (Node n : pieces.getChildren()) {
-            ((eventPiece) n).reset();
-            // grid.getChildren().remove(((eventPiece) n).holder);
-        }
-        //grid.getChildren().get()
-        createBoard();
+            if(((((eventPiece)n).pieceInfo))!=null){
+                 if(!startingBoard.contains(((eventPiece)n).pieceInfo)) {
+                  System.out.println(((eventPiece) n).pieceInfo);
+                  grid.getChildren().remove(((eventPiece) n).holder);
+                   pieces.getChildren().add(new eventPiece((((eventPiece)n).pieceInfo).charAt(0)));
+            }
+            } }}
+            catch (ConcurrentModificationException e){}
+
     }
 
 
