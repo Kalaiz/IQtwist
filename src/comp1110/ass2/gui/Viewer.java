@@ -2,7 +2,6 @@ package comp1110.ass2.gui;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -14,7 +13,6 @@ import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import java.util.ArrayList;
 import java.util.List;
-
 
 /**
  * A very simple viewer for piece placements in the twist game.

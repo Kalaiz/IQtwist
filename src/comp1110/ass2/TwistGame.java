@@ -24,7 +24,7 @@ public class TwistGame {
     static boolean  initialisedhm=false;
     static boolean initilisedCs=false;
     static Set<String> viablePiece2 = new HashSet<String>();
-    static String[][] tempboard=new String[4][8];
+    //static String[][] tempboard=new String[4][8];
 
 
 
@@ -250,7 +250,7 @@ public class TwistGame {
     public static void main(String[] args) {
         //getViablePiecePlacements("c1A3d2A6");
 
-        String placement=   "b6A7c1A3d2A6e2C3f3C4g4A7h6D0i6B0j2B0j1C0k3C0l4B0";
+        String placement="c1A3d2A6";
         int ctr=0;
         String[] s = getSolutions(placement);
         if(s.length==0){
