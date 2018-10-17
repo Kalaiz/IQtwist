@@ -6,7 +6,6 @@ public class StartingBoard extends TwistGame{
 
     private static List<String> sol = new ArrayList<>();
     private static  HashMap<String, String> storage=new HashMap<>();
-    public static HashMap<Integer,String[]> difficultyStorage=new HashMap<>();
     private static String[] initiator = {"a6B0b6C0c5A2d1B5e4A5f4C2g2B5h1A2",
                                          "a1A6b1B1c2D0d3B6e7A3f7B1g5B7h4A0",
                                          "a7A7b3B1c1A0d5A3e1C2f1B0g6B7h4D0",
@@ -132,8 +131,8 @@ public class StartingBoard extends TwistGame{
     /*In reference to Difficulty level choose a certain state from StartingBoard */
 
     public static void main(String[] args) {
-  /*      Pieces.initialisehms();
-        System.out.println(getSolutions("b6C0c5A0h1A0i6B0j4C0j6A0l1A0l4A0").length);*/
+     Pieces.initialisehms();
+      //  System.out.println(getSolutions("b6C0c5A0h1A0i6B0j4C0j6A0l1A0l4A0").length);
         for (int m = 0; m < 10; m++) {
             System.out.println(pieceCreator());
             ;
