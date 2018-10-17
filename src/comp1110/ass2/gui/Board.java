@@ -35,15 +35,12 @@ public class Board extends Application {
     6)Removal of extra board
     7)PPT
     8)Code cleanup
-
-
-
-
     */
 
 
     private static String gameState = "";//The game String
     private static String startingBoard = "";//The starting board string
+    private static String solution="";
     private static final int DISPLAY_WIDTH = 1280;
     private static final int DISPLAY_HEIGHT = 649;
     private static final String URI_BASE = "assets/";

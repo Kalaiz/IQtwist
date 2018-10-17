@@ -13,7 +13,7 @@ import static comp1110.ass2.Pieces.hm;
  * (http://www.smartgames.eu/en/smartgames/iq-twist)
  */
 public class TwistGame {
-    private static GameBoard gobj = new GameBoard();
+    public static GameBoard gobj = new GameBoard();
     private static final  int[] containerSpecs={3,2,2,3,3,3,4,1,1,4};//rcrcrc.. where r represents row and c represents column
     static int[][] ppContainer=new int[5][];//Jagged array for task 6
     private static final int[] bWeakSymmetricpair={0,2,1,3,4,6,5,7};
@@ -250,7 +250,7 @@ public class TwistGame {
     public static void main(String[] args) {
         //getViablePiecePlacements("c1A3d2A6");
 
-        String placement="f7B1g5B7h3D0i5A0";
+        String placement="a7A7c1A0";
         int ctr=0;
         String[] s = getSolutions(placement);
         if(s.length==0){
@@ -258,7 +258,7 @@ public class TwistGame {
         }
         for(String c : s){
 
-            System.out.println(c);
+            System.out.println(ctr++ +" "+ c);
         }
         /*Set<String> p = getViablePiecePlacements(placement);
                 Iterator<String> a = p.iterator();
