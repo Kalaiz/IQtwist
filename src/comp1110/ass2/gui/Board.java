@@ -488,7 +488,6 @@ public class Board extends Application {
      * @param startingPlacement - The board state at the start of the game.
      */
     private void setBackground(String startingPlacement) {
-
         /*
          *IDEA- use the pieces group objects to know all offboard pieces
          *makes about 15 pieces
