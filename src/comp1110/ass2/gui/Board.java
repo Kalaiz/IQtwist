@@ -151,19 +151,17 @@ public class Board extends Application {
         dialogue.initModality(Modality.APPLICATION_MODAL);
         dialogue.setMinWidth(500);
         dialogue.setMaxHeight(500);
-
+        dialogue.getIcons().add((new Image((Viewer.class.getResource(URI_BASE + "e.png").toString()))));
         Button button = new Button("Close the widow");
         button.setOnAction(e -> dialogue.close());
-
-        Text t1 = new Text("Right click for flip;");
-        Text t2 = new Text("Scroll for rotate;");
-        Text t3 = new Text("...;");
-
+        Text t1 = new Text("Right click for flip.");
+        Text t2 = new Text("Scroll over the piece to rotate it.");
+        Text t3 = new Text("To reset a piece,hover over it and press the middle button");
         VBox layout = new VBox(10);
         layout.getChildren().addAll(t1, t2, t3, button);
-        layout.setAlignment(Pos.CENTER);
-
+        layout.setAlignment(Pos.CENTER);;
         Scene scene = new Scene(layout);
+        scene.setFill(Color.WHITE);
         dialogue.setScene(scene);
         dialogue.showAndWait();
     }
