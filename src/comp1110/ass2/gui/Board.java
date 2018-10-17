@@ -459,6 +459,7 @@ public class Board extends Application {
         System.out.println(numofpiece);
         if (numofpiece == 8){
             makeCompletion();
+            
         }
     }
 
