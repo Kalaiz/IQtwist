@@ -133,12 +133,14 @@ public class SolutionData extends TwistGame{
      */
     private static void difficultyStorageConverter(){
         Random rnd=new Random();
-        int rnd_num=rnd.nextInt(1);
+        int difficultyRnd=rnd.nextInt(1);
         for(int i=0;i<storage.size();i++){
-            String completeSolution=pegAdder(storage.get(i));
+            List<String> listOfPieces =getFormalPieces(pegAdder(storage.get(i)));
             for(int dlo=0;dlo<difficultyLevelDetails.length/2;dlo++){
                 int numofpieces=pegDetails[(dlo*2)+1];
                 int numofpegs=pegDetails[dlo*2];
+                int rndPiece=rnd.nextInt(listOfPieces.size());
+                //listOfPieces.
 
 
             }
