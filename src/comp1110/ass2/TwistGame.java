@@ -191,21 +191,12 @@ public class TwistGame {
      *
      */
     public static String[][] boardcreator(String placement, char bt) {
- /*if (gobj.getCBoardName()!=null){
-     if(placement.equals(gobj.getCBoardName().substring(0,placement.length()-4))&&bt=='c'){
-         gobj.removepiece(gobj.getCBoardName().substring(gobj.getcboard().length-4),'c');
-         placement=placement.substring(placement.length()-4);//so to not do so many operations
-        }
-     else {
-         gobj.resetBoardvalues(Character.toString(bt));//resets the respective board ( test reasons)
-     }}
-        else {*/
- /*if(tempboard!=null){
-     gobj.updateBoard(tempboard);
-     placement=placement.substring(placement.length()-4);
- }
- else {*/
-     gobj.resetBoardvalues(Character.toString(bt));//resets the respective board ( test reasons)
+
+            if (placement.contains(gobj.getCBoardName())) {
+                placement = placement.substring(placement.length() - 4);
+            } else {
+                gobj.resetBoardvalues(Character.toString(bt));//resets the respective board ( test reasons)
+            }
 /* }*/
          /* }*/
         //ToDo : make a static board fr task 6 operations so that there wont be any need to reset the board
@@ -217,6 +208,7 @@ public class TwistGame {
                 gobj.pieceTobeAdded(ch, "a");
             } else {
                 gobj.pieceTobeAdded(ch, "c");
+
                 if(gobj.getcboard()==null||!checkBoard2()){
                     return null; }
             }

@@ -6,7 +6,7 @@ public class SolutionData extends TwistGame{
 
 
     private static List<Character> availPiece=new ArrayList<>();
-    private static  List<String> storage=new ArrayList<>(25);
+    private static  HashMap<String, String> storage=new HashMap<>();
     /*String[0]=startingBoardPlacement; String[1]=Solution */
     public static HashMap<Integer,String[]> difficultyStorage=new HashMap<>();
     private static String[] initiator = {"a6B0b6C0c5A2d1B5e4A5f4C2g2B5h1A2",
@@ -48,6 +48,7 @@ public class SolutionData extends TwistGame{
                     }}
             }
         }
+        storage.put(solution,pegs);
         return pegs;
     }
 
@@ -61,19 +62,21 @@ public class SolutionData extends TwistGame{
     private static String pieceCreator(){
 
         Random r = new Random();
-        String existpiece = "";     //The piece which we initially choose from the choosen string
-        String unaddpiece = "";
+        /*String existpiece = "";     //The piece which we initially choose from the choosen string
+        String unaddpiece = "";*/
         List<String> choPie = new ArrayList<>();
         List<String> choFro = new ArrayList<>();    //The pieces from which we may choose the next piece
         int ranSol = r.nextInt(4);
-        int ranPie = r.nextInt(8);
+        //int ranPie = r.nextInt(8);
 
         String str = initiator[ranSol];
         choFro = getFormalPieces(str);
-        existpiece = choFro.get(ranPie);
+        /*existpiece = choFro.get(ranPie);
         unaddpiece = choFro.get(ranPie);
-        choPie.add(existpiece);
-        choPie = addPiece(choPie,unaddpiece,choFro);
+        choPie.add(existpiece);*/
+        Collections.shuffle(choFro);
+        choPie.add(choFro.get(0));
+        choPie.add(choFro.get(1));
 
         StringBuilder sb = new StringBuilder();
         for (Object c : choPie){
@@ -84,7 +87,7 @@ public class SolutionData extends TwistGame{
         return sb.toString();
     }
 
-    private static List<String> addPiece(List<String> choPie, String unaddPiece, List<String> choFro){
+   /* private static List<String> addPiece(List<String> choPie, String unaddPiece, List<String> choFro){
 
         Random r = new Random();
         int ranPie = r.nextInt(8);
@@ -97,22 +100,24 @@ public class SolutionData extends TwistGame{
         }
 
         return choPie;
-    }
+    }*/
 
     /** Adds the solution in accordance to the respective key of ArrayList - storage
      *
      * @param twoPieceBoard - The board state which has two random pieces.
      * */
-    private static void solutionAdder(String twoPieceBoard){
+   /* private static void solutionAdder(String twoPieceBoard){
         String[] str = getSolutions(twoPieceBoard);
         for (int i = 0; i < str.length; i++){
             if(!(storage.size()>25)){
-                storage.add(str[i]);}
+                storage.put(str[i],pegAdder(str[i]));
+            }
             else{
                 break;
             }
         }
-    }
+
+    }*/
 
 
 
@@ -132,7 +137,7 @@ public class SolutionData extends TwistGame{
      * 50-75 -- Level 3
      * Each number is the key for difficultyStorage and it will have a starting board string  as a value.
      */
-    private static void difficultyStorageConverter(){
+/*    private static void difficultyStorageConverter(){
         Random rnd=new Random();
         int difficultyRnd;
         int keynumbase=0;
@@ -168,22 +173,22 @@ public class SolutionData extends TwistGame{
                     keynumbase++;
                     startingplacement="";
                 }
+
+                listOfPegsCopy = null;
+                listOfPegs = null;
             }
         }
-
-
-
-    }
+    }*/
 
 
 
     public static void main(String[] args) {
-        Pieces.initialisehms();
+  /*      Pieces.initialisehms();
 
 
-       /* while(storage.size()!=25){
+       *//* while(storage.size()!=25){
             solutionAdder(pieceCreator());
-        }*/
+        }*//*
         int c=0;
 
         //difficultyStorageConverter();
@@ -193,7 +198,7 @@ public class SolutionData extends TwistGame{
         difficultyStorageConverter();
         for(int i=0;i<difficultyStorage.size();i++){
             System.out.println(c++ +  " " + difficultyStorage.get(i)[1]);
-        }
+        }*/
 
         //System.out.println(pegAdder("a7A7b3B1c1A0d5A3e1C2f1B0g6B7h4D0")); ;
         /*Where to store these data ?
