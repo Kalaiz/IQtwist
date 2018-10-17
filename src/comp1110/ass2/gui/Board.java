@@ -20,6 +20,10 @@ import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import java.util.*;
 import java.util.stream.IntStream;
@@ -72,6 +76,9 @@ public class Board extends Application {
     /*States whether game has started or not */
     private static boolean gamestart;
 
+
+    private final Text completionText = new Text("Well done!");
+
     /*Sets up the board*/
     private void createBoard() {
         board.getChildren().clear();
@@ -88,6 +95,41 @@ public class Board extends Application {
         grid.setLayoutY(10);
         board.getChildren().add(grid);
         //board.toBack();      //places the node it at the back
+    }
+
+
+    /*
+     *Create the message to be displayed when the player completes the game
+     */
+    private void makeCompletion(){
+        completionText.setFill(Color.BLACK);
+        completionText.setFont(Font.font("Arial", FontWeight.EXTRA_BOLD, 80));
+        completionText.setLayoutX(DISPLAY_WIDTH/3);
+        completionText.setLayoutY(DISPLAY_HEIGHT/2);
+        completionText.setTextAlignment(TextAlignment.CENTER);
+        completionText.toFront();
+        completionText.setOpacity(1);
+        root.getChildren().add(completionText);
+    }
+
+    private void showCompletion(){
+        int length = gameState.length();
+        int numofpi = length/4;
+        int numofpiece = 0;
+        int i = 0;
+
+        while (i < length){
+            if (gameState.substring(i).charAt(0) < (char)105){
+                numofpiece ++;
+            }
+            i += 4;
+        }
+
+        System.out.println(numofpiece);
+        if (numofpiece == 8){
+            makeCompletion();
+
+        }
     }
 
 
@@ -439,14 +481,65 @@ public class Board extends Application {
     }
 
 
-    // FIXME Task 8: Implement starting placements
+  /*  // FIXME Task 8: Implement starting placements
     public static String makeBoard() {
         SolutionData obj = new SolutionData();
         Random rand = new Random();
         String startboard = obj.difficultyStorage.get(rand.nextInt(75))[0];
 
+        //String startboard = "b6A7c1A3d2A6e2C3f3C2g4A7h6D0i6B0j2B0j1C0k3C0l4B0l5C0";
+
         return startboard;
+    }*/
+
+    // TESTING REASONS
+    public static String makeBoard() {
+
+        Random rand = new Random();
+        String[] strs = {
+                "c1A3d2A6e2C3f3C2g4A7h6D0i6B0j2B0j1C0k3C0l4B0l5C0",
+                "c5A2d1B3e4A5f4C2g2B3h1A2i7D0j7A0k5B0k5C0l3A0l3D0",
+                "c3A3d1A3e1C4f4B3g6B2h5D0i5A0j2B0j3C0k2C0k2D0l8C0l8D0",
+                "c1B2d7B1e1C6f6A0g4A5h1A0j3B0j7D0k1C0k1D0l6B0l1A0",
+                "c1B2d4C4e1C3f4A0g6A1h1A0j3B0j5C0",
+                "c5A2d7B7e5B0f1A6g3A7h5D0i1B0j7A0j7B0k1A0k2B0l3B0l4C0",
+                "c2D0d7B1e1A3f2A2g4B2h4A2i7B0j3D0j7D0k3A0l6A0",
+                "c2D0d1A0e5B4f1B3g3A3h5A0k1B0k6B0l5A0l3C0",
+                "c5C0d3A6e7A1f3C4g1B3h6D0j4B0k8B0k5D0l3C0",
+                "c3A0d1A3e5C2f1C4g6B7h4B0k3D0k5D0l6C0",
+                "d2A6e2C3f3C2g4A7h6D0i6B0j2B0j1C0k3C0l4B0l5C0",
+                "d1B3e4A5f4C2g2B3h1A2i7D0j7A0k5B0k5C0l3A0l3D0",
+                "d1A3e1C4f4B3g6B2h5D0i5A0j2B0j3C0k2C0k2D0l8C0l8D0",
+                "d7B1e1C6f6A0g4A5h1A0j3B0j7D0k1C0k1D0l6B0l1A0",
+                "d4C4e1C3f4A0g6A1h1A0j3B0j5C0",
+                "d7B7e5B0f1A6g3A7h5D0i1B0j7A0j7B0k1A0k2B0l3B0l4C0",
+                "d7B1e1A3f2A2g4B2h4A2i7B0j3D0j7D0k3A0l6A0",
+                "d1A0e5B4f1B3g3A3h5A0k1B0k6B0l5A0l3C0",
+                "d3A6e7A1f3C4g1B3h6D0j4B0k8B0k5D0l3C0",
+                "d1A3e5C2f1C4g6B7h4B0k3D0k5D0l6C0",
+                "e2C3f3C2g4A7h6D0i6B0j2B0j1C0k3C0l4B0l5C0",
+                "e4A5f4C2g2B3h1A2i7D0j7A0k5B0k5C0l3A0l3D0",
+                "e1C4f4B3g6B2h5D0i5A0j2B0j3C0k2C0k2D0l8C0l8D0",
+                "e1C6f6A0g4A5h1A0j3B0j7D0k1C0k1D0l6B0l1A0",
+                "e1C3f4A0g6A1h1A0j3B0j5C0",
+                "e5B0f1A6g3A7h5D0i1B0j7A0j7B0k1A0k2B0l3B0l4C0",
+                "e1A3f2A2g4B2h4A2i7B0j3D0j7D0k3A0l6A0",
+                "e5B4f1B3g3A3h5A0k1B0k6B0l5A0l3C0",
+                "e7A1f3C4g1B3h6D0j4B0k8B0k5D0l3C0",
+                "e5C2f1C4g6B7h4B0k3D0k5D0l6C0",
+                "c1A3d2A6e2C3f3C2g4A7h6D0j2B0j1C0k3C0l4B0l5C0",
+                "a7A7b6A5c1A3d2A6e2C3f3C2g4A7h6D0",
+                "a6A0b6B0c1A3d2A6e2C3f3C2g4A7h6D0",
+                "a6B0b6C0c5A2e4A5f4C2h1A2i7D0j7A0k5B0k5C0l3A0",
+                "a6B0b6C0c5A2d1B3e4A5f4C2g2B3h1A2",
+                "a6B0b6C0c5A2d1B5e4A5f4C2g2B5h1A2"
+        };
+        int radius = strs.length;
+        int number = rand.nextInt(radius);
+        String startpoints = strs[number];
+        return startpoints;
     }
+
 
 
     /*private void makeBoard() {
