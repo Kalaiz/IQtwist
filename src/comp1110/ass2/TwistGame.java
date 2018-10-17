@@ -192,11 +192,11 @@ public class TwistGame {
      */
     public static String[][] boardcreator(String placement, char bt) {
 
-            if (placement.contains(gobj.getCBoardName())) {
+            /*if (placement.contains(gobj.getCBoardName())) {
                 placement = placement.substring(placement.length() - 4);
-            } else {
+            } else {*/
                 gobj.resetBoardvalues(Character.toString(bt));//resets the respective board ( test reasons)
-            }
+           /* }*/
 /* }*/
          /* }*/
         //ToDo : make a static board fr task 6 operations so that there wont be any need to reset the board
@@ -242,7 +242,9 @@ public class TwistGame {
     public static void main(String[] args) {
         //getViablePiecePlacements("c1A3d2A6");
 
-        String placement="a7A7c1A0";
+        String s ="abcdedfg";
+        System.out.println(s.replace("ded",""));
+        /*String placement="a7A7c1A0";
         int ctr=0;
         String[] s = getSolutions(placement);
         if(s.length==0){
@@ -251,7 +253,7 @@ public class TwistGame {
         for(String c : s){
 
             System.out.println(ctr++ +" "+ c);
-        }
+        }*/
         /*Set<String> p = getViablePiecePlacements(placement);
                 Iterator<String> a = p.iterator();
         while (a.hasNext()) {
