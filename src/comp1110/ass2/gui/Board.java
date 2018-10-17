@@ -37,13 +37,14 @@ public class Board extends Application {
     /*ToDo:
     1)Link task 11 to task 7
     2Task 10
-    3)loading Screen
-    4)Set image background
-    5)Task 5 resetting the board
-    6)Removal of extra board
-    7)Board:createBoard improve current codes
-    8)PPT
-    9)Code cleanup & Fix Warnings
+    3)On completion Text should appear
+    4)loading Screen
+    5)Set image background
+    6)Task 5 resetting the board
+    7)Removal of extra board
+    8)Board:createBoard improve current codes
+    9)PPT
+    10)Code cleanup & Fix Warnings
     */
 
 
@@ -156,7 +157,7 @@ public class Board extends Application {
         button.setOnAction(e -> dialogue.close());
         Text t1 = new Text("Right click for flip.");
         Text t2 = new Text("Scroll over the piece to rotate it.");
-        Text t3 = new Text("To reset a piece,hover over it and press the middle button");
+        Text t3 = new Text("To reset a piece,hover over it and press the middle button.");
         VBox layout = new VBox(10);
         layout.getChildren().addAll(t1, t2, t3, button);
         layout.setAlignment(Pos.CENTER);;
