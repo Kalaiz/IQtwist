@@ -41,8 +41,9 @@ public class Board extends Application {
     4)Set image background
     5)Task 5 resetting the board
     6)Removal of extra board
-    7)PPT
-    8)Code cleanup & Fix Warnings
+    7)Board:createBoard improve current codes
+    8)PPT
+    9)Code cleanup & Fix Warnings
     */
 
 
@@ -88,6 +89,7 @@ public class Board extends Application {
     private void createBoard(){
         Rectangle rect1 = new Rectangle(690, 2.5, 420, 215);
         Rectangle rect2 = new Rectangle(692.5, 5, 415, 210);
+        //rect1.setFill(Color.GREY);
         rect2.setFill(Color.WHITE);
         rect1.setArcHeight(30);
         rect1.setArcWidth(30);
@@ -101,6 +103,7 @@ public class Board extends Application {
                 Circle circle2 = new Circle(725 + 50 * i, 35 + 50 * j, 25);
                 Circle innercircle =new Circle(725 + 50 * i, 35 + 50 * j, 15);
                 Circle innercircle2 =new Circle(725 + 50 * i, 35 + 50 * j, 13);
+                circle1.setFill(Color.DARKGREY);
                 circle2.setFill(Color.WHITE);
                 innercircle.setFill(Color.LIGHTGREY);
                 innercircle2.setFill(Color.WHITE);
