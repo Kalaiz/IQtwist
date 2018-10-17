@@ -65,6 +65,7 @@ public class Board extends Application {
     private Group pieces = new Group();
     private Group controls = new Group();
     private Group board=new Group();
+    private Group outsides = new Group();
 
     /* Grid */
     private static GridPane grid = new GridPane();
@@ -86,6 +87,15 @@ public class Board extends Application {
 
 
     private void createBoard(){
+        Rectangle rect1 = new Rectangle(690, 2.5, 420, 215);
+        Rectangle rect2 = new Rectangle(692.5, 5, 415, 210);
+        rect2.setFill(Color.WHITE);
+        rect1.setArcHeight(30);
+        rect1.setArcWidth(30);
+        rect2.setArcHeight(30);
+        rect2.setArcWidth(30);
+        rect1.toBack();
+        rect2.toBack();
         for (int i = 0; i < 8; i ++) {
             for (int j = 0; j < 4; j ++) {
                 Circle circle1 = new Circle(725 + 50 * i, 35 + 50 * j, 27);
@@ -103,6 +113,9 @@ public class Board extends Application {
                 board.getChildren().add(innercircle2);
             }
         }
+        outsides.getChildren().add(rect1);
+        outsides.getChildren().add(rect2);
+
 
 
     }
@@ -539,6 +552,7 @@ public class Board extends Application {
         primaryStage.getIcons().add(new Image((Viewer.class.getResource(URI_BASE + "e.png").toString())));
         Scene scene = new Scene(root, DISPLAY_WIDTH, DISPLAY_HEIGHT);
         createBoard();
+        root.getChildren().add(outsides);
         root.getChildren().add(board);
         newGame();
         root.getChildren().add(boardgrid);
