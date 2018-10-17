@@ -128,7 +128,8 @@ public class SolutionData extends TwistGame{
         int pieceNum = 0;
         int pegNum = 0;
         int solNum = r.nextInt(sol.size());
-        String pegs = storage.get(solution[solNum]);
+        String pegs = pegAdder(solution[solNum]);
+
         //get the pieces & pegs number by difficulty level
         pegNum = difficultyLevelDetails[2 * level];
         pieceNum = difficultyLevelDetails[2*level + 1];
@@ -216,8 +217,13 @@ public class SolutionData extends TwistGame{
     public static void main(String[] args) {
 
         System.out.println(pieceCreator());;
-        /*String p = difficultyLevel(1,sol);
-        System.out.println(p);*/
+        String[] s = new String[sol.size()];
+        //pegAdder();
+        for (int i = 0; i < s.length; i++) {
+            s[i] = sol.get(i);
+        }
+        String p = difficultyLevel(1,s);
+        System.out.println(p);
   /*      Pieces.initialisehms();
 
 
