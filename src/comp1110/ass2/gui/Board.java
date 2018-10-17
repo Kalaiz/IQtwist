@@ -15,6 +15,7 @@ import javafx.scene.control.Slider;
 import javafx.scene.effect.Glow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
@@ -186,7 +187,9 @@ public class Board extends Application {
             int orientation = (flip) ? (int) ((holder.getRotate() / 90) + 4) : (int) (holder.getRotate() / 90);
             // Character of the piece + Column:number + Row:Alpha + orientation:number
             pieceInfo = Character.toString((char) pieceType) + col + ((char) (gridRow + 65)) + Integer.toString(orientation);
+
         }
+
 
         eventPiece(char piece) {
             super(piece);
@@ -199,8 +202,26 @@ public class Board extends Application {
                 }
             });
 
+            holder.setOnMouseClicked(remover->{
+                if(remover.getButton()==MouseButton.PRIMARY&&grid.getChildren().contains(holder)){
+             Timer t =new Timer();
+             TimerTask task=new TimerTask() {
+                 @Override
+                 public void run() {
+                     System.out.println("Yeah");
+                     resetPiece((eventPiece)holder.getClip());
+                 }
+             };
+             t.schedule(task,100);
+            } });
+
+
+
+
+
             holder.setOnMouseEntered(geffect -> { //Glow effect
                 holder.setEffect(g1);
+
             });
 
             holder.setOnMouseExited(ageffect -> {//Anti glow effect
@@ -247,6 +268,7 @@ public class Board extends Application {
             });
 
         }
+
 
         int[] imgModifier() {
             int rowspan = (int) holder.getImage().getHeight() / 100;
@@ -296,6 +318,7 @@ public class Board extends Application {
     }
 
 
+
     private void forceReset() {//Used for new game
         grid = new GridPane();
         Iterator im = pieces.getChildren().iterator();
@@ -342,6 +365,12 @@ public class Board extends Application {
 
     }
 
+    private void  resetPiece(eventPiece p){
+        grid.getChildren().remove(p.holder);
+        pieces.getChildren().remove(p);
+        pieces.getChildren().add(new eventPiece(((p).pieceInfo).charAt(0)));
+    }
+
 
     private void resetgame() {
         try {
@@ -352,9 +381,7 @@ public class Board extends Application {
                 if (((((eventPiece) obj).pieceInfo)) != null) {
                     if (!startingBoard.contains(((eventPiece) obj).pieceInfo)) {
                         System.out.println(((eventPiece) obj).pieceInfo);
-                        grid.getChildren().remove(((eventPiece) obj).holder);
-                        pieces.getChildren().remove((obj));
-                        pieces.getChildren().add(new eventPiece((((eventPiece) obj).pieceInfo).charAt(0)));
+                    resetPiece((eventPiece )obj);
                     }
                 }
             }
@@ -461,7 +488,7 @@ public class Board extends Application {
         }
 
         System.out.println(numofpiece);
-        if (numofpiece == 8){
+        if (numofpiece >= 8){
             makeCompletion();
             
         }
@@ -478,7 +505,7 @@ public class Board extends Application {
         root.getChildren().add(board);
         root.getChildren().add(pieces);
         makeControls();
-        showCompletion();
+        //showCvb   ompletion();
         primaryStage.setScene(scene);
         primaryStage.show();
     }
