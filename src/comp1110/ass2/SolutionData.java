@@ -4,7 +4,7 @@ import java.util.*;
 
 public class SolutionData extends TwistGame{
 
-
+    private static List<String> sol = new ArrayList<>();
     private static List<Character> availPiece=new ArrayList<>();
     private static  HashMap<String, String> storage=new HashMap<>();
     /*String[0]=startingBoardPlacement; String[1]=Solution */
@@ -82,7 +82,11 @@ public class SolutionData extends TwistGame{
         for (Object c : choPie){
             sb.append(c);
         }
-        //System.out.println(sb.toString());
+        System.out.println(sb.toString());
+        String[] s = getSolutions(sb.toString());
+        for (int i = 0; i < s.length; i++) {
+            sol.add(s[i]);
+        }
 
         return sb.toString();
     }
@@ -102,10 +106,7 @@ public class SolutionData extends TwistGame{
         return choPie;
     }*/
 
-    /** Adds the solution in accordance to the respective key of ArrayList - storage
-     *
-     * @param twoPieceBoard - The board state which has two random pieces.
-     * */
+
    /* private static void solutionAdder(String twoPieceBoard){
         String[] str = getSolutions(twoPieceBoard);
         for (int i = 0; i < str.length; i++){
@@ -119,6 +120,37 @@ public class SolutionData extends TwistGame{
 
     }*/
 
+   /*gives the difficulty level and a random solution string, find the values of pegs in hashMap*/
+    private static String difficultyLevel(int level, String[] solution){
+
+        Random r = new Random();
+        String startPlacement = "";
+        int pieceNum = 0;
+        int pegNum = 0;
+        int solNum = r.nextInt(sol.size());
+        String pegs = storage.get(solution[solNum]);
+
+        //get the pieces & pegs number by difficulty level
+        pegNum = difficultyLevelDetails[2 * level];
+        pieceNum = difficultyLevelDetails[2*level + 1];
+
+        List<String> pie = getFormalPieces(solution[solNum]);
+        List<String> peg = getFormalPieces(pegs);
+
+        Collections.shuffle(pie);
+        Collections.shuffle(peg);
+
+        for (int i = 0; i < pieceNum; i++) {
+            startPlacement += pie.get(i);
+        }
+
+        for (int j = 0; j < pegNum; j++) {
+            startPlacement += peg.get(j);
+        }
+
+        return startPlacement;
+
+    }
 
 
     // FIXME Task 11: Generate interesting starting placements
@@ -183,6 +215,10 @@ public class SolutionData extends TwistGame{
 
 
     public static void main(String[] args) {
+
+        System.out.println(pieceCreator());;
+        /*String p = difficultyLevel(1,sol);
+        System.out.println(p);*/
   /*      Pieces.initialisehms();
 
 
