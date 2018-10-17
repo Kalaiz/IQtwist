@@ -6,19 +6,22 @@ public class SolutionData extends TwistGame{
     // FIXME Task 11: Generate interesting starting placements
     /*
      * 3 difficulty levels:
-     * 1: Place 6 or 7 pegs /4  pieces on board which may lead to a single solution, because pegs limited the color of pieces and may have fixed solutions
-     * 2: Place 5 or 6 pegs /3 pieces on board which may have more possibilities but lead to a single solution
-     * 3: Place 4 or 5 pegs /2 pieces  on board which have the most possibilities but lead to the single answer
+     * 1: Place 6 or 7 pegs on board which may lead to a single solution, because pegs limited the color of pieces and may have fixed solutions
+     * 2: Place 5 or pegs on board which may have more possibilities but lead to a single solution
+     * 3: Place 3 or 、4 pegs on board which have the most possibilities but lead to the single answer
      * */
     /*In reference to Difficulty level choose a certain state from SolutionData */
 
     private static List<Character> availPiece=new ArrayList<>();
-    TwistGame game= new TwistGame();//For access to Task 9
     /*Using linked list as it has no size limit
     the string will be the encoding for two random pieces*/
-    private static List<String> storage=new ArrayList<>(25);
-    /*String[0]=startingBoardPlacement String[1]=Solution */
+    private static  List<String> storage=new ArrayList<>(25);
     private static HashMap<Integer,String[]> difficultyStorage=new HashMap<>();
+    static String[] solutions = {"a6B0b6C0c5A2d1B5e4A5f4C2g2B5h1A2",
+                                 "a1A6b1B1c2D0d3B6e7A3f7B1g5B7h4A0",
+                                 "a7A7b3B1c1A0d5A3e1C2f1B0g6B7h4D0",
+                                 "a1C6b6A4c2D0d7B1e1A3f2A2g4B2h4A0"};
+    /*String[0]=startingBoardPlacement String[1]=Solution */
     private static int[]pegDetails={1,2,2,2};
     private static int[][] difficultyLevelDetails={{7,4},{6,3},{5,2}};
 
@@ -63,14 +66,56 @@ public class SolutionData extends TwistGame{
     /*Creates a board String such that it consist of 2 pieces
      * Produces the key for the Hashmap - storage*/
     private static String pieceCreator(){
-        return null;
+
+        Random r = new Random();
+        String existpiece = "";     //The piece which we initially choose from the choosen string
+        String unaddpiece = "";
+        List<String> choPie = new ArrayList<>();
+        List<String> choFro = new ArrayList<>();    //The pieces from which we may choose the next piece
+        int ranSol = r.nextInt(4);
+        int ranPie = r.nextInt(8);
+
+        String str = solutions[ranSol];
+        choFro = getFormalPieces(str);
+        existpiece = choFro.get(ranPie);
+        unaddpiece = choFro.get(ranPie);
+        choPie.add(existpiece);
+        choPie = addPiece(choPie,unaddpiece,choFro);
+
+        StringBuilder sb = new StringBuilder();
+        for (Object c : choPie){
+            sb.append(c);
+        }
+        //System.out.println(sb.toString());
+
+        return sb.toString();
     }
 
-    /** Adds the solution in accordance to the respective key of HashMap - storage
-     *  If there is no solution , do not create the key(twoPieceBoard).
+    private static List<String> addPiece(List<String> choPie, String unaddPiece, List<String> choFro){
+
+        Random r = new Random();
+        int ranPie = r.nextInt(8);
+
+        if (choPie.get(0) != unaddPiece) {
+            choPie.add(unaddPiece);
+        } else {
+            unaddPiece = choFro.get(ranPie);
+            addPiece(choPie,unaddPiece,choFro);
+        }
+
+        return choPie;
+    }
+
+    /** Adds the solution in accordance to the respective key of ArrayList - storage
+     *
      * @param twoPieceBoard - The board state which has two random pieces.
      * */
-    private static void solutionAdder(String twoPieceBoard){}
+    private static void solutionAdder(String twoPieceBoard){
+        String[] str = getSolutions(twoPieceBoard);
+        for (int i = 0; i < str.length; i++){
+            storage.add(str[i]);
+        }
+    }
 
 
     /**Converts the available data into respective difficulty levels
@@ -101,8 +146,6 @@ public class SolutionData extends TwistGame{
         Pieces.initialisehms();
         //System.out.println(pegAdder("a7A7b3B1c1A0d5A3e1C2f1B0g6B7h4D0")); ;
         /*Where to store these data ?
-
-
         Options are :
         1)write it in a java class(not manually but using write operations)
         2)write it to a text file similar to the way above
