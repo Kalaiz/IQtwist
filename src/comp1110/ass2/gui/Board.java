@@ -472,6 +472,15 @@ public class Board extends Application {
     public void start(Stage primaryStage) throws Exception {
         primaryStage.setTitle("IQ-twist");//sets the title name on the bar
         //sets the icon
+        /*
+        *  createpieces()
+        *  getsolutions()
+        *  pegAdder()   -->  add to hashMap
+        *  add a loading screen until hashMap is initialized
+        *  difficulty level alg (which should be created in SolutionData.java, returns a starting board string)
+        *           problem: find effecive way of finding n pieces & pegs from a collection
+        *  when the user press the "new game" button, accroding to the diff level, run the alg over solutions
+        */
         primaryStage.getIcons().add(new Image((Viewer.class.getResource(URI_BASE + "e.png").toString())));
         Scene scene = new Scene(root, DISPLAY_WIDTH, DISPLAY_HEIGHT);
         newGame();
