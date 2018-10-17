@@ -62,18 +62,12 @@ public class SolutionData extends TwistGame{
     private static String pieceCreator(){
 
         Random r = new Random();
-        /*String existpiece = "";     //The piece which we initially choose from the choosen string
-        String unaddpiece = "";*/
         List<String> choPie = new ArrayList<>();
         List<String> choFro = new ArrayList<>();    //The pieces from which we may choose the next piece
         int ranSol = r.nextInt(4);
-        //int ranPie = r.nextInt(8);
 
         String str = initiator[ranSol];
         choFro = getFormalPieces(str);
-        /*existpiece = choFro.get(ranPie);
-        unaddpiece = choFro.get(ranPie);
-        choPie.add(existpiece);*/
         Collections.shuffle(choFro);
         choPie.add(choFro.get(0));
         choPie.add(choFro.get(1));
@@ -91,34 +85,6 @@ public class SolutionData extends TwistGame{
         return sb.toString();
     }
 
-   /* private static List<String> addPiece(List<String> choPie, String unaddPiece, List<String> choFro){
-
-        Random r = new Random();
-        int ranPie = r.nextInt(8);
-
-        if (choPie.get(0) != unaddPiece) {
-            choPie.add(unaddPiece);
-        } else {
-            unaddPiece = choFro.get(ranPie);
-            addPiece(choPie,unaddPiece,choFro);
-        }
-
-        return choPie;
-    }*/
-
-
-   /* private static void solutionAdder(String twoPieceBoard){
-        String[] str = getSolutions(twoPieceBoard);
-        for (int i = 0; i < str.length; i++){
-            if(!(storage.size()>25)){
-                storage.put(str[i],pegAdder(str[i]));
-            }
-            else{
-                break;
-            }
-        }
-
-    }*/
 
    /*gives the difficulty level and a random solution string, find the values of pegs in hashMap*/
     private static String difficultyLevel(int level, String[] solution){
@@ -132,7 +98,7 @@ public class SolutionData extends TwistGame{
 
         //get the pieces & pegs number by difficulty level
         pegNum = difficultyLevelDetails[2 * level];
-        pieceNum = difficultyLevelDetails[2*level + 1];
+        pieceNum = difficultyLevelDetails[2 * level + 1];
 
         List<String> pie = getFormalPieces(solution[solNum]);
         List<String> peg = getFormalPieces(pegs);
@@ -169,50 +135,6 @@ public class SolutionData extends TwistGame{
      * 50-75 -- Level 3
      * Each number is the key for difficultyStorage and it will have a starting board string  as a value.
      */
-/*    private static void difficultyStorageConverter(){
-        Random rnd=new Random();
-        int difficultyRnd;
-        int keynumbase=0;
-        String startingplacement="";
-        for(int i=0;i<storage.size();i++){
-            String solution=(storage.get(i));
-            List<String> listOfPieces = getFormalPieces(solution);
-            List<String> listOfPegs = getFormalPieces(pegAdder(solution));
-            for(int dlo=0;dlo<3;dlo++){
-                List<String> listOfPiecesCopy=listOfPieces;
-                List<String> listOfPegsCopy =listOfPegs;
-
-                difficultyRnd=rnd.nextInt(1);
-                int numofpieces=difficultyLevelDetails[(dlo*2)+1];
-                int numofpegs=difficultyLevelDetails[dlo*2];
-                int rndPiece;
-                int rndPegs;
-                for(int pieceCollater=0;pieceCollater<numofpieces+difficultyRnd+1;pieceCollater++){
-                    if(listOfPiecesCopy.size()==0){break;}
-                    rndPiece=rnd.nextInt(listOfPiecesCopy.size());
-                    startingplacement+=listOfPiecesCopy.get(rndPiece);
-                    listOfPiecesCopy.remove(rndPiece);
-                }
-                for(int pegCollator =0; pegCollator<numofpegs+difficultyRnd+1;pegCollator++){
-                    if(listOfPegsCopy.size()==0){break;}
-                    rndPegs= rnd.nextInt(listOfPegsCopy.size());
-                    startingplacement+=listOfPegsCopy.get(rndPegs);
-                    listOfPegsCopy.remove(rndPegs);
-                }
-                String[] solstart={solution,startingplacement};
-                difficultyStorage.put((25*difficultyRnd)+(keynumbase),solstart);
-                if(dlo==(difficultyLevelDetails.length/2 )-1){
-                    keynumbase++;
-                    startingplacement="";
-                }
-
-                listOfPegsCopy = null;
-                listOfPegs = null;
-            }
-        }
-    }*/
-
-
 
     public static void main(String[] args) {
 
@@ -224,38 +146,7 @@ public class SolutionData extends TwistGame{
         }
         String p = difficultyLevel(1,s);
         System.out.println(p);
-  /*      Pieces.initialisehms();
-
-
-       *//* while(storage.size()!=25){
-            solutionAdder(pieceCreator());
-        }*//*
-        int c=0;
-
-        //difficultyStorageConverter();
-        String piece=pieceCreator();
-        System.out.println(piece);
-        solutionAdder(piece);
-        difficultyStorageConverter();
-        for(int i=0;i<difficultyStorage.size();i++){
-            System.out.println(c++ +  " " + difficultyStorage.get(i)[1]);
-        }*/
-
-        //System.out.println(pegAdder("a7A7b3B1c1A0d5A3e1C2f1B0g6B7h4D0")); ;
-        /*Where to store these data ?
-        Options are :
-        1)write it in a java class(not manually but using write operations)
-        2)write it to a text file similar to the way above
-        3)Dynamically:
-             set a predefined number of twoPieceBoard  (considering the fact that it should run only once upon the start of game)
-             - convert the available data in accordance to difficulty level
-             - having a loading screen in the game  - meanwhile the solutions are stored .
-             - Access accordingly.
-         */
 
     }
-
-
-
 
 }
