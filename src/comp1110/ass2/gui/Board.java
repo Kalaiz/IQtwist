@@ -202,23 +202,6 @@ public class Board extends Application {
                 }
             });
 
-            holder.setOnMouseClicked(remover->{
-                if(remover.getButton()==MouseButton.PRIMARY&&grid.getChildren().contains(holder)){
-             Timer t =new Timer();
-             TimerTask task=new TimerTask() {
-                 @Override
-                 public void run() {
-                     System.out.println("Yeah");
-                     resetPiece((eventPiece)holder.getClip());
-                 }
-             };
-             t.schedule(task,100);
-            } });
-
-
-
-
-
             holder.setOnMouseEntered(geffect -> { //Glow effect
                 holder.setEffect(g1);
 
@@ -237,6 +220,10 @@ public class Board extends Application {
                         holder.setScaleY(-1);
                         flip = true;
                     }
+                }
+                else if(click.getButton()==MouseButton.MIDDLE&&grid.getChildren().contains(holder)){
+                  resetPiecestr(pieceInfo);
+
                 }
             });
 
@@ -370,6 +357,20 @@ public class Board extends Application {
         pieces.getChildren().remove(p);
         pieces.getChildren().add(new eventPiece(((p).pieceInfo).charAt(0)));
     }
+
+    private void  resetPiecestr(String pieceInfo){
+        try {
+        for(Node n:pieces.getChildren()){
+            if (((((eventPiece) n).pieceInfo)) != null) {
+            if(((eventPiece) n).pieceInfo.equals(pieceInfo)){
+                grid.getChildren().remove(((eventPiece) n).holder);
+                pieces.getChildren().remove(( n));
+                pieces.getChildren().add(new eventPiece(((((eventPiece) n)).pieceInfo).charAt(0)));}
+                gameState=gameState.replace(pieceInfo,"");
+        }}
+
+    }
+    catch(ConcurrentModificationException e){}}
 
 
     private void resetgame() {
