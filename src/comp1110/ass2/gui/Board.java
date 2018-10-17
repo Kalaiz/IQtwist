@@ -20,6 +20,7 @@ import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
@@ -90,13 +91,23 @@ public class Board extends Application {
             RowConstraints row = new RowConstraints(50);
             grid.getRowConstraints().add(row);
         }
-        grid.setGridLinesVisible(true);
+
+        for (int i = 0; i < 8; i ++) {
+            for (int j = 0; j < 4; j ++) {
+                Circle circle1 = new Circle(700 + 25 * i, 10 + 25 * j, 27);
+                Circle circle2 = new Circle(700 + 25 * i, 10 + 25 * j, 25);
+                circle2.setFill(Color.WHITE);
+                grid.add(circle1,i,j);
+                grid.add(circle2,i,j);
+            }
+        }
+
+        grid.setGridLinesVisible(false);
         grid.setLayoutX(700);
         grid.setLayoutY(10);
         board.getChildren().add(grid);
         //board.toBack();      //places the node it at the back
     }
-
 
     /*
      *Create the message to be displayed when the player completes the game
@@ -459,9 +470,7 @@ public class Board extends Application {
             }
             i += 4;
         }
-
-        System.out.println(numofpiece);
-        if (numofpiece == 8){
+        if (numofpiece >= 8){
             makeCompletion();
             
         }
@@ -486,11 +495,11 @@ public class Board extends Application {
 
   /*  // FIXME Task 8: Implement starting placements
     public static String makeBoard() {
-        SolutionData obj = new SolutionData();
-        Random rand = new Random();
-        String startboard = obj.difficultyStorage.get(rand.nextInt(75))[0];
+//        SolutionData obj = new SolutionData();
+//        Random rand = new Random();
+//        String startboard = obj.difficultyStorage.get(rand.nextInt(75))[0];
 
-        //String startboard = "b6A7c1A3d2A6e2C3f3C2g4A7h6D0i6B0j2B0j1C0k3C0l4B0l5C0";
+       String startboard = "a7A7b6A7c1A3d2A6e2C3f3C2g4A7h6D0i6B0j2B0j1C0k3C0l4B0l5C0";
 
         return startboard;
     }*/
