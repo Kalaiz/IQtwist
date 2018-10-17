@@ -6,6 +6,7 @@ import comp1110.ass2.TwistGame;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -19,12 +20,15 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import java.util.*;
 import java.util.stream.IntStream;
@@ -60,6 +64,7 @@ public class Board extends Application {
     private Group pieces = new Group();
     private Group controls = new Group();
     private Group board=new Group();
+    private Group outsides = new Group();
 
     /* Grid */
     private static GridPane grid = new GridPane();
@@ -81,6 +86,15 @@ public class Board extends Application {
 
 
     private void createBoard(){
+        Rectangle rect1 = new Rectangle(690, 2.5, 420, 215);
+        Rectangle rect2 = new Rectangle(692.5, 5, 415, 210);
+        rect2.setFill(Color.WHITE);
+        rect1.setArcHeight(30);
+        rect1.setArcWidth(30);
+        rect2.setArcHeight(30);
+        rect2.setArcWidth(30);
+        rect1.toBack();
+        rect2.toBack();
         for (int i = 0; i < 8; i ++) {
             for (int j = 0; j < 4; j ++) {
                 Circle circle1 = new Circle(725 + 50 * i, 35 + 50 * j, 27);
@@ -98,6 +112,9 @@ public class Board extends Application {
                 board.getChildren().add(innercircle2);
             }
         }
+        outsides.getChildren().add(rect1);
+        outsides.getChildren().add(rect2);
+
 
 
     }
@@ -120,6 +137,32 @@ public class Board extends Application {
         grid.setLayoutY(10);
         boardgrid.getChildren().add(grid);
         //board.toBack();      //places the node it at the back
+    }
+
+    /*
+     *Create a dialogue when the player start the game
+     */
+    private void instructions(){
+        Stage dialogue = new Stage();
+        dialogue.setTitle("Instructions");
+        dialogue.initModality(Modality.APPLICATION_MODAL);
+        dialogue.setMinWidth(500);
+        dialogue.setMaxHeight(500);
+
+        Button button = new Button("Close the widow");
+        button.setOnAction(e -> dialogue.close());
+
+        Text t1 = new Text("Right click for flip;");
+        Text t2 = new Text("Scroll for rotate;");
+        Text t3 = new Text("...;");
+
+        VBox layout = new VBox(10);
+        layout.getChildren().addAll(t1, t2, t3, button);
+        layout.setAlignment(Pos.CENTER);
+
+        Scene scene = new Scene(layout);
+        dialogue.setScene(scene);
+        dialogue.showAndWait();
     }
 
     /*
@@ -432,6 +475,7 @@ public class Board extends Application {
 
             }
         });
+
         controls.getChildren().add(newGame);
         controls.getChildren().add(reset);
         difficulty.setMin(1);
@@ -526,11 +570,13 @@ public class Board extends Application {
         primaryStage.getIcons().add(new Image((Viewer.class.getResource(URI_BASE + "e.png").toString())));
         Scene scene = new Scene(root, DISPLAY_WIDTH, DISPLAY_HEIGHT);
         createBoard();
+        root.getChildren().add(outsides);
         root.getChildren().add(board);
         newGame();
         root.getChildren().add(boardgrid);
         root.getChildren().add(pieces);
         makeControls();
+        instructions();
         //showCvb   ompletion();
         primaryStage.setScene(scene);
         primaryStage.show();
