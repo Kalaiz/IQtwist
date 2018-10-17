@@ -21,7 +21,9 @@ import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
@@ -59,16 +61,17 @@ public class Board extends Application {
 
     /*NODE groups*/
     private Group root = new Group();
-    private Group board = new Group();
+    private Group boardgrid = new Group();
     private Group pieces = new Group();
     private Group controls = new Group();
+    private Group board=new Group();
 
     /* Grid */
     private static GridPane grid = new GridPane();
 
     /* Default (home) x & y coordinates*/
     private static final double[] hxy = {100, 50, 100, 200, 100, 400, 740, 380, 340
-            , 50, 340, 200, 340, 350, 540, 380};
+                                          , 50, 340, 200, 340, 350, 540, 380};
 
     /* the difficulty slider */
     private final Slider difficulty = new Slider();
@@ -81,9 +84,31 @@ public class Board extends Application {
     private static boolean gamestart;
 
 
+
+    private void createBoard(){
+        for (int i = 0; i < 8; i ++) {
+            for (int j = 0; j < 4; j ++) {
+                Circle circle1 = new Circle(725 + 50 * i, 35 + 50 * j, 27);
+                Circle circle2 = new Circle(725 + 50 * i, 35 + 50 * j, 25);
+                Circle innercircle =new Circle(725 + 50 * i, 35 + 50 * j, 15);
+                Circle innercircle2 =new Circle(725 + 50 * i, 35 + 50 * j, 13);
+                circle2.setFill(Color.WHITE);
+                innercircle.setFill(Color.LIGHTGREY);
+                innercircle2.setFill(Color.WHITE);
+                circle1.toBack();
+                circle2.toBack();
+                board.getChildren().add(circle1);
+                board.getChildren().add(circle2);
+                board.getChildren().add(innercircle);
+                board.getChildren().add(innercircle2);
+            }
+        }
+
+
+    }
     /*Sets up the board*/
-    private void createBoard() {
-        board.getChildren().clear();
+    private void createBoardGrid() {
+        boardgrid.getChildren().clear();
         for (int i = 0; i < 8; i++) {
             ColumnConstraints col = new ColumnConstraints(50);
             grid.getColumnConstraints().add(col);
@@ -93,20 +118,12 @@ public class Board extends Application {
             grid.getRowConstraints().add(row);
         }
 
-        for (int i = 0; i < 8; i ++) {
-            for (int j = 0; j < 4; j ++) {
-                Circle circle1 = new Circle(700 + 25 * i, 10 + 25 * j, 27);
-                Circle circle2 = new Circle(700 + 25 * i, 10 + 25 * j, 25);
-                circle2.setFill(Color.WHITE);
-                grid.add(circle1,i,j);
-                grid.add(circle2,i,j);
-            }
-        }
+
 
         grid.setGridLinesVisible(false);
         grid.setLayoutX(700);
         grid.setLayoutY(10);
-        board.getChildren().add(grid);
+        boardgrid.getChildren().add(grid);
         //board.toBack();      //places the node it at the back
     }
 
@@ -357,7 +374,7 @@ public class Board extends Application {
         for (int i = 0; i < listOfPieces.size(); i++) {
             pieces.getChildren().add(new eventPiece(listOfPieces.get(i)));
         }
-        createBoard();
+        createBoardGrid();
         //place all the pieces from  startingBoardplacement to the grid
         //update gameState & startingboard
 
@@ -521,8 +538,10 @@ public class Board extends Application {
         */
         primaryStage.getIcons().add(new Image((Viewer.class.getResource(URI_BASE + "e.png").toString())));
         Scene scene = new Scene(root, DISPLAY_WIDTH, DISPLAY_HEIGHT);
-        newGame();
+        createBoard();
         root.getChildren().add(board);
+        newGame();
+        root.getChildren().add(boardgrid);
         root.getChildren().add(pieces);
         makeControls();
         //showCvb   ompletion();
