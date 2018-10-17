@@ -16,9 +16,12 @@ public class SolutionData extends TwistGame{
     TwistGame game= new TwistGame();//For access to Task 9
     /*Using linked list as it has no size limit
     the string will be the encoding for two random pieces*/
-    private static HashMap<String, LinkedList<String>> storage=new HashMap<>();
-    private static HashMap<Integer,String> difficultyStorage=new HashMap<>();
-    static String[] solutions = {"a6B0b6C0c5A2d1B5e4A5f4C2g2B5h1A2","a1A6b1B1c2D0d3B6e7A3f7B1g5B7h4A0","a7A7b3B1c1A0d5A3e1C2f1B0g6B7h4D0"};
+    private static  List<String> storage=new ArrayList<>(25);
+    private static HashMap<Integer,String[]> difficultyStorage=new HashMap<>();
+    static String[] solutions = {"a6B0b6C0c5A2d1B5e4A5f4C2g2B5h1A2",
+                                 "a1A6b1B1c2D0d3B6e7A3f7B1g5B7h4A0",
+                                 "a7A7b3B1c1A0d5A3e1C2f1B0g6B7h4D0",
+                                 "a1C6b6A4c2D0d7B1e1A3f2A2g4B2h4A0"};
 
 
     /**Gets a solution and places pegs where ever possible and makes all the other possible solutions*
@@ -34,11 +37,11 @@ public class SolutionData extends TwistGame{
     private static String pieceCreator(){
 
         Random r = new Random();
-        String existpiece = "";
+        String existpiece = "";     //The piece which we initially choose from the choosen string
         String unaddpiece = "";
         List<String> choPie = new ArrayList<>();
-        List<String> choFro = new ArrayList<>();
-        int ranSol = r.nextInt(3);
+        List<String> choFro = new ArrayList<>();    //The pieces from which we may choose the next piece
+        int ranSol = r.nextInt(4);
         int ranPie = r.nextInt(8);
 
         String str = solutions[ranSol];
@@ -52,7 +55,7 @@ public class SolutionData extends TwistGame{
         for (Object c : choPie){
             sb.append(c);
         }
-        System.out.println(sb.toString());
+        //System.out.println(sb.toString());
 
         return sb.toString();
     }
@@ -72,11 +75,16 @@ public class SolutionData extends TwistGame{
         return choPie;
     }
 
-    /** Adds the solution in accordance to the respective key of HashMap - storage
-     *  If there is no solution , do not create the key(twoPieceBoard).
+    /** Adds the solution in accordance to the respective key of ArrayList - storage
+     *
      * @param twoPieceBoard - The board state which has two random pieces.
      * */
-    private static void solutionAdder(String twoPieceBoard){}
+    private static void solutionAdder(String twoPieceBoard){
+        String[] str = getSolutions(twoPieceBoard);
+        for (int i = 0; i < str.length; i++){
+            storage.add(str[i]);
+        }
+    }
 
 
     /**Converts the available data into respective difficulty levels
