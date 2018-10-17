@@ -9,12 +9,12 @@ public class SolutionData extends TwistGame{
     private static  List<String> storage=new ArrayList<>(25);
     /*String[0]=startingBoardPlacement; String[1]=Solution */
     private static HashMap<Integer,String[]> difficultyStorage=new HashMap<>();
-    private static String[] solutions = {"a6B0b6C0c5A2d1B5e4A5f4C2g2B5h1A2",
-                                 "a1A6b1B1c2D0d3B6e7A3f7B1g5B7h4A0",
-                                 "a7A7b3B1c1A0d5A3e1C2f1B0g6B7h4D0",
-                                 "a1C6b6A4c2D0d7B1e1A3f2A2g4B2h4A0"};
+    private static String[] initiator = {"a6B0b6C0c5A2d1B5e4A5f4C2g2B5h1A2",
+                                         "a1A6b1B1c2D0d3B6e7A3f7B1g5B7h4A0",
+                                         "a7A7b3B1c1A0d5A3e1C2f1B0g6B7h4D0",
+                                         "a1C6b6A4c2D0d7B1e1A3f2A2g4B2h4A0"};
     private static int[] pegDetails={1,2,2,2};
-                                              /*pegnos,piecenos,pegnos,piecenos...*/
+                                              /*pgnos,piecenos,pgnos,piecenos...*/
     private static int[] difficultyLevelDetails={6,4,5,3,4,2};
 
 
@@ -67,7 +67,7 @@ public class SolutionData extends TwistGame{
         int ranSol = r.nextInt(4);
         int ranPie = r.nextInt(8);
 
-        String str = solutions[ranSol];
+        String str = initiator[ranSol];
         choFro = getFormalPieces(str);
         existpiece = choFro.get(ranPie);
         unaddpiece = choFro.get(ranPie);
@@ -120,8 +120,9 @@ public class SolutionData extends TwistGame{
      * 3 difficulty levels:
      * 1: Place 6 or 7 pegs on board which may lead to a single solution, because pegs limited the color of pieces and may have fixed solutions
      * 2: Place 5 or pegs on board which may have more possibilities but lead to a single solution
-     * 3: Place 3 or 、4 pegs on board which have the most possibilities but lead to the single answer
-     * */
+     * 3: Place 3 or 4 pegs on board which have the most possibilities but lead to the single answer
+     * pegnos,piecenos,pegnos,piecenos...
+     * {6,4,5,3,4,2};
     /*In reference to Difficulty level choose a certain state from SolutionData */
     /**Converts the available data into respective difficulty levels
      * Available Series:
@@ -132,9 +133,13 @@ public class SolutionData extends TwistGame{
      */
     private static void difficultyStorageConverter(){
         Random rnd=new Random();
+        int rnd_num=rnd.nextInt(1);
         for(int i=0;i<storage.size();i++){
             String completeSolution=pegAdder(storage.get(i));
-            for(int dlo=0;dlo<difficultyLevelDetails.length;dlo++){
+            for(int dlo=0;dlo<difficultyLevelDetails.length/2;dlo++){
+                int numofpieces=pegDetails[(dlo*2)+1];
+                int numofpegs=pegDetails[dlo*2];
+
 
             }
         }
