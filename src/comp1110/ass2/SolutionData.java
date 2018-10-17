@@ -2,7 +2,7 @@ package comp1110.ass2;
 
 import java.util.*;
 
-public class SolutionData {
+public class SolutionData extends TwistGame{
     // FIXME Task 11: Generate interesting starting placements
     /*
      * 3 difficulty levels:
@@ -18,6 +18,7 @@ public class SolutionData {
     the string will be the encoding for two random pieces*/
     private static HashMap<String, LinkedList<String>> storage=new HashMap<>();
     private static HashMap<Integer,String> difficultyStorage=new HashMap<>();
+    static String[] solutions = {"a6B0b6C0c5A2d1B5e4A5f4C2g2B5h1A2","a1A6b1B1c2D0d3B6e7A3f7B1g5B7h4A0","a7A7b3B1c1A0d5A3e1C2f1B0g6B7h4D0"};
 
 
     /**Gets a solution and places pegs where ever possible and makes all the other possible solutions*
@@ -31,7 +32,44 @@ public class SolutionData {
     /*Creates a board String such that it consist of 2 pieces
      * Produces the key for the Hashmap - storage*/
     private static String pieceCreator(){
-        return null;
+
+        Random r = new Random();
+        String existpiece = "";
+        String unaddpiece = "";
+        List<String> choPie = new ArrayList<>();
+        List<String> choFro = new ArrayList<>();
+        int ranSol = r.nextInt(3);
+        int ranPie = r.nextInt(8);
+
+        String str = solutions[ranSol];
+        choFro = getFormalPieces(str);
+        existpiece = choFro.get(ranPie);
+        unaddpiece = choFro.get(ranPie);
+        choPie.add(existpiece);
+        choPie = addPiece(choPie,unaddpiece,choFro);
+
+        StringBuilder sb = new StringBuilder();
+        for (Object c : choPie){
+            sb.append(c);
+        }
+        System.out.println(sb.toString());
+
+        return sb.toString();
+    }
+
+    private static List<String> addPiece(List<String> choPie, String unaddPiece, List<String> choFro){
+
+        Random r = new Random();
+        int ranPie = r.nextInt(8);
+
+        if (choPie.get(0) != unaddPiece) {
+            choPie.add(unaddPiece);
+        } else {
+            unaddPiece = choFro.get(ranPie);
+            addPiece(choPie,unaddPiece,choFro);
+        }
+
+        return choPie;
     }
 
     /** Adds the solution in accordance to the respective key of HashMap - storage
@@ -65,8 +103,6 @@ public class SolutionData {
          */
 
     }
-
-
 
 
 }
