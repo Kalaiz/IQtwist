@@ -129,7 +129,6 @@ public class SolutionData extends TwistGame{
         int pegNum = 0;
         int solNum = r.nextInt(sol.size());
         String pegs = storage.get(solution[solNum]);
-
         //get the pieces & pegs number by difficulty level
         pegNum = difficultyLevelDetails[2 * level];
         pieceNum = difficultyLevelDetails[2*level + 1];
