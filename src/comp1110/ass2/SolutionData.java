@@ -8,15 +8,13 @@ public class SolutionData extends TwistGame{
     private static List<Character> availPiece=new ArrayList<>();
     private static  List<String> storage=new ArrayList<>(25);
     /*String[0]=startingBoardPlacement; String[1]=Solution */
-    private static HashMap<Integer,String[]> difficultyStorage=new HashMap<>();
+    public static HashMap<Integer,String[]> difficultyStorage=new HashMap<>();
     private static String[] initiator = {"a6B0b6C0c5A2d1B5e4A5f4C2g2B5h1A2",
                                          "a1A6b1B1c2D0d3B6e7A3f7B1g5B7h4A0",
                                          "a7A7b3B1c1A0d5A3e1C2f1B0g6B7h4D0",
                                          "a1C6b6A4c2D0d7B1e1A3f2A2g4B2h4A0"};
     private static int[] pegDetails={1,2,2,2};
-                                              /*pgnos,piecenos,pgnos,piecenos...*/
-    private static int[] difficultyLevelDetails={6,4,5,3,4,2};
-
+                                              /*pgnos,piecenos,pgnos,piecenos...*/;
 
 
     /**Gets a solution and places pegs where ever possible and returns a board State string filled with pegs*

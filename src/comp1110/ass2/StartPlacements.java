@@ -46,159 +46,38 @@ public class StartPlacements {
         return pegset;
     }
 
-    /* choose a difficult level
-     * each level contains a set of String(start placement)
-     * level 3 : 4 pieces + 2 pegs
-     */
-//    public static Set<String> level3() {
-//        Set<String> finalstart = new HashSet<>();
-//        Set<String> finalstart3 = new HashSet<>();
-//        //Set<String> fpieces = pieces1();
-//
-//        //4 pieces + 2 pegs
-//        for (String p1 : pi.pieces(10)) {
-//            for (String p2 : pi.pieces(10))
-//                for (String p3 : pi.pieces(10)) {
-//                    for (String p4 : pi.pieces(10)) {
-//                        for (String p5 : pegs()) {
-//                            for (String p6 : pegs()) {
-//                                String p = p1 + p2 + p3 + p4 + p5 + p6;
-//                                if (obj.isPlacementStringWellFormed(p) && obj.isPlacementStringValid(p)) {
-//                                    finalstart.add(p);
-//                                }
-//                            }
-//                        }
-//                    }
-//                }
-//        }
+    public static String validpieces(){
+        String p = pi.twopieces();
+        while (obj.getSolutions(p).length == 0){
+            p = pi.twopieces();
+        }
 
-//        //4 piece + 2 pegs
-//        for (String p1 : pi.pieces(0,0,10)) {
-//            for (String p2 : pi.pieces(1,1,10))
-//                for (String p3 : pi.pieces(2,2,10)) {
-//                    for (String p4 : pi.pieces(3,3,10)) {
-//                        for (String p5 : pi.pieces(2,2,10)) {
-//                            String p = p1 + p2 + p3 + p4 + p5;
-//                            if (obj.isPlacementStringWellFormed(p) && obj.isPlacementStringValid(p)) {
-//                                finalstart.add(p);
-//                            }
-//                        }
-//                    }
-//                }
-//        }
-
-//        for (String p1 : finalstart){
-//            if (obj.getSolutions(p1).length == 1){
-//                finalstart3.add(p1);
-//            }
-//        }
-//
-//
-//        return finalstart3;
-//    }
+        return p;
+    }
 
     /*
      * level 1: 6 pieces
      */
 
-    public static Set<String> level2() {
-        Set<String> finalstart = new HashSet<>();
-        Set<String> finalstart2 = new HashSet<>();
-        //Set<String> fpieces = pieces1();
-
-        //5 piece + 2 pegs
-        for (String p1 : pi.pieces(10)) {
-            for (String p2 : pi.pieces(10))
-                for (String p3 : pi.pieces(10)) {
-                    for (String p4 : pi.pieces(10)) {
-                        for (String p5 : pi.pieces(10)) {
-                            for (String p6 : pi.pieces(10)) {
-                                for (String p7 : pi.pieces(10)) {
-                                    for (String p8 : pi.pieces(10)) {
-                                        String p = p1 + p2 + p3 + p4 + p5 + p6 + p7 + p8;
-                                        if (obj.isPlacementStringWellFormed(p) && obj.isPlacementStringValid(p)) {
-                                            finalstart.add(p);
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-        }
-
-//        for (String p1 : finalstart){
-//            if (obj.getSolutions(p1).length == 1){
-//                finalstart2.add(p1);
+    public static void main(String[] args) {
+        String p = validpieces();
+            System.out.println(p + " " + obj.isPlacementStringValid(p));
+//            String[] solutions = obj.getSolutions(p);
+//            for (String pi : solutions){
+//                System.out.println(pi);
 //            }
+//            System.out.println();
+
+//        String[] str = obj.getSolutions("c3A7d7A3");
+//        for (String p : str){
+//            System.out.println(str.length);
 //        }
-
-
-        return finalstart;
-    }
-
-    /*
-         * level 1: 6 pieces
-         */
-//
-//    public static void main(String[] args) {
-//        String placement = "c1A3d2A6e2C3f3C2g4A7h6D0i6B0j2B0j1C0k3C0l4B0l5C0";
+//        String placement = "c1A3d2A6";
 //        String[] pl = obj.getSolutions(placement);
 //        for (String pi : pl) {
 //            System.out.println(pi);
 //        }
-//    }
-//        System.out.println(pl.length);
-//        Set<String> piecelist = pieces();
-//        Set<String> peglist = pegs();
-//
-//        System.out.println(piecelist.size());
-//        System.out.println(peglist.size());
-
-    // Set<String> start = level2();
-    // System.out.println(start.size());
-//        for(String piece : start){
-//            System.out.println(piece);
-//        }
-//        if(piecelist.contains("a7A7")){
-//            System.out.println("true");
-//        } else {
-//            System.out.println("false");
-//        }
-//    }
-
-
-//    public static void main (String[]args) throws Exception {
-//        File filename = new File("assets/level3.txt");
-//        if (filename.exists()) {
-//            filename.delete();
-//            filename.createNewFile();
-//        }
-//
-//        Set<String> level3 = level3();
-//        BufferedWriter bw = new BufferedWriter(new FileWriter(filename));
-//        for (String pi : level3) {
-//            bw.write(pi);
-//            bw.newLine();
-//        }
-//        bw.close();
-
-//        public static void main (String[]args) throws Exception {
-//            File filename = new File("assets/levels.txt");
-//            if (filename.exists()) {
-//                filename.delete();
-//                filename.createNewFile();
-//            }
-//
-//            BufferedWriter bw = new BufferedWriter(new FileWriter(filename));
-//            for (String pi : level2()) {
-//                bw.write(pi);
-//                bw.newLine();
-//            }
-//            bw.close();
-//
-//        }
-//
+    }
 
     }
 

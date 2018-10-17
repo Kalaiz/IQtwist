@@ -1,6 +1,7 @@
 package comp1110.ass2.gui;
 
 
+import comp1110.ass2.SolutionData;
 import comp1110.ass2.TwistGame;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
@@ -440,50 +441,11 @@ public class Board extends Application {
 
     // FIXME Task 8: Implement starting placements
     public static String makeBoard() {
-
+        SolutionData obj = new SolutionData();
         Random rand = new Random();
-        String[] strs = {
-                "c1A3d2A6e2C3f3C2g4A7h6D0i6B0j2B0j1C0k3C0l4B0l5C0",
-                "c5A2d1B3e4A5f4C2g2B3h1A2i7D0j7A0k5B0k5C0l3A0l3D0",
-                "c3A3d1A3e1C4f4B3g6B2h5D0i5A0j2B0j3C0k2C0k2D0l8C0l8D0",
-                "c1B2d7B1e1C6f6A0g4A5h1A0j3B0j7D0k1C0k1D0l6B0l1A0",
-                "c1B2d4C4e1C3f4A0g6A1h1A0j3B0j5C0",
-                "c5A2d7B7e5B0f1A6g3A7h5D0i1B0j7A0j7B0k1A0k2B0l3B0l4C0",
-                "c2D0d7B1e1A3f2A2g4B2h4A2i7B0j3D0j7D0k3A0l6A0",
-                "c2D0d1A0e5B4f1B3g3A3h5A0k1B0k6B0l5A0l3C0",
-                "c5C0d3A6e7A1f3C4g1B3h6D0j4B0k8B0k5D0l3C0",
-                "c3A0d1A3e5C2f1C4g6B7h4B0k3D0k5D0l6C0",
-                "d2A6e2C3f3C2g4A7h6D0i6B0j2B0j1C0k3C0l4B0l5C0",
-                "d1B3e4A5f4C2g2B3h1A2i7D0j7A0k5B0k5C0l3A0l3D0",
-                "d1A3e1C4f4B3g6B2h5D0i5A0j2B0j3C0k2C0k2D0l8C0l8D0",
-                "d7B1e1C6f6A0g4A5h1A0j3B0j7D0k1C0k1D0l6B0l1A0",
-                "d4C4e1C3f4A0g6A1h1A0j3B0j5C0",
-                "d7B7e5B0f1A6g3A7h5D0i1B0j7A0j7B0k1A0k2B0l3B0l4C0",
-                "d7B1e1A3f2A2g4B2h4A2i7B0j3D0j7D0k3A0l6A0",
-                "d1A0e5B4f1B3g3A3h5A0k1B0k6B0l5A0l3C0",
-                "d3A6e7A1f3C4g1B3h6D0j4B0k8B0k5D0l3C0",
-                "d1A3e5C2f1C4g6B7h4B0k3D0k5D0l6C0",
-                "e2C3f3C2g4A7h6D0i6B0j2B0j1C0k3C0l4B0l5C0",
-                "e4A5f4C2g2B3h1A2i7D0j7A0k5B0k5C0l3A0l3D0",
-                "e1C4f4B3g6B2h5D0i5A0j2B0j3C0k2C0k2D0l8C0l8D0",
-                "e1C6f6A0g4A5h1A0j3B0j7D0k1C0k1D0l6B0l1A0",
-                "e1C3f4A0g6A1h1A0j3B0j5C0",
-                "e5B0f1A6g3A7h5D0i1B0j7A0j7B0k1A0k2B0l3B0l4C0",
-                "e1A3f2A2g4B2h4A2i7B0j3D0j7D0k3A0l6A0",
-                "e5B4f1B3g3A3h5A0k1B0k6B0l5A0l3C0",
-                "e7A1f3C4g1B3h6D0j4B0k8B0k5D0l3C0",
-                "e5C2f1C4g6B7h4B0k3D0k5D0l6C0",
-                "c1A3d2A6e2C3f3C2g4A7h6D0j2B0j1C0k3C0l4B0l5C0",
-                "a7A7b6A5c1A3d2A6e2C3f3C2g4A7h6D0",
-                "a6A0b6B0c1A3d2A6e2C3f3C2g4A7h6D0",
-                "a6B0b6C0c5A2e4A5f4C2h1A2i7D0j7A0k5B0k5C0l3A0",
-                "a6B0b6C0c5A2d1B3e4A5f4C2g2B3h1A2",
-                "a6B0b6C0c5A2d1B5e4A5f4C2g2B5h1A2"
-        };
-        int radius = strs.length;
-        int number = rand.nextInt(radius);
-        String startpoints = strs[number];
-        return startpoints;
+        String startboard = obj.difficultyStorage.get(rand.nextInt(75))[0];
+
+        return startboard;
     }
 
 
@@ -523,6 +485,27 @@ public class Board extends Application {
     // FIXME Task 10: Implement hints
     public static void hint() {
 
+
+    }
+
+    //return next piece
+    public static String nextpiece(String placement, Integer difficult){
+        SolutionData solutions = new SolutionData();
+        String solutionboard = solutions.difficultyStorage.get(difficult)[1];
+        Set<String> solu = turnintoset(solutionboard);
+        Set<String> placeboard = turnintoset(placement);
+
+        for (String pi : placeboard){
+            if (solu.contains(pi)){
+                solu.remove(pi);
+            }
+        }
+
+        Iterator next = solu.iterator();
+        String nextpi = (String) next.next();
+
+        return nextpi;
+
     }
 
     //turn a String into a pi set
@@ -540,58 +523,6 @@ public class Board extends Application {
         }
 
         return placesp;
-    }
-
-    //return a set of String which represents pieces that already placed (contains no pegs)
-    public static Set<String> placedPieces(String placement) {
-        Set<String> placesp = turnintoset(placement);
-
-        //remove pegs
-        Set<String> placepiece = new HashSet<>();
-        for (String piece : placesp) {
-            if (piece.charAt(0) <= (char) 104) {
-                placepiece.add(piece);
-            }
-        }
-
-        return placepiece;
-
-    }
-
-    //return a set of pieces help users towards one of the solutions
-    public static Set<String> nextpieces(String placement, String disolution) {
-        Set<String> placedpieces = placedPieces(placement);
-        Set<String> soluset = turnintoset(disolution);
-
-        for (String pi : placedpieces) {
-            if (soluset.contains(pi)) {
-                soluset.remove(pi);
-            }
-        }
-
-        return soluset;
-    }
-
-    // return one piece
-    public static String one_help_piece(String placement) {
-        TwistGame t = new TwistGame();
-        String[] solutions = t.getSolutions(placement);
-        int numofsolutions = solutions.length;
-        Set<String> nextpi = new HashSet<>();
-
-        for (int i = 0; i < numofsolutions; i ++){
-            Set<String> solusets = nextpieces(placement, solutions[i]);//for different solutions
-            for (String p : solusets){
-                if (!nextpi.contains(p)){
-                    nextpi.add(p);
-                }
-            }
-        }
-        Iterator<String> obj = nextpi.iterator();
-
-        String pi = obj.next();
-
-        return pi;
     }
 
 
