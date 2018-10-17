@@ -49,6 +49,11 @@ public class StartingBoard extends TwistGame{
         storage.put(solution,pegs);
         return pegs;
     }
+    /* TO initialise the storage at the start of the game */
+    private void initialiseStorage(){
+        pieceCreator();
+
+    }
 
 
 

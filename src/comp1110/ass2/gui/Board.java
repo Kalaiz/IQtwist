@@ -38,7 +38,7 @@ public class Board extends Application {
     5)Task 5 resetting the board
     6)Removal of extra board
     7)PPT
-    8)Code cleanup
+    8)Code cleanup & Fix Warnings
     */
 
 
@@ -188,9 +188,9 @@ public class Board extends Application {
         eventPiece(String pieceInfo) {
             super(pieceInfo.charAt(0));
             gridCol = Integer.parseInt(pieceInfo.charAt(1) + "") - 1;
-            System.out.println(gridCol);
+            //System.out.println(gridCol);
             gridRow = pieceInfo.charAt(2) - 65;
-            System.out.println(gridRow);
+            //System.out.println(gridRow);
             int orientation = Integer.parseInt(pieceInfo.charAt(3) + "");
             flip = (orientation > 3);
             if (flip) {
@@ -261,10 +261,6 @@ public class Board extends Application {
                     //Piece G is an exception as it does not cause any offset error
                     double imgCornerx = ((rotate / 90) % 2 == 0 || pieceType == 103) ? holder.getX() : holder.getX() + holder.getFitWidth() / 2.5;
                     double imgCornery = ((rotate / 90) % 2 == 0 || pieceType == 103) ? holder.getY() : cornerY - holder.getFitWidth() / 2.25;
-                    System.out.println("Height of image " + holder.getFitHeight() + " width of image " + holder.getFitWidth());
-                    System.out.println("X is " + (drag.getSceneX()) + " Y is  " + (drag.getSceneY()) + " ");
-                    System.out.println("getX is : " + holder.getX() + " getY is: " + holder.getY());
-                    System.out.println("imgCornerx: " + imgCornerx + "  imgcY:  " + imgCornery);
                     holder.setOnMouseReleased(released -> {
                         //not exactly the coordinates of the grid as to allow flexibility for the user
                         if (imgCornerx < 680 || imgCornerx > 1080 || imgCornery > 200 || imgCornery < 0) {
@@ -287,7 +283,6 @@ public class Board extends Application {
             int rs = ((rotate / 90) % 2 == 0) ? rowspan : colspan;
             int cs = ((rotate / 90) % 2 == 0) ? colspan : rowspan;
             int translateX = ((rotate / 90) % 2 == 0) ? 0 : -(int) (holder.getFitWidth() - holder.getFitHeight()) / 2;
-            System.out.println("Translation value  " + translateX);
             //to balance the offset created upon setting the image  on the grid
             holder.setTranslateX(translateX);
             int[] csrs = {cs, rs};
@@ -298,13 +293,12 @@ public class Board extends Application {
         void setOnGrid(double positionalX, double positionalY) {// Image's top left corner.
             // 50 - width/height of each grid
             // 695 & 5 - the approximate starting co-ordinates  of the grid
-            System.out.println("X: " + positionalX + "  Y: " + positionalY);
             gridCol = (int) (positionalX - 695) / 50;
             gridRow = (int) (positionalY - 5) / 50;
             int[] csrs = imgModifier();
             decodePieces();//Converting available data into piece encoding
             gameState += pieceInfo;//Concatenating the piece encoding into the game String
-            System.out.println(gameState);
+            //System.out.println(gameState);
             if (game.isPlacementStringValid(gameState)) {
                 grid.add(holder, gridCol, gridRow, csrs[0], csrs[1]);
             } else {
@@ -313,8 +307,6 @@ public class Board extends Application {
                 //updating the gameState string if the position is not valid.
                 gameState = gameState.substring(0, gameState.length() - 4);
             }
-            System.out.println(rotate);
-            System.out.println("GridCol: " + gridCol + " GridRow: " + gridRow + " RowSpan: " + csrs[1] + " ColSpan: " + csrs[0]);
         }
     }
 
@@ -348,7 +340,7 @@ public class Board extends Application {
     private void newGame() {
         Viewer access = new Viewer();
         TwistGame t = new TwistGame();
-        System.out.println(gamestart);
+        //System.out.println(gamestart);
         if (gamestart) {
             forceReset();//clear the board and pieces using a seperate function
         }
@@ -364,7 +356,7 @@ public class Board extends Application {
         for (int m = 0; m < unplaced.length(); m++) {
             pieces.getChildren().add(new eventPiece(unplaced.charAt(m)));
         }
-        System.out.println(startingBoard);
+        //System.out.println(startingBoard);
         List<String> listOfPieces = t.getFormalPieces(startingBoard);
         for (int i = 0; i < listOfPieces.size(); i++) {
             pieces.getChildren().add(new eventPiece(listOfPieces.get(i)));
@@ -401,10 +393,10 @@ public class Board extends Application {
             gameState = startingBoard;
             Object[] arr = pieces.getChildren().toArray();//casue of concurrentModificationerror
             for (Object obj : arr) {
-                System.out.println((((eventPiece) obj).pieceInfo));
+               // System.out.println((((eventPiece) obj).pieceInfo));
                 if (((((eventPiece) obj).pieceInfo)) != null) {
                     if (!startingBoard.contains(((eventPiece) obj).pieceInfo)) {
-                        System.out.println(((eventPiece) obj).pieceInfo);
+                        //System.out.println(((eventPiece) obj).pieceInfo);
                     resetPiece((eventPiece )obj);
                     }
                 }
@@ -509,7 +501,7 @@ public class Board extends Application {
             }
             i += 4;
         }
-        System.out.println(numofpiece);
+        //System.out.println(numofpiece);
         if (numofpiece >= 8){
             makeCompletion();
 
@@ -530,6 +522,7 @@ public class Board extends Application {
         *           problem: find effecive way of finding n pieces & pegs from a collection
         *  when the user press the "new game" button, accroding to the diff level, run the alg over solutions
         */
+
         primaryStage.getIcons().add(new Image((Viewer.class.getResource(URI_BASE + "e.png").toString())));
         Scene scene = new Scene(root, DISPLAY_WIDTH, DISPLAY_HEIGHT);
         createBoard();
