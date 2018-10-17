@@ -2,7 +2,7 @@ package comp1110.ass2;
 
 import java.util.*;
 
-public class SolutionData extends TwistGame{
+public class StartingBoard extends TwistGame{
 
     private static List<String> sol = new ArrayList<>();
     private static  HashMap<String, String> storage=new HashMap<>();
@@ -124,7 +124,7 @@ public class SolutionData extends TwistGame{
      * 3: Place 3 or 4 pegs on board which have the most possibilities but lead to the single answer
      * pegnos,piecenos,pegnos,piecenos...
      * {6,4,5,3,4,2};
-    /*In reference to Difficulty level choose a certain state from SolutionData */
+    /*In reference to Difficulty level choose a certain state from StartingBoard */
 
     public static void main(String[] args) {
   /*      Pieces.initialisehms();

@@ -1,7 +1,7 @@
 package comp1110.ass2.gui;
 
 
-import comp1110.ass2.SolutionData;
+import comp1110.ass2.StartingBoard;
 import comp1110.ass2.TwistGame;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
@@ -15,15 +15,12 @@ import javafx.scene.control.Slider;
 import javafx.scene.effect.Glow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
@@ -34,12 +31,10 @@ import java.util.stream.IntStream;
 
 public class Board extends Application {
     /*ToDo:
-    1)Task 11 & 8
-    2)Upon pressing backspace the previously placed piece must be obtained back.
-       *gameState must be updated respectively
-    3)Solutions must be created before the user starts to place the pieces:For task 10
-    4)Add background image - beware of which computer you are going to use.(preferably dimension of HD (1280x 640))
-      OR use javafx itself(Most probably).
+    1)Link task 11 to task 7
+    2Task 10
+    3)loading Screen
+    4)Set image background
     5)Task 5 resetting the board
     6)Removal of extra board
     7)PPT
@@ -531,7 +526,7 @@ public class Board extends Application {
         *  getsolutions()
         *  pegAdder()   -->  add to hashMap
         *  add a loading screen until hashMap is initialized
-        *  difficulty level alg (which should be created in SolutionData.java, returns a starting board string)
+        *  difficulty level alg (which should be created in StartingBoard.java, returns a starting board string)
         *           problem: find effecive way of finding n pieces & pegs from a collection
         *  when the user press the "new game" button, accroding to the diff level, run the alg over solutions
         */
@@ -551,7 +546,7 @@ public class Board extends Application {
 
   /*  // FIXME Task 8: Implement starting placements
     public static String makeBoard() {
-//        SolutionData obj = new SolutionData();
+//        StartingBoard obj = new StartingBoard();
 //        Random rand = new Random();
 //        String startboard = obj.difficultyStorage.get(rand.nextInt(75))[0];
 
@@ -651,7 +646,7 @@ public class Board extends Application {
 
     //return next piece
     public static String nextpiece(String placement, Integer difficult){
-        SolutionData solutions = new SolutionData();
+        StartingBoard solutions = new StartingBoard();
         String solutionboard = solutions.difficultyStorage.get(difficult)[1];
         Set<String> solu = turnintoset(solutionboard);
         Set<String> placeboard = turnintoset(placement);
