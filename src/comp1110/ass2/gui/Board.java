@@ -685,25 +685,7 @@ public class Board extends Application {
 
     }
 
-    //return next piece
-    public static String nextpiece(String placement, Integer difficult){
-        StartingBoard solutions = new StartingBoard();
-        String solutionboard = solutions.difficultyStorage.get(difficult)[1];
-        Set<String> solu = turnintoset(solutionboard);
-        Set<String> placeboard = turnintoset(placement);
 
-        for (String pi : placeboard){
-            if (solu.contains(pi)){
-                solu.remove(pi);
-            }
-        }
-
-        Iterator next = solu.iterator();
-        String nextpi = (String) next.next();
-
-        return nextpi;
-
-    }
 
     //turn a String into a pi set
     public static Set<String> turnintoset(String placement) {
