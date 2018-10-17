@@ -16,7 +16,6 @@ public class SolutionData extends TwistGame{
     private static int[] pegDetails={1,2,2,2};
                                               /*pgnos,piecenos,pgnos,piecenos...*/;
 
-
     /**Gets a solution and places pegs where ever possible and returns a board State string filled with pegs*
      * @param solution - Complete solution string from task 9 codes
      */
