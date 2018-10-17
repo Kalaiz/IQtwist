@@ -20,6 +20,10 @@ import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import java.util.*;
 import java.util.stream.IntStream;
@@ -45,6 +49,8 @@ public class Board extends Application {
     private static final int DISPLAY_WIDTH = 1280;
     private static final int DISPLAY_HEIGHT = 649;
     private static final String URI_BASE = "assets/";
+
+    private final Text completionText = new Text("Well done!");
 
     /*Game object*/
     TwistGame game = new TwistGame();
@@ -423,6 +429,39 @@ public class Board extends Application {
 
     }
 
+    /*
+     *Create the message to be displayed when the player completes the game
+     */
+    private void makeCompletion(){
+        completionText.setFill(Color.BLACK);
+        completionText.setFont(Font.font("Arial", FontWeight.EXTRA_BOLD, 80));
+        completionText.setLayoutX(DISPLAY_WIDTH/3);
+        completionText.setLayoutY(DISPLAY_HEIGHT/2);
+        completionText.setTextAlignment(TextAlignment.CENTER);
+        completionText.toFront();
+        completionText.setOpacity(1);
+        root.getChildren().add(completionText);
+    }
+
+    private void showCompletion(){
+        int length = gameState.length();
+        int numofpi = length/4;
+        int numofpiece = 0;
+        int i = 0;
+
+        while (i < length){
+            if (gameState.substring(i).charAt(0) < (char)105){
+                numofpiece ++;
+            }
+            i += 4;
+        }
+
+        System.out.println(numofpiece);
+        if (numofpiece == 8){
+            makeCompletion();
+        }
+    }
+
     /*Start of JavaFX operations */
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -434,6 +473,7 @@ public class Board extends Application {
         root.getChildren().add(board);
         root.getChildren().add(pieces);
         makeControls();
+        showCompletion();
         primaryStage.setScene(scene);
         primaryStage.show();
     }
@@ -444,6 +484,8 @@ public class Board extends Application {
         SolutionData obj = new SolutionData();
         Random rand = new Random();
         String startboard = obj.difficultyStorage.get(rand.nextInt(75))[0];
+
+        //String startboard = "b6A7c1A3d2A6e2C3f3C2g4A7h6D0i6B0j2B0j1C0k3C0l4B0l5C0";
 
         return startboard;
     }

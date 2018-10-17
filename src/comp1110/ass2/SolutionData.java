@@ -8,44 +8,45 @@ public class SolutionData extends TwistGame{
     private static List<Character> availPiece=new ArrayList<>();
     private static  List<String> storage=new ArrayList<>(25);
     /*String[0]=startingBoardPlacement; String[1]=Solution */
-    private static HashMap<Integer,String[]> difficultyStorage=new HashMap<>();
+    public static HashMap<Integer,String[]> difficultyStorage=new HashMap<>();
     private static String[] initiator = {"a6B0b6C0c5A2d1B5e4A5f4C2g2B5h1A2",
-                                         "a1A6b1B1c2D0d3B6e7A3f7B1g5B7h4A0",
-                                         "a7A7b3B1c1A0d5A3e1C2f1B0g6B7h4D0",
-                                         "a1C6b6A4c2D0d7B1e1A3f2A2g4B2h4A0"};
+            "a1A6b1B1c2D0d3B6e7A3f7B1g5B7h4A0",
+            "a7A7b3B1c1A0d5A3e1C2f1B0g6B7h4D0",
+            "a1C6b6A4c2D0d7B1e1A3f2A2g4B2h4A0"};
     private static int[] pegDetails={1,2,2,2};
-                                              /*pgnos,piecenos,pgnos,piecenos...*/
+    /*pgnos,piecenos,pgnos,piecenos...*/
     private static int[] difficultyLevelDetails={6,4,5,3,4,2};
+
 
 
     /**Gets a solution and places pegs where ever possible and returns a board State string filled with pegs*
      * @param solution - Complete solution string from task 9 codes
      */
     private static String pegAdder(String solution){
-      boardcreator(solution,'a');
-      String[][] board = gobj.getaboard();
-      for(int row=0;row<board.length;row++){
-          for(int col =0;col<board[0].length;col++){
-                 if(board[row][col].startsWith("o")){
-                     int pgno=0;
+        boardcreator(solution,'a');
+        String[][] board = gobj.getaboard();
+        for(int row=0;row<board.length;row++){
+            for(int col =0;col<board[0].length;col++){
+                if(board[row][col].startsWith("o")){
+                    int pgno=0;
                     switch(board[row][col]){
                         case "or":
-                          break;
+                            break;
                         case "ob":
-                           pgno=1;
+                            pgno=1;
                             break;
                         case "og":
-                           pgno=2;
+                            pgno=2;
                             break;
                         case "oy":
                             pgno=3;
                     }
-                     if(pegDetails[pgno]>0){
-                         solution+=((char)(105+pgno))+Integer.toString((col+1))+((char)(row+65))+"0";
-                         --pegDetails[pgno];
-                     }}
-          }
-      }
+                    if(pegDetails[pgno]>0){
+                        solution+=((char)(105+pgno))+Integer.toString((col+1))+((char)(row+65))+"0";
+                        --pegDetails[pgno];
+                    }}
+            }
+        }
         return solution;
     }
 
@@ -105,7 +106,7 @@ public class SolutionData extends TwistGame{
         String[] str = getSolutions(twoPieceBoard);
         for (int i = 0; i < str.length; i++){
             if(!(storage.size()>25)){
-            storage.add(str[i]);}
+                storage.add(str[i]);}
             else{
                 break;
             }
