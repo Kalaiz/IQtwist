@@ -5,9 +5,7 @@ import java.util.*;
 public class SolutionData extends TwistGame{
 
     private static List<String> sol = new ArrayList<>();
-    private static List<Character> availPiece=new ArrayList<>();
     private static  HashMap<String, String> storage=new HashMap<>();
-    /*String[0]=startingBoardPlacement; String[1]=Solution */
     public static HashMap<Integer,String[]> difficultyStorage=new HashMap<>();
     private static String[] initiator = {"a6B0b6C0c5A2d1B5e4A5f4C2g2B5h1A2",
                                          "a1A6b1B1c2D0d3B6e7A3f7B1g5B7h4A0",
@@ -53,9 +51,6 @@ public class SolutionData extends TwistGame{
     }
 
 
-    private void updatePieceDetails(){
-
-    }
 
     /*Creates a board String such that it consist of 2 pieces
      * Produces the key for the Hashmap - storage*/
@@ -87,12 +82,14 @@ public class SolutionData extends TwistGame{
 
 
    /*gives the difficulty level and a random solution string, find the values of pegs in hashMap*/
+   // FIXME Task 11: The output must be sorted so the get 1 solution from getSolutions
     private static String difficultyLevel(int level, String[] solution){
 
         Random r = new Random();
+        int ndv=r.nextInt(2);//ndv-non-deterministic value
         String startPlacement = "";
-        int pieceNum = 0;
-        int pegNum = 0;
+        int pieceNum ;
+        int pegNum ;
         int solNum = r.nextInt(sol.size());
         String pegs = pegAdder(solution[solNum]);
 
@@ -106,11 +103,11 @@ public class SolutionData extends TwistGame{
         Collections.shuffle(pie);
         Collections.shuffle(peg);
 
-        for (int i = 0; i < pieceNum; i++) {
+        for (int i = 0; i < pieceNum+ndv; i++) {
             startPlacement += pie.get(i);
         }
 
-        for (int j = 0; j < pegNum; j++) {
+        for (int j = 0; j < pegNum+ndv; j++) {
             startPlacement += peg.get(j);
         }
 
@@ -119,7 +116,7 @@ public class SolutionData extends TwistGame{
     }
 
 
-    // FIXME Task 11: Generate interesting starting placements
+
     /*
      * 3 difficulty levels:
      * 1: Place 6 or 7 pegs on board which may lead to a single solution, because pegs limited the color of pieces and may have fixed solutions
@@ -128,25 +125,22 @@ public class SolutionData extends TwistGame{
      * pegnos,piecenos,pegnos,piecenos...
      * {6,4,5,3,4,2};
     /*In reference to Difficulty level choose a certain state from SolutionData */
-    /**Converts the available data into respective difficulty levels
-     * Available Series:
-     * 0-25 -- Level 1
-     * 25-50 -- Level 2
-     * 50-75 -- Level 3
-     * Each number is the key for difficultyStorage and it will have a starting board string  as a value.
-     */
 
     public static void main(String[] args) {
+  /*      Pieces.initialisehms();
+        System.out.println(getSolutions("b6C0c5A0h1A0i6B0j4C0j6A0l1A0l4A0").length);*/
+        for (int m = 0; m < 10; m++) {
+            System.out.println(pieceCreator());
+            ;
+            String[] s = new String[sol.size()];
+            //pegAdder();
+            for (int i = 0; i < s.length; i++) {
+                s[i] = sol.get(i);
+            }
+            String p = difficultyLevel(0, s);
+            System.out.println(p);
 
-        System.out.println(pieceCreator());;
-        String[] s = new String[sol.size()];
-        //pegAdder();
-        for (int i = 0; i < s.length; i++) {
-            s[i] = sol.get(i);
         }
-        String p = difficultyLevel(2,s);
-        System.out.println(p);
-
     }
 
 }
