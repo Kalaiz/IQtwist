@@ -467,10 +467,13 @@ public class Board extends Application {
     private void makeControls() {
         Button newGame = new Button("New Game");
         Button reset = new Button("Reset");
+        Button random = new Button("Random");
         reset.setLayoutX(DISPLAY_WIDTH / 4 + 30);
         reset.setLayoutY(DISPLAY_HEIGHT - 45);
         newGame.setLayoutX(DISPLAY_WIDTH / 4 + 100);
         newGame.setLayoutY(DISPLAY_HEIGHT - 45);
+        random.setLayoutX(DISPLAY_WIDTH/4 + 200);
+        random.setLayoutY(DISPLAY_HEIGHT - 45);
         reset.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
@@ -485,9 +488,16 @@ public class Board extends Application {
 
             }
         });
+        random.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                RandomStart();
+            }
+        });
 
         controls.getChildren().add(newGame);
         controls.getChildren().add(reset);
+        controls.getChildren().add(random);
         difficulty.setMin(0);
         difficulty.setMax(2);
         difficulty.setValue(0);
@@ -618,7 +628,7 @@ public class Board extends Application {
     }*/
 
     // TESTING REASONS
-    public static String makeBoard() {
+    public static String RandomStart() {
         Random rand = new Random();
         int level = rand.nextInt(3);
         StartingBoard start = new StartingBoard();
