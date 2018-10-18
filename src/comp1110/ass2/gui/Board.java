@@ -369,15 +369,6 @@ public class Board extends Application {
     }
 
 
-    /*Creates all required pieces -- for the start of the game*/
-    private void createPieces() {
-        pieces.getChildren().clear();
-        for (char ch = 'a'; ch <= 'h'; ch++) {//for only pieces not for pegs as pegs can't be placed by players
-            pieces.getChildren().add(new eventPiece(ch));
-        }
-    }
-
-
 
     private void forceReset() {//Used for new game
         grid = new GridPane();
@@ -593,7 +584,6 @@ public class Board extends Application {
      */
     private void showCompletion(){
         int length = gameState.length();
-        int numofpi = length/4;
         int numofpiece = 0;
         int i = 0;
 
@@ -603,7 +593,6 @@ public class Board extends Application {
             }
             i += 4;
         }
-        //System.out.println(numofpiece);
         if (numofpiece >= 8){
             makeCompletion();
 
@@ -632,12 +621,10 @@ public class Board extends Application {
 
     private String diffLevel(double level){
         startingBoard = sb.difficultyLevel(level);
-
         return sb.sol.get(solNum);
     }
 
 
-   // FIXME Task 8: Implement starting placements
 
     /*
      * select a random valid start placement from the dictionary
@@ -657,23 +644,17 @@ public class Board extends Application {
     use Blur effect for that certain piece (using setEffect) Use task 9 code for the solutions.*/
     // FIXME Task 10: Implement hints
     public static String  hint() {
-
         String hint = "";
-
         if (specificSol.contains(gameState) && specificSol.length() > gameState.length()) {
-
             Random r = new Random();
-
             //get the gamestate string & specific solutionstring and convert them into lists, \
             // resort them to find the unplaced strings in specificSolL
             List<String> gameStateL = getFormalPieces(gameState.substring(0,specificSol.length()));
             Collections.sort(gameStateL);
             List<String> specificSolL = getFormalPieces(specificSol);
             Collections.sort(specificSolL);
-
             //randomly choose one piece in specificSolL which is shown as the hint
             int index = r.nextInt(specificSolL.size() - gameStateL.size()) + gameStateL.size();
-            
            return specificSolL.get(index);
         }
   return null;  }
