@@ -88,7 +88,7 @@ public class Board extends Application {
     private Glow g2 = new Glow();
 
     /*States whether game has started or not */
-    private static boolean gamestart;
+    private static boolean gamerunning;
 
     private static StartingBoard sb = new StartingBoard();
 
@@ -273,6 +273,7 @@ public class Board extends Application {
 
         eventPiece(char piece) {
             super(piece);
+
             flip = false;//Declaring
             holder.setOnScroll(scroll -> {//Rotation on scroll
                 if (!grid.getChildren().contains(holder)) {//If grid does not contain the piece .
@@ -309,6 +310,7 @@ public class Board extends Application {
 
             holder.setOnMouseDragged(drag -> {
                 if (!grid.getChildren().contains(holder)) {
+                    holder.toFront();
                     double cornerX = drag.getSceneX();
                     double cornerY = drag.getSceneY();
                     //Divide by 2 so to pull it by the center & using getScene for relative positioning
@@ -377,9 +379,6 @@ public class Board extends Application {
             eventPiece g = (eventPiece) im.next();
             g.delete();//Deleting the images formed by eventpieces
         }
-        //pieces.getChildren().clear();//clears all the pieces in the node .
-
-
     }
 
 
@@ -390,13 +389,11 @@ public class Board extends Application {
     private void newGame() {
         Viewer access = new Viewer();
         TwistGame t = new TwistGame();
-        //System.out.println(gamestart);
-        if (gamestart) {
-            forceReset();//clear the board and pieces using a seperate function
+        if (gamerunning) {
+            forceReset();//clear the board and pieces using a separate function
         }
-        gamestart = true;
+        gamerunning = true;
         specificSol = diffLevel(difficulty.getValue());
-        //System.out.println(diffLevel(difficulty.getValue()));
         gameState = startingBoard;
         String placed = access.returner(startingBoard, 0);
         String unplaced = "";
@@ -406,8 +403,7 @@ public class Board extends Application {
         }//converting to String- not necessary
         for (int m = 0; m < unplaced.length(); m++) {
             pieces.getChildren().add(new eventPiece(unplaced.charAt(m)));
-        }
-        //System.out.println(startingBoard);
+        };
         List<String> listOfPieces = t.getFormalPieces(startingBoard);
         for (int i = 0; i < listOfPieces.size(); i++) {
             pieces.getChildren().add(new eventPiece(listOfPieces.get(i)));
@@ -444,12 +440,10 @@ public class Board extends Application {
     private void resetgame() {
         try {
             gameState = startingBoard;
-            Object[] arr = pieces.getChildren().toArray();//casue of concurrentModificationerror
+            Object[] arr = pieces.getChildren().toArray();//cause of concurrentModificationerror
             for (Object obj : arr) {
-               // System.out.println((((eventPiece) obj).pieceInfo));
                 if (((((eventPiece) obj).pieceInfo)) != null) {
                     if (!startingBoard.contains(((eventPiece) obj).pieceInfo)) {
-                        //System.out.println(((eventPiece) obj).pieceInfo);
                     resetPiece((eventPiece )obj,false);
                     }
                 }
@@ -574,8 +568,7 @@ public class Board extends Application {
      * Authorship: Yuqing Zhang
      */
     private void hideCompletion(){
-        completionText.toBack();
-        completionText.setOpacity(0);
+        root.getChildren().remove(completionText);
     }
 
     /*
@@ -606,7 +599,7 @@ public class Board extends Application {
         primaryStage.setTitle("IQ-twist");//sets the title name on the bar
         primaryStage.getIcons().add(new Image((Viewer.class.getResource(URI_BASE + "e.png").toString())));
         Scene scene = new Scene(root, DISPLAY_WIDTH, DISPLAY_HEIGHT);
-        if(!gamestart){
+        if(!gamerunning){
             sb.pegAdder(sb.pieceCreator());
           }
         createBoard();
@@ -616,6 +609,28 @@ public class Board extends Application {
         root.getChildren().add(boardgrid);
         root.getChildren().add(pieces);
         makeControls();
+        scene.setOnKeyPressed(mk->{
+            if(mk.getCode()== KeyCode.H){
+                String hintpiece=hint();
+                System.out.println(hintpiece);
+                if(hintpiece!=null){
+                   /* System.out.println(hintpiece);
+                    eventPiece p = new eventPiece(hintpiece);
+                    p.setOpacity(0.4);
+                    root.getChildren().add(p);
+                    long startTime = System.currentTimeMillis();
+                    long endTime = System.currentTimeMillis();
+                    while((endTime-startTime)/1000<4){
+                        if(endTime-startTime%2==0){ p.setEffect(g1);}
+                        else{p.setEffect(g2);}
+                        endTime = System.currentTimeMillis();
+                    }
+                    resetPiece(p,true);
+                    root.getChildren().remove(p);*/
+
+                }
+            }
+        });
         primaryStage.setScene(scene);
         primaryStage.show();
     }
@@ -646,17 +661,31 @@ public class Board extends Application {
     // FIXME Task 10: Implement hints
     public static String  hint() {
         String hint = "";
-        if (specificSol.contains(gameState) && specificSol.length() > gameState.length()) {
+        System.out.println(gameState);
+        System.out.println(specificSol);
+
+            System.out.println("In");
             Random r = new Random();
             //get the gamestate string & specific solutionstring and convert them into lists, \
             // resort them to find the unplaced strings in specificSolL
-            List<String> gameStateL = getFormalPieces(gameState.substring(0,specificSol.length()));
-            Collections.sort(gameStateL);
-            List<String> specificSolL = getFormalPieces(specificSol);
-            Collections.sort(specificSolL);
+            String[] gameStateA = getFormalPieces(gameState.substring(0,specificSol.length())).stream().map(str->(String)str).toArray(String[]::new);
+       // Collections.sort(g);
+            for(String pieceOrpeg:gameStateA){
+                if((int)pieceOrpeg.charAt(0)<105){
+                    pieceOrpeg="";//Removing pegs
+                }
+            }
+        List<String> specificSolL = getFormalPieces(specificSol);
+        if (specificSolL.size() > gameStateA.length) {
+
+           // for(String check:gameStateL){
+             //   System.out.println(check);
+          //  }
+
+
             //randomly choose one piece in specificSolL which is shown as the hint
-            int index = r.nextInt(specificSolL.size() - gameStateL.size()) + gameStateL.size();
-           return specificSolL.get(index);
+           // int index = r.nextInt(specificSolL.size() - gameStateL.size()) + gameStateL.size();
+           //return specificSolL.get(index);
         }
   return null;  }
 
