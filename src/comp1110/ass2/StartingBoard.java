@@ -15,8 +15,14 @@ public class StartingBoard extends TwistGame{
                                          "a1A6b1B1c2D0d3B6e7A3f7B1g5B7h4A0",
                                          "a7A7b3B1c1A0d5A3e1C2f1B0g6B7h4D0",
                                          "a1C6b6A4c2D0d7B1e1A3f2A2g4B2h4A0"};
-    private static final int[] pegDetails={1, 2, 2, 2};
-    /*pgnos,piecenos,pgnos,piecenos...*/
+    private static final int[] pegDetails={1, 2, 2, 2};//dtat storage for Limitation on the number of pegs
+    /*
+     * 3 difficulty levels:
+     * 1: Place 6 or 7 pegs / 4 or 5 pieces on board which may lead to a single solution, because pegs limited the color of pieces and may have fixed solutions
+     * 2: Place 5 or 6 pegs/ 3 or 4 pieces on board which may have more possibilities but lead to a single solution
+     * 3: Place 3 or 4 pegs /2 or 3 pieces on board which have the most possibilities but lead to the single answer
+     *
+     *                                                pgnos,piecenos,pgnos,piecenos...*/
     private static final int[] difficultyLevelDetails={6,4,5,3,4,2};
 
 
@@ -54,7 +60,7 @@ public class StartingBoard extends TwistGame{
         return pegs;
     }
 
-    /*Creates a boardString such that it consist of 2 pieces
+    /**Creates a boardString such that it consist of 2 pieces
      * Produces the key for the Hashmap - storage
      * author: Lingyu Xia*/
     public static String pieceCreator(){
@@ -82,7 +88,7 @@ public class StartingBoard extends TwistGame{
     }
 
 
-    /*gives the difficulty level and a random solution string, find the values of pegs in hashMap
+    /**gives the difficulty level and a random solution string, find the values of pegs in hashMap
     * author:Lingyu Xia*/
     public static String difficultyLevel(double level){
         Random r = new Random();
@@ -113,28 +119,8 @@ public class StartingBoard extends TwistGame{
 
 
 
-    /*
-     * 3 difficulty levels:
-     * 1: Place 6 or 7 pegs on board which may lead to a single solution, because pegs limited the color of pieces and may have fixed solutions
-     * 2: Place 5 or pegs on board which may have more possibilities but lead to a single solution
-     * 3: Place 3 or 4 pegs on board which have the most possibilities but lead to the single answer
-     * pegnos,piecenos,pegnos,piecenos...
-     * {6,4,5,3,4,2};
-    /*In reference to Difficulty level choose a certain state from StartingBoard */
 
-    public static void main(String[] args) {
 
-        for (int m = 0; m < 10; m++) {
-            pieceCreator();
-            String[] s = new String[sol.size()];
-            //pegAdder();
-            for (int i = 0; i < s.length; i++) {
-                s[i] = sol.get(i);
-            }
-            String p = difficultyLevel(0);
-            System.out.println(p);
 
-        }
-    }
 
 }
