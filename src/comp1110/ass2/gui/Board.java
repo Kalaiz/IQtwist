@@ -319,7 +319,6 @@ public class Board extends Application {
                     });
                 }
             });
-
         }
 
 
@@ -354,6 +353,8 @@ public class Board extends Application {
                 //updating the gameState string if the position is not valid.
                 gameState = gameState.substring(0, gameState.length() - 4);
             }
+
+            showCompletion();
         }
     }
 
@@ -594,7 +595,6 @@ public class Board extends Application {
         //showCvb   ompletion();
         primaryStage.setScene(scene);
         primaryStage.show();
-        showCompletion();
     }
 
     private String diffLevel(double level){
