@@ -4,8 +4,8 @@ import java.util.*;
 
 public class StartingBoard extends TwistGame{
 
-    static int solNum;
-    static List<String> sol = new ArrayList<>();
+    public static int solNum;
+    public static List<String> sol = new ArrayList<>();
     private static HashMap<String, List<String>> storage=new HashMap<>();
     private static String[] initiator = {"a6B0b6C0c5A2d1B5e4A5f4C2g2B5h1A2",
                                          "a1A6b1B1c2D0d3B6e7A3f7B1g5B7h4A0",
@@ -19,7 +19,7 @@ public class StartingBoard extends TwistGame{
     /**Gets all pegs where ever possible and returns a board State string filled with pegs*
      * @param solution - Complete solution string from task 9 codes
      */
-    private static List<String> pegAdder(String solution){
+    public static List<String> pegAdder(String solution){
         boardcreator(solution,'a');
         String[][] board = gobj.getaboard();
         List<String> pegs = new ArrayList<>();
@@ -59,7 +59,7 @@ public class StartingBoard extends TwistGame{
 
     /*Creates a board String such that it consist of 2 pieces
      * Produces the key for the Hashmap - storage*/
-    private static String pieceCreator(){
+    public static String pieceCreator(){
 
         Random r = new Random();
         List<String> choPie = new ArrayList<>();
@@ -76,7 +76,7 @@ public class StartingBoard extends TwistGame{
         for (Object c : choPie){
             sb.append(c);
         }
-        System.out.println(sb.toString());
+        //System.out.println(sb.toString());
         String[] s = getSolutions(sb.toString());
         for (int i = 0; i < s.length; i++) {
             sol.add(s[i]);
@@ -88,7 +88,7 @@ public class StartingBoard extends TwistGame{
 
    /*gives the difficulty level and a random solution string, find the values of pegs in hashMap*/
    // FIXME Task 11: The output must be sorted so the get 1 solution from getSolutions
-    private static String difficultyLevel(int level, String[] solution){
+    public static String difficultyLevel(double level){
 
         Random r = new Random();
         int ndv=r.nextInt(2);//ndv-non-deterministic value
@@ -96,13 +96,13 @@ public class StartingBoard extends TwistGame{
         int pieceNum ;
         int pegNum ;
         solNum = r.nextInt(sol.size());
-        List<String> pegs = pegAdder(solution[solNum]);
+        List<String> pegs = pegAdder(sol.get(solNum));
 
         //get the pieces & pegs number by difficulty level
-        pegNum = difficultyLevelDetails[2 * level];
-        pieceNum = difficultyLevelDetails[2 * level + 1];
+        pegNum = difficultyLevelDetails[(int)(2 * level)];
+        pieceNum = difficultyLevelDetails[(int)(2 * level + 1)];
 
-        List<String> pie = getFormalPieces(solution[solNum]);
+        List<String> pie = getFormalPieces(sol.get(solNum));
 
         Collections.shuffle(pie);
         Collections.shuffle(pegs);
@@ -134,14 +134,13 @@ public class StartingBoard extends TwistGame{
   /*      Pieces.initialisehms();
         System.out.println(getSolutions("b6C0c5A0h1A0i6B0j4C0j6A0l1A0l4A0").length);*/
         for (int m = 0; m < 10; m++) {
-            System.out.println(pieceCreator());
-            ;
+            pieceCreator();
             String[] s = new String[sol.size()];
             //pegAdder();
             for (int i = 0; i < s.length; i++) {
                 s[i] = sol.get(i);
             }
-            String p = difficultyLevel(0, s);
+            String p = difficultyLevel(0);
             System.out.println(p);
 
         }

@@ -34,6 +34,9 @@ import javafx.stage.Stage;
 import java.util.*;
 import java.util.stream.IntStream;
 
+import static comp1110.ass2.StartingBoard.solNum;
+import static comp1110.ass2.TwistGame.getFormalPieces;
+
 public class Board extends Application {
     /*ToDo:
     1)Link task 11 to task 7
@@ -47,8 +50,7 @@ public class Board extends Application {
     9)PPT
     10)Code cleanup & Fix Warnings
     */
-
-
+    private static String specificSol = "";
     private static String gameState = "";//The game String
     private static String startingBoard = "";//The starting board string
     private static String solution="";
@@ -391,7 +393,8 @@ public class Board extends Application {
             forceReset();//clear the board and pieces using a seperate function
         }
         gamestart = true;
-        startingBoard = makeBoard();
+        specificSol = diffLevel(difficulty.getValue());
+        //System.out.println(diffLevel(difficulty.getValue()));
         gameState = startingBoard;
         String placed = access.returner(startingBoard, 0);
         String unplaced = "";
@@ -483,8 +486,8 @@ public class Board extends Application {
 
         controls.getChildren().add(newGame);
         controls.getChildren().add(reset);
-        difficulty.setMin(1);
-        difficulty.setMax(4);
+        difficulty.setMin(0);
+        difficulty.setMax(2);
         difficulty.setValue(0);
         difficulty.setShowTickLabels(true);
         difficulty.setShowTickMarks(true);
@@ -587,6 +590,14 @@ public class Board extends Application {
         primaryStage.show();
     }
 
+    private String diffLevel(double level){
+        StartingBoard sb = new StartingBoard();
+        sb.pegAdder(sb.pieceCreator());
+        startingBoard = sb.difficultyLevel(level);
+
+        return sb.sol.get(solNum);
+    }
+
 
   /*  // FIXME Task 8: Implement starting placements
     public static String makeBoard() {
@@ -652,7 +663,23 @@ public class Board extends Application {
     // FIXME Task 10: Implement hints
     public static void hint() {
 
+        String hint = "";
 
+        if (specificSol.contains(gameState) && specificSol.length() > gameState.length()) {
+
+            Random r = new Random();
+
+            //get the gamestate string & specific solutionstring and convert them into lists, resort them to find the unplaced strings in specificSolL
+            List<String> gameStateL = getFormalPieces(gameState.substring(0,specificSol.length()));
+            Collections.sort(gameStateL);
+            List<String> specificSolL = getFormalPieces(specificSol);
+            Collections.sort(specificSolL);
+
+            //randomly choose one piece in specificSolL which is shown as the hint
+            int index = r.nextInt(specificSolL.size() - gameStateL.size()) + gameStateL.size();
+            
+            hint = specificSolL.get(index);
+        }
     }
 
 
