@@ -461,6 +461,7 @@ public class Board extends Application {
      * Create the controls that allow the game to be restarted and the difficulty
      * level set.
      * New Game - will create a new game board according to sliding level value
+     * author: Lingyu Xia
      */
     private void makeControls() {
         Button newGame = new Button("New Game");
@@ -651,7 +652,8 @@ public class Board extends Application {
 
 
     /*set opacity of selected pieces to a certain percentage  or
-    use Blur effect for that certain piece (using setEffect) Use task 9 code for the solutions.*/
+    use Blur effect for that certain piece (using setEffect) Use task 9 code for the solutions.
+    author: Lingyu Xia*/
     // FIXME Task 10: Implement hints
     public static String  hint() {
        Random r = new Random();
