@@ -33,11 +33,13 @@ import javafx.scene.text.TextAlignment;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import java.util.*;
+import java.util.function.Predicate;
 import java.util.stream.IntStream;
 
 import static comp1110.ass2.StartingBoard.solNum;
 import static comp1110.ass2.TwistGame.getFormalPieces;
 import static java.lang.System.currentTimeMillis;
+import static java.lang.System.setOut;
 
 public class Board extends Application {
     /*ToDo:
@@ -273,10 +275,9 @@ public class Board extends Application {
 
         eventPiece(char piece) {
             super(piece);
-
             flip = false;//Declaring
             holder.setOnScroll(scroll -> {//Rotation on scroll
-                if (!grid.getChildren().contains(holder)) {//If grid does not contain the piece .
+                if (!grid.getChildren().contains(holder)){//If grid does not contain the piece .
                     rotate += 90;
                     rotate = (rotate >= 360) ? 0 : rotate;
                     holder.setRotate(rotate);
@@ -355,7 +356,7 @@ public class Board extends Application {
             gridRow = (int) (positionalY - 5) / 50;
             int[] csrs = imgModifier();
             decodePieces();//Converting available data into piece encoding
-            gameState += pieceInfo;//Concatenating the piece encoding into the game String
+                gameState += pieceInfo;//Concatenating the piece encoding into the game String
             //System.out.println(gameState);
             if (game.isPlacementStringValid(gameState)) {
                 grid.add(holder, gridCol, gridRow, csrs[0], csrs[1]);
@@ -614,19 +615,10 @@ public class Board extends Application {
                 String hintpiece=hint();
                 System.out.println(hintpiece);
                 if(hintpiece!=null){
-                   /* System.out.println(hintpiece);
+                    System.out.println(hintpiece);
                     eventPiece p = new eventPiece(hintpiece);
-                    p.setOpacity(0.4);
+                    p.holder.setOpacity(0.4);
                     root.getChildren().add(p);
-                    long startTime = System.currentTimeMillis();
-                    long endTime = System.currentTimeMillis();
-                    while((endTime-startTime)/1000<4){
-                        if(endTime-startTime%2==0){ p.setEffect(g1);}
-                        else{p.setEffect(g2);}
-                        endTime = System.currentTimeMillis();
-                    }
-                    resetPiece(p,true);
-                    root.getChildren().remove(p);*/
 
                 }
             }
@@ -656,39 +648,25 @@ public class Board extends Application {
         return startpoints;
     }
 
+
+
     /*set opacity of selected pieces to a certain percentage  or
     use Blur effect for that certain piece (using setEffect) Use task 9 code for the solutions.*/
     // FIXME Task 10: Implement hints
     public static String  hint() {
-        String hint = "";
-        System.out.println(gameState);
-        System.out.println(specificSol);
-            System.out.println("In");
-            Random r = new Random();
-            //get the gamestate string & specific solutionstring and convert them into lists, \
-            // resort them to find the unplaced strings in specificSolL
-            String[] gameStateA = getFormalPieces(gameState.substring(0,specificSol.length())).stream().map(str->(String)str).toArray(String[]::new);
-       // Collections.sort(g);
-            for(String pieceOrpeg:gameStateA){
-                if((int)pieceOrpeg.charAt(0)<105){
-                    pieceOrpeg="";//Removing pegs
-                }
-            }
-        List<String> specificSolL = getFormalPieces(specificSol);
-        if (specificSolL.size() > gameStateA.length) {
-
-           // for(String check:gameStateL){
-             //   System.out.println(check);
-          //  }
+       Random r = new Random();
+       List<String>usedPieces= getFormalPieces(gameState);
+       List<String>solution=getFormalPieces(specificSol);
+       for(String up:usedPieces){
+           Predicate<String> piecePredicate = piece-> piece.equals(up);
+           solution.removeIf(piecePredicate);
+       }
+       int rnd=r.nextInt(solution.size());
+       return solution.get(rnd);
+      }
+  ;  }
 
 
-            //randomly choose one piece in specificSolL which is shown as the hint
-           // int index = r.nextInt(specificSolL.size() - gameStateL.size()) + gameStateL.size();
-           //return specificSolL.get(index);
-        }
-  return null;  }
-
-}
 
 
 

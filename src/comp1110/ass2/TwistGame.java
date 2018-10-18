@@ -24,7 +24,7 @@ public class TwistGame {
     static boolean  initialisedhm=false;
     static boolean initilisedCs=false;
     static Set<String> viablePiece2 = new HashSet<String>();
-    //static String[][] tempboard=new String[4][8];
+
 
 
 
