@@ -147,7 +147,10 @@ public class Board extends Application {
     }
 
     /*
-     *Create a dialogue when the player start the game
+     * Create a dialogue when the click the "help" button
+     * show the instructions for the game
+     *
+     * Authorship: Yuqing Zhang
      */
     private void instructions(){
         Stage dialogue = new Stage();
@@ -171,7 +174,9 @@ public class Board extends Application {
     }
 
     /*
-     *Create the message to be displayed when the player completes the game
+     * Display a "Well Done!" message
+     *
+     * Authorship: Yuqing Zhang
      */
     private void makeCompletion(){
         completionText.setFill(Color.BLACK);
@@ -468,12 +473,15 @@ public class Board extends Application {
         Button newGame = new Button("New Game");
         Button reset = new Button("Reset");
         Button random = new Button("Random");
+        Button help = new Button("Help");
         reset.setLayoutX(DISPLAY_WIDTH / 4 + 30);
         reset.setLayoutY(DISPLAY_HEIGHT - 45);
         newGame.setLayoutX(DISPLAY_WIDTH / 4 + 100);
         newGame.setLayoutY(DISPLAY_HEIGHT - 45);
         random.setLayoutX(DISPLAY_WIDTH/4 + 200);
         random.setLayoutY(DISPLAY_HEIGHT - 45);
+        help.setLayoutX(DISPLAY_WIDTH / 4 + 285);
+        help.setLayoutY(DISPLAY_HEIGHT - 45);
         reset.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
@@ -495,10 +503,17 @@ public class Board extends Application {
                 newGame();
             }
         });
+        help.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                instructions();
+            }
+        });
 
         controls.getChildren().add(newGame);
         controls.getChildren().add(reset);
         controls.getChildren().add(random);
+        controls.getChildren().add(help);
         difficulty.setMin(0);
         difficulty.setMax(2);
         difficulty.setValue(0);
@@ -554,11 +569,21 @@ public class Board extends Application {
     }
 
 
+    /*
+     * Hide the "Well Done!" message when player click "new game" button
+     *
+     * Authorship: Yuqing Zhang
+     */
     private void hideCompletion(){
         completionText.toBack();
         completionText.setOpacity(0);
     }
 
+    /*
+     * Show a message when the player add all pieces to the board
+     *
+     * Authorship: Yuqing Zhang
+     */
     private void showCompletion(){
         int length = gameState.length();
         int numofpi = length/4;
@@ -602,8 +627,6 @@ public class Board extends Application {
         root.getChildren().add(boardgrid);
         root.getChildren().add(pieces);
         makeControls();
-        instructions();
-        //showCvb   ompletion();
         primaryStage.setScene(scene);
         primaryStage.show();
     }
@@ -617,18 +640,14 @@ public class Board extends Application {
     }
 
 
-  /*  // FIXME Task 8: Implement starting placements
-    public static String makeBoard() {
-//        StartingBoard obj = new StartingBoard();
-//        Random rand = new Random();
-//        String startboard = obj.difficultyStorage.get(rand.nextInt(75))[0];
+   // FIXME Task 8: Implement starting placements
 
-       String startboard = "a7A7b6A7c1A3d2A6e2C3f3C2g4A7h6D0i6B0j2B0j1C0k3C0l4B0l5C0";
-
-        return startboard;
-    }*/
-
-    // TESTING REASONS
+    /*
+     * select a random valid start placement from the dictionary
+     * implement class StatingBoard
+     *
+     * Authorship: Yuqing Zhang
+     */
     public static String RandomStart() {
         Random rand = new Random();
         int level = rand.nextInt(3);
@@ -660,33 +679,6 @@ public class Board extends Application {
             hint = specificSolL.get(index);
         }
     }
-
-
-    //turn a String into a pi set
-    public static Set<String> turnintoset(String placement) {
-        //4 characters represents a pi
-        int numofp = placement.length() / 4;
-        Set<String> placesp = new HashSet<>();
-        String pi = "";
-        int i = 0;
-        while (placesp.size() < numofp) {
-            pi += placement.substring(i, i + 4);
-            placesp.add(pi);
-            pi = "";
-            i += 4;
-        }
-
-        return placesp;
-    }
-
-
-//    public static void main(String[] args) {
-//        String placement = "c1A3d2A6e2C3f3C2g4A7h6D0j2B0j1C0k3C0l4B0l5C0";
-//        String pi = one_help_piece(placement);
-//        System.out.println(pi);
-//    }
-
-
 
 }
 
