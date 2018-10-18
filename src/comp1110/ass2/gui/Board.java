@@ -61,6 +61,7 @@ public class Board extends Application {
     private Group board=new Group();
     private Group outsides = new Group();
 
+
     /* Grid */
     private static GridPane grid = new GridPane();
 
@@ -84,6 +85,7 @@ public class Board extends Application {
     /*Contains the updated Hints */
     private static List<String>hintList=new ArrayList<>();
 
+
     /*Sets up the board*/
     private void createBoardGrid() {
         boardgrid.getChildren().clear();
@@ -95,7 +97,6 @@ public class Board extends Application {
             RowConstraints row = new RowConstraints(50);
             grid.getRowConstraints().add(row);
         }
-
         grid.setGridLinesVisible(false);//hiding the grid
         grid.setLayoutX(700);
         grid.setLayoutY(10);
@@ -121,7 +122,7 @@ public class Board extends Application {
         Text t1 = new Text("Right click for flip.");
         Text t2 = new Text("Scroll over the piece to rotate it.");
         Text t3 = new Text("To reset a piece,hover over it and press the middle button.");
-        Text t4= new Text ("For hints, press '/ '");
+        Text t4= new Text ("For hints, press ' / '");
         VBox layout = new VBox(10);
         layout.getChildren().addAll(t1, t2, t3,t4, button);
         layout.setAlignment(Pos.CENTER);;
@@ -205,14 +206,14 @@ public class Board extends Application {
             holder.setFitHeight(height);
             holder.setFitWidth(width);
             this.pieceType = pieceType;// according to ascii encoding
-            if (!(pieceType > 104)) {//pegs
+            if (!(pieceType > 104)) {//pieces
                 defaultX = hxy[2 * (pieceType - 97)];
                 defaultY = hxy[(2 * (pieceType - 97)) + 1];
                 holder.setX(defaultX);
                 holder.setY(defaultY);
             }
-
         }
+
     }
 
 
@@ -240,9 +241,7 @@ public class Board extends Application {
         eventPiece(String pieceInfo) {
             super(pieceInfo.charAt(0));
             gridCol = Integer.parseInt(pieceInfo.charAt(1) + "") - 1;
-            //System.out.println(gridCol);
             gridRow = pieceInfo.charAt(2) - 65;
-            //System.out.println(gridRow);
             int orientation = Integer.parseInt(pieceInfo.charAt(3) + "");
             flip = (orientation > 3);
             if (flip) {
@@ -543,39 +542,7 @@ public class Board extends Application {
     }
 
 
-    /**
-     * Sets the background filled with miniature sized pieces with a different opacity level
-     * Miniature pieces must not be in the region of the grid
-     * Obtains data about the starting positions so to allow miniature pieces to fill empty areas
-     *
-     * @param startingPlacement - The board state at the start of the game.
-     */
-    private void setBackground(String startingPlacement) {
-        /*
-         *IDEA- use the pieces group objects to know all offboard pieces
-         *makes about 15 pieces
-         *produce x and y coordinates randomly (updating starting x and y  and increasing upper bound of random value)
-         *check if x and y coordinate are not in
-         *                                       1)Grid
-         *                                       2)Placement area of pieces (not on board)
-         *
-         *                                       */
-        Viewer access = new Viewer();
-        Random rnd = new Random();
-        String onBoardPieces = access.returner(startingPlacement, 0);
-        double rotate = rnd.nextInt(360);
-        int piecePicker = rnd.nextInt(8);
-        // offBoardPieces [] is going to contain the ascii encoding values of all pieces which are off board.
-        int[] offBoardPieces = IntStream.rangeClosed(97, 104).filter(i -> !onBoardPieces.contains((char) i + "")).parallel().toArray();
-        List<Integer> invalidArea = new ArrayList<>();
-        for (int offboardVal : offBoardPieces) {
-            //invalidArea.add((int))
 
-        }
-        double tempx = 0;
-        double tempy = 0;
-
-    }
 
 
     /**
@@ -609,7 +576,8 @@ public class Board extends Application {
         }
     }
 
-    /*Start of JavaFX operations */
+    /*Start of JavaFX operations
+    * Author(s):All of us*/
     @Override
     public void start(Stage primaryStage) throws Exception {
         primaryStage.setTitle("IQ-twist");//sets the title name on the bar
@@ -637,6 +605,7 @@ public class Board extends Application {
                 }
             }
         });
+
         primaryStage.setScene(scene);
         primaryStage.show();
     }
