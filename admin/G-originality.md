@@ -9,4 +9,4 @@ We declare that the work we have submitted for Stage G of this assignment and al
 
 * 
 
-Signed: Yuqing Zhang (u6767747), Kalaiarasan Somasundaram(u6555407), and Sue Black (u0123456)
+Signed: Yuqing Zhang (u6767747), Kalaiarasan Somasundaram(u6555407), and Lingyu Xia (u6483756)
