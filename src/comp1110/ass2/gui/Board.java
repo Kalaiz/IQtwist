@@ -78,13 +78,11 @@ public class Board extends Application {
     /*States whether game has started or not */
     private static boolean gamerunning;
 
+    /* For access to StartingBoard */
     private static StartingBoard sb = new StartingBoard();
 
+    /*Contains the updated Hints */
     private static List<String>hintList=new ArrayList<>();
-
-
-
-
 
     /*Sets up the board*/
     private void createBoardGrid() {
@@ -98,14 +96,12 @@ public class Board extends Application {
             grid.getRowConstraints().add(row);
         }
 
-
-
-        grid.setGridLinesVisible(false);
+        grid.setGridLinesVisible(false);//hiding the grid
         grid.setLayoutX(700);
         grid.setLayoutY(10);
         boardgrid.getChildren().add(grid);
-        //board.toBack();      //places the node it at the back
     }
+
 
     /**
      * Create a dialogue when the click the "help" button
@@ -171,8 +167,8 @@ public class Board extends Application {
         }
         outsides.getChildren().add(rect1);
         outsides.getChildren().add(rect2);
-
     }
+
 
     /**
      * Display a "Well Done!" message
@@ -217,8 +213,8 @@ public class Board extends Application {
             }
 
         }
-
     }
+
 
 /* Class which handle Events upon User interaction
 *  Author:Kalai */
@@ -417,8 +413,8 @@ public class Board extends Application {
             pieces.getChildren().add(new eventPiece(listOfPieces.get(i)));
         }
         createBoardGrid();
-        //place all the pieces from  startingBoardplacement to the grid
-        //update gameState & startingboard
+
+
 
     }
 
