@@ -26,12 +26,16 @@ public class GameBoard {
 
     }
 
-
+    /**
+     * Returns the respective Hashmap key (pp from PieceData)
+     * @param piece
+     * @return
+     */
     private int getHashmapkey(String piece){
         char pName = piece.charAt(0);
         int orientationNo = Character.getNumericValue(piece.charAt(3));
         int hashMapKey = (pName > 104) ? pName - 104 + 63 : (pName - 97) * 8 + orientationNo;//(pname - 97)*8 to get the corresponding piece base number
-        //Strong symmetric pieces dont have redudndant piece orientations
+        //Strong symmetric pieces dont have redundant piece orientations
         if((hashMapKey>19&& hashMapKey<24 )||(hashMapKey>59 && hashMapKey<64))
         {hashMapKey-=4;}
 
@@ -49,8 +53,6 @@ return hashMapKey;
     }
 
 
-
-
     /**
      * Resets the respective Board(s)
      */
@@ -64,8 +66,6 @@ return hashMapKey;
                 this.actualBoard=board;
 
         }
-
-
 
 
     /**
@@ -108,6 +108,7 @@ return hashMapKey;
         }
         return board;
     }
+
 
     /**
      * flip the array stuffs (not considering the holes in
