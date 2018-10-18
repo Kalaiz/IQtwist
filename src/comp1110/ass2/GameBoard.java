@@ -17,6 +17,7 @@ public class GameBoard {
     private String[][] actualBoard = new String[4][8];
     private String checkingBoardName;
     private String actualBoardName;
+    public static  boolean offBoardOrOverlap;
 
 
     /**
@@ -161,6 +162,7 @@ return hashMapKey;
      */
     public static String[][] placer(String[][] board, String[][] piecearr, int row2, int col2) {
         if (row2 < 0 || col2 < 0||row2>=board.length||col2>=board[0].length) {
+            offBoardOrOverlap=true;
             return null;
         }
         try {
@@ -181,6 +183,7 @@ return hashMapKey;
         }
         //if piecearr size is more than than board or the board has null value(i.e Values of the board not declared)
         catch (ArrayIndexOutOfBoundsException | NullPointerException e) {
+            offBoardOrOverlap=true;
             return null;
         }
         return board;

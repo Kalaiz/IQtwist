@@ -191,17 +191,7 @@ public class TwistGame {
      *
      */
     public static String[][] boardcreator(String placement, char bt) {
-
-            /*if (placement.contains(gobj.getCBoardName())) {
-                placement = placement.substring(placement.length() - 4);
-            } else {*/
-                gobj.resetBoardvalues(Character.toString(bt));//resets the respective board ( test reasons)
-           /* }*/
-/* }*/
-         /* }*/
-        //ToDo : make a static board fr task 6 operations so that there wont be any need to reset the board
-        //if static board(temp) is same as placement string-4 or same as placment  dont reset and update placement to just the piece and
-        // change checking board to temp--better than calling :Placer,piecetobeAdded,access to hashmap,and reseting the board
+        gobj.resetBoardvalues(Character.toString(bt));//resets the respective board ( test reasons)
         for (int i = 0; i < placement.length() / 4; i++) {
             String ch = placement.substring(4 * i, 4 * i + 4);
             if (bt == 'a') {
@@ -209,7 +199,8 @@ public class TwistGame {
             } else {
                 gobj.pieceTobeAdded(ch, "c");
 
-                if(gobj.getcboard()==null||!checkBoard2()){
+                if(gobj.offBoardOrOverlap||!checkBoard2()){
+                    gobj.offBoardOrOverlap=false;
                     return null; }
             }
         }
@@ -350,7 +341,6 @@ public class TwistGame {
     initialisedhm=initilisedCs=true;
 }
         boardcreator(placement,'c');//creates a board in accordance to the placement string
-        //tempboard=gobj.getcboard();
         int[][] ppContainer2=ppContainer.clone();
         Viewer access=new Viewer();
         String unplaced ="";

@@ -614,7 +614,7 @@ public class Board extends Application {
                 String hintpiece=hint();
                 System.out.println(hintpiece);
                 if(hintpiece!=null){
-                    System.out.println(hintpiece);
+                   /* System.out.println(hintpiece);
                     eventPiece p = new eventPiece(hintpiece);
                     p.setOpacity(0.4);
                     root.getChildren().add(p);
@@ -626,7 +626,7 @@ public class Board extends Application {
                         endTime = System.currentTimeMillis();
                     }
                     resetPiece(p,true);
-                    root.getChildren().remove(p);
+                    root.getChildren().remove(p);*/
 
                 }
             }
@@ -661,17 +661,31 @@ public class Board extends Application {
     // FIXME Task 10: Implement hints
     public static String  hint() {
         String hint = "";
-        if (specificSol.contains(gameState) && specificSol.length() > gameState.length()) {
+        System.out.println(gameState);
+        System.out.println(specificSol);
+
+            System.out.println("In");
             Random r = new Random();
             //get the gamestate string & specific solutionstring and convert them into lists, \
             // resort them to find the unplaced strings in specificSolL
-            List<String> gameStateL = getFormalPieces(gameState.substring(0,specificSol.length()));
-            Collections.sort(gameStateL);
-            List<String> specificSolL = getFormalPieces(specificSol);
-            Collections.sort(specificSolL);
+            String[] gameStateA = getFormalPieces(gameState.substring(0,specificSol.length())).stream().map(str->(String)str).toArray(String[]::new);
+       // Collections.sort(g);
+            for(String pieceOrpeg:gameStateA){
+                if((int)pieceOrpeg.charAt(0)<105){
+                    pieceOrpeg="";//Removing pegs
+                }
+            }
+        List<String> specificSolL = getFormalPieces(specificSol);
+        if (specificSolL.size() > gameStateA.length) {
+
+           // for(String check:gameStateL){
+             //   System.out.println(check);
+          //  }
+
+
             //randomly choose one piece in specificSolL which is shown as the hint
-            int index = r.nextInt(specificSolL.size() - gameStateL.size()) + gameStateL.size();
-           return specificSolL.get(index);
+           // int index = r.nextInt(specificSolL.size() - gameStateL.size()) + gameStateL.size();
+           //return specificSolL.get(index);
         }
   return null;  }
 
