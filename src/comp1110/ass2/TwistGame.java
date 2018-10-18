@@ -19,14 +19,9 @@ public class TwistGame {
     private static final int[] bWeakSymmetricpair={0,2,1,3,4,6,5,7};
     private static final int[] eWeakSymmetricpair={0,7,1,4,2,5,3,6};
     private static final int[] fWeakSymmetricpair={0,6,1,7,2,4,3,5};
-    private static int testval=0;
-    private static  int totalmethodcalls=0;
     static boolean  initialisedhm=false;
     static boolean initilisedCs=false;
     static Set<String> viablePiece2 = new HashSet<String>();
-
-
-
 
 
     /**
@@ -178,7 +173,7 @@ public class TwistGame {
 
 
     /**
-     * Modifies respective board based on the placement string
+     * Modifies the board based on the placement string
      * and checks whether place is valid or not concurrently
      *
      * @param placement details of the pieces
@@ -192,6 +187,7 @@ public class TwistGame {
             String ch = placement.substring(4 * i, 4 * i + 4);
             gobj.pieceTobeAdded(ch);
                 if(gobj.offBoardOrOverlap||!checkBoard2()){
+                    //setting back to false as to prevent any problems for the subsequent boardplacements
                     gobj.offBoardOrOverlap=false;
                     return null; }
             }
@@ -214,7 +210,7 @@ public class TwistGame {
      * Authorship: Yuqing Zhang & Kalai
      */
     public static boolean isPlacementStringValid(String placement) {
-        if(!initialisedhm) {//for task test purposes
+        if(!initialisedhm) {//So to initialise Pieces(hashmap) only once.
           Pieces.initialisehms();
             initialisedhm=true;
         }
@@ -234,26 +230,27 @@ public class TwistGame {
      * with the lowest rotation should be included in the set.
      *
      * @param placement A valid placement string (comprised of peg and piece placements)
+     * @local ppContainer2 - contains all possible pieces sorted within them
      * @return An set of viable piece placements, or null if there are none.
      * author: Kalai
      */
 
     public static Set<String> getViablePiecePlacements(String placement) {//Take note that this does not check if board is valid or not
-        viablePiece2.clear();
+      viablePiece2.clear();//clearing the previous data stored in viablepieces set
      if (!initialisedhm&&!initilisedCs) {
-      Pieces.initialisehms();//initialise hashmap just for the sake of task tests
+      Pieces.initialisehms();//Making sure that there arent any redundant initialisations
       initialiseContainersSpecs();
       initialisedhm=initilisedCs=true;
 }
         boardcreator(placement);//creates a board in accordance to the placement string
-        int[][] ppContainer2=ppContainer.clone();
+        int[][] ppContainer2=ppContainer.clone();//Making a clone so to not mess with the static array
         Viewer access=new Viewer();
         String unplaced ="";
-        String nonAvailcharpieces=access.returner(placement,0);
+        String nonAvailcharpieces=access.returner(placement,0);//
         //will give an int array of numbers which represent ascii encodings of the piece character
         int[] unplacedoutput=IntStream.rangeClosed(97, 104).filter(i-> !nonAvailcharpieces.contains((char)i+"")).parallel().toArray();
         for(int i:unplacedoutput){ unplaced+=(Character.toString((char)i)); }//converting to String for listofContaineused function
-        List<Integer> containerscanbeused=listofcontainersused(unplaced);
+        List<Integer> containerscanbeused=listOfContainersUsed(unplaced);
         ppContainer2=updateppcandnew(nonAvailcharpieces,ppContainer2);
         //update ppcontainer value in accordance to unplaced
         //find range of the containers in accordance to the emptyindices
@@ -289,8 +286,6 @@ public class TwistGame {
                                         insertinset(piece);
 
                                     }
-                                    //generate piece data  accordingly to check with isValidPlacement  and then check
-                                    //if valid add to viablePiece set
                                 }
                             }
                         }
@@ -305,7 +300,10 @@ public class TwistGame {
         return viablePiece2;
     }
 
-
+    /**
+     * Inserts in the piece encoding into  the set accordingly
+     * @param piece- piece encoding
+     */
     private static void insertinset(String piece) {
         if (viablePiece2.size() == 0) {//if set has nothing
             viablePiece2.add(piece);
@@ -323,7 +321,7 @@ public class TwistGame {
                         switch (piece.charAt(0)) {
                             case 'c':
                             case 'h':
-                                if (alrsetpr - piecer == 2) {
+                                if (alrsetpr - piecer == 2) {//orientation number has pattern which relates to symmetries of pieces
                                     viablePiece2.remove(x);
                                     viablePiece2.add(piece);
                                     break;
@@ -341,7 +339,8 @@ public class TwistGame {
                                 break;
                         }
                         for (int t = 0; t < 4; t++) {
-                            if (temparr[t * 2] == piecer && temparr[(2 * t) + 1] == alrsetpr) {//
+                            //if there exist weakly symmetric take the one with lower rotation value
+                            if (temparr[t * 2] == piecer && temparr[(2 * t) + 1] == alrsetpr) {
                                 viablePiece2.remove(x);
                                 viablePiece2.add(piece);
                                 check++;
@@ -370,11 +369,16 @@ public class TwistGame {
 
 
 
-
-    private static int[][] updateppcandnew(String shouldnotbeonrefdata,int[][] ppContainer3){
-        for(int c=0;c<shouldnotbeonrefdata.length();c++){
-            if(shouldnotbeonrefdata.charAt(c)>='i'){continue;}
-            int startnum=(shouldnotbeonrefdata.charAt(c)-97) * 8;
+/**
+ * Updates the Container Values to contain only the required ones
+ * @param ppContainer3 - Container
+ * @param piecesNotToBeUsed -- in form of just the alpha values of pieces exampl:abcdef
+ * Author:Kalai
+ */
+    private static int[][] updateppcandnew(String piecesNotToBeUsed,int[][] ppContainer3){
+        for(int c=0;c<piecesNotToBeUsed.length();c++){
+            if(piecesNotToBeUsed.charAt(c)>='i'){continue;}
+            int startnum=(piecesNotToBeUsed.charAt(c)-97) * 8;
             int endnum=startnum+7;
             for(int i=0;i<5;i++){
                 ppContainer3[i]=Arrays.stream(ppContainer3[i]).parallel().filter(no->!(no>=startnum &&no<=endnum)).toArray();
@@ -383,8 +387,13 @@ public class TwistGame {
         return ppContainer3;
     }
 
-
-    private  static  List<Integer> listofcontainersused(String availpieces){
+    /**
+     * Chooses the Containers to be used
+     * @param availpieces
+     * @return list of containers used
+     * Author:Kalai
+     */
+    private  static  List<Integer> listOfContainersUsed(String availpieces){
         List<Integer> ap = new ArrayList<Integer>();
         if(availpieces.contains("g")){
             ap.add(2);
@@ -422,6 +431,8 @@ public class TwistGame {
      *    X X         X X X       X X X       X
      *    X X                     X X X       X
      *                                        X
+     *
+     *Author:Kalai
      * */
 
     private  static void  initialiseContainersSpecs(){
@@ -432,7 +443,7 @@ public class TwistGame {
                     // do nothing
                 }
                 else if( pp.get(t).length<=containerSpecs[i*2] && pp.get(t)[0].length<=containerSpecs[i*2+1]){
-                    if((i==3||i==4)&&(t>55)){//skipping redundants
+                    if((i==3||i==4)&&(t>55)){//skipping redundant
                         continue;
                     }
                     else if(i==2&&!(t>47&&t<56)){

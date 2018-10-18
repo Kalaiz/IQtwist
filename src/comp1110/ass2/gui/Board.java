@@ -107,7 +107,7 @@ public class Board extends Application {
         //board.toBack();      //places the node it at the back
     }
 
-    /*
+    /**
      * Create a dialogue when the click the "help" button
      * show the instructions for the game
      *
@@ -125,8 +125,9 @@ public class Board extends Application {
         Text t1 = new Text("Right click for flip.");
         Text t2 = new Text("Scroll over the piece to rotate it.");
         Text t3 = new Text("To reset a piece,hover over it and press the middle button.");
+        Text t4= new Text ("For hints, press '/ '");
         VBox layout = new VBox(10);
-        layout.getChildren().addAll(t1, t2, t3, button);
+        layout.getChildren().addAll(t1, t2, t3,t4, button);
         layout.setAlignment(Pos.CENTER);;
         Scene scene = new Scene(layout);
         scene.setFill(Color.WHITE);
@@ -134,6 +135,12 @@ public class Board extends Application {
         dialogue.showAndWait();
     }
 
+
+    /**
+     * Creates a board using different shapes
+     *
+     * Authorship: Yuqing Zhang
+     */
     private void createBoard(){
         Rectangle rect1 = new Rectangle(690, 2.5, 420, 215);
         Rectangle rect2 = new Rectangle(692.5, 5, 415, 210);
@@ -167,7 +174,7 @@ public class Board extends Application {
 
     }
 
-    /*
+    /**
      * Display a "Well Done!" message
      *
      * Authorship: Yuqing Zhang
@@ -184,7 +191,8 @@ public class Board extends Application {
     }
 
 
-    /* Inner class for pieces*/
+    /* Inner class for pieces
+    * Author:Kalai & Lingyi Xia*/
     class piece extends ImageView {
         int pieceType;//The actual ascii number.
         double defaultX;//Default x coordinate position on start of the game
@@ -212,6 +220,8 @@ public class Board extends Application {
 
     }
 
+/* Class which handle Events upon User interaction
+*  Author:Kalai */
     class eventPiece extends piece {
         String pieceInfo;
         int gridRow;//placement on the grid
@@ -336,7 +346,13 @@ public class Board extends Application {
         }
 
 
-        void setOnGrid(double positionalX, double positionalY) {// Image's top left corner.
+    /**
+     * Places the piece(image) accordingly upon dragging
+     * @param positionalX- the x coordinate of the image
+     * @param positionalY- the y coordinate of the image
+     * Author:Kalai
+     */
+    void setOnGrid(double positionalX, double positionalY) {// Image's top left corner.
             // 50 - width/height of each grid
             // 695 & 5 - the approximate starting co-ordinates  of the grid
             gridCol = (int) (positionalX - 695) / 50;
@@ -344,7 +360,6 @@ public class Board extends Application {
             int[] csrs = imgModifier();
             decodePieces();//Converting available data into piece encoding
                 gameState += pieceInfo;//Concatenating the piece encoding into the game String
-            //System.out.println(gameState);
             if (game.isPlacementStringValid(gameState)) {
                 grid.add(holder, gridCol, gridRow, csrs[0], csrs[1]);
             } else {
@@ -359,7 +374,10 @@ public class Board extends Application {
     }
 
 
-
+    /**
+     * Reset the pieces (when user clicks newGame)
+     * Author:Kalai
+     */
     private void forceReset() {//Used for new game
         grid = new GridPane();
         Iterator im = pieces.getChildren().iterator();
@@ -372,7 +390,8 @@ public class Board extends Application {
 
 
     /**
-     * Start a new game & clear the previous board
+     * Start a new game & clear the previous board and pieces
+     * Authors:All of Us.
      */
     private void newGame() {
         Viewer access = new Viewer();
@@ -403,21 +422,29 @@ public class Board extends Application {
 
     }
 
+
+    /**
+     * Resets an individual event piece back to the default positions
+     * @param p- eventpiece object
+     * Author:Kalai
+     */
     private void  resetPiece(eventPiece p){
         grid.getChildren().remove(p.holder);
             pieces.getChildren().remove(p);
             pieces.getChildren().add(new eventPiece(((p).pieceInfo).charAt(0)));
 
     }
-
+/**
+ * reset the particular piece
+ * @param pieceInfo- The piece encoding
+ * Author:Kalai
+ */
     private void  resetPiecestr(String pieceInfo){
         try {
         for(Node n:pieces.getChildren()){
             if (((((eventPiece) n).pieceInfo)) != null) {
             if(((eventPiece) n).pieceInfo.equals(pieceInfo)){
-                grid.getChildren().remove(((eventPiece) n).holder);
-                pieces.getChildren().remove(( n));
-                pieces.getChildren().add(new eventPiece(((((eventPiece) n)).pieceInfo).charAt(0)));}
+                resetPiece(((eventPiece) n));}
                 gameState=gameState.replace(pieceInfo,"");
         }}
 
@@ -425,6 +452,10 @@ public class Board extends Application {
     catch(ConcurrentModificationException e){}}
 
 
+    /**
+     * Reset the game
+     * Author:Kalai
+     */
     private void resetgame() {
         try {
             gameState = startingBoard;
@@ -551,7 +582,7 @@ public class Board extends Application {
     }
 
 
-    /*
+    /**
      * Hide the "Well Done!" message when player click "new game" button
      *
      * Authorship: Yuqing Zhang
@@ -560,7 +591,7 @@ public class Board extends Application {
         root.getChildren().remove(completionText);
     }
 
-    /*
+    /**
      * Show a message when the player add all pieces to the board
      *
      * Authorship: Yuqing Zhang

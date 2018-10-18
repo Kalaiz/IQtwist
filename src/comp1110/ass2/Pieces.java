@@ -11,10 +11,9 @@ import static comp1110.ass2.PieceData.*;
  */
 
 public class Pieces {
-    private char piece_name;
     private String[][] actual_piece;
     /**
-     *hm:Hashmap which holds all types of pieces.
+     *pp:Hashmap which holds all types of pieces.
      *Numbers are used to denote the key of hashmap.
      *Values are the multidimensional piece array
      *=======Details of the key numbers=======
@@ -32,7 +31,7 @@ public class Pieces {
     Pieces(char piece_name){
         int i = piece_name-97;
         actual_piece= Arrays.stream(all_pieces[i]).parallel().toArray(String[][]::new);
-        this.piece_name=piece_name; }
+        }
 
     /**
      *Initialises the Hashmap with all the required values(pieces)
