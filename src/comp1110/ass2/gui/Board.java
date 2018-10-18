@@ -507,6 +507,7 @@ public class Board extends Application {
             @Override
             public void handle(ActionEvent event) {
                 startingBoard = RandomStart();
+                hideCompletion();
                 newGame();
             }
         });
