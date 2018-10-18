@@ -12,7 +12,7 @@ public class GetEmptyGridTest {
 
     public void getEmptyGrid(String placementString,List<int[]> expected) {
         boolean valid = true;
-        boardcreator(placementString,'a');
+        boardcreator(placementString);
         List<int[]> emptyGrid = TwistGame.getEmptyGrid();
         for (int i = 0; i < emptyGrid.size(); i++){
             for (int j = 0; j < 2; j++){
