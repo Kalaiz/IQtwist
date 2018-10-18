@@ -20,7 +20,7 @@ public class StartingBoard extends TwistGame{
      * @param solution - Complete solution string from task 9 codes
      */
     public static List<String> pegAdder(String solution){
-        boardcreator(solution,'a');
+        boardcreator(solution);
         String[][] board = gobj.getaboard();
         List<String> pegs = new ArrayList<>();
         int[]pegD =pegDetails.clone();

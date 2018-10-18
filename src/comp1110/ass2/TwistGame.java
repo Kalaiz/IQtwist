@@ -153,7 +153,7 @@ public class TwistGame {
     private static boolean checkBoard2() {//checks for colourpeg and overlap
         for (int row = 0; row < 4; row++) {
             for (int col = 0; col < 8; col++) {
-                String ccs = gobj.getcboard()[row][col];//ccs-Current checking piece string
+                String ccs = gobj.getaboard()[row][col];//ccs-Current checking piece string
                 if (ccs.length() == 4) {
                     if (ccs.charAt(1) != ccs.charAt(3)) {//pror (or)  orpr
                         return false;
@@ -181,29 +181,22 @@ public class TwistGame {
      * and checks whether place is valid or not concurrently
      *
      * @param placement details of the pieces
-     * @param bt        describes the board type
-     *                  actualboard (4x8 board)
-     *                  checkingboard (10x12 board specifically for is_onboard and isvalidPlacement )
      * @return Updated board
      * Authorship:Kalai
      *
      */
-    public static String[][] boardcreator(String placement, char bt) {
-        gobj.resetBoardvalues(Character.toString(bt));//resets the respective board ( test reasons)
+    public static String[][] boardcreator(String placement) {
+        gobj.resetBoardvalues();
         for (int i = 0; i < placement.length() / 4; i++) {
             String ch = placement.substring(4 * i, 4 * i + 4);
-            if (bt == 'a') {
-                gobj.pieceTobeAdded(ch, "a");
-            } else {
-                gobj.pieceTobeAdded(ch, "c");
-
+            gobj.pieceTobeAdded(ch);
                 if(gobj.offBoardOrOverlap||!checkBoard2()){
                     gobj.offBoardOrOverlap=false;
                     return null; }
             }
-        }
-        return (bt == 'a') ? gobj.getaboard() : gobj.getcboard();
-    }
+        return gobj.getaboard();  }
+
+
 
 
     /**
@@ -221,10 +214,10 @@ public class TwistGame {
      */
     public static boolean isPlacementStringValid(String placement) {
         if(!initialisedhm) {//for task test purposes
-          Pieces.initialisehms(); // USE ONLY  FOR TESTS
+          Pieces.initialisehms();
             initialisedhm=true;
         }
-        return (!(boardcreator(placement, 'c')==null));
+        return (!(boardcreator(placement)==null));
     }
 
 
@@ -253,7 +246,7 @@ public class TwistGame {
         Viewer v = new Viewer();
         String placed_pieces = v.returner(placement,0);
         String unplaced_pieces = "";
-        boardcreator(placement,'a');//Creates* an  actualboard
+        boardcreator(placement);//Creates* an  actualboard
         for (int i = 'a' ; i <= 'h' ; i++){
             if(placed_pieces.indexOf(String.valueOf((char)i))==-1)
                 unplaced_pieces = unplaced_pieces + String.valueOf((char)i);
@@ -313,7 +306,7 @@ public class TwistGame {
     initialiseContainersSpecs();
     initialisedhm=initilisedCs=true;
 }
-        boardcreator(placement,'c');//creates a board in accordance to the placement string
+        boardcreator(placement);//creates a board in accordance to the placement string
         int[][] ppContainer2=ppContainer.clone();
         Viewer access=new Viewer();
         String unplaced ="";
@@ -529,8 +522,8 @@ public class TwistGame {
         for (int x = 0; x < 4; x++){
             for(int y = 0; y < 8; y++){
                 /*    gobj.getcboard()[x][y].contains("p")&&gobj.getcboard()[x][y].length()==2    */
-                if (gobj.getcboard()[x][y].equals("x")|| gobj.getcboard()[x][y].equals("pr") || gobj.getcboard()[x][y].equals("pb")//this runs faster
-                        || gobj.getcboard()[x][y].equals("pg") || gobj.getcboard()[x][y].equals("py")){
+                if (gobj.getaboard()[x][y].equals("x")|| gobj.getaboard()[x][y].equals("pr") || gobj.getaboard()[x][y].equals("pb")//this runs faster
+                        || gobj.getaboard()[x][y].equals("pg") || gobj.getaboard()[x][y].equals("py")){
                     if(coordinate=='x'){emptyGridcoord.add(x);}
                     else{emptyGridcoord.add(y);} } } }
         int[] sortcoord=emptyGridcoord.stream().mapToInt(x->x).toArray();
@@ -609,7 +602,7 @@ public class TwistGame {
         Viewer v = new Viewer();
         String placed_pieces = v.returner(placement,0);
         String unplaced_pieces = "";
-        boardcreator(placement,'a');//Creates* an actualboard
+        boardcreator(placement);//Creates* an actualboard
 
         /*Find the missing pieces*/
         for (int i = 'a' ; i <= 'h' ; i++){

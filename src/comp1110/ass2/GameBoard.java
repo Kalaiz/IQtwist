@@ -13,7 +13,6 @@ import static comp1110.ass2.Pieces.hm;
  *           Kalai (Everything else)
  */
 public class GameBoard {
-    private String[][] checkingBoard = new String[4][8];
     private String[][] actualBoard = new String[4][8];
     public static boolean offBoardOrOverlap;
 
@@ -22,17 +21,13 @@ public class GameBoard {
      * Adds a piece to the respective board and updates it.
      *
      * @param piece piece String
-     * @param bt    represents board-type(either actual or checking)
+     *
      */
-    void pieceTobeAdded(String piece, String bt) {
+    void pieceTobeAdded(String piece) {
         int hashMapKey= getHashmapkey(piece);
         int col = Character.getNumericValue(piece.charAt(1)) - 1;
         int row = piece.charAt(2) - 65;
-        if (bt.equals("a")) {
             this.actualBoard = placer(actualBoard, hm.get(hashMapKey), row, col );
-        } else {
-            this.checkingBoard = placer(checkingBoard, hm.get(hashMapKey), row, col);
-        }
 
     }
 
@@ -58,43 +53,21 @@ return hashMapKey;
         return actualBoard;
     }
 
-    /**
-     * Obtains the checkingboard
-     *
-     * @return Multidimensional array representing the checkingBoard
-     */
-    String[][] getcboard() {
-        return checkingBoard;
-    }
 
 
 
     /**
      * Resets the respective Board(s)
-     *
-     * @param s which could represent
-     *          "a"-actual board
-     *          "c"-checking board
-     *          "ac"-both the boards
      */
-    void resetBoardvalues(String s) { //TODO-Try to implement Map function using streams
-        int row = 4, col = 8;
+    void resetBoardvalues() {
         String[][] board = new String[4][8];
-        if (s.equals("ac")) {
-            resetBoardvalues("a");
-            resetBoardvalues("c");
-        }
-        for (int trow = 0; trow < row; trow++) {
-            for (int tcol = 0; tcol < col; tcol++) {
+        for (int trow = 0; trow < 4; trow++) {
+            for (int tcol = 0; tcol < 8; tcol++) {
                     board[trow][tcol] = "x";
                 }
             }
-            if(s.equals("c") ){
-                this.checkingBoard=board;
-            }
-            else{
                 this.actualBoard=board;
-            }
+
         }
 
 
