@@ -72,6 +72,7 @@ public class TwistGame {
      */
     public static boolean isPlacementStringWellFormed(String placement) {
         //  Task 3: determine whether a placement is well-formed
+        //author: Lingyu Xia
         String[] items = new String[placement.length() / 4];                      //Using a loop to store all four-character placements into a String[]
         int countRed = 0;
         int countGre = 0;
@@ -583,6 +584,7 @@ public class TwistGame {
     // FIXME : IMPORTANT :
     // 1)Whenever there is just one piece left to solve getSolution return null --
     //     example : "b6A7c1A3d2A6e2C3f3C4g4A7h6D0i6B0j2B0j1C0k3C0l4B0" should return a7A7 added to it
+    //author: Lingyu Xia
 
     public static String[] getSolutions(String placement) {//Use task 6 code here
 
@@ -596,6 +598,7 @@ public class TwistGame {
     /*
      *  This method uses task 6 and construct a 32-character placement string
      *  Reorder the string into a valid placement string
+     *  author: Lingyu Xia
      * */
     public static String[] reorderPlacementStrings(String placement){
 
@@ -756,6 +759,7 @@ public class TwistGame {
 
 
     //Combine all the different pieces, give all the possible combinations.  e.g. a1,a2,a3,b1,b2,c1 --> a1,b1,c1; a1,b2,c1; a2, b1, c1; a2, b2, c1; ....
+    //author: Lingyu Xia
     public static List<String> combination(List<String> result, String[] madePieces, String[] missingPieces){
 
         for (int j = 0; j < madePieces.length; j++){
@@ -776,6 +780,7 @@ public class TwistGame {
     }
 
     //Divid the string into single pieces so that it can be sorted.
+    //author: Lingyu Xia
     public static List<String> getFormalPieces(String formalPiece){
 
         List<String> fp = new ArrayList<>();

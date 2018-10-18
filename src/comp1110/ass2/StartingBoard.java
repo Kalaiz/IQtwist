@@ -51,7 +51,8 @@ public class StartingBoard extends TwistGame{
     }
 
     /*Creates a board String such that it consist of 2 pieces
-     * Produces the key for the Hashmap - storage*/
+     * Produces the key for the Hashmap - storage
+     * author: Lingyu Xia*/
     public static String pieceCreator(){
 
         Random r = new Random();
@@ -78,7 +79,8 @@ public class StartingBoard extends TwistGame{
     }
 
 
-    /*gives the difficulty level and a random solution string, find the values of pegs in hashMap*/
+    /*gives the difficulty level and a random solution string, find the values of pegs in hashMap
+    * author:Lingyu Xia*/
     // FIXME Task 11: The output must be sorted so the get 1 solution from getSolutions
     public static String difficultyLevel(double level){
         Random r = new Random();
