@@ -491,7 +491,8 @@ public class Board extends Application {
         random.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                RandomStart();
+                startingBoard = RandomStart();
+                newGame();
             }
         });
 
