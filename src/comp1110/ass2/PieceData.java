@@ -1,7 +1,7 @@
 package comp1110.ass2;
 
 
-/*Class which contains a  3-D array which consist of  all the pieces
+/*Class which contains a 3-D array which consist of  all the pieces
  *Authorship:Kalai
  */
 public class PieceData {

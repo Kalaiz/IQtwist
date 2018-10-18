@@ -159,15 +159,15 @@ public class Viewer extends Application {
 
         }
      /*TRANSLATION DATA
-        R90    R180    R270  RS
-      a -45     0      -45   N
-      b -45     0      -45   N
-      c -140    0     -140   N
-      d -45     0      -45   N
-      e  0      0       0    N
-      f -45     0      -45   N
-      g 0       0        0   N
-      h 0       0        0   N
+        R90        R270  RS
+      a -45        -45   N
+      b -45        -45   N
+      c -140       -140   N
+      d -45        -45   N
+      e  0           0    N
+      f -45        -45   N
+      g 0            0   N
+      h 0            0   N
         */
 
         controls.getChildren().addAll(grid);

@@ -21,7 +21,7 @@ public class Pieces {
      * a0=1,a1=2..... where the character is the piece type
      * and the integer is the orientation number.
      */
-    static HashMap<Integer,String[][]> hm=new HashMap<>();
+    static HashMap<Integer,String[][]> pp=new HashMap<>();
 
 
     /**
@@ -30,14 +30,12 @@ public class Pieces {
      * @param piece_name : Respective piece character
      */
     Pieces(char piece_name){
-        int i = piece_name-97;//gets the 'i'th element of the 3D array
-        //parallel streams are usually faster than sequential ones**
-        //Will be testing if it is really faster than for loop or not later
+        int i = piece_name-97;
         actual_piece= Arrays.stream(all_pieces[i]).parallel().toArray(String[][]::new);
         this.piece_name=piece_name; }
 
     /**
-     *Initialises the Hashmap with all the required values
+     *Initialises the Hashmap with all the required values(pieces)
      * t is the hashmap key
      */
     static void initialisehms(){
@@ -45,7 +43,7 @@ public class Pieces {
          for(int innerval=-1,t=0;t<68;t++){// Main hashmap loop :-1 for initialisation;
             innerval=(innerval==7)?0:++innerval;
             if(t>63){//need to change
-                hm.put(t,(new Pieces((char)((t-64)+105))).getactual_piece());
+                pp.put(t,(new Pieces((char)((t-64)+105))).getactual_piece());
                 continue;
             }
             else if(t>19&&t<24||t>59&&t<63){//neglecting strong symmetric pieces which are redundant
@@ -63,7 +61,7 @@ public class Pieces {
                 piece= GameBoard.rotator(piece);
             }
 
-            hm.put(t,piece);
+            pp.put(t,piece);
         }
 
     }

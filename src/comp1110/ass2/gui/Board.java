@@ -403,12 +403,11 @@ public class Board extends Application {
 
     }
 
-    private void  resetPiece(eventPiece p,boolean hints){
+    private void  resetPiece(eventPiece p){
         grid.getChildren().remove(p.holder);
-        if(!hints) {
             pieces.getChildren().remove(p);
             pieces.getChildren().add(new eventPiece(((p).pieceInfo).charAt(0)));
-        }
+
     }
 
     private void  resetPiecestr(String pieceInfo){
@@ -433,7 +432,7 @@ public class Board extends Application {
             for (Object obj : arr) {
                 if (((((eventPiece) obj).pieceInfo)) != null) {
                     if (!startingBoard.contains(((eventPiece) obj).pieceInfo)) {
-                    resetPiece((eventPiece )obj,false);
+                    resetPiece((eventPiece )obj);
                     }
                 }
             }
@@ -638,9 +637,8 @@ public class Board extends Application {
 
 
 
-    /*set opacity of selected pieces to a certain percentage  or
-    use Blur effect for that certain piece (using setEffect) Use task 9 code for the solutions.
-    author: Lingyu Xia*/
+    /*Produces Hints based on the current gameState String
+    author: Kalai*/
 
     public static String  hint() {
        Random r = new Random();

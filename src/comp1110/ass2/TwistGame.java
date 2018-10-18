@@ -3,7 +3,7 @@ package comp1110.ass2;
 import comp1110.ass2.gui.Viewer;
 import java.util.*;
 import java.util.stream.IntStream;
-import static comp1110.ass2.Pieces.hm;
+import static comp1110.ass2.Pieces.pp;
 
 
 /**
@@ -19,8 +19,8 @@ public class TwistGame {
     private static final int[] bWeakSymmetricpair={0,2,1,3,4,6,5,7};
     private static final int[] eWeakSymmetricpair={0,7,1,4,2,5,3,6};
     private static final int[] fWeakSymmetricpair={0,6,1,7,2,4,3,5};
-    //private static int testval=0;
-    //private static  int totalmethodcalls=0;
+    private static int testval=0;
+    private static  int totalmethodcalls=0;
     static boolean  initialisedhm=false;
     static boolean initilisedCs=false;
     static Set<String> viablePiece2 = new HashSet<String>();
@@ -235,89 +235,26 @@ public class TwistGame {
      *
      * @param placement A valid placement string (comprised of peg and piece placements)
      * @return An set of viable piece placements, or null if there are none.
-     * author: Lingyu Xia
+     * author: Kalai
      */
-    public static Set<String> ligetViablePiecePlacements(String placement) //Take note that this does not check if board is valid or not
-    {
-        // FIXME Task 6: determine the set of valid next piece placements
-
-        Set<String> viablePiece = new HashSet();
-        Pieces.initialisehms();
-        int methodcallctr=0;
-        Viewer v = new Viewer();
-        String placed_pieces = v.returner(placement,0);
-        String unplaced_pieces = "";
-        boardcreator(placement);//Creates* an  actualboard
-        for (int i = 'a' ; i <= 'h' ; i++){
-            if(placed_pieces.indexOf(String.valueOf((char)i))==-1)
-                unplaced_pieces = unplaced_pieces + String.valueOf((char)i);
-        }
-        //System.out.print(unplaced_pieces);
-        //System.out.println();
-        List<int[]> emptyGrid = getEmptyGrid();
-        String newPiece = "";
-        String newPlacement = "";
-
-        loop: for (int i = 0; i < unplaced_pieces.length(); i++){
-
-            for (int j = 0; j < emptyGrid.size(); j++){
-
-                for (int l = 'A'; l <= 'D'; l++) {
-
-                    for (int k = 0; k < 8; k++) {
-
-                        if (unplaced_pieces.charAt(i) >= 'i') {
-                            break;
-                        } else {
-                            newPiece = String.valueOf(unplaced_pieces.charAt(i)) + emptyGrid.get(j)[1] + String.valueOf((char)l) + k;
-                            newPlacement = placement + newPiece;
-                        }
-
-                        //System.out.println(placement + newPiece);
-                        methodcallctr++;
-                        if (isPlacementStringValid(newPlacement)) {
-                            //System.out.println(newPlacement);
-                            viablePiece.add(newPiece);
-                            //if (unplaced_pieces.charAt(i) == 'c' || unplaced_pieces.charAt(i) == 'h' || unplaced_pieces.charAt(i) == 'f')
-                            if (unplaced_pieces.charAt(i) != 'a')
-                                continue loop;
-                        }
-                    }
-                }
-            }
-        }
-
-
-
-       // totalmethodcalls+=methodcallctr;
-
-        if (viablePiece.isEmpty()){
-            return null;}
-
-        //  System.out.println("Test" + (++testval) +" calls Task 5  " + Integer.toString(methodcallctr)+ " Times. Total Average is : " +( totalmethodcalls/testval) );
-        return viablePiece;
-    }
-
 
     public static Set<String> getViablePiecePlacements(String placement) {//Take note that this does not check if board is valid or not
         viablePiece2.clear();
      if (!initialisedhm&&!initilisedCs) {
-    //gobj.resetBoardvalues("ac");
-    Pieces.initialisehms();//initialise hashmap just for the sake of task tests
-    initialiseContainersSpecs();
-    initialisedhm=initilisedCs=true;
+      Pieces.initialisehms();//initialise hashmap just for the sake of task tests
+      initialiseContainersSpecs();
+      initialisedhm=initilisedCs=true;
 }
         boardcreator(placement);//creates a board in accordance to the placement string
         int[][] ppContainer2=ppContainer.clone();
         Viewer access=new Viewer();
         String unplaced ="";
         String nonAvailcharpieces=access.returner(placement,0);
-        //will give an int array of numbers which represent ascii encodings
-        int[] output=IntStream.rangeClosed(97, 104).filter(i-> !nonAvailcharpieces.contains((char)i+"")).parallel().toArray();
-        for(int i:output){ unplaced+=(Character.toString((char)i)); }//converting to String- not necessary
+        //will give an int array of numbers which represent ascii encodings of the piece character
+        int[] unplacedoutput=IntStream.rangeClosed(97, 104).filter(i-> !nonAvailcharpieces.contains((char)i+"")).parallel().toArray();
+        for(int i:unplacedoutput){ unplaced+=(Character.toString((char)i)); }//converting to String for listofContaineused function
         List<Integer> containerscanbeused=listofcontainersused(unplaced);
         ppContainer2=updateppcandnew(nonAvailcharpieces,ppContainer2);
-        // ctr+=2;
         //update ppcontainer value in accordance to unplaced
         //find range of the containers in accordance to the emptyindices
         int[] emptygridval=getEmptyGrid2('x');
@@ -340,8 +277,7 @@ public class TwistGame {
                                         for(int iy=my;iy<my+containerSpecs[2*cno+1];iy++){
                                             String piece=(char) ((pno/8)+97)+col+row+Integer.toString(pno-((pno/8)*8));
                                             if(isPlacementStringValid(placement+piece)&&!viablePiece2.contains(piece)){
-                                                // ctr++;
-                                                insertinfakeset(piece);
+                                                insertinset(piece);
                                             }
                                         }
                                     }
@@ -350,8 +286,8 @@ public class TwistGame {
                                 else {
                                     String piece = (char) ((pno / 8) + 97)  + col + row + Integer.toString(pno - ((pno / 8) * 8));
                                     if (isPlacementStringValid(placement + piece)) {
-                                        insertinfakeset(piece);
-                                        // ctr++;
+                                        insertinset(piece);
+
                                     }
                                     //generate piece data  accordingly to check with isValidPlacement  and then check
                                     //if valid add to viablePiece set
@@ -365,13 +301,12 @@ public class TwistGame {
 
         if(viablePiece2.size()==0)
         { return null;}
-        //totalmethodcalls+=ctr;
-        // System.out.println("Test" + (++testval) +" calls helper functions (inclusive of task5) " + " Times. Total Average is : " +( totalmethodcalls/testval) );
+
         return viablePiece2;
     }
 
 
-    private static void insertinfakeset(String piece) {
+    private static void insertinset(String piece) {
         if (viablePiece2.size() == 0) {//if set has nothing
             viablePiece2.add(piece);
         } else {
@@ -496,7 +431,7 @@ public class TwistGame {
                 if(t>19&&t<24){//neglecting strong symmetric pieces which are redundant
                     // do nothing
                 }
-                else if( hm.get(t).length<=containerSpecs[i*2] && hm.get(t)[0].length<=containerSpecs[i*2+1]){
+                else if( pp.get(t).length<=containerSpecs[i*2] && pp.get(t)[0].length<=containerSpecs[i*2+1]){
                     if((i==3||i==4)&&(t>55)){//skipping redundants
                         continue;
                     }
@@ -505,7 +440,6 @@ public class TwistGame {
                     }
                     cs.add(t); } }
             int oarr[]= cs.stream().mapToInt(no->no).toArray();
-            //ppContainer[i] =new int[oarr.length];   //not necessary
             ppContainer[i]=oarr;
         }
     }
@@ -522,7 +456,6 @@ public class TwistGame {
         List<Integer> emptyGridcoord= new ArrayList<>();
         for (int x = 0; x < 4; x++){
             for(int y = 0; y < 8; y++){
-                /*    gobj.getcboard()[x][y].contains("p")&&gobj.getcboard()[x][y].length()==2    */
                 if (gobj.getaboard()[x][y].equals("x")|| gobj.getaboard()[x][y].equals("pr") || gobj.getaboard()[x][y].equals("pb")//this runs faster
                         || gobj.getaboard()[x][y].equals("pg") || gobj.getaboard()[x][y].equals("py")){
                     if(coordinate=='x'){emptyGridcoord.add(x);}
@@ -533,29 +466,8 @@ public class TwistGame {
     }
 
 
-    /** Gives the indices of the empty grids
-     *
-     * @return list of required indices
-     *  author: Lingyu Xia
-     */
-    public static List<int[]> getEmptyGrid() {
-        List<int[]> emptyGrid = new ArrayList<>();
-        for (int x = 0; x < 4; x++){
-            for(int y = 0; y < 8; y++){
-                if (gobj.getaboard()[x][y]=="x" || gobj.getaboard()[x][y]=="pr" || gobj.getaboard()[x][y]=="pb"
-                        || gobj.getaboard()[x][y]=="pg" || gobj.getaboard()[x][y]=="py"){
 
-                    int[] gridIndex = new int[2];
-                    gridIndex[0] = x;
-                    gridIndex[1] = y + 1;
-                    emptyGrid.add(gridIndex);
 
-                }
-            }
-        }
-
-        return emptyGrid;
-    }
     /**
      * Return an array of all unique solutions for a given starting placement.
      *
@@ -572,16 +484,10 @@ public class TwistGame {
      * @param placement A valid piece placement string.
      * @return An array of strings, each 32-characters long, describing a unique
      * unordered solution to the game given the starting point provided by placement.
+     * author: Lingyu Xia
      */
 
-    // FIXME : IMPORTANT :
-    // 1)Whenever there is just one piece left to solve getSolution return null --
-    //     example : "b6A7c1A3d2A6e2C3f3C4g4A7h6D0i6B0j2B0j1C0k3C0l4B0" should return a7A7 added to it
-    //author: Lingyu Xia
-
     public static String[] getSolutions(String placement) {//Use task 6 code here
-
-        // FIXME Task 9: determine all solutions to the game, given a particular starting placement
 
         String[] solutions = reorderPlacementStrings(placement);
 
@@ -750,9 +656,37 @@ public class TwistGame {
         return retVal;
     }
 
+    /** Gives the indices of the empty grids
+     *
+     * @return list of required indices
+     *  author: Lingyu Xia
+     */
+    public static List<int[]> getEmptyGrid() {
+        List<int[]> emptyGrid = new ArrayList<>();
+        for (int x = 0; x < 4; x++){
+            for(int y = 0; y < 8; y++){
+                if (gobj.getaboard()[x][y]=="x" || gobj.getaboard()[x][y]=="pr" || gobj.getaboard()[x][y]=="pb"
+                        || gobj.getaboard()[x][y]=="pg" || gobj.getaboard()[x][y]=="py"){
 
-    //Combine all the different pieces, give all the possible combinations.  e.g. a1,a2,a3,b1,b2,c1 --> a1,b1,c1; a1,b2,c1; a2, b1, c1; a2, b2, c1; ....
-    //author: Lingyu Xia
+                    int[] gridIndex = new int[2];
+                    gridIndex[0] = x;
+                    gridIndex[1] = y + 1;
+                    emptyGrid.add(gridIndex);
+
+                }
+            }
+        }
+
+        return emptyGrid;
+    }
+
+
+
+    /**Combine all the different pieces, give all the possible combinations.
+    * e.g. a1,a2,a3,b1,b2,c1 --> a1,b1,c1; a1,b2,c1; a2, b1, c1; a2, b2, c1; ....
+    * @param result
+    *
+    author: Lingyu Xia*/
     public static List<String> combination(List<String> result, String[] madePieces, String[] missingPieces){
 
         for (int j = 0; j < madePieces.length; j++){
@@ -772,7 +706,7 @@ public class TwistGame {
         return result;
     }
 
-    //Divid the string into single pieces so that it can be sorted.
+    //Divide the string into single pieces so that it can be sorted.
     //author: Lingyu Xia
     public static List<String> getFormalPieces(String formalPiece){
 

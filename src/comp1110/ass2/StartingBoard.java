@@ -1,6 +1,10 @@
 package comp1110.ass2;
 
 import java.util.*;
+/*Class which initialises the starting boards
+ Authorships:LingYu Xia
+             Kalai(pegcreator)*/
+
 
 public class StartingBoard extends TwistGame{
 
@@ -50,7 +54,7 @@ public class StartingBoard extends TwistGame{
         return pegs;
     }
 
-    /*Creates a board String such that it consist of 2 pieces
+    /*Creates a boardString such that it consist of 2 pieces
      * Produces the key for the Hashmap - storage
      * author: Lingyu Xia*/
     public static String pieceCreator(){
@@ -59,7 +63,6 @@ public class StartingBoard extends TwistGame{
         List<String> choPie = new ArrayList<>();
         List<String> choFro = new ArrayList<>();    //The pieces from which we may choose the next piece
         int ranSol = r.nextInt(4);
-
         String str = initiator[ranSol];
         choFro = getFormalPieces(str);
         Collections.shuffle(choFro);
@@ -81,7 +84,6 @@ public class StartingBoard extends TwistGame{
 
     /*gives the difficulty level and a random solution string, find the values of pegs in hashMap
     * author:Lingyu Xia*/
-    // FIXME Task 11: The output must be sorted so the get 1 solution from getSolutions
     public static String difficultyLevel(double level){
         Random r = new Random();
         int ndv=r.nextInt(2);//ndv-non-deterministic value
@@ -121,8 +123,7 @@ public class StartingBoard extends TwistGame{
     /*In reference to Difficulty level choose a certain state from StartingBoard */
 
     public static void main(String[] args) {
-  /*      Pieces.initialisehms();
-        System.out.println(getSolutions("b6C0c5A0h1A0i6B0j4C0j6A0l1A0l4A0").length);*/
+
         for (int m = 0; m < 10; m++) {
             pieceCreator();
             String[] s = new String[sol.size()];

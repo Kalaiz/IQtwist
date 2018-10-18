@@ -1,14 +1,9 @@
 package comp1110.ass2;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static comp1110.ass2.Pieces.hm;
+import static comp1110.ass2.Pieces.pp;
 
 /*
- *Class which creates a set of boards and does operation over them whenever needed.
- * 1)checkingBoard - specially meant for isPlacementStringValid method.
- * 2)actualBoard- specially meant for the running game.
+ *Class which creates a board and does operation over them whenever needed.
+ *
  *Authorship:LingYu Xia (rotator)
  *           Kalai (Everything else)
  */
@@ -27,7 +22,7 @@ public class GameBoard {
         int hashMapKey= getHashmapkey(piece);
         int col = Character.getNumericValue(piece.charAt(1)) - 1;
         int row = piece.charAt(2) - 65;
-            this.actualBoard = placer(actualBoard, hm.get(hashMapKey), row, col );
+            this.actualBoard = placer(actualBoard, pp.get(hashMapKey), row, col );
 
     }
 
