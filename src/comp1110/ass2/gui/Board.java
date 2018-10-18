@@ -17,6 +17,7 @@ import javafx.scene.control.Slider;
 import javafx.scene.effect.Glow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
@@ -36,6 +37,7 @@ import java.util.stream.IntStream;
 
 import static comp1110.ass2.StartingBoard.solNum;
 import static comp1110.ass2.TwistGame.getFormalPieces;
+import static java.lang.System.currentTimeMillis;
 
 public class Board extends Application {
     /*ToDo:
@@ -87,6 +89,9 @@ public class Board extends Application {
 
     /*States whether game has started or not */
     private static boolean gamestart;
+
+    private static StartingBoard sb = new StartingBoard();
+
 
 
 
@@ -389,7 +394,6 @@ public class Board extends Application {
     private void newGame() {
         Viewer access = new Viewer();
         TwistGame t = new TwistGame();
-        //System.out.println(gamestart);
         if (gamestart) {
             forceReset();//clear the board and pieces using a seperate function
         }
@@ -417,10 +421,12 @@ public class Board extends Application {
 
     }
 
-    private void  resetPiece(eventPiece p){
+    private void  resetPiece(eventPiece p,boolean hints){
         grid.getChildren().remove(p.holder);
-        pieces.getChildren().remove(p);
-        pieces.getChildren().add(new eventPiece(((p).pieceInfo).charAt(0)));
+        if(!hints) {
+            pieces.getChildren().remove(p);
+            pieces.getChildren().add(new eventPiece(((p).pieceInfo).charAt(0)));
+        }
     }
 
     private void  resetPiecestr(String pieceInfo){
@@ -447,7 +453,7 @@ public class Board extends Application {
                 if (((((eventPiece) obj).pieceInfo)) != null) {
                     if (!startingBoard.contains(((eventPiece) obj).pieceInfo)) {
                         //System.out.println(((eventPiece) obj).pieceInfo);
-                    resetPiece((eventPiece )obj);
+                    resetPiece((eventPiece )obj,false);
                     }
                 }
             }
@@ -582,19 +588,11 @@ public class Board extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         primaryStage.setTitle("IQ-twist");//sets the title name on the bar
-        //sets the icon
-        /*
-        *  createpieces()
-        *  getsolutions()
-        *  pegAdder()   -->  add to hashMap
-        *  add a loading screen until hashMap is initialized
-        *  difficulty level alg (which should be created in StartingBoard.java, returns a starting board string)
-        *           problem: find effecive way of finding n pieces & pegs from a collection
-        *  when the user press the "new game" button, accroding to the diff level, run the alg over solutions
-        */
-
         primaryStage.getIcons().add(new Image((Viewer.class.getResource(URI_BASE + "e.png").toString())));
         Scene scene = new Scene(root, DISPLAY_WIDTH, DISPLAY_HEIGHT);
+        if(!gamestart){
+            sb.pegAdder(sb.pieceCreator());
+          }
         createBoard();
         root.getChildren().add(outsides);
         root.getChildren().add(board);
@@ -603,30 +601,16 @@ public class Board extends Application {
         root.getChildren().add(pieces);
         makeControls();
         instructions();
-        //showCvb   ompletion();
         primaryStage.setScene(scene);
         primaryStage.show();
     }
 
     private String diffLevel(double level){
-        StartingBoard sb = new StartingBoard();
-        sb.pegAdder(sb.pieceCreator());
         startingBoard = sb.difficultyLevel(level);
-
         return sb.sol.get(solNum);
     }
 
 
-  /*  // FIXME Task 8: Implement starting placements
-    public static String makeBoard() {
-//        StartingBoard obj = new StartingBoard();
-//        Random rand = new Random();
-//        String startboard = obj.difficultyStorage.get(rand.nextInt(75))[0];
-
-       String startboard = "a7A7b6A7c1A3d2A6e2C3f3C2g4A7h6D0i6B0j2B0j1C0k3C0l4B0l5C0";
-
-        return startboard;
-    }*/
 
     // TESTING REASONS
     public static String RandomStart() {
@@ -640,7 +624,7 @@ public class Board extends Application {
     /*set opacity of selected pieces to a certain percentage  or
     use Blur effect for that certain piece (using setEffect) Use task 9 code for the solutions.*/
     // FIXME Task 10: Implement hints
-    public static void hint() {
+    public static String  hint() {
 
         String hint = "";
 
@@ -648,7 +632,8 @@ public class Board extends Application {
 
             Random r = new Random();
 
-            //get the gamestate string & specific solutionstring and convert them into lists, resort them to find the unplaced strings in specificSolL
+            //get the gamestate string & specific solutionstring and convert them into lists, \
+            // resort them to find the unplaced strings in specificSolL
             List<String> gameStateL = getFormalPieces(gameState.substring(0,specificSol.length()));
             Collections.sort(gameStateL);
             List<String> specificSolL = getFormalPieces(specificSol);
@@ -657,9 +642,9 @@ public class Board extends Application {
             //randomly choose one piece in specificSolL which is shown as the hint
             int index = r.nextInt(specificSolL.size() - gameStateL.size()) + gameStateL.size();
             
-            hint = specificSolL.get(index);
+           return specificSolL.get(index);
         }
-    }
+  return null;  }
 
 
     //turn a String into a pi set
@@ -679,12 +664,6 @@ public class Board extends Application {
         return placesp;
     }
 
-
-//    public static void main(String[] args) {
-//        String placement = "c1A3d2A6e2C3f3C2g4A7h6D0j2B0j1C0k3C0l4B0l5C0";
-//        String pi = one_help_piece(placement);
-//        System.out.println(pi);
-//    }
 
 
 
