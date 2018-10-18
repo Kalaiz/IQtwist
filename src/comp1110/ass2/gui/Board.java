@@ -663,7 +663,6 @@ public class Board extends Application {
         String hint = "";
         System.out.println(gameState);
         System.out.println(specificSol);
-
             System.out.println("In");
             Random r = new Random();
             //get the gamestate string & specific solutionstring and convert them into lists, \

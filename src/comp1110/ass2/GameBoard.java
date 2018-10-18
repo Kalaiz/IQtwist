@@ -15,9 +15,7 @@ import static comp1110.ass2.Pieces.hm;
 public class GameBoard {
     private String[][] checkingBoard = new String[4][8];
     private String[][] actualBoard = new String[4][8];
-    private String checkingBoardName;
-    private String actualBoardName;
-    public static  boolean offBoardOrOverlap;
+    public static boolean offBoardOrOverlap;
 
 
     /**
@@ -50,49 +48,6 @@ public class GameBoard {
 return hashMapKey;
     }
 
-    //piece must be valid placement
-    //only for checking board
-    void removepiece(String piece,char bt){
-        int row= piece.charAt(2) -65;
-        int col= Integer.parseInt(piece.charAt(1)+"") -1 ;
-        //String[][] board= (bt=='c')? checkingBoard:actualBoard;
-     /*    int hashmapkey =getHashmapkey(piece);
-         String[][] piecearr = hm.get(hashmapkey);*/
-         for(;row<4;row++){
-             for(int cc=col;cc<8;cc++){
-                 if(checkingBoard[row][cc].contains("p")&&checkingBoard[row][cc].length()>2){
-                     int piecestrsval=(checkingBoard[row][cc].length()==4)?2:3;
-                     //always be in format of orpr as pr will be always on board itself
-                     checkingBoard[row][cc]=checkingBoard[row][cc].substring(piecestrsval);
-                 }
-                 else if (!checkingBoard[row][cc].equals("x")){
-                     checkingBoard[row][cc]="x";
-                 }
-             }
-         }
-
-
-    }
-
-  /*  String[][] bruteremover(List indices,char bt ){
-
-
-    }*/
-    void updateCBoardName(String checkingBoardName){
-        this.checkingBoardName=checkingBoardName;
-    }
-
-    void updateABoardName(String actualBoardName){
-        this.actualBoardName=actualBoardName;
-    }
-
-    String getCBoardName(){
-        return  checkingBoardName;
-    }
-
-    String getABoardName(){
-        return actualBoardName;
-    }
 
     /**
      * Obtains the actual board
@@ -112,9 +67,6 @@ return hashMapKey;
         return checkingBoard;
     }
 
-    void updateBoard(String[][] cboard){
-        checkingBoard=cboard;
-    }
 
 
     /**
@@ -158,7 +110,7 @@ return hashMapKey;
      * @param piecearr Multidimensional array of the piece
      * @param row2     the row on which the top-most piece resides
      * @param col2     the column in which the left-most piece resides
-     * @return (Updated) board or null if invalid position
+     * @return (Updated) board or null if there is a piece in an  invalid position
      */
     public static String[][] placer(String[][] board, String[][] piecearr, int row2, int col2) {
         if (row2 < 0 || col2 < 0||row2>=board.length||col2>=board[0].length) {
