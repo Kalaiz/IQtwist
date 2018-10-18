@@ -42,26 +42,12 @@ import static java.lang.System.currentTimeMillis;
 import static java.lang.System.setOut;
 
 public class Board extends Application {
-    /*ToDo:
-    1)Link task 11 to task 7
-    2)Task 10
-    3)On completion Text should appear
-    4)loading Screen
-    5)Set image background
-    6)Task 5 resetting the board
-    7)Removal of extra board
-    8)Board:createBoard improve current codes
-    9)PPT
-    10)Code cleanup & Fix Warnings
-    */
     private static String specificSol = "";
     private static String gameState = "";//The game String
     private static String startingBoard = "";//The starting board string
-    private static String solution="";
     private static final int DISPLAY_WIDTH = 1280;
     private static final int DISPLAY_HEIGHT = 649;
     private static final String URI_BASE = "assets/";
-
     private final Text completionText = new Text("Well done!");
 
     /*Game object*/
@@ -94,44 +80,12 @@ public class Board extends Application {
 
     private static StartingBoard sb = new StartingBoard();
 
+    private static List<String>hintList=new ArrayList<>();
 
 
 
-    private void createBoard(){
-        Rectangle rect1 = new Rectangle(690, 2.5, 420, 215);
-        Rectangle rect2 = new Rectangle(692.5, 5, 415, 210);
-        //rect1.setFill(Color.GREY);
-        rect2.setFill(Color.WHITE);
-        rect1.setArcHeight(30);
-        rect1.setArcWidth(30);
-        rect2.setArcHeight(30);
-        rect2.setArcWidth(30);
-        rect1.toBack();
-        rect2.toBack();
-        for (int i = 0; i < 8; i ++) {
-            for (int j = 0; j < 4; j ++) {
-                Circle circle1 = new Circle(725 + 50 * i, 35 + 50 * j, 27);
-                Circle circle2 = new Circle(725 + 50 * i, 35 + 50 * j, 25);
-                Circle innercircle =new Circle(725 + 50 * i, 35 + 50 * j, 15);
-                Circle innercircle2 =new Circle(725 + 50 * i, 35 + 50 * j, 13);
-                circle1.setFill(Color.DARKGREY);
-                circle2.setFill(Color.WHITE);
-                innercircle.setFill(Color.LIGHTGREY);
-                innercircle2.setFill(Color.WHITE);
-                circle1.toBack();
-                circle2.toBack();
-                board.getChildren().add(circle1);
-                board.getChildren().add(circle2);
-                board.getChildren().add(innercircle);
-                board.getChildren().add(innercircle2);
-            }
-        }
-        outsides.getChildren().add(rect1);
-        outsides.getChildren().add(rect2);
 
 
-
-    }
     /*Sets up the board*/
     private void createBoardGrid() {
         boardgrid.getChildren().clear();
@@ -178,6 +132,39 @@ public class Board extends Application {
         scene.setFill(Color.WHITE);
         dialogue.setScene(scene);
         dialogue.showAndWait();
+    }
+
+    private void createBoard(){
+        Rectangle rect1 = new Rectangle(690, 2.5, 420, 215);
+        Rectangle rect2 = new Rectangle(692.5, 5, 415, 210);
+        rect2.setFill(Color.WHITE);
+        rect1.setArcHeight(30);
+        rect1.setArcWidth(30);
+        rect2.setArcHeight(30);
+        rect2.setArcWidth(30);
+        rect1.toBack();
+        rect2.toBack();
+        for (int i = 0; i < 8; i ++) {
+            for (int j = 0; j < 4; j ++) {
+                Circle circle1 = new Circle(725 + 50 * i, 35 + 50 * j, 27);
+                Circle circle2 = new Circle(725 + 50 * i, 35 + 50 * j, 25);
+                Circle innercircle =new Circle(725 + 50 * i, 35 + 50 * j, 15);
+                Circle innercircle2 =new Circle(725 + 50 * i, 35 + 50 * j, 13);
+                circle1.setFill(Color.DARKGREY);
+                circle2.setFill(Color.WHITE);
+                innercircle.setFill(Color.LIGHTGREY);
+                innercircle2.setFill(Color.WHITE);
+                circle1.toBack();
+                circle2.toBack();
+                board.getChildren().add(circle1);
+                board.getChildren().add(circle2);
+                board.getChildren().add(innercircle);
+                board.getChildren().add(innercircle2);
+            }
+        }
+        outsides.getChildren().add(rect1);
+        outsides.getChildren().add(rect2);
+
     }
 
     /*
@@ -395,6 +382,7 @@ public class Board extends Application {
         }
         gamerunning = true;
         specificSol = diffLevel(difficulty.getValue());
+        hintList=getFormalPieces(specificSol);
         gameState = startingBoard;
         String placed = access.returner(startingBoard, 0);
         String unplaced = "";
@@ -611,16 +599,15 @@ public class Board extends Application {
         root.getChildren().add(boardgrid);
         root.getChildren().add(pieces);
         makeControls();
+
         scene.setOnKeyPressed(mk->{
-            if(mk.getCode()== KeyCode.H){
+            if(mk.getCode()== KeyCode.SLASH){
                 String hintpiece=hint();
-                System.out.println(hintpiece);
+                hintList.remove(hintpiece);
                 if(hintpiece!=null){
-                    System.out.println(hintpiece);
                     eventPiece p = new eventPiece(hintpiece);
                     p.holder.setOpacity(0.4);
                     root.getChildren().add(p);
-
                 }
             }
         });
@@ -654,17 +641,19 @@ public class Board extends Application {
     /*set opacity of selected pieces to a certain percentage  or
     use Blur effect for that certain piece (using setEffect) Use task 9 code for the solutions.
     author: Lingyu Xia*/
-    // FIXME Task 10: Implement hints
+
     public static String  hint() {
        Random r = new Random();
        List<String>usedPieces= getFormalPieces(gameState);
-       List<String>solution=getFormalPieces(specificSol);
+
        for(String up:usedPieces){
            Predicate<String> piecePredicate = piece-> piece.equals(up);
-           solution.removeIf(piecePredicate);
+           hintList.removeIf(piecePredicate);
        }
-       int rnd=r.nextInt(solution.size());
-       return solution.get(rnd);
+       if(hintList.size()!=0){
+       int rnd=r.nextInt(hintList.size());
+       return hintList.get(rnd);}
+       else{return null;}
       }
   ;  }
 
