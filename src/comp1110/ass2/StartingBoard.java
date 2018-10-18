@@ -49,13 +49,6 @@ public class StartingBoard extends TwistGame{
         storage.put(solution,pegs);
         return pegs;
     }
-    /* TO initialise the storage at the start of the game */
-    private void initialiseStorage(){
-        pieceCreator();
-
-    }
-
-
 
     /*Creates a board String such that it consist of 2 pieces
      * Produces the key for the Hashmap - storage*/
@@ -76,7 +69,6 @@ public class StartingBoard extends TwistGame{
         for (Object c : choPie){
             sb.append(c);
         }
-        //System.out.println(sb.toString());
         String[] s = getSolutions(sb.toString());
         for (int i = 0; i < s.length; i++) {
             sol.add(s[i]);
@@ -89,7 +81,6 @@ public class StartingBoard extends TwistGame{
     /*gives the difficulty level and a random solution string, find the values of pegs in hashMap*/
     // FIXME Task 11: The output must be sorted so the get 1 solution from getSolutions
     public static String difficultyLevel(double level){
-
         Random r = new Random();
         int ndv=r.nextInt(2);//ndv-non-deterministic value
         String startPlacement = "";
@@ -97,13 +88,10 @@ public class StartingBoard extends TwistGame{
         int pegNum ;
         solNum = r.nextInt(sol.size());
         List<String> pegs = pegAdder(sol.get(solNum));
-
         //get the pieces & pegs number by difficulty level
         pegNum = difficultyLevelDetails[(int)(2 * level)];
         pieceNum = difficultyLevelDetails[(int)(2 * level + 1)];
-
         List<String> pie = getFormalPieces(sol.get(solNum));
-
         Collections.shuffle(pie);
         Collections.shuffle(pegs);
 

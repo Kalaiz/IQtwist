@@ -163,7 +163,7 @@ public class TwistGame {
                 } else if (ccs.length() == 3) {
                     return false;
                 } else if ((ccs.length() == 2)) {
-                    //shouldnt start with any character other than o or p
+                    //should not start with any character other than o or p
                     if (!((ccs.charAt(0) == 'p') || (ccs.charAt(0) == 'o'))) {
                         return false;
                     }
@@ -174,8 +174,6 @@ public class TwistGame {
         }
         return true;
     }
-
-
 
 
     /**
@@ -204,9 +202,9 @@ public class TwistGame {
                     return null; }
             }
         }
-        if (bt=='c'){ gobj.updateCBoardName(placement);}else{gobj.updateABoardName(placement);}
         return (bt == 'a') ? gobj.getaboard() : gobj.getcboard();
     }
+
 
     /**
      * Determine whether a placement string is valid.  To be valid, the placement
@@ -227,32 +225,7 @@ public class TwistGame {
             initialisedhm=true;
         }
         return (!(boardcreator(placement, 'c')==null));
-
     }
-
-    public static void main(String[] args) {
-        //getViablePiecePlacements("c1A3d2A6");
-        String placement="a7A7c1A0";
-        int ctr=0;
-        String[] s = getSolutions(placement);
-        if(s.length==0){
-            System.out.println("No Solutions found");
-        }
-        for(String c : s){
-
-            System.out.println(ctr++ +" "+ c);
-        }
-        /*Set<String> p = getViablePiecePlacements(placement);
-                Iterator<String> a = p.iterator();
-        while (a.hasNext()) {
-            ctr++;
-            String h = a.next();
-            System.out.println(ctr + "" + h);
-        }*/
-
-    }
-
-
 
 
     /**
