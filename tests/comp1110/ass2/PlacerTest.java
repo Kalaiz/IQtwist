@@ -11,7 +11,7 @@ public class PlacerTest  {
     private String[][]testpiece=(new Pieces('a')).getactual_piece();
 
     private void test(boolean cond,String expected,String input){
-        tb.resetBoardvalues("ac");//initialises both the  boards
+        tb.resetBoardvalues();//initialises  the  boards
         assertTrue("Expected : "+expected+" for inputs : "+ input, cond); }
 
 
@@ -20,7 +20,7 @@ public class PlacerTest  {
     */
     @Test
     public void  inputPieceTooBig(){
-      test((iptb('a')&&iptb('c')),"The default board","valid board,row,col and invalid inputpiecearr");
+      test((iptb()),"The default board","valid board,row,col and invalid inputpiecearr");
     }
 
 
@@ -31,23 +31,23 @@ public class PlacerTest  {
     */
     @Test
     public void  wrongPositionValues(){
-        tb.resetBoardvalues("ac");
-      test((wpv('a')),"The default board","valid board,inputpiecearr and an invalid positional row and col");
+        tb.resetBoardvalues();
+      test((wpv()),"The default board","valid board,inputpiecearr and an invalid positional row and col");
         }
 
 
     //Checks for the return of an correctly-updated board based upon an empty board.
      @Test
     public void exactlyPlaced(){
-         test( !Arrays.deepEquals(GameBoard.placer(tb.getcboard(),testpiece,3,3),DeliverableTestUtility.expectedacboards),"exp","inp");
+         test( !Arrays.deepEquals(GameBoard.placer(tb.getaboard(),testpiece,3,3),DeliverableTestUtility.expectedacboards),"exp","inp");
     }
 
 
     //Checks for the return of an correctly-updated board based upon an empty board(Mathematical logic).
     @Test
     public void basicPlacesIt(){
-        tb.resetBoardvalues("ac");
-test(!(placesitsum('a')),"The Input pieces to be placed within the board","which are valid ");
+        tb.resetBoardvalues();
+test(!(placesitsum()),"The Input pieces to be placed within the board","which are valid ");
     }//calculate the number of characters other than "x" if placed ;ensure whether it is correct
 
 
@@ -59,18 +59,11 @@ test(!(placesitsum('a')),"The Input pieces to be placed within the board","which
     @Test
     public void emptyPieceDataDoesntOverlapBoard(){
     boolean acc =true;
-    char type='a';
-
-     loop:for(int m =0;m<DeliverableTestUtility.multiboards(type).size()+1;m++) {
+     loop:for(int m =0;m<DeliverableTestUtility.multiboards().size()+1;m++) {
        for(int i=0;i<10;i++){
-            if(m==5&& type!='c'){
-               type='c';
-                m=0;
-             continue loop; }
-        if(m==5){test (acc,"An updated board","which includes a Board which contain(s) piece(s) and other required valid inputs");
-        break loop;}
+      Pieces.initialisehms();//initialis the pieces
         Pieces p= (new Pieces((char) (i+97)));
-        acc=acc&&((GameBoard.placer(DeliverableTestUtility.multiboards(type).get(m),p.getactual_piece(),0,0))==null);
+        acc=acc&&((GameBoard.placer(DeliverableTestUtility.multiboards().get(m),p.getactual_piece(),0,0))==null);
             }
         }
     }
@@ -104,15 +97,15 @@ test(!(placesitsum('a')),"The Input pieces to be placed within the board","which
             for(int m=0;m<input[0].length;m++){
                 input[i][m]="x"; } }return input; }
 
-    private boolean iptb(char type){
-        String[][] board=(type=='a')?tb.getaboard():tb.getcboard();
+    private boolean iptb(){
+        String[][] board=tb.getaboard();
         int row= board.length;
         int col=board[0].length;
         String[][] bigPiece= filler(new String[row][col]);//to avoid nullpointerexception
         return Arrays.deepEquals(GameBoard.placer(board,bigPiece,0,0),null);
     }
-    private boolean wpv(char type){
-        String[][] board=(type=='a')?tb.getaboard():tb.getcboard();
+    private boolean wpv(){
+        String[][] board=tb.getaboard();
         int prow = board.length;
         int pcol = board[0].length;
         //for negative positioning input
@@ -121,12 +114,11 @@ test(!(placesitsum('a')),"The Input pieces to be placed within the board","which
         return cond1 && Arrays.deepEquals(GameBoard.placer(board,testpiece,prow,pcol),null);
     }
 
-    private boolean placesitsum(char type){
+    private boolean placesitsum(){
 
         for(int i=0;i<9;i++){
             Pieces p= (new Pieces((char) (i+97)));
             String[][]testboard= GameBoard.placer(tb.getaboard(),(new Pieces((char) (i+97))).getactual_piece(),0,0);
-            //Arrays.stream(testboard).filter(ch->ch=="x")
             int eoccupancy=sumnotx(testboard);
             int aoccupancy=sumnotx(p.getactual_piece());
             if((eoccupancy!=aoccupancy)){return false;}

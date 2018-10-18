@@ -19,10 +19,10 @@ public class DeliverableTestUtility {
             {"x", "x", "x", "x", "x", "x", "x", "x", "x,", "x", "x", "x", "x"}};
     static  final String[] sampleboarddata = {"g1A0", "b2A1", "c1A1", "e1A0c3A1", "k1A0",};
 
-    static List<String[][]> multiboards(char type) {
+    static List<String[][]> multiboards() {
         List<String[][]> mboards = new ArrayList<>();
         for (int i = 0; i < 5; i++) {
-            mboards.add(g.boardcreator(sampleboarddata[i], type));
+            mboards.add(g.boardcreator(sampleboarddata[i]));
         }
         return mboards;
     }
