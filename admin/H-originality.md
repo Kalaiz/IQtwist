@@ -6,5 +6,5 @@ We declare that the work we have submitted for Stage H of this assignment and al
 
 * ....
 
-Signed: Yuqing Zhang (u6767747), Bob Smith (u3456789), and Sue Black (u0123456)
+Signed: Yuqing Zhang (u6767747), Kalaiarasan Somasundaram(u6555407), and Lingyu Xia (u6483756)
 
