@@ -318,7 +318,7 @@ public class Board extends Application {
                         if (imgCornerx < 680 || imgCornerx > 1080 || imgCornery > 200 || imgCornery < 0) {
                             holder.setX(defaultX);
                             holder.setY(defaultY);
-                        } else {// Image's top left corner.
+                        } else {// Image's top left corner
                             setOnGrid(imgCornerx, imgCornery);
                         }
                     });
@@ -420,11 +420,12 @@ public class Board extends Application {
 
     /**
      * Resets an individual event piece back to the default positions
-     * @param p- eventpiece object
+     * @param p - eventpiece object
      * Author:Kalai
      */
     private void  resetPiece(eventPiece p){
-        grid.getChildren().remove(p.holder);
+           grid.getChildren().remove(p.holder);
+            p.delete();
             pieces.getChildren().remove(p);
             pieces.getChildren().add(new eventPiece(((p).pieceInfo).charAt(0)));
 
@@ -435,16 +436,16 @@ public class Board extends Application {
  * Author:Kalai
  */
     private void  resetPiecestr(String pieceInfo){
-        try {
+
         for(Node n:pieces.getChildren()){
-            if (((((eventPiece) n).pieceInfo)) != null) {
+            try {  if (((((eventPiece) n).pieceInfo)) != null) {
             if(((eventPiece) n).pieceInfo.equals(pieceInfo)){
                 resetPiece(((eventPiece) n));}
                 gameState=gameState.replace(pieceInfo,"");
-        }}
+        }}catch(ConcurrentModificationException e){}
 
     }
-    catch(ConcurrentModificationException e){}}
+    }
 
 
     /**
@@ -462,6 +463,7 @@ public class Board extends Application {
                     }
                 }
             }
+
         } catch (ConcurrentModificationException e) {
             System.out.println("Error");
         }
