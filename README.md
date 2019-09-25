@@ -1,6 +1,6 @@
 # COMP1110 Assignment 2
-*Skeleton code which made the organisational structure of the code base was provided.
-*This assignment is only for those enrolled in COMP1110 or COMP6710. COMP1140 students should look [here](https://gitlab.cecs.anu.edu.au/comp1110/comp1140-ass2).*
+* Skeleton code which made the organisational structure of the code base was provided.
+* This assignment is only for those enrolled in COMP1110 or COMP6710. COMP1140 students should look [here](https://gitlab.cecs.anu.edu.au/comp1110/comp1140-ass2).*
 
 ## Academic Honesty and Integrity
 
